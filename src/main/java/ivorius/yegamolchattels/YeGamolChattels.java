@@ -210,8 +210,8 @@ public class YeGamolChattels
         YGCItems.smoothPlank = new ItemPlank().setUnlocalizedName("smoothPlank").setCreativeTab(CreativeTabs.tabMisc).setTextureName(textureBase + "smoothPlank");
         GameRegistry.registerItem(YGCItems.smoothPlank, "smoothPlank", MODID);
 
-        YGCItems.oiledPlank = new ItemPlank().setUnlocalizedName("oiledPlank").setCreativeTab(CreativeTabs.tabMisc).setTextureName(textureBase + "oiledPlank");
-        GameRegistry.registerItem(YGCItems.oiledPlank, "oiledPlank", MODID);
+        YGCItems.refinedPlank = new ItemPlank().setUnlocalizedName("refinedPlank").setCreativeTab(CreativeTabs.tabMisc).setTextureName(textureBase + "refinedPlank");
+        GameRegistry.registerItem(YGCItems.refinedPlank, "refinedPlank", MODID);
 
         YGCBlocks.plankSaw = new BlockPlankSaw().setBlockName("plankSaw").setCreativeTab(CreativeTabs.tabDecorations);
         GameRegistry.registerBlock(YGCBlocks.plankSaw, ItemPlankSaw.class, "plankSaw", MODID);
@@ -317,6 +317,6 @@ public class YeGamolChattels
             GameRegistry.addRecipe(new ItemStack(Blocks.planks, 1, i), "##", "##", '#', new ItemStack(YGCItems.plank, 1, i));
 
         TileEntityPlanksRefinement.addRefinement(new PlanksRefinementEntry(YGCItems.plank, YGCItems.sandpaper, new ItemStack(YGCItems.smoothPlank)));
-        TileEntityPlanksRefinement.addRefinement(new PlanksRefinementEntry(YGCItems.smoothPlank, YGCItems.oil, new ItemStack(YGCItems.oiledPlank)));
+        TileEntityPlanksRefinement.addRefinement(new PlanksRefinementEntry(YGCItems.smoothPlank, YGCItems.oil, new ItemStack(YGCItems.refinedPlank)));
     }
 }

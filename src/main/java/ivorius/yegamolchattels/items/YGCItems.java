@@ -16,7 +16,7 @@ public class YGCItems
 
     public static Item plank;
     public static Item smoothPlank;
-    public static Item oiledPlank;
+    public static Item refinedPlank;
 
     public static Item sandpaper;
     public static Item oil;

@@ -46,7 +46,7 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
         {
             Item item = stack.getItem();
 
-            if (item == YGCItems.plank || item == YGCItems.smoothPlank || item == YGCItems.oiledPlank)
+            if (item == YGCItems.plank || item == YGCItems.smoothPlank || item == YGCItems.refinedPlank)
             {
                 if (!worldObj.isRemote)
                 {
