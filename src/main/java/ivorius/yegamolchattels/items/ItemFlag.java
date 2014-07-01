@@ -50,7 +50,7 @@ public class ItemFlag extends Item
         entityflag.setColor(par1ItemStack.getItemDamage());
         entityflag.setSize(flagSize);
 
-        if (entityflag.fallIfNecessary())
+        if (entityflag.canStayAtPosition())
         {
             if (!par3World.isRemote)
             {

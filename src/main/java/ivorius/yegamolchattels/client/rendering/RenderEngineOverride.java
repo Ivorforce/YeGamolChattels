@@ -26,13 +26,13 @@ public class RenderEngineOverride extends TextureManager
     {
         if (textureOverride == null)
             renderEngine.bindTexture(par1ResourceLocation);
-        else if (par1ResourceLocation.getResourcePath().indexOf("armor") >= 0)
+        else if (par1ResourceLocation.getResourcePath().contains("armor"))
             renderEngine.bindTexture(par1ResourceLocation);
-        else if (par1ResourceLocation.getResourcePath().indexOf("spider_eyes") >= 0)
+        else if (par1ResourceLocation.getResourcePath().contains("spider_eyes"))
             renderEngine.bindTexture(par1ResourceLocation);
-        else if (par1ResourceLocation.getResourcePath().indexOf("enderman_eyes") >= 0)
+        else if (par1ResourceLocation.getResourcePath().contains("enderman_eyes"))
             renderEngine.bindTexture(par1ResourceLocation);
-        else if (par1ResourceLocation.getResourcePath().indexOf("dragon_eyes") >= 0)
+        else if (par1ResourceLocation.getResourcePath().contains("dragon_eyes"))
             renderEngine.bindTexture(par1ResourceLocation);
         else if (par1ResourceLocation.equals(TextureMap.locationBlocksTexture))
             renderEngine.bindTexture(par1ResourceLocation);

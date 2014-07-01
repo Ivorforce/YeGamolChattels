@@ -36,8 +36,8 @@ public class EntityFlag extends Entity
     @Override
     protected void entityInit()
     {
-        this.dataWatcher.addObject(25, new Integer(0));
-        this.dataWatcher.addObject(26, new Integer(0));
+        this.dataWatcher.addObject(25, 0);
+        this.dataWatcher.addObject(26, 0);
     }
 
     public void updateBounds()
@@ -56,7 +56,7 @@ public class EntityFlag extends Entity
         {
             if (!worldObj.isRemote)
             {
-                if (!fallIfNecessary())
+                if (!canStayAtPosition())
                 {
                     setDead();
                     dropFlag();
@@ -118,7 +118,7 @@ public class EntityFlag extends Entity
         return (MathHelper.sin(time * 0.001f) + 1.0f) * 0.5f;
     }
 
-    public boolean fallIfNecessary()
+    public boolean canStayAtPosition()
     {
         Block block = worldObj.getBlock((int) posX, (int) posY - 1, (int) posZ);
 
@@ -139,9 +139,9 @@ public class EntityFlag extends Entity
         }
 
         List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox);
-        for (int l1 = 0; l1 < list.size(); l1++)
+        for (Object anObject : list)
         {
-            if (list.get(l1) instanceof EntityFlag)
+            if (anObject instanceof EntityFlag)
             {
                 return false;
             }

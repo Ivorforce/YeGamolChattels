@@ -82,9 +82,9 @@ public class ModelGhost extends ModelBase
         rightArm.render(f5);
         leftArm.render(f5);
 
-        for (int i = 0; i < tentacles.length; i++)
+        for (ModelRenderer tentacle : tentacles)
         {
-            tentacles[i].render(f5);
+            tentacle.render(f5);
         }
     }
 

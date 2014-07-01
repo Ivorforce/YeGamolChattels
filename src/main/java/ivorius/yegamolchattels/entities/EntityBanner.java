@@ -60,13 +60,13 @@ public class EntityBanner extends EntityHanging
     {
         super.entityInit();
 
-        this.dataWatcher.addObject(25, new Integer(0));
-        this.dataWatcher.addObject(26, new Integer(0));
-        this.dataWatcher.addObject(27, new Integer(0));
+        this.dataWatcher.addObject(25, 0);
+        this.dataWatcher.addObject(26, 0);
+        this.dataWatcher.addObject(27, 0);
 
-        this.dataWatcher.addObject(28, new Integer(0));
-        this.dataWatcher.addObject(29, new Integer(0));
-        this.dataWatcher.addObject(30, new Integer(0));
+        this.dataWatcher.addObject(28, 0);
+        this.dataWatcher.addObject(29, 0);
+        this.dataWatcher.addObject(30, 0);
     }
 
     @Override
@@ -137,7 +137,7 @@ public class EntityBanner extends EntityHanging
     public int getWidthPixels()
     {
         if (getSize() == 0)
-            return 1 * 16;
+            return 16;
         else if (getSize() == 2)
             return 3 * 16;
 

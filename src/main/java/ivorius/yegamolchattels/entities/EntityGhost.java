@@ -32,9 +32,9 @@ public class EntityGhost extends EntityMob
     {
         super.entityInit();
 
-        this.dataWatcher.addObject(15, new Float(0.0f));
-        this.dataWatcher.addObject(16, new Float(0.0f));
-        this.dataWatcher.addObject(17, new Float(0.0f));
+        this.dataWatcher.addObject(15, 0.0f);
+        this.dataWatcher.addObject(16, 0.0f);
+        this.dataWatcher.addObject(17, 0.0f);
     }
 
     protected void applyEntityAttributes()
@@ -236,16 +236,16 @@ public class EntityGhost extends EntityMob
 
     public void setCurrentDestX(float destX)
     {
-        this.getDataWatcher().updateObject(15, new Float(destX));
+        this.getDataWatcher().updateObject(15, destX);
     }
 
     public void setCurrentDestY(float destY)
     {
-        this.getDataWatcher().updateObject(16, new Float(destY));
+        this.getDataWatcher().updateObject(16, destY);
     }
 
     public void setCurrentDestZ(float destZ)
     {
-        this.getDataWatcher().updateObject(17, new Float(destZ));
+        this.getDataWatcher().updateObject(17, destZ);
     }
 }

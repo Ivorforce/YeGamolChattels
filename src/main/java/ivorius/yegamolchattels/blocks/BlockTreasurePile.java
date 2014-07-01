@@ -74,24 +74,23 @@ public class BlockTreasurePile extends Block
         return 3;
     }
 
-    public static boolean canFallBelow(World world, int i, int j, int k)
+    public static boolean canFallBelow(World world, int x, int y, int z)
     {
-        Block l = world.getBlock(i, j, k);
-        if (l == Blocks.air)
-        {
-            return true;
-        }
-        if (l == Blocks.fire)
-        {
-            return true;
-        }
+        Block block = world.getBlock(x, y, z);
 
-        Material material = l.getMaterial();
-        if (material == Material.water)
+        if (block.isAir(world, x, y, z))
         {
             return true;
         }
-        return material == Material.lava;
+        else if (block == Blocks.fire)
+        {
+            return true;
+        }
+        else
+        {
+            Material material = block.getMaterial();
+            return material == Material.water || material == Material.lava;
+        }
     }
 
     @Override

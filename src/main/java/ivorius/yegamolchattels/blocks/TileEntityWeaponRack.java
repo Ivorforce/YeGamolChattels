@@ -74,12 +74,9 @@ public class TileEntityWeaponRack extends IvTileEntityRotatable implements ITile
             {
                 int slot = getHoveredSlot(entity);
 
-                if (slot >= 0)
-                    return tryAddingWeapon(stack, slot);
+                return slot >= 0 && tryAddingWeapon(stack, slot);
 
-                return false;
-
-//    			return tryAddingWeapon(stack);
+                //    			return tryAddingWeapon(stack);
             }
         }
 
@@ -260,12 +257,7 @@ public class TileEntityWeaponRack extends IvTileEntityRotatable implements ITile
     {
         int slot = getHoveredSlot(entity);
 
-        if (slot >= 0)
-        {
-            return this.tryEquippingItemOnPlayer(slot, entity);
-        }
-
-        return false;
+        return slot >= 0 && this.tryEquippingItemOnPlayer(slot, entity);
     }
 
     public void dropAllWeapons()

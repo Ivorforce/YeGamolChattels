@@ -134,10 +134,7 @@ public abstract class TileEntityItemShelf extends IvTileEntityMultiBlock
         {
             TileEntityItemShelf parent = (TileEntityItemShelf) getParent();
 
-            if (parent != null)
-                return parent.onRightClick(player, stack, side);
-
-            return false;
+            return parent != null && parent.onRightClick(player, stack, side);
         }
         else
         {
