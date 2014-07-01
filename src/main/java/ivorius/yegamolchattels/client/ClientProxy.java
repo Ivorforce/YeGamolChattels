@@ -8,7 +8,8 @@ package ivorius.yegamolchattels.client;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import ivorius.yegamolchattels.ServerProxy;
+import ivorius.yegamolchattels.YGCProxy;
+import ivorius.yegamolchattels.server.ServerProxy;
 import ivorius.yegamolchattels.blocks.*;
 import ivorius.yegamolchattels.client.rendering.*;
 import ivorius.yegamolchattels.entities.EntityBanner;
@@ -19,7 +20,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
 
-public class ClientProxy extends ServerProxy
+public class ClientProxy implements YGCProxy
 {
     @Override
     public void registerRenderers()

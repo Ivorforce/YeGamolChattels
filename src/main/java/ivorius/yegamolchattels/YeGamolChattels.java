@@ -25,6 +25,7 @@ import ivorius.yegamolchattels.entities.EntityGhost;
 import ivorius.yegamolchattels.entities.YGCEntityList;
 import ivorius.yegamolchattels.gui.YGCGuiHandler;
 import ivorius.yegamolchattels.items.*;
+import ivorius.yegamolchattels.server.ServerProxy;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -47,8 +48,8 @@ public class YeGamolChattels
     @Instance(value = MODID)
     public static YeGamolChattels instance;
 
-    @SidedProxy(clientSide = "ivorius.yegamolchattels.client.ClientProxy", serverSide = "ivorius.yegamolchattels.ServerProxy")
-    public static ServerProxy proxy;
+    @SidedProxy(clientSide = "ivorius.yegamolchattels.client.ClientProxy", serverSide = "ivorius.yegamolchattels.server.ServerProxy")
+    public static YGCProxy proxy;
 
     public static String filePathTexturesFull = "yegamolchattels:textures/mod/";
     public static String filePathTextures = "textures/mod/";

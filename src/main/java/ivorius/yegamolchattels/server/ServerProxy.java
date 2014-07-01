@@ -3,10 +3,13 @@
  * http://lukas.axxim.net
  **************************************************************************************************/
 
-package ivorius.yegamolchattels;
+package ivorius.yegamolchattels.server;
 
-public class ServerProxy
+import ivorius.yegamolchattels.YGCProxy;
+
+public class ServerProxy implements YGCProxy
 {
+    @Override
     public void registerRenderers()
     {
 
