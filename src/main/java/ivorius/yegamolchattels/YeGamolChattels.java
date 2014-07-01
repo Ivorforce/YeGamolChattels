@@ -39,11 +39,12 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = YeGamolChattels.MODID, version = YeGamolChattels.VERSION)
+@Mod(modid = YeGamolChattels.MODID, version = YeGamolChattels.VERSION, name = YeGamolChattels.NAME)
 public class YeGamolChattels
 {
     public static final String MODID = "yegamolchattels";
     public static final String VERSION = "1.0.1";
+    public static final String NAME = "Ye Gamol Chattels";
 
     @Instance(value = MODID)
     public static YeGamolChattels instance;
