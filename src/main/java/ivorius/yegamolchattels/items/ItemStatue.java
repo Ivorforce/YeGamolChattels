@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -43,6 +44,9 @@ public class ItemStatue extends ItemBlock
         if (!par3World.isRemote) // Some entities start with random sizes
         {
             Entity statueEntity = createStatueEntity(par1ItemStack, par3World);
+            if (statueEntity == null)
+                statueEntity = new EntityPig(par3World);
+
             int statueWidth = MathHelper.ceiling_float_int(statueEntity.width);
             int statueHeight = MathHelper.ceiling_float_int(statueEntity.height);
 
