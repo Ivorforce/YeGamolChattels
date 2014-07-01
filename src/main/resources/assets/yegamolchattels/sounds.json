@@ -1,0 +1,6 @@
+{
+   "gongSmall": {"category": "master", "sounds": [{"name": "gongSmall","stream": false}]},
+   "gong": {"category": "master", "sounds": [{"name": "gong","stream": false}]},
+   "gongLarge": {"category": "master", "sounds": [{"name": "gongLarge","stream": false}]},
+   "gongWrong": {"category": "master", "sounds": [{"name": "gongWrong","stream": false}]}
+}
