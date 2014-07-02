@@ -7,7 +7,9 @@ package ivorius.yegamolchattels.blocks;
 
 import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.math.IvMathHelper;
-import ivorius.ivtoolkit.network.ITileEntityUpdateData;
+import ivorius.ivtoolkit.network.IvNetworkHelperServer;
+import ivorius.ivtoolkit.network.PacketTileEntityData;
+import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.ivtoolkit.raytracing.IvRaytraceableObject;
 import ivorius.ivtoolkit.raytracing.IvRaytracedIntersection;
 import ivorius.yegamolchattels.YeGamolChattels;
@@ -27,7 +29,7 @@ import org.lwjgl.util.vector.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements ITileEntityUpdateData
+public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements PartialUpdateHandler
 {
     public static final int shelfJamien = 0;
     public static final int shelfWall = 1;
@@ -357,7 +359,7 @@ public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements IT
                             player.inventory.mainInventory[player.inventory.currentItem] = null;
 
                         narniaActivating = !narniaActivating;
-                        YeGamolChattels.chTileEntityData.sendUpdatePacketSafe(this, "narniaProgress");
+                        IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "narniaProgress", YeGamolChattels.network);
                     }
                 }
                 else

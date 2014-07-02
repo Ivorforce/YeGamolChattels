@@ -6,4 +6,6 @@ package ivorius.yegamolchattels;
 public interface YGCProxy
 {
     void registerRenderers();
+
+    void registerPackets();
 }

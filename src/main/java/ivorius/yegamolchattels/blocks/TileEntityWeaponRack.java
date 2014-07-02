@@ -9,7 +9,9 @@ import cpw.mods.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.blocks.IvTileEntityRotatable;
 import ivorius.ivtoolkit.entities.IvEntityHelper;
-import ivorius.ivtoolkit.network.ITileEntityUpdateData;
+import ivorius.ivtoolkit.network.IvNetworkHelperServer;
+import ivorius.ivtoolkit.network.PacketTileEntityData;
+import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.ivtoolkit.raytracing.IvRaytraceableObject;
 import ivorius.ivtoolkit.raytracing.IvRaytracedIntersection;
 import ivorius.ivtoolkit.raytracing.IvRaytracerMC;
@@ -29,7 +31,7 @@ import net.minecraftforge.common.util.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TileEntityWeaponRack extends IvTileEntityRotatable implements ITileEntityUpdateData
+public class TileEntityWeaponRack extends IvTileEntityRotatable implements PartialUpdateHandler
 {
     public static final int weaponRackTypeFloor = 0;
     public static final int weaponRackTypeWall = 1;
@@ -146,7 +148,7 @@ public class TileEntityWeaponRack extends IvTileEntityRotatable implements ITile
 
                 storedWeaponsSwinging[slot] = 0.0f;
 
-                YeGamolChattels.chTileEntityData.sendUpdatePacketSafe(this, "weaponRackData");
+                IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "weaponRackData", YeGamolChattels.network);
                 markDirty();
             }
 
@@ -222,7 +224,7 @@ public class TileEntityWeaponRack extends IvTileEntityRotatable implements ITile
 
                 storedWeapons[slot] = null;
 
-                YeGamolChattels.chTileEntityData.sendUpdatePacketSafe(this, "weaponRackData");
+                IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "weaponRackData", YeGamolChattels.network);
                 markDirty();
             }
 
@@ -242,7 +244,7 @@ public class TileEntityWeaponRack extends IvTileEntityRotatable implements ITile
                 {
                     storedWeapons[slot] = null;
 
-                    YeGamolChattels.chTileEntityData.sendUpdatePacketSafe(this, "weaponRackData");
+                    IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "weaponRackData", YeGamolChattels.network);
                     markDirty();
                 }
             }

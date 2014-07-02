@@ -14,10 +14,15 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-import ivorius.ivtoolkit.network.ChannelHandlerExtendedEntityPropertiesData;
-import ivorius.ivtoolkit.network.ChannelHandlerTileEntityData;
+import cpw.mods.fml.relauncher.Side;
+import ivorius.ivtoolkit.network.PacketEntityData;
+import ivorius.ivtoolkit.network.PacketExtendedEntityPropertiesData;
+import ivorius.ivtoolkit.network.PacketGuiAction;
+import ivorius.ivtoolkit.network.PacketTileEntityData;
 import ivorius.yegamolchattels.blocks.*;
 import ivorius.yegamolchattels.entities.EntityBanner;
 import ivorius.yegamolchattels.entities.EntityFlag;
@@ -62,8 +67,7 @@ public class YeGamolChattels
     public static Logger logger;
     public static YGCGuiHandler guiHandler;
 
-    public static ChannelHandlerTileEntityData chTileEntityData;
-    public static ChannelHandlerExtendedEntityPropertiesData chEEPData;
+    public static SimpleNetworkWrapper network;
 
     public static int entityGhostGlobalID;
 
@@ -86,12 +90,6 @@ public class YeGamolChattels
         easterEggsAllowed = config.get("General", "easterEggsAllowed", true).getBoolean(true);
 
         config.save();
-
-        chEEPData = new ChannelHandlerExtendedEntityPropertiesData("YGC|EntityData");
-        NetworkRegistry.INSTANCE.newChannel(chEEPData.packetChannel, chEEPData);
-
-        chTileEntityData = new ChannelHandlerTileEntityData("YGC|TEData");
-        NetworkRegistry.INSTANCE.newChannel(chTileEntityData.packetChannel, chTileEntityData);
 
         guiHandler = new YGCGuiHandler();
         NetworkRegistry.INSTANCE.registerGuiHandler(this, guiHandler);
@@ -236,6 +234,12 @@ public class YeGamolChattels
     @EventHandler
     public void load(FMLInitializationEvent event)
     {
+        network = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
+        network.registerMessage(PacketExtendedEntityPropertiesData.Handler.class, PacketExtendedEntityPropertiesData.class, 0, Side.CLIENT);
+        network.registerMessage(PacketEntityData.Handler.class, PacketEntityData.class, 1, Side.CLIENT);
+        network.registerMessage(PacketTileEntityData.Handler.class, PacketTileEntityData.class, 3, Side.CLIENT);
+        YeGamolChattels.network.registerMessage(PacketGuiAction.Handler.class, PacketGuiAction.class, 4, Side.SERVER);
+
         proxy.registerRenderers();
 
         addCrafting();

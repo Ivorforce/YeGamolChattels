@@ -7,7 +7,9 @@ package ivorius.yegamolchattels.blocks;
 
 import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
-import ivorius.ivtoolkit.network.ITileEntityUpdateData;
+import ivorius.ivtoolkit.network.IvNetworkHelperServer;
+import ivorius.ivtoolkit.network.PacketTileEntityData;
+import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.ivtoolkit.raytracing.IvRaytraceableObject;
 import ivorius.ivtoolkit.raytracing.IvRaytracedIntersection;
 import ivorius.ivtoolkit.raytracing.IvRaytracerMC;
@@ -26,7 +28,7 @@ import net.minecraft.util.MathHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TileEntityGong extends IvTileEntityMultiBlock implements ITileEntityUpdateData
+public class TileEntityGong extends IvTileEntityMultiBlock implements PartialUpdateHandler
 {
     public int vibrationStrength;
     public int gongType;
@@ -162,7 +164,7 @@ public class TileEntityGong extends IvTileEntityMultiBlock implements ITileEntit
                     MinecraftServer.getServer().getConfigurationManager().sendChatMsg(new ChatComponentText("Oh no! Something has gong wrong! " + EnumChatFormatting.OBFUSCATED + "GongGongGong" + EnumChatFormatting.RESET + ""));
             }
 
-            YeGamolChattels.chTileEntityData.sendUpdatePacketSafe(this, "vibrationData");
+            IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "vibrationData", YeGamolChattels.network);
             markDirty();
         }
 

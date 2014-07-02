@@ -8,7 +8,9 @@ package ivorius.yegamolchattels.blocks;
 import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.blocks.IvTileEntityHelper;
 import ivorius.ivtoolkit.math.IvMathHelper;
-import ivorius.ivtoolkit.network.ITileEntityUpdateData;
+import ivorius.ivtoolkit.network.IvNetworkHelperServer;
+import ivorius.ivtoolkit.network.PacketTileEntityData;
+import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.client.rendering.TileEntityRendererSnowGlobe;
 import net.minecraft.init.Items;
@@ -20,7 +22,7 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 
-public class TileEntitySnowGlobe extends TileEntity implements ITileEntityUpdateData
+public class TileEntitySnowGlobe extends TileEntity implements PartialUpdateHandler
 {
     public int glCallListIndex = -1;
     public boolean needsVisualUpdate = true;
@@ -74,7 +76,7 @@ public class TileEntitySnowGlobe extends TileEntity implements ITileEntityUpdate
                 stack.stackSize--;
                 isRealityGlobe = !isRealityGlobe;
 
-                YeGamolChattels.chTileEntityData.sendUpdatePacketSafe(this, "snowGlobeData");
+                IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "snowGlobeData", YeGamolChattels.network);
                 markDirty();
             }
 

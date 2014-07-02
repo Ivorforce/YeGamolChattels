@@ -14,4 +14,10 @@ public class ServerProxy implements YGCProxy
     {
 
     }
+
+    @Override
+    public void registerPackets()
+    {
+
+    }
 }

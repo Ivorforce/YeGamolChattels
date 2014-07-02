@@ -3,7 +3,9 @@ package ivorius.yegamolchattels.blocks;
 import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
 import ivorius.ivtoolkit.entities.IvEntityHelper;
-import ivorius.ivtoolkit.network.ITileEntityUpdateData;
+import ivorius.ivtoolkit.network.IvNetworkHelperServer;
+import ivorius.ivtoolkit.network.PacketTileEntityData;
+import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.items.YGCItems;
 import net.minecraft.entity.Entity;
@@ -17,7 +19,7 @@ import net.minecraft.util.MathHelper;
 /**
  * Created by lukas on 04.05.14.
  */
-public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements ITileEntityUpdateData
+public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements PartialUpdateHandler
 {
     public ItemStack containedItem;
     public static final int cutsPerLog = 6;
@@ -160,7 +162,7 @@ public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements ITileE
                 calculateIsInWood();
 
             if (worldObj.isRemote)
-                YeGamolChattels.chTileEntityData.sendPacketToServerSafe(this, "sawMove");
+                IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "sawMove", YeGamolChattels.network);
 
             if (woodCutY >= 1.0f)
                 chopOffWood(woodCutScore, player);

@@ -3,7 +3,8 @@ package ivorius.yegamolchattels.blocks;
 import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
 import ivorius.ivtoolkit.entities.IvEntityHelper;
-import ivorius.ivtoolkit.network.ITileEntityUpdateData;
+import ivorius.ivtoolkit.network.PacketTileEntityData;
+import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.gui.YGCGuiHandler;
 import ivorius.yegamolchattels.items.YGCItems;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 /**
  * Created by lukas on 04.05.14.
  */
-public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implements ITileEntityUpdateData
+public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implements PartialUpdateHandler
 {
     private static ArrayList<IPlanksRefinementEntry> planksRefinementEntries = new ArrayList<IPlanksRefinementEntry>();
 

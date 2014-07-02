@@ -8,7 +8,9 @@ package ivorius.yegamolchattels.blocks;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
-import ivorius.ivtoolkit.network.ITileEntityUpdateData;
+import ivorius.ivtoolkit.network.IvNetworkHelperServer;
+import ivorius.ivtoolkit.network.PacketTileEntityData;
+import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.ivtoolkit.tools.IvDateHelper;
 import ivorius.yegamolchattels.YeGamolChattels;
 import net.minecraft.client.Minecraft;
@@ -30,7 +32,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 
-public class TileEntityStatue extends IvTileEntityMultiBlock implements ITileEntityUpdateData
+public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialUpdateHandler
 {
     public static Class[] equippableMobs = new Class[]{EntityZombie.class, EntitySkeleton.class};
     public static Class[] dangerousMobs = new Class[]{EntityGiantZombie.class, EntityDragon.class, EntityWither.class};
@@ -57,7 +59,7 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements ITileEnt
     {
         setStatueEntity(statueEntity, safe);
 
-        YeGamolChattels.chTileEntityData.sendUpdatePacketSafe(this, "statueData");
+        IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "statueData", YeGamolChattels.network);
         markDirty();
     }
 
@@ -129,7 +131,7 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements ITileEnt
 
                     worldObj.spawnEntityInWorld(statueEntity);
 
-                    YeGamolChattels.chTileEntityData.sendUpdatePacketSafe(this, "statueData");
+                    IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "statueData", YeGamolChattels.network);
                     markDirty();
                 }
 
@@ -201,7 +203,7 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements ITileEnt
                         statueEntity.setCurrentItemOrArmor(slot, item.copy());
                         item.stackSize = 0;
 
-                        YeGamolChattels.chTileEntityData.sendUpdatePacketSafe(this, "statueData");
+                        IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "statueData", YeGamolChattels.network);
                         markDirty();
                     }
 
@@ -249,7 +251,7 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements ITileEnt
                     }
                 }
 
-                YeGamolChattels.chTileEntityData.sendUpdatePacketSafe(this, "statueData");
+                IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "statueData", YeGamolChattels.network);
                 markDirty();
             }
         }

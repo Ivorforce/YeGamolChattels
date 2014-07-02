@@ -8,7 +8,10 @@ package ivorius.yegamolchattels.client;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import ivorius.ivtoolkit.network.PacketGuiAction;
 import ivorius.yegamolchattels.YGCProxy;
+import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.server.ServerProxy;
 import ivorius.yegamolchattels.blocks.*;
 import ivorius.yegamolchattels.client.rendering.*;
@@ -45,6 +48,12 @@ public class ClientProxy implements YGCProxy
         RenderingRegistry.registerEntityRenderingHandler(EntityGhost.class, new RenderGhost());
 
         MinecraftForge.EVENT_BUS.register(this); // For the rendering events
+    }
+
+    @Override
+    public void registerPackets()
+    {
+
     }
 
     @SubscribeEvent

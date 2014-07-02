@@ -7,7 +7,9 @@ package ivorius.yegamolchattels.blocks;
 
 import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.blocks.IvTileEntityHelper;
-import ivorius.ivtoolkit.network.ITileEntityUpdateData;
+import ivorius.ivtoolkit.network.IvNetworkHelperServer;
+import ivorius.ivtoolkit.network.PacketTileEntityData;
+import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.items.YGCItems;
 import net.minecraft.block.Block;
@@ -27,7 +29,7 @@ import net.minecraft.tileentity.TileEntity;
 
 import java.util.Random;
 
-public class TileEntityGrindstone extends TileEntity implements ITileEntityUpdateData
+public class TileEntityGrindstone extends TileEntity implements PartialUpdateHandler
 {
     public static final int maxGrindstoneHealth = 30;
 
@@ -95,7 +97,7 @@ public class TileEntityGrindstone extends TileEntity implements ITileEntityUpdat
                     this.grindstoneHealth = maxGrindstoneHealth;
                     stack.stackSize--;
 
-                    YeGamolChattels.chTileEntityData.sendUpdatePacketSafe(this, "grindstoneData");
+                    IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "grindstoneData", YeGamolChattels.network);
                     markDirty();
                 }
 
@@ -170,7 +172,7 @@ public class TileEntityGrindstone extends TileEntity implements ITileEntityUpdat
                         timeSharpening = 30;
                     }
 
-                    YeGamolChattels.chTileEntityData.sendUpdatePacketSafe(this, "grindstoneData");
+                    IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "grindstoneData", YeGamolChattels.network);
                     markDirty();
 
                     return true;
@@ -198,7 +200,7 @@ public class TileEntityGrindstone extends TileEntity implements ITileEntityUpdat
             if (crankRotationTime > 30)
                 crankRotationTime = 30;
 
-            YeGamolChattels.chTileEntityData.sendUpdatePacketSafe(this, "grindstoneData");
+            IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "grindstoneData", YeGamolChattels.network);
             markDirty();
         }
     }
