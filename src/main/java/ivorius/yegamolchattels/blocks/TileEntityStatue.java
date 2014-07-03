@@ -6,10 +6,11 @@
 package ivorius.yegamolchattels.blocks;
 
 import cpw.mods.fml.common.network.ByteBufUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
 import ivorius.ivtoolkit.network.IvNetworkHelperServer;
-import ivorius.ivtoolkit.network.PacketTileEntityData;
 import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.ivtoolkit.tools.IvDateHelper;
 import ivorius.yegamolchattels.YeGamolChattels;
@@ -26,6 +27,7 @@ import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
@@ -73,7 +75,7 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
             EntityLiving livingStatue = (EntityLiving) statueEntity;
 
             double[] center = getActiveCenterCoords();
-            EntityLivingBase player = Minecraft.getMinecraft().thePlayer;
+            EntityLivingBase player = getClientPlayer();
             statueEntity.setPosition(center[0], center[1], center[2]);
 
             if (livingStatue instanceof EntityVillager)
@@ -88,6 +90,12 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
             livingStatue.prevRotationYawHead = livingStatue.rotationYawHead;
             livingStatue.prevRotationPitch = livingStatue.rotationPitch;
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private EntityPlayer getClientPlayer()
+    {
+        return Minecraft.getMinecraft().thePlayer;
     }
 
     public boolean letStatueComeAlive()

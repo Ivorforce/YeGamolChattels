@@ -2,13 +2,9 @@ package ivorius.ivtoolkit.network;
 
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
 /**
@@ -46,6 +42,46 @@ public class PacketExtendedEntityPropertiesData implements IMessage
         return new PacketExtendedEntityPropertiesData(entity.getEntityId(), context, eepKey, buf);
     }
 
+    public int getEntityID()
+    {
+        return entityID;
+    }
+
+    public void setEntityID(int entityID)
+    {
+        this.entityID = entityID;
+    }
+
+    public String getContext()
+    {
+        return context;
+    }
+
+    public void setContext(String context)
+    {
+        this.context = context;
+    }
+
+    public String getEepKey()
+    {
+        return eepKey;
+    }
+
+    public void setEepKey(String eepKey)
+    {
+        this.eepKey = eepKey;
+    }
+
+    public ByteBuf getPayload()
+    {
+        return payload;
+    }
+
+    public void setPayload(ByteBuf payload)
+    {
+        this.payload = payload;
+    }
+
     @Override
     public void fromBytes(ByteBuf buf)
     {
@@ -64,23 +100,4 @@ public class PacketExtendedEntityPropertiesData implements IMessage
         IvPacketHelper.writeByteBuffer(buf, payload);
     }
 
-    public static class Handler implements IMessageHandler<PacketExtendedEntityPropertiesData, IMessage>
-    {
-        @Override
-        public IMessage onMessage(PacketExtendedEntityPropertiesData message, MessageContext ctx)
-        {
-            World world = Minecraft.getMinecraft().theWorld;
-            Entity entity = world.getEntityByID(message.entityID);
-
-            if (entity != null)
-            {
-                IExtendedEntityProperties eep = entity.getExtendedProperties(message.eepKey);
-
-                if (eep != null)
-                    ((PartialUpdateHandler) eep).readUpdateData(message.payload, message.context);
-            }
-
-            return null;
-        }
-    }
 }

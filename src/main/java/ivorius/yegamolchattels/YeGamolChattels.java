@@ -14,15 +14,11 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
-import ivorius.ivtoolkit.network.PacketEntityData;
-import ivorius.ivtoolkit.network.PacketExtendedEntityPropertiesData;
-import ivorius.ivtoolkit.network.PacketGuiAction;
-import ivorius.ivtoolkit.network.PacketTileEntityData;
+import ivorius.ivtoolkit.network.*;
 import ivorius.yegamolchattels.blocks.*;
 import ivorius.yegamolchattels.entities.EntityBanner;
 import ivorius.yegamolchattels.entities.EntityFlag;
@@ -30,7 +26,6 @@ import ivorius.yegamolchattels.entities.EntityGhost;
 import ivorius.yegamolchattels.entities.YGCEntityList;
 import ivorius.yegamolchattels.gui.YGCGuiHandler;
 import ivorius.yegamolchattels.items.*;
-import ivorius.yegamolchattels.server.ServerProxy;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -235,10 +230,8 @@ public class YeGamolChattels
     public void load(FMLInitializationEvent event)
     {
         network = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
-        network.registerMessage(PacketExtendedEntityPropertiesData.Handler.class, PacketExtendedEntityPropertiesData.class, 0, Side.CLIENT);
-        network.registerMessage(PacketEntityData.Handler.class, PacketEntityData.class, 1, Side.CLIENT);
-        network.registerMessage(PacketTileEntityData.Handler.class, PacketTileEntityData.class, 3, Side.CLIENT);
-        YeGamolChattels.network.registerMessage(PacketGuiAction.Handler.class, PacketGuiAction.class, 4, Side.SERVER);
+        YeGamolChattels.network.registerMessage(PacketGuiActionHandler.class, PacketGuiAction.class, 4, Side.SERVER);
+        proxy.registerPackets();
 
         proxy.registerRenderers();
 

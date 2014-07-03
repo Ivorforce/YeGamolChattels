@@ -40,6 +40,26 @@ public class PacketGuiAction implements IMessage
         return new PacketGuiAction(context, payload);
     }
 
+    public String getContext()
+    {
+        return context;
+    }
+
+    public void setContext(String context)
+    {
+        this.context = context;
+    }
+
+    public ByteBuf getPayload()
+    {
+        return payload;
+    }
+
+    public void setPayload(ByteBuf payload)
+    {
+        this.payload = payload;
+    }
+
     @Override
     public void fromBytes(ByteBuf buf)
     {
@@ -52,23 +72,6 @@ public class PacketGuiAction implements IMessage
     {
         ByteBufUtils.writeUTF8String(buf, context);
         IvPacketHelper.writeByteBuffer(buf, payload);
-    }
-
-    public static class Handler implements IMessageHandler<PacketGuiAction, IMessage>
-    {
-        @Override
-        public IMessage onMessage(PacketGuiAction message, MessageContext ctx)
-        {
-            NetHandlerPlayServer netHandler = ctx.getServerHandler();
-
-            Container container = netHandler.playerEntity.openContainer;
-            if (container instanceof ActionHandler)
-            {
-                ((ActionHandler) container).handleAction(message.context, message.payload);
-            }
-
-            return null;
-        }
     }
 
     public static interface ActionHandler

@@ -9,7 +9,7 @@ import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
-import ivorius.ivtoolkit.network.PacketGuiAction;
+import ivorius.ivtoolkit.network.*;
 import ivorius.yegamolchattels.YGCProxy;
 import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.server.ServerProxy;
@@ -53,7 +53,9 @@ public class ClientProxy implements YGCProxy
     @Override
     public void registerPackets()
     {
-
+        YeGamolChattels.network.registerMessage(PacketExtendedEntityPropertiesDataHandler.class, PacketExtendedEntityPropertiesData.class, 0, Side.CLIENT);
+        YeGamolChattels.network.registerMessage(PacketEntityDataHandler.class, PacketEntityData.class, 1, Side.CLIENT);
+        YeGamolChattels.network.registerMessage(PacketTileEntityDataHandler.class, PacketTileEntityData.class, 3, Side.CLIENT);
     }
 
     @SubscribeEvent

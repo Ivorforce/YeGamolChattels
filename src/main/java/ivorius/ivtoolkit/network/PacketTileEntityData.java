@@ -2,13 +2,9 @@ package ivorius.ivtoolkit.network;
 
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 
 /**
  * Created by lukas on 01.07.14.
@@ -39,6 +35,56 @@ public class PacketTileEntityData implements IMessage
         return new PacketTileEntityData(entity.xCoord, entity.yCoord, entity.zCoord, context, buf);
     }
 
+    public int getX()
+    {
+        return x;
+    }
+
+    public void setX(int x)
+    {
+        this.x = x;
+    }
+
+    public int getY()
+    {
+        return y;
+    }
+
+    public void setY(int y)
+    {
+        this.y = y;
+    }
+
+    public int getZ()
+    {
+        return z;
+    }
+
+    public void setZ(int z)
+    {
+        this.z = z;
+    }
+
+    public String getContext()
+    {
+        return context;
+    }
+
+    public void setContext(String context)
+    {
+        this.context = context;
+    }
+
+    public ByteBuf getPayload()
+    {
+        return payload;
+    }
+
+    public void setPayload(ByteBuf payload)
+    {
+        this.payload = payload;
+    }
+
     @Override
     public void fromBytes(ByteBuf buf)
     {
@@ -59,18 +105,4 @@ public class PacketTileEntityData implements IMessage
         IvPacketHelper.writeByteBuffer(buf, payload);
     }
 
-    public static class Handler implements IMessageHandler<PacketTileEntityData, IMessage>
-    {
-        @Override
-        public IMessage onMessage(PacketTileEntityData message, MessageContext ctx)
-        {
-            World world = Minecraft.getMinecraft().theWorld;
-            TileEntity entity = world.getTileEntity(message.x, message.y, message.z);
-
-            if (entity != null)
-                ((PartialUpdateHandler) entity).readUpdateData(message.payload, message.context);
-
-            return null;
-        }
-    }
 }
