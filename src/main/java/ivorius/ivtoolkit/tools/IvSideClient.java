@@ -16,35 +16,28 @@
  * No additional restrictions — You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.
  */
 
-package ivorius.ivtoolkit.network;
+package ivorius.ivtoolkit.tools;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import ivorius.ivtoolkit.tools.IvSideClient;
-import net.minecraft.entity.Entity;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IExtendedEntityProperties;
 
 /**
- * Created by lukas on 02.07.14.
+ * Created by lukas on 03.07.14.
  */
-public class PacketExtendedEntityPropertiesDataHandler implements IMessageHandler<PacketExtendedEntityPropertiesData, IMessage>
+public class IvSideClient
 {
-    @Override
-    public IMessage onMessage(PacketExtendedEntityPropertiesData message, MessageContext ctx)
+    @SideOnly(Side.CLIENT)
+    public static EntityPlayer getClientPlayer()
     {
-        World world = IvSideClient.getClientWorld();
-        Entity entity = world.getEntityByID(message.getEntityID());
+        return Minecraft.getMinecraft().thePlayer;
+    }
 
-        if (entity != null)
-        {
-            IExtendedEntityProperties eep = entity.getExtendedProperties(message.getEepKey());
-
-            if (eep != null)
-                ((PartialUpdateHandler) eep).readUpdateData(message.getPayload(), message.getContext());
-        }
-
-        return null;
+    @SideOnly(Side.CLIENT)
+    public static World getClientWorld()
+    {
+        return Minecraft.getMinecraft().theWorld;
     }
 }

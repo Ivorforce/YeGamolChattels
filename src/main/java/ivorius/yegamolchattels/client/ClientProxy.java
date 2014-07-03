@@ -53,14 +53,6 @@ public class ClientProxy implements YGCProxy
     }
 
     @Override
-    public void registerPackets()
-    {
-        YeGamolChattels.network.registerMessage(PacketExtendedEntityPropertiesDataHandler.class, PacketExtendedEntityPropertiesData.class, 0, Side.CLIENT);
-        YeGamolChattels.network.registerMessage(PacketEntityDataHandler.class, PacketEntityData.class, 1, Side.CLIENT);
-        YeGamolChattels.network.registerMessage(PacketTileEntityDataHandler.class, PacketTileEntityData.class, 3, Side.CLIENT);
-    }
-
-    @Override
     public EntityPlayer getClientPlayer()
     {
         return Minecraft.getMinecraft().thePlayer;

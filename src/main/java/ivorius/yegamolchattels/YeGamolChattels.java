@@ -230,8 +230,10 @@ public class YeGamolChattels
     public void load(FMLInitializationEvent event)
     {
         network = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
+        YeGamolChattels.network.registerMessage(PacketExtendedEntityPropertiesDataHandler.class, PacketExtendedEntityPropertiesData.class, 0, Side.CLIENT);
+        YeGamolChattels.network.registerMessage(PacketEntityDataHandler.class, PacketEntityData.class, 1, Side.CLIENT);
+        YeGamolChattels.network.registerMessage(PacketTileEntityDataHandler.class, PacketTileEntityData.class, 3, Side.CLIENT);
         YeGamolChattels.network.registerMessage(PacketGuiActionHandler.class, PacketGuiAction.class, 4, Side.SERVER);
-        proxy.registerPackets();
 
         proxy.registerRenderers();
 

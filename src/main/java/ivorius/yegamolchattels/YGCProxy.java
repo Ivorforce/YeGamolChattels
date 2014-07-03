@@ -9,7 +9,5 @@ public interface YGCProxy
 {
     void registerRenderers();
 
-    void registerPackets();
-
     EntityPlayer getClientPlayer();
 }

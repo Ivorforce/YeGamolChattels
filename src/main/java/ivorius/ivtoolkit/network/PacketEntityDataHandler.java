@@ -21,7 +21,7 @@ package ivorius.ivtoolkit.network;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import net.minecraft.client.Minecraft;
+import ivorius.ivtoolkit.tools.IvSideClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
@@ -33,7 +33,7 @@ public class PacketEntityDataHandler implements IMessageHandler<PacketEntityData
     @Override
     public IMessage onMessage(PacketEntityData message, MessageContext ctx)
     {
-        World world = Minecraft.getMinecraft().theWorld;
+        World world = IvSideClient.getClientWorld();
         Entity entity = world.getEntityByID(message.getEntityID());
 
         if (entity != null)

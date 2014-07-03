@@ -7,14 +7,20 @@ import io.netty.buffer.ByteBuf;
  */
 public class IvPacketHelper
 {
-    public static void writeByteBuffer(ByteBuf src, ByteBuf dst)
+    public static void writeByteBuffer(ByteBuf dst, ByteBuf src)
     {
-        src.writeInt(dst.writerIndex()).writeBytes(dst);
+        int length = src.readableBytes();
+        System.out.println("IvPacketHelper.writeByteBuffer");
+        System.out.println("length = " + length);
+        dst.writeInt(length).writeBytes(src, 0, length);
     }
 
     public static ByteBuf readByteBuffer(ByteBuf src)
     {
-        return src.readBytes(src.readInt());
+        int length = src.readInt();
+        System.out.println("IvPacketHelper.readByteBuffer");
+        System.out.println("length = " + length);
+        return src.readBytes(length);
     }
 
     public static void writeNumber(ByteBuf buffer, Number number)

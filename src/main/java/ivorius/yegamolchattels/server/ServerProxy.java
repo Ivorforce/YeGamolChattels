@@ -17,12 +17,6 @@ public class ServerProxy implements YGCProxy
     }
 
     @Override
-    public void registerPackets()
-    {
-
-    }
-
-    @Override
     public EntityPlayer getClientPlayer()
     {
         throw new UnsupportedOperationException();
