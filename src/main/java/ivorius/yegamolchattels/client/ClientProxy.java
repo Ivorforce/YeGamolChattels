@@ -18,6 +18,8 @@ import ivorius.yegamolchattels.client.rendering.*;
 import ivorius.yegamolchattels.entities.EntityBanner;
 import ivorius.yegamolchattels.entities.EntityFlag;
 import ivorius.yegamolchattels.entities.EntityGhost;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.ChunkEvent;
@@ -56,6 +58,12 @@ public class ClientProxy implements YGCProxy
         YeGamolChattels.network.registerMessage(PacketExtendedEntityPropertiesDataHandler.class, PacketExtendedEntityPropertiesData.class, 0, Side.CLIENT);
         YeGamolChattels.network.registerMessage(PacketEntityDataHandler.class, PacketEntityData.class, 1, Side.CLIENT);
         YeGamolChattels.network.registerMessage(PacketTileEntityDataHandler.class, PacketTileEntityData.class, 3, Side.CLIENT);
+    }
+
+    @Override
+    public EntityPlayer getClientPlayer()
+    {
+        return Minecraft.getMinecraft().thePlayer;
     }
 
     @SubscribeEvent
