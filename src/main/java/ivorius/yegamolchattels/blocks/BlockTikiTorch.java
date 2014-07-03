@@ -12,6 +12,7 @@ import net.minecraft.block.BlockStairs;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
@@ -52,6 +53,12 @@ public class BlockTikiTorch extends Block
     public int getRenderType()
     {
         return YGCBlocks.blockTikiTorchRenderType;
+    }
+
+    @Override
+    public Item getItemDropped(int metadata, Random random, int luck)
+    {
+        return metadata == 0 ? super.getItemDropped(metadata, random, luck) : null;
     }
 
     private boolean canPlaceTorchOn(World par1World, int par2, int par3, int par4)
