@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
 import ivorius.ivtoolkit.entities.IvEntityHelper;
 import ivorius.ivtoolkit.network.IvNetworkHelperServer;
+import ivorius.ivtoolkit.network.PacketTileEntityClientEvent;
 import ivorius.ivtoolkit.network.PacketTileEntityData;
 import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.yegamolchattels.YeGamolChattels;
@@ -162,7 +163,7 @@ public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements Partia
                 calculateIsInWood();
 
             if (worldObj.isRemote)
-                IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "sawMove", YeGamolChattels.network);
+                YeGamolChattels.network.sendToServer(PacketTileEntityClientEvent.packetEntityData(this, "sawMove"));
 
             if (woodCutY >= 1.0f)
                 chopOffWood(woodCutScore, player);
