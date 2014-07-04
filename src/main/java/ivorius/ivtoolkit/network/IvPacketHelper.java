@@ -10,16 +10,12 @@ public class IvPacketHelper
     public static void writeByteBuffer(ByteBuf dst, ByteBuf src)
     {
         int length = src.readableBytes();
-        System.out.println("IvPacketHelper.writeByteBuffer");
-        System.out.println("length = " + length);
         dst.writeInt(length).writeBytes(src, 0, length);
     }
 
     public static ByteBuf readByteBuffer(ByteBuf src)
     {
         int length = src.readInt();
-        System.out.println("IvPacketHelper.readByteBuffer");
-        System.out.println("length = " + length);
         return src.readBytes(length);
     }
 
