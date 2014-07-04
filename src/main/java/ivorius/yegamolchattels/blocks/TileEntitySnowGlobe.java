@@ -175,10 +175,9 @@ public class TileEntitySnowGlobe extends TileEntity implements PartialUpdateHand
         }
     }
 
-    // Pass 1 bugged
-//    @Override
-//    public boolean shouldRenderInPass(int pass)
-//    {
-//        return pass == 1;
-//    }
+    @Override
+    public boolean shouldRenderInPass(int pass)
+    {
+        return pass == 1 || pass == 0;
+    }
 }

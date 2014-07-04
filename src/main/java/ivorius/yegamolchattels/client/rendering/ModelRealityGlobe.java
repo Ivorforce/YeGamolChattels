@@ -27,7 +27,7 @@ public class ModelRealityGlobe extends ModelBase
         textureHeight = 64;
 
         globe = new ModelRenderer(this, 0, 22);
-        globe.addBox(-7F, -1F, -7F, 14, 12, 14);
+        globe.addBox(-7F, -0.99F, -7F, 14, 12, 14);
         globe.setRotationPoint(0F, 8F, 0F);
         globe.setTextureSize(128, 64);
         globe.mirror = true;

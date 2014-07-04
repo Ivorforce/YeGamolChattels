@@ -21,6 +21,8 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.client.MinecraftForgeClient;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
@@ -53,22 +55,22 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
     }
 
     @Override
-    public void renderTileEntityAt(TileEntity var1, double var2, double var4, double var6, float var8)
+    public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float partialTicks)
     {
-        TileEntitySnowGlobe realityGlobe = ((TileEntitySnowGlobe) var1);
+        int pass = MinecraftForgeClient.getRenderPass();
+        TileEntitySnowGlobe realityGlobe = ((TileEntitySnowGlobe) tileEntity);
 
-        double playerDistSQ = var2 * var2 + var4 * var4 + var6 * var6;
-        Tessellator tessellator = Tessellator.instance;
+        double playerDistSQ = x * x + y * y + z * z;
 
         GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
         GL11.glPushMatrix();
-        GL11.glTranslated(var2 + 0.5, var4 + 0.5, var6 + 0.5);
+        GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
 
         float rumbling = realityGlobe.getRumbling();
-        float rumble = rumbling > 0.0f ? (-var1.getWorldObj().rand.nextFloat() * rumbling) : 0.0f;
+        float rumble = rumbling > 0.0f ? (-tileEntity.getWorldObj().rand.nextFloat() * rumbling) : 0.0f;
 
-        if (playerDistSQ < 4 * 4)
+        if (playerDistSQ < 4 * 4 && pass == 0)
         {
             if (realityGlobe.glCallListIndex < 0)
                 constructCallList(realityGlobe, this.blockRenderer);
@@ -123,14 +125,14 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
             {
                 if (playerDistSQ < 4 * 4)
                 {
-                    AxisAlignedBB bb = AxisAlignedBB.getBoundingBox((double) var1.xCoord - sizeX, (double) var1.yCoord - sizeY, (double) var1.zCoord - sizeZ, (double) var1.xCoord + 1 + sizeX, (double) var1.yCoord + 1 + sizeY, (double) var1.zCoord + 1 + sizeZ);
-                    List entities = var1.getWorldObj().getEntitiesWithinAABBExcludingEntity(null, bb);
+                    AxisAlignedBB bb = AxisAlignedBB.getBoundingBox((double) tileEntity.xCoord - sizeX, (double) tileEntity.yCoord - sizeY, (double) tileEntity.zCoord - sizeZ, (double) tileEntity.xCoord + 1 + sizeX, (double) tileEntity.yCoord + 1 + sizeY, (double) tileEntity.zCoord + 1 + sizeZ);
+                    List entities = tileEntity.getWorldObj().getEntitiesWithinAABBExcludingEntity(null, bb);
 
                     if (entities.size() > 0)
                     {
                         GL11.glPushMatrix();
                         setupWorldTransform(rumble);
-                        GL11.glTranslated(-var1.xCoord - 0.5, -var1.yCoord - 0.5, -var1.zCoord - 0.5);
+                        GL11.glTranslated(-tileEntity.xCoord - 0.5, -tileEntity.yCoord - 0.5, -tileEntity.zCoord - 0.5);
 
                         for (Object obj : entities)
                         {
@@ -139,12 +141,12 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
                             AxisAlignedBB entityBB = entity.boundingBox;
                             if (entityBB.minX > bb.minX && entityBB.maxX < bb.maxX && entityBB.minY > bb.minY && entityBB.maxY < bb.maxY && entityBB.minZ > bb.minZ && entityBB.maxZ < bb.maxZ)
                             {
-                                double rX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double) var8;
-                                double rY = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double) var8;
-                                double rZ = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double) var8;
-                                float rYaw = entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * var8;
+                                double rX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double) partialTicks;
+                                double rY = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double) partialTicks;
+                                double rZ = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double) partialTicks;
+                                float rYaw = entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * partialTicks;
 
-                                RenderManager.instance.renderEntityWithPosYaw(entity, rX, rY, rZ, rYaw, var8);
+                                RenderManager.instance.renderEntityWithPosYaw(entity, rX, rY, rZ, rYaw, partialTicks);
                             }
                         }
 
@@ -169,7 +171,8 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
             GL11.glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
             GL11.glTranslated(0.0, -1.0, 0.0);
             bindTexture(realityGlobeTextureClear);
-            modelRealityGlobe.render(null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+            if (pass == 0)
+                modelRealityGlobe.render(null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
 
 //            if (globeAlpha > 0.0)
             {
@@ -178,7 +181,8 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
                 OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
                 GL11.glDisable(GL11.GL_ALPHA_TEST);
                 GL11.glColor4f(1.0f, 1.0f, 1.0f, globeAlpha);
-                modelRealityGlobe.render(null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+                if (pass == 1)
+                    modelRealityGlobe.render(null, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
                 GL11.glEnable(GL11.GL_ALPHA_TEST);
                 GL11.glPopMatrix();
             }
