@@ -126,7 +126,8 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
 
     public void refineWithItem(ItemStack usedTool, EntityLivingBase entityLivingBase, float x, float y, float speed)
     {
-        int speedInfl = MathHelper.floor_float(speed * 1.0f) + ((worldObj.rand.nextFloat() < (speed % 1.0f) * 1.0f) ? 1 : 0);
+        speed = speed * 0.3f;
+        int speedInfl = MathHelper.floor_float(speed) + ((worldObj.rand.nextFloat() < speed % 1.0f) ? 1 : 0);
         usedTool.damageItem(1 + speedInfl, entityLivingBase);
 
         int startSlotX = MathHelper.floor_float(x - 1.5f + 0.5f);

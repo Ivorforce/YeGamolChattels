@@ -190,15 +190,8 @@ public class GuiScreenPlanksRefinement extends GuiScreen
 
     private float getRefinementSafe(int x, int y)
     {
-        if (x < 0)
-            x = 0;
-        else if (x >= TileEntityPlanksRefinement.REFINEMENT_SLOTS_X)
-            x = TileEntityPlanksRefinement.REFINEMENT_SLOTS_X - 1;
-
-        if (y < 0)
-            y = 0;
-        else if (y >= TileEntityPlanksRefinement.REFINEMENT_SLOTS_Y)
-            y = TileEntityPlanksRefinement.REFINEMENT_SLOTS_Y - 1;
+        x = MathHelper.clamp_int(x, 0, TileEntityPlanksRefinement.REFINEMENT_SLOTS_X - 1);
+        y = MathHelper.clamp_int(y, 0, TileEntityPlanksRefinement.REFINEMENT_SLOTS_Y - 1);
 
         return Math.min(tileEntity.getRefinement(x, y), 1.4f) * 0.4f;
     }
@@ -210,8 +203,8 @@ public class GuiScreenPlanksRefinement extends GuiScreen
 
         if (buttonClicked == 0)
         {
-            mouseLastKnownSpeedX = mouseX - mouseLastKnownX;
-            mouseLastKnownSpeedY = mouseY - mouseLastKnownY;
+            mouseLastKnownSpeedX = 0;
+            mouseLastKnownSpeedY = 0;
             mouseLastKnownX = mouseX;
             mouseLastKnownY = mouseY;
             mouseButtonDown = buttonClicked;
