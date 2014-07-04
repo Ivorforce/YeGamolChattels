@@ -30,7 +30,7 @@ public class BlockItemShelf extends IvBlockMultiblock
     {
         super(par2Material);
 
-        setCreativeTab(CreativeTabs.tabDecorations);
+        setCreativeTab(YeGamolChattels.tabMain);
     }
 
     @Override

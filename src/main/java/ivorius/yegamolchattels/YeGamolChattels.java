@@ -64,6 +64,15 @@ public class YeGamolChattels
 
     public static SimpleNetworkWrapper network;
 
+    public static CreativeTabs tabMain = new CreativeTabs("yegamolchattels")
+    {
+        @Override
+        public Item getTabIconItem()
+        {
+            return Item.getItemFromBlock(YGCBlocks.snowGlobe);
+        }
+    };
+
     public static int entityGhostGlobalID;
 
     public static boolean areDangerousStatuesAllowed;
@@ -101,64 +110,64 @@ public class YeGamolChattels
 
         // --------------------------------Tiki Torch--------------------------------
 
-        YGCBlocks.tikiTorch = (new BlockTikiTorch()).setHardness(0.0F).setLightLevel(0.9375F).setStepSound(Block.soundTypeWood).setBlockName("tikiTorch").setBlockTextureName("tikiTorch").setCreativeTab(CreativeTabs.tabDecorations);
+        YGCBlocks.tikiTorch = (new BlockTikiTorch()).setHardness(0.0F).setLightLevel(0.9375F).setStepSound(Block.soundTypeWood).setBlockName("tikiTorch").setBlockTextureName("tikiTorch").setCreativeTab(tabMain);
         GameRegistry.registerBlock(YGCBlocks.tikiTorch, ItemTikiTorch.class, "tikiTorch");
 
         // --------------------------------Banner--------------------------------
 
         EntityRegistry.registerModEntity(EntityBanner.class, "ygcBanner", YGCEntityList.bannerID, this, 160, Integer.MAX_VALUE, false);
 
-        YGCItems.bannerSmall = (new ItemBanner(0, "small")).setUnlocalizedName("bannerSmall").setTextureName(textureBase + "bannerSmall").setCreativeTab(CreativeTabs.tabDecorations);
-        YGCItems.bannerLarge = (new ItemBanner(2, "large")).setUnlocalizedName("bannerLarge").setTextureName(textureBase + "bannerLarge").setCreativeTab(CreativeTabs.tabDecorations);
+        YGCItems.bannerSmall = (new ItemBanner(0, "small")).setUnlocalizedName("bannerSmall").setTextureName(textureBase + "bannerSmall").setCreativeTab(tabMain);
+        YGCItems.bannerLarge = (new ItemBanner(2, "large")).setUnlocalizedName("bannerLarge").setTextureName(textureBase + "bannerLarge").setCreativeTab(tabMain);
 
         GameRegistry.registerItem(YGCItems.bannerSmall, "bannerSmall", MODID);
         GameRegistry.registerItem(YGCItems.bannerLarge, "bannerLarge", MODID);
 
         // --------------------------------Statue--------------------------------
 
-        YGCBlocks.statueStone = (new BlockStatue(Material.rock, 0)).setHardness(2.0F).setStepSound(Block.soundTypeStone).setBlockName("statueStone").setBlockTextureName("statueStone").setCreativeTab(CreativeTabs.tabDecorations);
+        YGCBlocks.statueStone = (new BlockStatue(Material.rock, 0)).setHardness(2.0F).setStepSound(Block.soundTypeStone).setBlockName("statueStone").setBlockTextureName("statueStone").setCreativeTab(tabMain);
         GameRegistry.registerBlock(YGCBlocks.statueStone, ItemStatue.class, "statueStone", MODID, 0);
 
-        YGCBlocks.statuePlanks = (new BlockStatue(Material.wood, 1)).setHardness(2.0F).setStepSound(Block.soundTypeWood).setBlockName("statuePlanks").setBlockTextureName("statuePlanks").setCreativeTab(CreativeTabs.tabDecorations);
+        YGCBlocks.statuePlanks = (new BlockStatue(Material.wood, 1)).setHardness(2.0F).setStepSound(Block.soundTypeWood).setBlockName("statuePlanks").setBlockTextureName("statuePlanks").setCreativeTab(tabMain);
         GameRegistry.registerBlock(YGCBlocks.statuePlanks, ItemStatue.class, "statuePlanks", MODID, 1);
 
-        YGCBlocks.statueGold = (new BlockStatue(Material.iron, 2)).setHardness(2.0F).setStepSound(Block.soundTypeMetal).setBlockName("statueGold").setBlockTextureName("statueGold").setCreativeTab(CreativeTabs.tabDecorations);
+        YGCBlocks.statueGold = (new BlockStatue(Material.iron, 2)).setHardness(2.0F).setStepSound(Block.soundTypeMetal).setBlockName("statueGold").setBlockTextureName("statueGold").setCreativeTab(tabMain);
         GameRegistry.registerBlock(YGCBlocks.statueGold, ItemStatue.class, "statueGold", MODID, 2);
 
         GameRegistry.registerTileEntity(TileEntityStatue.class, "ygcStatue");
 
         // --------------------------------Treasure piles--------------------------------
 
-        YGCBlocks.treasurePile = new BlockTreasurePile().setHardness(0.2F).setStepSound(Block.soundTypeMetal).setBlockName("treasurePile").setBlockTextureName(textureBase + "treasurePile").setCreativeTab(CreativeTabs.tabDecorations);
+        YGCBlocks.treasurePile = new BlockTreasurePile().setHardness(0.2F).setStepSound(Block.soundTypeMetal).setBlockName("treasurePile").setBlockTextureName(textureBase + "treasurePile").setCreativeTab(tabMain);
         GameRegistry.registerBlock(YGCBlocks.treasurePile, ItemBlock.class, "treasurePile", MODID);
 
         // --------------------------------Flags--------------------------------
 
         EntityRegistry.registerModEntity(EntityFlag.class, "ygcFlag", YGCEntityList.flagID, this, 160, Integer.MAX_VALUE, false);
 
-        YGCItems.flagSmall = (new ItemFlag(0, "small")).setUnlocalizedName("flagSmall").setTextureName(textureBase + "flagSmall").setCreativeTab(CreativeTabs.tabDecorations);
-        YGCItems.flagLarge = (new ItemFlag(2, "large")).setUnlocalizedName("flagLarge").setTextureName(textureBase + "flagLarge").setCreativeTab(CreativeTabs.tabDecorations);
+        YGCItems.flagSmall = (new ItemFlag(0, "small")).setUnlocalizedName("flagSmall").setTextureName(textureBase + "flagSmall").setCreativeTab(tabMain);
+        YGCItems.flagLarge = (new ItemFlag(2, "large")).setUnlocalizedName("flagLarge").setTextureName(textureBase + "flagLarge").setCreativeTab(tabMain);
 
         GameRegistry.registerItem(YGCItems.flagSmall, "flagSmall", MODID);
         GameRegistry.registerItem(YGCItems.flagLarge, "flagLarge", MODID);
 
         // --------------------------------Old Clock--------------------------------
 
-        YGCBlocks.grandfatherClock = (new BlockGrandfatherClock(Material.wood)).setHardness(1.5F).setStepSound(Block.soundTypeWood).setBlockName("grandfatherClock").setBlockTextureName(textureBase + "grandfatherClock").setCreativeTab(CreativeTabs.tabDecorations);
+        YGCBlocks.grandfatherClock = (new BlockGrandfatherClock(Material.wood)).setHardness(1.5F).setStepSound(Block.soundTypeWood).setBlockName("grandfatherClock").setBlockTextureName(textureBase + "grandfatherClock").setCreativeTab(tabMain);
         GameRegistry.registerBlock(YGCBlocks.grandfatherClock, ItemGrandfatherClock.class, "grandfatherClock", MODID);
 
         GameRegistry.registerTileEntityWithAlternatives(TileEntityGrandfatherClock.class, "ygcGrandfatherClock", "grandfatherClock");
 
         // --------------------------------Weapon Rack--------------------------------
 
-        YGCBlocks.weaponRack = (new BlockWeaponRack(Material.wood)).setHardness(1.5F).setStepSound(Block.soundTypeWood).setBlockName("weaponRack").setBlockTextureName("weaponRack").setCreativeTab(CreativeTabs.tabDecorations);
+        YGCBlocks.weaponRack = (new BlockWeaponRack(Material.wood)).setHardness(1.5F).setStepSound(Block.soundTypeWood).setBlockName("weaponRack").setBlockTextureName("weaponRack").setCreativeTab(tabMain);
         GameRegistry.registerBlock(YGCBlocks.weaponRack, ItemWeaponRack.class, "weaponRack", MODID);
 
         GameRegistry.registerTileEntityWithAlternatives(TileEntityWeaponRack.class, "ygcWeaponRack", "weaponRack");
 
         // --------------------------------Grindstone--------------------------------
 
-        YGCBlocks.grindstone = (new BlockGrindstone(Material.wood)).setHardness(1.5F).setStepSound(Block.soundTypeWood).setBlockName("grindstone").setBlockTextureName(textureBase + "grindstoneBase").setCreativeTab(CreativeTabs.tabDecorations);
+        YGCBlocks.grindstone = (new BlockGrindstone(Material.wood)).setHardness(1.5F).setStepSound(Block.soundTypeWood).setBlockName("grindstone").setBlockTextureName(textureBase + "grindstoneBase").setCreativeTab(tabMain);
         GameRegistry.registerBlock(YGCBlocks.grindstone, ItemGrindstone.class, "grindstone", MODID);
 
         YGCItems.grindstoneStone = (new ItemGrindstoneStone()).setUnlocalizedName("grindstoneStone").setTextureName(textureBase + "grindstoneStone");
@@ -171,7 +180,7 @@ public class YeGamolChattels
         YGCBlocks.gong = (new BlockGong(Material.iron)).setHardness(1.5F).setStepSound(Block.soundTypeMetal).setBlockName("gong");
         GameRegistry.registerBlock(YGCBlocks.gong, ItemGong.class, "gong", MODID);
 
-        YGCItems.mallet = (new Item()).setUnlocalizedName("mallet").setCreativeTab(CreativeTabs.tabDecorations).setMaxStackSize(1).setTextureName(textureBase + "mallet");
+        YGCItems.mallet = (new Item()).setUnlocalizedName("mallet").setCreativeTab(tabMain).setMaxStackSize(1).setTextureName(textureBase + "mallet");
         GameRegistry.registerItem(YGCItems.mallet, "mallet", MODID);
 
         GameRegistry.registerTileEntityWithAlternatives(TileEntityGong.class, "ygcGong", "gong");
@@ -185,43 +194,43 @@ public class YeGamolChattels
 
         // --------------------------------Item Shelf--------------------------------
 
-        YGCBlocks.itemShelf = new BlockItemShelf(Material.wood).setHardness(1.5F).setStepSound(Block.soundTypeWood).setBlockName("ygcItemShelf").setCreativeTab(CreativeTabs.tabDecorations);
+        YGCBlocks.itemShelf = new BlockItemShelf(Material.wood).setHardness(1.5F).setStepSound(Block.soundTypeWood).setBlockName("ygcItemShelf").setCreativeTab(tabMain);
         GameRegistry.registerBlock(YGCBlocks.itemShelf, ItemItemShelf.class, "ygcItemShelf", MODID);
 
         GameRegistry.registerTileEntityWithAlternatives(TileEntityItemShelfModel0.class, "ygcItemShelf", "Item Shelf");
 
         // --------------------------------Snow Globe--------------------------------
 
-        YGCBlocks.snowGlobe = new BlockSnowGlobe().setBlockName("ygcSnowGlobe").setCreativeTab(CreativeTabs.tabDecorations);
+        YGCBlocks.snowGlobe = new BlockSnowGlobe().setBlockName("ygcSnowGlobe").setCreativeTab(tabMain);
         GameRegistry.registerBlock(YGCBlocks.snowGlobe, ItemBlock.class, "ygcSnowGlobe", MODID);
 
         GameRegistry.registerTileEntityWithAlternatives(TileEntitySnowGlobe.class, "ygcSnowGlobe", "Snow Globe");
 
         // --------------------------------Carpentry--------------------------------
 
-        YGCItems.plank = new ItemPlank().setUnlocalizedName("plank").setCreativeTab(CreativeTabs.tabMisc).setTextureName(textureBase + "plank");
+        YGCItems.plank = new ItemPlank().setUnlocalizedName("plank").setCreativeTab(tabMain).setTextureName(textureBase + "plank");
         GameRegistry.registerItem(YGCItems.plank, "plank", MODID);
 
-        YGCItems.smoothPlank = new ItemPlank().setUnlocalizedName("smoothPlank").setCreativeTab(CreativeTabs.tabMisc).setTextureName(textureBase + "smoothPlank");
+        YGCItems.smoothPlank = new ItemPlank().setUnlocalizedName("smoothPlank").setCreativeTab(tabMain).setTextureName(textureBase + "smoothPlank");
         GameRegistry.registerItem(YGCItems.smoothPlank, "smoothPlank", MODID);
 
-        YGCItems.refinedPlank = new ItemPlank().setUnlocalizedName("refinedPlank").setCreativeTab(CreativeTabs.tabMisc).setTextureName(textureBase + "refinedPlank");
+        YGCItems.refinedPlank = new ItemPlank().setUnlocalizedName("refinedPlank").setCreativeTab(tabMain).setTextureName(textureBase + "refinedPlank");
         GameRegistry.registerItem(YGCItems.refinedPlank, "refinedPlank", MODID);
 
-        YGCBlocks.plankSaw = new BlockPlankSaw().setBlockName("plankSaw").setCreativeTab(CreativeTabs.tabDecorations);
+        YGCBlocks.plankSaw = new BlockPlankSaw().setBlockName("plankSaw").setCreativeTab(tabMain);
         GameRegistry.registerBlock(YGCBlocks.plankSaw, ItemPlankSaw.class, "plankSaw", MODID);
 
-        YGCBlocks.planksRefinement = new BlockPlanksRefinement().setBlockName("planksRefinement").setCreativeTab(CreativeTabs.tabDecorations);
+        YGCBlocks.planksRefinement = new BlockPlanksRefinement().setBlockName("planksRefinement").setCreativeTab(tabMain);
         GameRegistry.registerBlock(YGCBlocks.planksRefinement, ItemPlanksRefinement.class, "planksRefinement", MODID);
 
         GameRegistry.registerTileEntity(TileEntityPlankSaw.class, "ygcPlankSaw");
         GameRegistry.registerTileEntity(TileEntityPlanksRefinement.class, "ygcPlanksRefinement");
 
-        YGCItems.sandpaper = new Item().setUnlocalizedName("sandpaper").setTextureName(textureBase + "sandpaper").setCreativeTab(CreativeTabs.tabMisc);
+        YGCItems.sandpaper = new Item().setUnlocalizedName("sandpaper").setTextureName(textureBase + "sandpaper").setCreativeTab(tabMain);
         YGCItems.sandpaper.setMaxDamage(800).setMaxStackSize(1).setNoRepair();
         GameRegistry.registerItem(YGCItems.sandpaper, "sandpaper", MODID);
 
-        YGCItems.oil = new Item().setUnlocalizedName("ygcOil").setTextureName(textureBase + "oil").setCreativeTab(CreativeTabs.tabMisc);
+        YGCItems.oil = new Item().setUnlocalizedName("ygcOil").setTextureName(textureBase + "oil").setCreativeTab(tabMain);
         YGCItems.oil.setMaxDamage(800).setMaxStackSize(1).setNoRepair();
         GameRegistry.registerItem(YGCItems.oil, "oil", MODID);
     }
