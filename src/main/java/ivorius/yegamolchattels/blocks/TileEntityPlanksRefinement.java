@@ -1,10 +1,13 @@
 package ivorius.yegamolchattels.blocks;
 
+import cpw.mods.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
 import ivorius.ivtoolkit.entities.IvEntityHelper;
-import ivorius.ivtoolkit.network.PacketTileEntityData;
+import ivorius.ivtoolkit.network.IvNetworkHelperServer;
+import ivorius.ivtoolkit.network.PacketTileEntityClientEvent;
 import ivorius.ivtoolkit.network.PartialUpdateHandler;
+import ivorius.ivtoolkit.tools.IvSideClient;
 import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.gui.YGCGuiHandler;
 import ivorius.yegamolchattels.items.YGCItems;
@@ -88,7 +91,7 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
         return false;
     }
 
-    public boolean tryUsingItem(ItemStack usedTool, EntityPlayer entityLiving)
+    public boolean tryUsingItem(ItemStack usedTool, EntityPlayer player)
     {
         if (containedItem == null)
         {
@@ -97,9 +100,9 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
 
         if (isCorrectTool(usedTool))
         {
-            if (worldObj.isRemote)
+            if (!worldObj.isRemote)
             {
-                entityLiving.openGui(YeGamolChattels.instance, YGCGuiHandler.plankRefinementGuiID, worldObj, xCoord, yCoord, zCoord);
+                IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "refinementGui", YeGamolChattels.network, player);
             }
 
             return true;
@@ -121,9 +124,10 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
         return false;
     }
 
-    public void refineWithItem(ItemStack usedTool, EntityLivingBase entityLivingBase, float x, float y)
+    public void refineWithItem(ItemStack usedTool, EntityLivingBase entityLivingBase, float x, float y, float speed)
     {
-        usedTool.damageItem(1, entityLivingBase);
+        int speedInfl = MathHelper.floor_float(speed * 1.0f) + ((worldObj.rand.nextFloat() < (speed % 1.0f) * 1.0f) ? 1 : 0);
+        usedTool.damageItem(1 + speedInfl, entityLivingBase);
 
         int startSlotX = MathHelper.floor_float(x - 1.5f + 0.5f);
         int endSlotX = MathHelper.floor_float(x + 1.5f + 0.5f);
@@ -137,10 +141,13 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
             {
                 if (slotX >= 0 && slotX < REFINEMENT_SLOTS_X && slotY >= 0 && slotY < REFINEMENT_SLOTS_Y)
                 {
-                    ticksRefinedPerSlot[slotY * REFINEMENT_SLOTS_X + slotX]++;
+                    ticksRefinedPerSlot[slotY * REFINEMENT_SLOTS_X + slotX] += speedInfl;
                 }
             }
         }
+
+        if (worldObj.isRemote)
+            YeGamolChattels.network.sendToServer(PacketTileEntityClientEvent.packetEntityData(this, "plankRefinement"));
 
         if (isRefinementComplete())
         {
@@ -175,12 +182,19 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
             ticksRefinedPerSlot[i] = 0;
         }
 
-        for (IPlanksRefinementEntry entry : planksRefinementEntries)
+        if (!worldObj.isRemote)
         {
-            if (entry.matchesSource(containedItem))
+            for (IPlanksRefinementEntry entry : planksRefinementEntries)
             {
-                containedItem = entry.getResult();
+                if (entry.matchesSource(containedItem))
+                {
+                    containedItem = entry.getResult();
+                    break;
+                }
             }
+
+            markDirty();
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         }
     }
 
@@ -228,7 +242,17 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
     {
         if ("plankRefinement".equals(context))
         {
-
+            for (int tickRefinedPerSlot : ticksRefinedPerSlot)
+            {
+                buffer.writeInt(tickRefinedPerSlot);
+            }
+        }
+        else if ("refinementGui".equals(context))
+        {
+            for (int tickRefinedPerSlot : ticksRefinedPerSlot)
+            {
+                buffer.writeInt(tickRefinedPerSlot);
+            }
         }
     }
 
@@ -237,7 +261,24 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
     {
         if ("plankRefinement".equals(context))
         {
+            for (int i = 0; i < ticksRefinedPerSlot.length; i++)
+            {
+                ticksRefinedPerSlot[i] = buffer.readInt();
+            }
 
+            if (isRefinementComplete())
+            {
+                completeRefinement();
+            }
+        }
+        else if ("refinementGui".equals(context))
+        {
+            for (int i = 0; i < ticksRefinedPerSlot.length; i++)
+            {
+                ticksRefinedPerSlot[i] = buffer.readInt();
+            }
+
+            IvSideClient.getClientPlayer().openGui(YeGamolChattels.instance, YGCGuiHandler.plankRefinementGuiID, worldObj, xCoord, yCoord, zCoord);
         }
     }
 }

@@ -29,6 +29,8 @@ public class GuiScreenPlanksRefinement extends GuiScreen
     public int mouseButtonDown = -1;
     public int mouseLastKnownX;
     public int mouseLastKnownY;
+    public int mouseLastKnownSpeedX;
+    public int mouseLastKnownSpeedY;
 
     public int ticksMouseDown;
 
@@ -75,8 +77,9 @@ public class GuiScreenPlanksRefinement extends GuiScreen
 
                 float usedX = (mouseLastKnownX - (width / 2 - leftX * 0.5f)) / PLANK_WIDTH;
                 float usedY = (mouseLastKnownY - (height / 2 - leftY * 0.5f)) / PLANK_HEIGHT;
+                float mouseSpeed = MathHelper.sqrt_float(mouseLastKnownSpeedX * mouseLastKnownSpeedX + mouseLastKnownSpeedY * mouseLastKnownSpeedY);
 
-                tileEntity.refineWithItem(tool, mc.thePlayer, usedX * 16.0f, usedY * 16.0f);
+                tileEntity.refineWithItem(tool, mc.thePlayer, usedX * 16.0f, usedY * 16.0f, mouseSpeed);
             }
 
             ticksMouseDown++;
@@ -201,14 +204,16 @@ public class GuiScreenPlanksRefinement extends GuiScreen
     }
 
     @Override
-    protected void mouseClicked(int x, int y, int buttonClicked)
+    protected void mouseClicked(int mouseX, int mouseY, int buttonClicked)
     {
-        super.mouseClicked(x, y, buttonClicked);
+        super.mouseClicked(mouseX, mouseY, buttonClicked);
 
         if (buttonClicked == 0)
         {
-            mouseLastKnownX = x;
-            mouseLastKnownY = y;
+            mouseLastKnownSpeedX = mouseX - mouseLastKnownX;
+            mouseLastKnownSpeedY = mouseY - mouseLastKnownY;
+            mouseLastKnownX = mouseX;
+            mouseLastKnownY = mouseY;
             mouseButtonDown = buttonClicked;
         }
     }
@@ -218,6 +223,8 @@ public class GuiScreenPlanksRefinement extends GuiScreen
     {
         super.mouseMovedOrUp(mouseX, mouseY, buttonClicked);
 
+        mouseLastKnownSpeedX = mouseX - mouseLastKnownX;
+        mouseLastKnownSpeedY = mouseY - mouseLastKnownY;
         mouseLastKnownX = mouseX;
         mouseLastKnownY = mouseY;
 
@@ -228,14 +235,16 @@ public class GuiScreenPlanksRefinement extends GuiScreen
     }
 
     @Override
-    protected void mouseClickMove(int x, int y, int buttonClicked, long timeDragged)
+    protected void mouseClickMove(int mouseX, int mouseY, int buttonClicked, long timeDragged)
     {
-        super.mouseClickMove(x, y, buttonClicked, timeDragged);
+        super.mouseClickMove(mouseX, mouseY, buttonClicked, timeDragged);
 
         if (buttonClicked == mouseButtonDown)
         {
-            mouseLastKnownX = x;
-            mouseLastKnownY = y;
+            mouseLastKnownSpeedX = mouseX - mouseLastKnownX;
+            mouseLastKnownSpeedY = mouseY - mouseLastKnownY;
+            mouseLastKnownX = mouseX;
+            mouseLastKnownY = mouseY;
         }
     }
 }

@@ -7,7 +7,9 @@ import ivorius.ivtoolkit.network.IvNetworkHelperServer;
 import ivorius.ivtoolkit.network.PacketTileEntityClientEvent;
 import ivorius.ivtoolkit.network.PacketTileEntityData;
 import ivorius.ivtoolkit.network.PartialUpdateHandler;
+import ivorius.ivtoolkit.tools.IvSideClient;
 import ivorius.yegamolchattels.YeGamolChattels;
+import ivorius.yegamolchattels.gui.YGCGuiHandler;
 import ivorius.yegamolchattels.items.YGCItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -171,6 +173,9 @@ public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements Partia
         else
         {
             moveSawInConstraints(x, y);
+
+            if (worldObj.isRemote)
+                YeGamolChattels.network.sendToServer(PacketTileEntityClientEvent.packetEntityData(this, "sawMove"));
         }
     }
 
@@ -232,6 +237,14 @@ public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements Partia
             buffer.writeFloat(woodCutScore);
             buffer.writeBoolean(isInWood);
         }
+        else if ("sawOpenGui".equals(context))
+        {
+            buffer.writeFloat(sawPositionX);
+            buffer.writeFloat(sawPositionY);
+            buffer.writeFloat(woodCutY);
+            buffer.writeFloat(woodCutScore);
+            buffer.writeBoolean(isInWood);
+        }
     }
 
     @Override
@@ -252,6 +265,16 @@ public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements Partia
                 if (woodCutY >= 1.0f && containedItem != null)
                     chopOffWood(woodCutScore, (EntityPlayer) entity);
             }
+        }
+        else if ("sawOpenGui".equals(context))
+        {
+            sawPositionX = buffer.readFloat();
+            sawPositionY = buffer.readFloat();
+            woodCutY = buffer.readFloat();
+            woodCutScore = buffer.readFloat();
+            isInWood = buffer.readBoolean();
+
+            IvSideClient.getClientPlayer().openGui(YeGamolChattels.instance, YGCGuiHandler.plankSawGuiID, worldObj, xCoord, yCoord, zCoord);
         }
     }
 }

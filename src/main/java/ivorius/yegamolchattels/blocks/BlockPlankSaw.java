@@ -2,6 +2,7 @@ package ivorius.yegamolchattels.blocks;
 
 import ivorius.ivtoolkit.blocks.IvBlockMultiblock;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
+import ivorius.ivtoolkit.network.IvNetworkHelperServer;
 import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.gui.YGCGuiHandler;
 import net.minecraft.block.material.Material;
@@ -52,8 +53,10 @@ public class BlockPlankSaw extends IvBlockMultiblock
                 return true;
             else
             {
-                if (world.isRemote)
-                    player.openGui(YeGamolChattels.instance, YGCGuiHandler.plankSawGuiID, world, plankSaw.xCoord, plankSaw.yCoord, plankSaw.zCoord);
+                if (!world.isRemote)
+                {
+                    IvNetworkHelperServer.sendTileEntityUpdatePacket(plankSaw, "sawOpenGui", YeGamolChattels.network, player);
+                }
 
                 return true;
             }
