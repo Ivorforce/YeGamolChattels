@@ -92,6 +92,18 @@ public class IvBlockCollection implements Iterable<BlockCoord>
         return metas[indexFromCoord(coord)];
     }
 
+    public void setBlockAndMetadata(BlockCoord coord, Block block, byte meta)
+    {
+        if (!hasCoord(coord))
+        {
+            return;
+        }
+
+        int index = indexFromCoord(coord);
+        blocks[index] = block;
+        metas[index] = meta;
+    }
+
     public void setBlock(BlockCoord coord, Block block)
     {
         if (!hasCoord(coord))

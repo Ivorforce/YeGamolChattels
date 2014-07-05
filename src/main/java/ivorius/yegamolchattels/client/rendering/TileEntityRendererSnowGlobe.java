@@ -5,7 +5,11 @@
 
 package ivorius.yegamolchattels.client.rendering;
 
+import ivorius.ivtoolkit.blocks.BlockArea;
+import ivorius.ivtoolkit.blocks.BlockCoord;
 import ivorius.ivtoolkit.blocks.IvBlockCollection;
+import ivorius.ivtoolkit.tools.MCRegistry;
+import ivorius.ivtoolkit.tools.MCRegistryDefault;
 import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.blocks.TileEntitySnowGlobe;
 import net.minecraft.block.Block;
@@ -15,16 +19,23 @@ import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.resources.IResource;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
@@ -37,9 +48,9 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
 
     public static IvBlockCollection defaultGlobe;
 
-    public static int sizeX = 10;
-    public static int sizeY = 9;
-    public static int sizeZ = 10;
+    public static final int SIZE_X = 10;
+    public static final int SIZE_Y = 9;
+    public static final int SIZE_Z = 10;
 
     public TileEntityRendererSnowGlobe()
     {
@@ -47,11 +58,38 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
         realityGlobeTexture = new ResourceLocation(YeGamolChattels.MODID, YeGamolChattels.filePathTextures + "realityGlobeGlass.png");
         realityGlobeTextureClear = new ResourceLocation(YeGamolChattels.MODID, YeGamolChattels.filePathTextures + "realityGlobeClear.png");
 
-        //TODO
-//        IvBlockMapper mapper = new IvBlockMapper();
-//        mapper.readFromResource(new ResourceLocation(YeGamolChattels.MODID, YeGamolChattels.filePathOther + "defaultGlobe.nbt"));
-//
-//        defaultGlobe = mapper.readCollectionFromMapping(sizeX * 2 + 1, sizeY * 2 + 1);
+        defaultGlobe = blockCollectionFromResourceLocation(new ResourceLocation(YeGamolChattels.MODID, YeGamolChattels.filePathOther + "defaultGlobe.nbt"), MCRegistryDefault.INSTANCE);
+    }
+
+    public static IvBlockCollection blockCollectionFromResourceLocation(ResourceLocation resourceLocation, MCRegistry registry)
+    {
+        IResource globeResource = null;
+        try
+        {
+            globeResource = Minecraft.getMinecraft().getResourceManager().getResource(resourceLocation);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        if (globeResource != null)
+        {
+            NBTTagCompound compound = null;
+            try
+            {
+                compound = CompressedStreamTools.read(new DataInputStream(globeResource.getInputStream()));
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+
+            if (compound != null)
+                return new IvBlockCollection(compound, registry);
+        }
+
+        return null;
     }
 
     @Override
@@ -80,9 +118,9 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
                 realityGlobe.needsVisualUpdate = false;
             }
 
-            double sizePX = 1.0 / (double) (sizeX * 2 + 1);
-            double sizePY = 1.0 / (double) (sizeX * 2 + 1);
-            double sizePZ = 1.0 / (double) (sizeX * 2 + 1);
+            double sizePX = 1.0 / (double) (SIZE_X * 2 + 1);
+            double sizePY = 1.0 / (double) (SIZE_X * 2 + 1);
+            double sizePZ = 1.0 / (double) (SIZE_X * 2 + 1);
 
             if (realityGlobe.glCallListIndex >= 0)
             {
@@ -125,7 +163,7 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
             {
                 if (playerDistSQ < 4 * 4)
                 {
-                    AxisAlignedBB bb = AxisAlignedBB.getBoundingBox((double) tileEntity.xCoord - sizeX, (double) tileEntity.yCoord - sizeY, (double) tileEntity.zCoord - sizeZ, (double) tileEntity.xCoord + 1 + sizeX, (double) tileEntity.yCoord + 1 + sizeY, (double) tileEntity.zCoord + 1 + sizeZ);
+                    AxisAlignedBB bb = AxisAlignedBB.getBoundingBox((double) tileEntity.xCoord - SIZE_X, (double) tileEntity.yCoord - SIZE_Y, (double) tileEntity.zCoord - SIZE_Z, (double) tileEntity.xCoord + 1 + SIZE_X, (double) tileEntity.yCoord + 1 + SIZE_Y, (double) tileEntity.zCoord + 1 + SIZE_Z);
                     List entities = tileEntity.getWorldObj().getEntitiesWithinAABBExcludingEntity(null, bb);
 
                     if (entities.size() > 0)
@@ -201,9 +239,9 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
 
     public void setupWorldTransform(float rumble)
     {
-        double sizePX = 1.0 / (double) (sizeX * 2 + 1);
-        double sizePY = 1.0 / (double) (sizeX * 2 + 1);
-        double sizePZ = 1.0 / (double) (sizeX * 2 + 1);
+        double sizePX = 1.0 / (double) (SIZE_X * 2 + 1);
+        double sizePY = 1.0 / (double) (SIZE_X * 2 + 1);
+        double sizePZ = 1.0 / (double) (SIZE_X * 2 + 1);
 
         GL11.glTranslated(0.0, 0.175 + rumble, 0.0);
         GL11.glScaled(0.85, 0.85, 0.85);
@@ -237,9 +275,9 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
 
             for (int i = 0; i < 2; i++)
             {
-                for (int x = -sizeX; x <= sizeX; x++)
-                    for (int y = -sizeY; y <= sizeY; y++)
-                        for (int z = -sizeZ; z <= sizeZ; z++)
+                for (int x = -SIZE_X; x <= SIZE_X; x++)
+                    for (int y = -SIZE_Y; y <= SIZE_Y; y++)
+                        for (int z = -SIZE_Z; z <= SIZE_Z; z++)
                         {
                             int blockX = x + tileEntity.xCoord;
                             int blockY = y + tileEntity.yCoord;
@@ -251,7 +289,7 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
                             {
                                 if (block.getRenderBlockPass() == i)
                                 {
-                                    if (x == -sizeX || x == sizeX || y == -sizeY || y == sizeY || z == -sizeZ || z == sizeZ)
+                                    if (x == -SIZE_X || x == SIZE_X || y == -SIZE_Y || y == SIZE_Y || z == -SIZE_Z || z == SIZE_Z)
                                     {
                                         blockRenderer.renderBlockAllFaces(block, blockX, blockY, blockZ);
                                     }
@@ -266,90 +304,83 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
         }
         else
         {
-//            var10.setTranslation((double) (-(float) tileEntity.xCoord - 0.5), (double) (-(float) tileEntity.yCoord - 0.5), (double) (-(float) tileEntity.zCoord - 0.5));
-//            var10.setColorOpaque_F(1.0f, 1.0f, 1.0f);
-//
-//            blockRenderer.brightnessBottomLeft = 255;
-//            blockRenderer.brightnessBottomRight = 255;
-//            blockRenderer.brightnessTopLeft = 255;
-//            blockRenderer.brightnessTopRight = 255;
-//
-//            for (int i = 0; i < 2; i++)
-//            {
-//                IvBlockMapper mapper = new IvBlockMapper();
-//
-//                for (int x = -sizeX; x <= sizeX; x++)
-//                    for (int y = -sizeY; y <= sizeY; y++)
-//                        for (int z = -sizeZ; z <= sizeZ; z++)
-//                        {
-//                            int blockX = x + tileEntity.xCoord;
-//                            int blockY = y + tileEntity.yCoord;
-//                            int blockZ = z + tileEntity.zCoord;
-//
-//                            int internalX = x + sizeX;
-//                            int internalY = y + sizeY;
-//                            int internalZ = z + sizeZ;
-//
-//                            Block block = defaultGlobe.getBlock(internalX, internalY, internalZ);
-//                            int meta = defaultGlobe.getMeta(internalX, internalY, internalZ);
-//                            int blColor = block != Blocks.grass ? block.getRenderColor(meta) : 0xffffff;
-//
-//                            float red = (float)(blColor >> 16 & 255) / 255.0F;
-//                            float green = (float)(blColor >> 8 & 255) / 255.0F;
-//                            float blue = (float)(blColor & 255) / 255.0F;
-////                            blockRenderer.enableAO = true;
-////                            blockRenderer.colorRedTopLeft = red;
-////                            blockRenderer.colorGreenTopLeft = green;
-////                            blockRenderer.colorBlueTopLeft = blue;
-////                            blockRenderer.colorRedBottomLeft = red;
-////                            blockRenderer.colorGreenBottomLeft = green;
-////                            blockRenderer.colorBlueBottomLeft = blue;
-////                            blockRenderer.colorRedBottomRight = red;
-////                            blockRenderer.colorGreenBottomRight = green;
-////                            blockRenderer.colorBlueBottomRight = blue;
-////                            blockRenderer.colorRedTopRight = red;
-////                            blockRenderer.colorGreenTopRight = green;
-////                            blockRenderer.colorBlueTopRight = blue;
-//
-////                            if (i == 0)
-////                                mapper.addBlock((x != 0 || y != 0 || z != 0) ? tileEntity.getWorldObj().getBlock(blockX, blockY, blockZ) : Blocks.air, (byte)tileEntity.getWorldObj().getBlockMetadata(blockX, blockY, blockZ));
-//
-//                            if (block != null)
-//                            {
-//                                if (block.getRenderBlockPass() == i && block.getRenderType() >= 0)
-//                                {
-//                                    block.setBlockBoundsForItemRender();
-//                                    blockRenderer.setRenderBoundsFromBlock(block);
-//
-//                                    var10.setColorOpaque_F(red, green, blue);
-//                                    if (defaultGlobe.renderSide(internalX, internalY, internalZ, 0))
-//                                        blockRenderer.renderFaceYNeg(block, blockX, blockY, blockZ, blockRenderer.getBlockIconFromSideAndMetadata(block, 0, meta));
-//                                    if (defaultGlobe.renderSide(internalX, internalY, internalZ, 1))
-//                                        blockRenderer.renderFaceYPos(block, blockX, blockY, blockZ, blockRenderer.getBlockIconFromSideAndMetadata(block, 1, meta));
-//                                    if (defaultGlobe.renderSide(internalX, internalY, internalZ, 2))
-//                                        blockRenderer.renderFaceZNeg(block, blockX, blockY, blockZ, blockRenderer.getBlockIconFromSideAndMetadata(block, 2, meta));
-//                                    if (defaultGlobe.renderSide(internalX, internalY, internalZ, 3))
-//                                        blockRenderer.renderFaceZPos(block, blockX, blockY, blockZ, blockRenderer.getBlockIconFromSideAndMetadata(block, 3, meta));
-//                                    if (defaultGlobe.renderSide(internalX, internalY, internalZ, 4))
-//                                        blockRenderer.renderFaceXNeg(block, blockX, blockY, blockZ, blockRenderer.getBlockIconFromSideAndMetadata(block, 4, meta));
-//                                    if (defaultGlobe.renderSide(internalX, internalY, internalZ, 5))
-//                                        blockRenderer.renderFaceXPos(block, blockX, blockY, blockZ, blockRenderer.getBlockIconFromSideAndMetadata(block, 5, meta));
-//                                }
-//                            }
-//
-//                            blockRenderer.enableAO = false;
-//                        }
-//
-////                if (i == 0)
-////                    mapper.writeToFile("defaultGlobe.nbt");
-//            }
-//
-//            var10.setTranslation(0.0D, 0.0D, 0.0D);
+            if (defaultGlobe != null)
+            {
+                BlockCoord lowerCoord = new BlockCoord(-SIZE_X, -SIZE_Y, -SIZE_Z);
+                BlockArea area = new BlockArea(lowerCoord, new BlockCoord(SIZE_X, SIZE_Y, SIZE_Z));
+
+                var10.setTranslation((double) (-(float) tileEntity.xCoord - 0.5), (double) (-(float) tileEntity.yCoord - 0.5), (double) (-(float) tileEntity.zCoord - 0.5));
+                var10.setColorOpaque_F(1.0f, 1.0f, 1.0f);
+
+                blockRenderer.brightnessBottomLeft = 255;
+                blockRenderer.brightnessBottomRight = 255;
+                blockRenderer.brightnessTopLeft = 255;
+                blockRenderer.brightnessTopRight = 255;
+
+                for (int i = 0; i < 2; i++)
+                {
+                    for (BlockCoord internalCoord : area)
+                    {
+                        BlockCoord worldCoord = internalCoord.add(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
+                        BlockCoord collectionCoord = internalCoord.subtract(lowerCoord);
+
+                        Block block = defaultGlobe.getBlock(collectionCoord);
+                        int meta = defaultGlobe.getMetadata(collectionCoord);
+                        int blColor = block != Blocks.grass ? block.getRenderColor(meta) : 0xffffff;
+
+                        float red = (float) (blColor >> 16 & 255) / 255.0F;
+                        float green = (float) (blColor >> 8 & 255) / 255.0F;
+                        float blue = (float) (blColor & 255) / 255.0F;
+//                        blockRenderer.enableAO = true;
+//                        blockRenderer.colorRedTopLeft = red;
+//                        blockRenderer.colorGreenTopLeft = green;
+//                        blockRenderer.colorBlueTopLeft = blue;
+//                        blockRenderer.colorRedBottomLeft = red;
+//                        blockRenderer.colorGreenBottomLeft = green;
+//                        blockRenderer.colorBlueBottomLeft = blue;
+//                        blockRenderer.colorRedBottomRight = red;
+//                        blockRenderer.colorGreenBottomRight = green;
+//                        blockRenderer.colorBlueBottomRight = blue;
+//                        blockRenderer.colorRedTopRight = red;
+//                        blockRenderer.colorGreenTopRight = green;
+//                        blockRenderer.colorBlueTopRight = blue;
+
+                        if (block != null)
+                        {
+                            if (block.getRenderBlockPass() == i && block.getRenderType() >= 0)
+                            {
+                                block.setBlockBoundsForItemRender();
+                                blockRenderer.setRenderBoundsFromBlock(block);
+
+                                var10.setColorOpaque_F(red, green, blue);
+                                if (defaultGlobe.shouldRenderSide(collectionCoord, ForgeDirection.DOWN))
+                                    blockRenderer.renderFaceYNeg(block, worldCoord.x, worldCoord.y, worldCoord.z, blockRenderer.getBlockIconFromSideAndMetadata(block, 0, meta));
+                                if (defaultGlobe.shouldRenderSide(collectionCoord, ForgeDirection.UP))
+                                    blockRenderer.renderFaceYPos(block, worldCoord.x, worldCoord.y, worldCoord.z, blockRenderer.getBlockIconFromSideAndMetadata(block, 1, meta));
+                                if (defaultGlobe.shouldRenderSide(collectionCoord, ForgeDirection.NORTH))
+                                    blockRenderer.renderFaceZNeg(block, worldCoord.x, worldCoord.y, worldCoord.z, blockRenderer.getBlockIconFromSideAndMetadata(block, 2, meta));
+                                if (defaultGlobe.shouldRenderSide(collectionCoord, ForgeDirection.SOUTH))
+                                    blockRenderer.renderFaceZPos(block, worldCoord.x, worldCoord.y, worldCoord.z, blockRenderer.getBlockIconFromSideAndMetadata(block, 3, meta));
+                                if (defaultGlobe.shouldRenderSide(collectionCoord, ForgeDirection.WEST))
+                                    blockRenderer.renderFaceXNeg(block, worldCoord.x, worldCoord.y, worldCoord.z, blockRenderer.getBlockIconFromSideAndMetadata(block, 4, meta));
+                                if (defaultGlobe.shouldRenderSide(collectionCoord, ForgeDirection.EAST))
+                                    blockRenderer.renderFaceXPos(block, worldCoord.x, worldCoord.y, worldCoord.z, blockRenderer.getBlockIconFromSideAndMetadata(block, 5, meta));
+                            }
+                        }
+
+                        blockRenderer.enableAO = false;
+                    }
+                }
+
+                var10.setTranslation(0.0D, 0.0D, 0.0D);
+            }
         }
 
         var10.draw();
 
         GL11.glEndList();
+
+//        captureAndWriteToFile("defaultGlobe.nbt", new BlockCoord(tileEntity), tileEntity.getWorldObj());
     }
 
     public static void destructCallList(TileEntitySnowGlobe tileEntity)
@@ -358,6 +389,31 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
         {
             GLAllocation.deleteDisplayLists(tileEntity.glCallListIndex);
             tileEntity.glCallListIndex = -1;
+        }
+    }
+
+    public static void captureAndWriteToFile(String fileName, BlockCoord coord, World world)
+    {
+        BlockCoord lowerCoord = new BlockCoord(-SIZE_X, -SIZE_Y, -SIZE_Z);
+        BlockArea area = new BlockArea(lowerCoord, new BlockCoord(SIZE_X, SIZE_Y, SIZE_Z));
+
+        IvBlockCollection blockCollection = new IvBlockCollection(SIZE_X * 2 + 1, SIZE_Y * 2 + 1, SIZE_Z * 2 + 1);
+        for (BlockCoord internalCoord : area)
+        {
+            BlockCoord worldCoord = internalCoord.add(coord);
+            BlockCoord collectionCoord = internalCoord.subtract(lowerCoord);
+            Block block = internalCoord.x != 0 || internalCoord.y != 0 || internalCoord.z != 0 ? worldCoord.getBlock(world) : Blocks.air;
+            blockCollection.setBlockAndMetadata(collectionCoord, block, (byte) worldCoord.getMetadata(world));
+        }
+
+        NBTTagCompound compound = blockCollection.createTagCompound();
+        try
+        {
+            CompressedStreamTools.write(compound, new File(Minecraft.getMinecraft().mcDataDir, fileName));
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
         }
     }
 

@@ -92,7 +92,15 @@ public class IvBlockMapper
 
         for (Block block : mapping)
         {
-            list.appendTag(new NBTTagString(Block.blockRegistry.getNameForObject(block)));
+            String name = Block.blockRegistry.getNameForObject(block);
+
+            if (name != null)
+                list.appendTag(new NBTTagString(name));
+            else
+            {
+                list.appendTag(new NBTTagString("minecraft:stone"));
+                System.out.println("Did not find name for block '" + block + "' to map");
+            }
         }
 
         return list;
