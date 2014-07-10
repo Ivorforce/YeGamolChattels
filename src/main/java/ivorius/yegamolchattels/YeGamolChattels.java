@@ -28,6 +28,7 @@ import ivorius.yegamolchattels.events.YGCFMLEventHandler;
 import ivorius.yegamolchattels.events.YGCForgeEventHandler;
 import ivorius.yegamolchattels.gui.YGCGuiHandler;
 import ivorius.yegamolchattels.items.*;
+import ivorius.yegamolchattels.worldgen.WorldGenFlax;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.material.Material;
@@ -262,6 +263,8 @@ public class YeGamolChattels
         proxy.registerRenderers();
 
         addCrafting();
+
+        GameRegistry.registerWorldGenerator(new WorldGenFlax(), 100);
     }
 
     @EventHandler
