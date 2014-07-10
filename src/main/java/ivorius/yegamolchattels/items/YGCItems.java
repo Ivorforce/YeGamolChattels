@@ -20,4 +20,7 @@ public class YGCItems
 
     public static Item sandpaper;
     public static Item oil;
+
+    public static Item flaxSeeds;
+    public static Item flaxFiber;
 }

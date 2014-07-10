@@ -29,6 +29,7 @@ import ivorius.yegamolchattels.events.YGCForgeEventHandler;
 import ivorius.yegamolchattels.gui.YGCGuiHandler;
 import ivorius.yegamolchattels.items.*;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockCrops;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EnumCreatureType;
@@ -36,6 +37,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.config.Configuration;
@@ -235,6 +237,16 @@ public class YeGamolChattels
         YGCItems.oil = new Item().setUnlocalizedName("ygcOil").setTextureName(textureBase + "oil").setCreativeTab(tabMain);
         YGCItems.oil.setMaxDamage(800).setMaxStackSize(1).setNoRepair();
         GameRegistry.registerItem(YGCItems.oil, "oil", MODID);
+
+        // --------------------------------Flax--------------------------------
+
+        YGCBlocks.flaxPlant = new BlockFlaxPlant().setBlockName("ygcFlaxPlant").setBlockTextureName(textureBase + "flax");
+        GameRegistry.registerBlock(YGCBlocks.flaxPlant, ItemBlock.class, "flaxPlant");
+
+        YGCItems.flaxSeeds = new ItemFlaxSeeds(YGCBlocks.flaxPlant, Blocks.farmland).setUnlocalizedName("ygcFlaxSeeds").setTextureName(textureBase + "flaxSeeds").setCreativeTab(tabMain);
+        GameRegistry.registerItem(YGCItems.flaxSeeds, "flaxSeeds", MODID);
+        YGCItems.flaxFiber = new Item().setUnlocalizedName("ygcFlaxFiber").setTextureName(textureBase + "flaxFiber").setCreativeTab(tabMain);
+        GameRegistry.registerItem(YGCItems.flaxFiber, "flaxFiber", MODID);
     }
 
     @EventHandler
@@ -331,5 +343,8 @@ public class YeGamolChattels
 
         TileEntityPlanksRefinement.addRefinement(new PlanksRefinementEntry(YGCItems.plank, YGCItems.sandpaper, new ItemStack(YGCItems.smoothPlank)));
         TileEntityPlanksRefinement.addRefinement(new PlanksRefinementEntry(YGCItems.smoothPlank, YGCItems.oil, new ItemStack(YGCItems.refinedPlank)));
+
+        GameRegistry.addShapelessRecipe(new ItemStack(YGCItems.oil), YGCItems.flaxSeeds, YGCItems.flaxSeeds, YGCItems.flaxSeeds, YGCItems.flaxSeeds, YGCItems.flaxSeeds, YGCItems.flaxSeeds, YGCItems.flaxSeeds, YGCItems.flaxSeeds, YGCItems.flaxSeeds);
+        GameRegistry.addRecipe(new ItemStack(Blocks.wool, 1), "##", "##", '#', YGCItems.flaxFiber);
     }
 }

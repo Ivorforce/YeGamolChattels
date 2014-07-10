@@ -54,6 +54,9 @@ item.refinedPlank.acacia.name=Refined Acacia Plank
 item.refinedPlank.big_oak.name=Refined Dark Oak Plank
 item.sandpaper.name=Sandpaper
 item.ygcOil.name=Oil
+item.ygcFlaxSeeds.name=Flax Seeds
+item.ygcFlaxFiber.name=Flax Fiber
+tile.ygcFlaxPlant.name=Flax Plant
 
 item.bannerSmall.dye0.name=Small Black Banner
 item.bannerSmall.dye1.name=Small Red Banner
