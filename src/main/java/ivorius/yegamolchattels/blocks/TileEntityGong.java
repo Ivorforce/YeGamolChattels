@@ -12,6 +12,7 @@ import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.ivtoolkit.raytracing.IvRaytraceableObject;
 import ivorius.ivtoolkit.raytracing.IvRaytracedIntersection;
 import ivorius.ivtoolkit.raytracing.IvRaytracerMC;
+import ivorius.yegamolchattels.YGCConfig;
 import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.items.YGCItems;
 import net.minecraft.entity.Entity;
@@ -155,7 +156,7 @@ public class TileEntityGong extends IvTileEntityMultiBlock implements PartialUpd
             else
                 vibrationStrength = 50;
 
-            if (stack != null && stack.getItem() == Items.ender_pearl && YeGamolChattels.easterEggsAllowed)
+            if (stack != null && stack.getItem() == Items.ender_pearl && YGCConfig.easterEggsAllowed)
             {
                 madnessTimer = 320;
 

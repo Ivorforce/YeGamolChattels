@@ -11,6 +11,7 @@ import ivorius.ivtoolkit.network.IvNetworkHelperServer;
 import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.ivtoolkit.raytracing.IvRaytraceableObject;
 import ivorius.ivtoolkit.raytracing.IvRaytracedIntersection;
+import ivorius.yegamolchattels.YGCConfig;
 import ivorius.yegamolchattels.YeGamolChattels;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -347,7 +348,7 @@ public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements Pa
     {
         if (getShelfType() == shelfWardrobe)
         {
-            if (YeGamolChattels.easterEggsAllowed && "WallPortal".equals(intersection.getUserInfo()))
+            if (YGCConfig.easterEggsAllowed && "WallPortal".equals(intersection.getUserInfo()))
             {
                 if (stack != null && stack.getItem() == Items.ender_pearl)
                 {

@@ -24,6 +24,8 @@ import ivorius.yegamolchattels.entities.EntityBanner;
 import ivorius.yegamolchattels.entities.EntityFlag;
 import ivorius.yegamolchattels.entities.EntityGhost;
 import ivorius.yegamolchattels.entities.YGCEntityList;
+import ivorius.yegamolchattels.events.YGCFMLEventHandler;
+import ivorius.yegamolchattels.events.YGCForgeEventHandler;
 import ivorius.yegamolchattels.gui.YGCGuiHandler;
 import ivorius.yegamolchattels.items.*;
 import net.minecraft.block.Block;
@@ -39,7 +41,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = YeGamolChattels.MODID, version = YeGamolChattels.VERSION, name = YeGamolChattels.NAME)
+@Mod(modid = YeGamolChattels.MODID, version = YeGamolChattels.VERSION, name = YeGamolChattels.NAME, guiFactory = "ivorius.yegamolchattels.gui.YGCConfigGuiFactory")
 public class YeGamolChattels
 {
     public static final String MODID = "yegamolchattels";
@@ -60,9 +62,14 @@ public class YeGamolChattels
     public static String otherBase = "yegamolchattels:";
 
     public static Logger logger;
+    public static Configuration config;
+
     public static YGCGuiHandler guiHandler;
 
     public static SimpleNetworkWrapper network;
+
+    public static YGCFMLEventHandler fmlEventHandler;
+    public static YGCForgeEventHandler forgeEventHandler;
 
     public static CreativeTabs tabMain = new CreativeTabs("yegamolchattels")
     {
@@ -75,24 +82,14 @@ public class YeGamolChattels
 
     public static int entityGhostGlobalID;
 
-    public static boolean areDangerousStatuesAllowed;
-    public static boolean areLifeStatuesAllowed;
-
-    public static boolean easterEggsAllowed;
-
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
         logger = event.getModLog();
 
-        Configuration config = new Configuration(event.getSuggestedConfigurationFile());
-
+        config = new Configuration(event.getSuggestedConfigurationFile());
         config.load();
-
-        areDangerousStatuesAllowed = config.get("General", "areDangerousStatuesAllowed", true).getBoolean(true);
-        areLifeStatuesAllowed = config.get("General", "areLifeStatuesAllowed", true).getBoolean(true);
-        easterEggsAllowed = config.get("General", "easterEggsAllowed", true).getBoolean(true);
-
+        YGCConfig.loadConfig(null);
         config.save();
 
         guiHandler = new YGCGuiHandler();
@@ -100,6 +97,11 @@ public class YeGamolChattels
 
         YGCBlocks.blockTreasurePileRenderType = RenderingRegistry.getNextAvailableRenderId();
         YGCBlocks.blockTikiTorchRenderType = RenderingRegistry.getNextAvailableRenderId();
+
+        fmlEventHandler = new YGCFMLEventHandler();
+        fmlEventHandler.register();
+        forgeEventHandler = new YGCForgeEventHandler();
+        forgeEventHandler.register();
 
         // --------------------------------Ghost--------------------------------
 

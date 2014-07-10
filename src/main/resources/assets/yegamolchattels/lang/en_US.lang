@@ -136,3 +136,7 @@ guiPlankSaw.title=Plank Saw
 guiPlanksRefinementFrame.title=Plank Refinement Frame
 
 itemGroup.yegamolchattels=Ye Gamol Chattels
+
+yegamolchattels.configgui.title=Ye Gamol Chattels
+yegamolchattels.configgui.general=General
+yegamolchattels.configgui.ctgy.general.tooltip=General Settings

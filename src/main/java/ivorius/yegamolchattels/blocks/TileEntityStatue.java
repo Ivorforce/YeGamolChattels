@@ -11,6 +11,7 @@ import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
 import ivorius.ivtoolkit.network.IvNetworkHelperServer;
 import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.ivtoolkit.tools.IvDateHelper;
+import ivorius.yegamolchattels.YGCConfig;
 import ivorius.yegamolchattels.YeGamolChattels;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -66,7 +67,7 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
     {
         super.updateEntity();
 
-        if (YeGamolChattels.easterEggsAllowed && worldObj.isRemote && statueEntity instanceof EntityLiving && IvDateHelper.isHalloween())
+        if (YGCConfig.easterEggsAllowed && worldObj.isRemote && statueEntity instanceof EntityLiving && IvDateHelper.isHalloween())
         {
             EntityLiving livingStatue = (EntityLiving) statueEntity;
 
@@ -90,13 +91,13 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
 
     public boolean letStatueComeAlive()
     {
-        if (statueEntity != null && YeGamolChattels.areLifeStatuesAllowed)
+        if (statueEntity != null && YGCConfig.areLifeStatuesAllowed)
         {
             boolean dangerous = false;
             for (Class c : dangerousMobs)
                 if (statueEntity.getClass() == c)
                     dangerous = true;
-            if (YeGamolChattels.areDangerousStatuesAllowed || !dangerous)
+            if (YGCConfig.areDangerousStatuesAllowed || !dangerous)
             {
                 if (!worldObj.isRemote)
                 {
