@@ -23,19 +23,12 @@ public class BlockFlaxPlant extends BlockCrops
     @Override
     public IIcon getIcon(int side, int metadata)
     {
-        if (metadata < 7)
+        if (metadata < 0 || metadata > 7)
         {
-            if (metadata == 6)
-            {
-                metadata = 5;
-            }
+            metadata = 7;
+        }
 
-            return this.icons[metadata >> 1];
-        }
-        else
-        {
-            return this.icons[3];
-        }
+        return icons[metadata];
     }
 
     @Override
@@ -53,7 +46,7 @@ public class BlockFlaxPlant extends BlockCrops
     @Override
     public void registerBlockIcons(IIconRegister p_149651_1_)
     {
-        this.icons = new IIcon[4];
+        this.icons = new IIcon[8];
 
         for (int i = 0; i < this.icons.length; ++i)
         {

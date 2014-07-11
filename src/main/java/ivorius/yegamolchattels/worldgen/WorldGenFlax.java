@@ -16,6 +16,7 @@ import net.minecraft.world.gen.feature.WorldGenFlowers;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.BiomeDictionary;
 
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -39,7 +40,7 @@ public class WorldGenFlax implements IWorldGenerator
         if (types.length == 1 && types[0] == BiomeDictionary.Type.PLAINS)
         {
             int flaxPlants = 0;
-            while (random.nextFloat() < 0.3f)
+            while (random.nextFloat() < 0.8f && flaxPlants < 10)
                 flaxPlants ++;
 
             for (int flower = 0; flower < flaxPlants; ++flower)
@@ -48,7 +49,7 @@ public class WorldGenFlax implements IWorldGenerator
                 int z = chunkZ * 16 + random.nextInt(16) + 8;
                 int y = random.nextInt(world.getHeightValue(x, z) + 32);
 
-                plantGen.func_150550_a(YGCBlocks.flaxPlant, random.nextInt(2) + 5);
+                plantGen.func_150550_a(YGCBlocks.flaxPlant, 7 - (random.nextFloat() < 0.1f ? 1 : 0));
                 plantGen.generate(world, random, x, y, z);
             }
         }
