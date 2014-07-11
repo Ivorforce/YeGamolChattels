@@ -19,7 +19,7 @@ public class YGCItems
     public static Item refinedPlank;
 
     public static Item sandpaper;
-    public static Item oil;
+    public static Item linseedOil;
 
     public static Item flaxSeeds;
     public static Item flaxFiber;
