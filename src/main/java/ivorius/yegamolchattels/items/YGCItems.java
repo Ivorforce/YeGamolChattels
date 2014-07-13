@@ -23,4 +23,8 @@ public class YGCItems
 
     public static Item flaxSeeds;
     public static Item flaxFiber;
+
+    public static ItemClubHammer clubHammer;
+    public static Item chiselIron;
+    public static Item blockFragment;
 }

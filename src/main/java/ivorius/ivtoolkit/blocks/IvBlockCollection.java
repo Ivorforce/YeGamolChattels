@@ -18,12 +18,21 @@
 
 package ivorius.ivtoolkit.blocks;
 
+import ivorius.ivtoolkit.raytracing.IvRaytraceableAxisAlignedBox;
+import ivorius.ivtoolkit.raytracing.IvRaytraceableObject;
+import ivorius.ivtoolkit.raytracing.IvRaytracedIntersection;
+import ivorius.ivtoolkit.raytracing.IvRaytracer;
 import ivorius.ivtoolkit.tools.MCRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
 /**
@@ -39,7 +48,14 @@ public class IvBlockCollection implements Iterable<BlockCoord>
 
     public IvBlockCollection(int width, int height, int length)
     {
-        this(new Block[width * height * length], new byte[width * height * length], width, height, length);
+        this(airArray(width, height, length), new byte[width * height * length], width, height, length);
+    }
+
+    private static Block[] airArray(int width, int height, int length)
+    {
+        Block[] blocks = new Block[width * height * length];
+        Arrays.fill(blocks, Blocks.air);
+        return blocks;
     }
 
     public IvBlockCollection(Block[] blocks, byte[] metas, int width, int height, int length)
@@ -140,6 +156,68 @@ public class IvBlockCollection implements Iterable<BlockCoord>
 
         Block block = getBlock(sideCoord);
         return !block.isOpaqueCube();
+    }
+
+    public MovingObjectPosition rayTrace(Vec3 position, Vec3 direction)
+    {
+        IvRaytraceableAxisAlignedBox containingBox = new IvRaytraceableAxisAlignedBox(null, 0.001, 0.001, 0.001, width - 0.002, height - 0.002, length - 0.002);
+        IvRaytracedIntersection intersection = IvRaytracer.getFirstIntersection(Arrays.<IvRaytraceableObject>asList(containingBox), position.xCoord, position.yCoord, position.zCoord, direction.xCoord, direction.yCoord, direction.zCoord);
+
+        if (intersection != null)
+        {
+            position = Vec3.createVectorHelper(intersection.getX(), intersection.getY(), intersection.getZ());
+            BlockCoord curCoord = new BlockCoord(MathHelper.floor_double(position.xCoord), MathHelper.floor_double(position.yCoord), MathHelper.floor_double(position.zCoord));
+            ForgeDirection hitSide = ((IvRaytraceableAxisAlignedBox.SurfaceInfo) intersection.getUserInfo()).getSide().getOpposite();
+
+            while (hasCoord(curCoord))
+            {
+                if (getBlock(curCoord).getMaterial() != Material.air)
+                    return new MovingObjectPosition(curCoord.x, curCoord.y, curCoord.z, hitSide.getOpposite().ordinal(), position);
+
+                hitSide = getExitSide(position, direction);
+
+                if (hitSide.offsetX != 0)
+                {
+                    double offX = hitSide.offsetX > 0 ? 1.0001 : -0.0001;
+                    double dirLength = ((curCoord.x + offX) - position.xCoord) / direction.xCoord;
+                    position = Vec3.createVectorHelper(curCoord.x + offX, position.yCoord + direction.yCoord * dirLength, position.zCoord + direction.zCoord * dirLength);
+                }
+                else if (hitSide.offsetY != 0)
+                {
+                    double offY = hitSide.offsetY > 0 ? 1.0001 : -0.0001;
+                    double dirLength = ((curCoord.y + offY) - position.yCoord) / direction.yCoord;
+                    position = Vec3.createVectorHelper(position.xCoord + direction.xCoord * dirLength, curCoord.y + offY, position.zCoord + direction.zCoord * dirLength);
+                }
+                else
+                {
+                    double offZ = hitSide.offsetZ > 0 ? 1.0001 : -0.0001;
+                    double dirLength = ((curCoord.z + offZ) - position.zCoord) / direction.zCoord;
+                    position = Vec3.createVectorHelper(position.xCoord + direction.xCoord * dirLength, position.yCoord + direction.yCoord * dirLength, curCoord.z + offZ);
+                }
+
+                curCoord = curCoord.add(hitSide.offsetX, hitSide.offsetY, hitSide.offsetZ);
+            }
+        }
+
+        return null;
+    }
+
+    private ForgeDirection getExitSide(Vec3 position, Vec3 direction)
+    {
+        double innerX = ((position.xCoord % 1.0) + 1.0) % 1.0;
+        double innerY = ((position.yCoord % 1.0) + 1.0) % 1.0;
+        double innerZ = ((position.zCoord % 1.0) + 1.0) % 1.0;
+
+        double xDist = direction.xCoord > 0.0 ? ((1.0 - innerX) / direction.xCoord) : (innerX / -direction.xCoord);
+        double yDist = direction.yCoord > 0.0 ? ((1.0 - innerY) / direction.yCoord) : (innerY / -direction.yCoord);
+        double zDist = direction.zCoord > 0.0 ? ((1.0 - innerZ) / direction.zCoord) : (innerZ / -direction.zCoord);
+
+        if (xDist < yDist && xDist < zDist)
+            return direction.xCoord > 0.0 ? ForgeDirection.EAST : ForgeDirection.WEST;
+        else if (yDist < zDist)
+            return direction.yCoord > 0.0 ? ForgeDirection.UP : ForgeDirection.DOWN;
+        else
+            return direction.zCoord > 0.0 ? ForgeDirection.SOUTH : ForgeDirection.NORTH;
     }
 
     public NBTTagCompound createTagCompound()

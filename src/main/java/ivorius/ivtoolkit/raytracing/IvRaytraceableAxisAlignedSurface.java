@@ -179,7 +179,7 @@ public class IvRaytraceableAxisAlignedSurface extends IvRaytraceableObject
 
     private boolean withinBounds(double value, double min, double max)
     {
-        return value >= min && value <= max;
+        return value >= (min - 0.0001f) && value <= (max + 0.0001f);
     }
 
     private void checkValid()

@@ -34,6 +34,9 @@ public class YGCBlocks
 
     public static Block flaxPlant;
 
+    public static Block microBlock;
+
     public static int blockTreasurePileRenderType;
     public static int blockTikiTorchRenderType;
+    public static int blockMicroBlockRenderType;
 }

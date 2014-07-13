@@ -42,6 +42,8 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.Logger;
 
+import java.util.HashSet;
+
 @Mod(modid = YeGamolChattels.MODID, version = YeGamolChattels.VERSION, name = YeGamolChattels.NAME, guiFactory = "ivorius.yegamolchattels.gui.YGCConfigGuiFactory")
 public class YeGamolChattels
 {
@@ -96,13 +98,14 @@ public class YeGamolChattels
         guiHandler = new YGCGuiHandler();
         NetworkRegistry.INSTANCE.registerGuiHandler(this, guiHandler);
 
-        YGCBlocks.blockTreasurePileRenderType = RenderingRegistry.getNextAvailableRenderId();
-        YGCBlocks.blockTikiTorchRenderType = RenderingRegistry.getNextAvailableRenderId();
-
         fmlEventHandler = new YGCFMLEventHandler();
         fmlEventHandler.register();
         forgeEventHandler = new YGCForgeEventHandler();
         forgeEventHandler.register();
+
+        YGCBlocks.blockTreasurePileRenderType = RenderingRegistry.getNextAvailableRenderId();
+        YGCBlocks.blockTikiTorchRenderType = RenderingRegistry.getNextAvailableRenderId();
+        YGCBlocks.blockMicroBlockRenderType = RenderingRegistry.getNextAvailableRenderId();
 
         // --------------------------------Ghost--------------------------------
 
@@ -215,18 +218,17 @@ public class YeGamolChattels
         GameRegistry.registerItem(YGCItems.plank, "plank", MODID);
 
         YGCItems.smoothPlank = new ItemPlank().setUnlocalizedName("smoothPlank").setCreativeTab(tabMain).setTextureName(textureBase + "smoothPlank");
-        GameRegistry.registerItem(YGCItems.smoothPlank, "smoothPlank", MODID);
+        GameRegistry.registerItem(YGCItems.smoothPlank, "smooth_plank", MODID);
 
         YGCItems.refinedPlank = new ItemPlank().setUnlocalizedName("refinedPlank").setCreativeTab(tabMain).setTextureName(textureBase + "refinedPlank");
-        GameRegistry.registerItem(YGCItems.refinedPlank, "refinedPlank", MODID);
+        GameRegistry.registerItem(YGCItems.refinedPlank, "refined_plank", MODID);
 
         YGCBlocks.plankSaw = new BlockPlankSaw().setBlockName("plankSaw").setCreativeTab(tabMain);
-        GameRegistry.registerBlock(YGCBlocks.plankSaw, ItemPlankSaw.class, "plankSaw");
+        GameRegistry.registerBlock(YGCBlocks.plankSaw, ItemPlankSaw.class, "plank_saw");
+        GameRegistry.registerTileEntity(TileEntityPlankSaw.class, "ygcPlankSaw");
 
         YGCBlocks.planksRefinement = new BlockPlanksRefinement().setBlockName("planksRefinement").setCreativeTab(tabMain);
-        GameRegistry.registerBlock(YGCBlocks.planksRefinement, ItemPlanksRefinement.class, "planksRefinement");
-
-        GameRegistry.registerTileEntity(TileEntityPlankSaw.class, "ygcPlankSaw");
+        GameRegistry.registerBlock(YGCBlocks.planksRefinement, ItemPlanksRefinement.class, "planks_refinement_frame");
         GameRegistry.registerTileEntity(TileEntityPlanksRefinement.class, "ygcPlanksRefinement");
 
         YGCItems.sandpaper = new Item().setUnlocalizedName("sandpaper").setTextureName(textureBase + "sandpaper").setCreativeTab(tabMain);
@@ -235,17 +237,34 @@ public class YeGamolChattels
 
         YGCItems.linseedOil = new Item().setUnlocalizedName("ygcLinseedOil").setTextureName(textureBase + "linseedOil").setCreativeTab(tabMain);
         YGCItems.linseedOil.setMaxDamage(800).setMaxStackSize(1).setNoRepair();
-        GameRegistry.registerItem(YGCItems.linseedOil, "linseedOil", MODID);
+        GameRegistry.registerItem(YGCItems.linseedOil, "linseed_oil", MODID);
 
         // --------------------------------Flax--------------------------------
 
         YGCBlocks.flaxPlant = new BlockFlaxPlant().setBlockName("ygcFlaxPlant").setBlockTextureName(textureBase + "flax");
-        GameRegistry.registerBlock(YGCBlocks.flaxPlant, ItemBlock.class, "flaxPlant");
+        GameRegistry.registerBlock(YGCBlocks.flaxPlant, ItemBlock.class, "flax_plant");
 
         YGCItems.flaxSeeds = new ItemFlaxSeeds(YGCBlocks.flaxPlant, Blocks.farmland).setUnlocalizedName("ygcFlaxSeeds").setTextureName(textureBase + "flaxSeeds").setCreativeTab(tabMain);
-        GameRegistry.registerItem(YGCItems.flaxSeeds, "flaxSeeds", MODID);
+        GameRegistry.registerItem(YGCItems.flaxSeeds, "flax_seeds", MODID);
         YGCItems.flaxFiber = new Item().setUnlocalizedName("ygcFlaxFiber").setTextureName(textureBase + "flaxFiber").setCreativeTab(tabMain);
-        GameRegistry.registerItem(YGCItems.flaxFiber, "flaxFiber", MODID);
+        GameRegistry.registerItem(YGCItems.flaxFiber, "flax_fiber", MODID);
+
+        // --------------------------------Microblocks--------------------------------
+
+        YGCBlocks.microBlock = new BlockMicroBlock().setBlockName("ygcMicroBlock");
+        GameRegistry.registerBlock(YGCBlocks.microBlock, ItemMicroBlock.class, "ygcMicroBlock");
+        GameRegistry.registerTileEntity(TileEntityMicroBlock.class, "ygcMicroBlock");
+
+        YGCItems.chiselIron = new ItemChisel(0.0f, Item.ToolMaterial.IRON, new HashSet()).setUnlocalizedName("ygcChiselIron").setTextureName(textureBase + "chiselIron").setCreativeTab(tabMain);
+        YGCItems.chiselIron.setMaxDamage(200).setMaxStackSize(1).setNoRepair();
+        GameRegistry.registerItem(YGCItems.chiselIron, "iron_chisel", MODID);
+
+        YGCItems.clubHammer = (ItemClubHammer) new ItemClubHammer(0.0f, Item.ToolMaterial.IRON, new HashSet()).setUnlocalizedName("ygcClubHammer").setTextureName(textureBase + "clubHammer").setCreativeTab(tabMain);
+        YGCItems.clubHammer.setMaxDamage(200).setMaxStackSize(1).setNoRepair();
+        GameRegistry.registerItem(YGCItems.clubHammer, "club_hammer", MODID);
+
+        YGCItems.blockFragment = new ItemBlockFragment().setUnlocalizedName("ygcBlockFragment");
+        GameRegistry.registerItem(YGCItems.blockFragment, "block_fragment", MODID);
     }
 
     @EventHandler

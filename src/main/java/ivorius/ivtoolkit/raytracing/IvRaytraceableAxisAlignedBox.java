@@ -18,6 +18,8 @@
 
 package ivorius.ivtoolkit.raytracing;
 
+import net.minecraftforge.common.util.ForgeDirection;
+
 import java.util.List;
 
 public class IvRaytraceableAxisAlignedBox extends IvRaytraceableObject
@@ -40,12 +42,12 @@ public class IvRaytraceableAxisAlignedBox extends IvRaytraceableObject
         this.depth = depth;
 
         this.surfaces = new IvRaytraceableAxisAlignedSurface[6];
-        this.surfaces[0] = new IvRaytraceableAxisAlignedSurface(userInfo, x, y, z, 0, height, depth);
-        this.surfaces[1] = new IvRaytraceableAxisAlignedSurface(userInfo, x + width, y, z, 0, height, depth);
-        this.surfaces[2] = new IvRaytraceableAxisAlignedSurface(userInfo, x, y, z, width, 0, depth);
-        this.surfaces[3] = new IvRaytraceableAxisAlignedSurface(userInfo, x, y + height, z, width, 0, depth);
-        this.surfaces[4] = new IvRaytraceableAxisAlignedSurface(userInfo, x, y, z, width, height, 0);
-        this.surfaces[5] = new IvRaytraceableAxisAlignedSurface(userInfo, x, y, z + depth, width, height, 0);
+        this.surfaces[0] = new IvRaytraceableAxisAlignedSurface(new SurfaceInfo(this, ForgeDirection.WEST), x, y, z, 0, height, depth);
+        this.surfaces[1] = new IvRaytraceableAxisAlignedSurface(new SurfaceInfo(this, ForgeDirection.EAST), x + width, y, z, 0, height, depth);
+        this.surfaces[2] = new IvRaytraceableAxisAlignedSurface(new SurfaceInfo(this, ForgeDirection.DOWN), x, y, z, width, 0, depth);
+        this.surfaces[3] = new IvRaytraceableAxisAlignedSurface(new SurfaceInfo(this, ForgeDirection.UP), x, y + height, z, width, 0, depth);
+        this.surfaces[4] = new IvRaytraceableAxisAlignedSurface(new SurfaceInfo(this, ForgeDirection.NORTH), x, y, z, width, height, 0);
+        this.surfaces[5] = new IvRaytraceableAxisAlignedSurface(new SurfaceInfo(this, ForgeDirection.SOUTH), x, y, z + depth, width, height, 0);
     }
 
     public double getX()
@@ -95,6 +97,34 @@ public class IvRaytraceableAxisAlignedBox extends IvRaytraceableObject
         for (IvRaytraceableObject object : surfaces)
         {
             object.drawOutlines();
+        }
+    }
+
+    @Override
+    public String toString()
+    {
+        return "IvRaytraceableAxisAlignedBox{ " + x + ", " + y + ", " + z + " -> " + width + " x " + height + " x " + depth + "}";
+    }
+
+    public static class SurfaceInfo
+    {
+        private IvRaytraceableAxisAlignedBox box;
+        private ForgeDirection side;
+
+        public SurfaceInfo(IvRaytraceableAxisAlignedBox box, ForgeDirection side)
+        {
+            this.box = box;
+            this.side = side;
+        }
+
+        public IvRaytraceableAxisAlignedBox getBox()
+        {
+            return box;
+        }
+
+        public ForgeDirection getSide()
+        {
+            return side;
         }
     }
 }

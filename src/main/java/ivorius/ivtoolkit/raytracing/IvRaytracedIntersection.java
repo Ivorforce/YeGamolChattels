@@ -52,6 +52,6 @@ public class IvRaytracedIntersection
     @Override
     public String toString()
     {
-        return String.format("%s: [%.3f, %.3f, %.3f]", this.getUserInfo().toString(), this.getX(), this.getY(), this.getZ());
+        return String.format("%s: [%.3f, %.3f, %.3f]", String.valueOf(this.getUserInfo()), this.getX(), this.getY(), this.getZ());
     }
 }
