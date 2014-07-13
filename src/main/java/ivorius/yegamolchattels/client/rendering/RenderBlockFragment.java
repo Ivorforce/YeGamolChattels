@@ -58,7 +58,7 @@ public class RenderBlockFragment implements IItemRenderer
 
         GL11.glScalef(0.4f, 0.4f, 0.4f);
         Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
-        IvRenderHelper.renderCubeInvBlock(renderBlocks, fragment.block);
+        IvRenderHelper.renderCubeInvBlock(renderBlocks, fragment.block, fragment.meta);
         GL11.glPopMatrix();
     }
 }
