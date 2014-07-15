@@ -60,12 +60,6 @@ public class BlockMicroBlock extends BlockContainer
     }
 
     @Override
-    public boolean isNormalCube(IBlockAccess world, int x, int y, int z)
-    {
-        return ((TileEntityMicroBlock) world.getTileEntity(x, y, z)).areAllSidesOpaque();
-    }
-
-    @Override
     public boolean renderAsNormalBlock()
     {
         return false;

@@ -287,7 +287,7 @@ public class IvNBTHelper
     {
         byte[] bytes = compound.getByteArray(idBase + "_bytes");
         byte bitLength = compound.getByte(idBase + "_bitLength");
-        int intArray = compound.getInteger(idBase + "_length");
-        return IvBytePacker.unpackValues(bytes, bitLength, intArray);
+        int intArrayLength = compound.getInteger(idBase + "_length");
+        return IvBytePacker.unpackValues(bytes, bitLength, intArrayLength);
     }
 }

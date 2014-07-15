@@ -116,7 +116,7 @@ public class IvBlockMapper
         for (int i = 0; i < blocks.length; i++)
             vals[i] = getMapping(blocks[i]);
         NBTTagCompound compressed = new NBTTagCompound();
-        IvNBTHelper.writeCompressed("data", vals, getMapSize(), compressed);
+        IvNBTHelper.writeCompressed("data", vals, getMapSize() - 1, compressed);
         compound.setTag("blocksCompressed", compressed);
 
 //        if (getMapSize() <= Byte.MAX_VALUE)

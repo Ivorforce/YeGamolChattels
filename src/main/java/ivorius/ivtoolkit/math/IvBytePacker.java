@@ -30,7 +30,7 @@ public class IvBytePacker
         byte bits = 0;
         while (maxValue > 0)
         {
-            maxValue >>>= 2;
+            maxValue >>>= 1;
             bits ++;
         }
         return bits;
@@ -93,6 +93,6 @@ public class IvBytePacker
 
     private static long deleteLeftBits(long val, int bits)
     {
-        return bits >= 64 ? 0 : (val << bits) >>> bits;
+        return bits >= 64 ? 0 : ((val << bits) >>> bits);
     }
 }

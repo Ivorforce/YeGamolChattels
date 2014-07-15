@@ -114,12 +114,12 @@ public class ItemChisel extends ItemTool
                         byte hitInternalMeta = collection.getMetadata(carveCoord);
 
                         collection.setBlockAndMetadata(carveCoord, Blocks.air, (byte) 0);
-                        if (tileEntityMicroBlock.validateBeingMicroblock())
-                            tileEntityMicroBlock.markCacheInvalid();
-
                         returnList.add(new BlockData(hitInternalBlock, hitInternalMeta));
                     }
                 }
+
+                if (tileEntityMicroBlock.validateBeingMicroblock())
+                    tileEntityMicroBlock.markCacheInvalid();
 
                 return returnList;
             }
