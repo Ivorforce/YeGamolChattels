@@ -56,6 +56,11 @@ public class TileEntityMicroBlock extends TileEntity implements PartialUpdateHan
         return isSideOpaque[direction.ordinal()];
     }
 
+    public boolean areAllSidesOpaque()
+    {
+        return isSideOpaque[0] && isSideOpaque[1] && isSideOpaque[2] && isSideOpaque[3] && isSideOpaque[4] && isSideOpaque[5];
+    }
+
     public void markCacheInvalid()
     {
         markCacheInvalid(false);

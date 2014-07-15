@@ -282,11 +282,6 @@ public class ItemChisel extends ItemTool
             return new MicroBlockFragment(new BlockCoord(blockX, blockY, blockZ), new BlockCoord(internalX, internalY, internalZ), internalSide.getOpposite(), hitPoint);
         }
 
-        private static int posModulo(long value, int mod)
-        {
-            return (int)((value % mod) + mod) % mod;
-        }
-
         @Override
         public String toString()
         {
