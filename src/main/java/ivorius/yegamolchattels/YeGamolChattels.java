@@ -254,7 +254,7 @@ public class YeGamolChattels
 
         // --------------------------------Microblocks--------------------------------
 
-        YGCBlocks.microBlock = new BlockMicroBlock().setBlockName("ygcMicroBlock");
+        YGCBlocks.microBlock = new BlockMicroBlock().setBlockName("ygcMicroBlock").setHardness(1.0F);
         GameRegistry.registerBlock(YGCBlocks.microBlock, ItemMicroBlock.class, "ygcMicroBlock");
         GameRegistry.registerTileEntity(TileEntityMicroBlock.class, "ygcMicroBlock");
 
@@ -369,5 +369,9 @@ public class YeGamolChattels
 
         GameRegistry.addShapelessRecipe(new ItemStack(YGCItems.linseedOil), Items.glass_bottle, YGCItems.flaxSeeds, YGCItems.flaxSeeds, YGCItems.flaxSeeds, YGCItems.flaxSeeds, YGCItems.flaxSeeds, YGCItems.flaxSeeds, YGCItems.flaxSeeds, YGCItems.flaxSeeds);
         GameRegistry.addRecipe(new ItemStack(Blocks.wool, 1), "##", "##", '#', YGCItems.flaxFiber);
+
+        GameRegistry.addRecipe(new ItemStack(YGCItems.clubHammer), "#I#", " I ", " I ", '#', Items.iron_ingot, 'I', Items.stick);
+        GameRegistry.addRecipe(new ItemStack(YGCItems.chiselIron), " #", "I ", '#', Items.iron_ingot, 'I', Items.stick);
+        GameRegistry.addRecipe(new ItemStack(YGCItems.chiselIron), "# ", " I", '#', Items.iron_ingot, 'I', Items.stick);
     }
 }

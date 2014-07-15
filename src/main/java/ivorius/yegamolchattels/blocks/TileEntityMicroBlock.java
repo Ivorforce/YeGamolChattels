@@ -10,13 +10,11 @@ import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.blocks.BlockArea;
 import ivorius.ivtoolkit.blocks.BlockCoord;
 import ivorius.ivtoolkit.blocks.IvBlockCollection;
-import ivorius.ivtoolkit.blocks.IvTileEntityHelper;
 import ivorius.ivtoolkit.network.IvNetworkHelperServer;
 import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.ivtoolkit.tools.MCRegistryDefault;
 import ivorius.yegamolchattels.YeGamolChattels;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -36,7 +34,7 @@ public class TileEntityMicroBlock extends TileEntity implements PartialUpdateHan
 
     private boolean[] isSideOpaque = new boolean[6];
 
-    private boolean destroyByConverting;
+    private boolean shouldDropAsItem = true;
 
     public TileEntityMicroBlock()
     {
@@ -106,7 +104,7 @@ public class TileEntityMicroBlock extends TileEntity implements PartialUpdateHan
 
         if (allSame)
         {
-            destroyByConverting = true;
+            shouldDropAsItem = false;
             worldObj.setBlock(xCoord, yCoord, zCoord, curBlock, curMeta, 3);
         }
 
@@ -124,9 +122,14 @@ public class TileEntityMicroBlock extends TileEntity implements PartialUpdateHan
         return true;
     }
 
-    public boolean isDestroyByConverting()
+    public boolean shouldDropAsItem()
     {
-        return destroyByConverting;
+        return shouldDropAsItem;
+    }
+
+    public void setShouldDropAsItem(boolean shouldDropAsItem)
+    {
+        this.shouldDropAsItem = shouldDropAsItem;
     }
 
     @Override

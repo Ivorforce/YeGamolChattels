@@ -7,16 +7,17 @@ package ivorius.yegamolchattels.blocks;
 
 import ivorius.ivtoolkit.blocks.BlockCoord;
 import ivorius.ivtoolkit.blocks.IvBlockCollection;
+import ivorius.yegamolchattels.items.ItemBlockFragment;
 import ivorius.yegamolchattels.items.ItemChisel;
 import ivorius.yegamolchattels.items.ItemMicroBlock;
 import ivorius.yegamolchattels.items.YGCItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -77,7 +78,7 @@ public class BlockMicroBlock extends BlockContainer
         {
             TileEntityMicroBlock microBlock = (TileEntityMicroBlock) world.getTileEntity(x, y, z);
 
-            if (!microBlock.isDestroyByConverting())
+            if (microBlock.shouldDropAsItem())
             {
                 ItemStack stack = new ItemStack(Item.getItemFromBlock(this));
                 ItemMicroBlock.setMicroBlock(stack, microBlock.getBlockCollection());
@@ -86,6 +87,40 @@ public class BlockMicroBlock extends BlockContainer
         }
 
         super.breakBlock(world, x, y, z, block, meta);
+    }
+
+    @Override
+    public void onBlockHarvested(World world, int x, int y, int z, int side, EntityPlayer player)
+    {
+        super.onBlockHarvested(world, x, y, z, side, player);
+
+        ItemStack heldItem = player.getHeldItem();
+        if (heldItem != null && heldItem.getItem() == YGCItems.clubHammer)
+        {
+            TileEntity tileEntity = world.getTileEntity(x, y, z);
+            if (tileEntity instanceof TileEntityMicroBlock)
+            {
+                TileEntityMicroBlock tileEntityMicroBlock = (TileEntityMicroBlock) tileEntity;
+                IvBlockCollection collection = tileEntityMicroBlock.getBlockCollection();
+
+                if (!world.isRemote)
+                {
+                    for (BlockCoord coord : collection)
+                    {
+                        if (world.rand.nextBoolean())
+                        {
+                            ItemStack drop = new ItemStack(YGCItems.blockFragment);
+                            ItemBlockFragment.setFragment(drop, new ItemChisel.BlockData(collection.getBlock(coord), collection.getMetadata(coord)));
+                            EntityItem entityItem = new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, drop);
+                            world.spawnEntityInWorld(entityItem);
+                        }
+                    }
+                }
+
+                tileEntityMicroBlock.setShouldDropAsItem(false);
+                world.setBlockToAir(x, y, z);
+            }
+        }
     }
 
     @Override
