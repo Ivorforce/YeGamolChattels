@@ -258,9 +258,13 @@ public class YeGamolChattels
         GameRegistry.registerBlock(YGCBlocks.microBlock, ItemMicroBlock.class, "ygcMicroBlock");
         GameRegistry.registerTileEntity(TileEntityMicroBlock.class, "ygcMicroBlock");
 
-        YGCItems.chiselIron = new ItemChisel(0.0f, Item.ToolMaterial.IRON, new HashSet()).setUnlocalizedName("ygcChiselIron").setTextureName(textureBase + "chiselIron").setCreativeTab(tabMain);
-        YGCItems.chiselIron.setMaxDamage(200).setMaxStackSize(1).setNoRepair();
-        GameRegistry.registerItem(YGCItems.chiselIron, "iron_chisel", MODID);
+        YGCItems.detailChiselIron = new ItemChisel(0, 0.0f, Item.ToolMaterial.IRON, new HashSet()).setUnlocalizedName("ygcChiselIron_detail").setTextureName(textureBase + "chiselIron_detail").setCreativeTab(tabMain);
+        YGCItems.detailChiselIron.setMaxDamage(200).setMaxStackSize(1).setNoRepair();
+        GameRegistry.registerItem(YGCItems.detailChiselIron, "iron_chisel_detail", MODID);
+
+        YGCItems.carvingChiselIron = new ItemChisel(1, 0.0f, Item.ToolMaterial.IRON, new HashSet()).setUnlocalizedName("ygcChiselIron").setTextureName(textureBase + "chiselIron").setCreativeTab(tabMain);
+        YGCItems.carvingChiselIron.setMaxDamage(200).setMaxStackSize(1).setNoRepair();
+        GameRegistry.registerItem(YGCItems.carvingChiselIron, "iron_chisel", MODID);
 
         YGCItems.clubHammer = (ItemClubHammer) new ItemClubHammer(0.0f, Item.ToolMaterial.IRON, new HashSet()).setUnlocalizedName("ygcClubHammer").setTextureName(textureBase + "clubHammer").setCreativeTab(tabMain);
         YGCItems.clubHammer.setMaxDamage(200).setMaxStackSize(1).setNoRepair();
@@ -371,7 +375,7 @@ public class YeGamolChattels
         GameRegistry.addRecipe(new ItemStack(Blocks.wool, 1), "##", "##", '#', YGCItems.flaxFiber);
 
         GameRegistry.addRecipe(new ItemStack(YGCItems.clubHammer), "#I#", " I ", " I ", '#', Items.iron_ingot, 'I', Items.stick);
-        GameRegistry.addRecipe(new ItemStack(YGCItems.chiselIron), " #", "I ", '#', Items.iron_ingot, 'I', Items.stick);
-        GameRegistry.addRecipe(new ItemStack(YGCItems.chiselIron), "# ", " I", '#', Items.iron_ingot, 'I', Items.stick);
+        GameRegistry.addRecipe(new ItemStack(YGCItems.detailChiselIron), " #", "I ", '#', Items.iron_ingot, 'I', Items.stick);
+        GameRegistry.addRecipe(new ItemStack(YGCItems.detailChiselIron), "# ", " I", '#', Items.iron_ingot, 'I', Items.stick);
     }
 }

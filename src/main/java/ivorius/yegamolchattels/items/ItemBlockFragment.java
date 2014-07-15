@@ -5,6 +5,7 @@
 
 package ivorius.yegamolchattels.items;
 
+import ivorius.ivtoolkit.blocks.BlockCoord;
 import ivorius.ivtoolkit.blocks.IvBlockCollection;
 import ivorius.yegamolchattels.blocks.TileEntityMicroBlock;
 import net.minecraft.block.Block;
@@ -42,10 +43,10 @@ public class ItemBlockFragment extends Item
     @Override
     public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
     {
-        return addBlock(world, x, y, z, player, itemStack);
+        return addBlock(x, y, z, player, itemStack);
     }
 
-    public boolean addBlock(World world, int x, int y, int z, EntityPlayer player, ItemStack usedStack)
+    public static boolean addBlock(int x, int y, int z, EntityPlayer player, ItemStack usedStack)
     {
         if (addBlock(player, x, y, z, getFragment(usedStack)))
         {
@@ -58,7 +59,7 @@ public class ItemBlockFragment extends Item
         return false;
     }
 
-    public boolean addBlock(Entity entity, int hoverX, int hoverY, int hoverZ, ItemChisel.BlockData blockFragment)
+    public static boolean addBlock(Entity entity, int hoverX, int hoverY, int hoverZ, ItemChisel.BlockData blockFragment)
     {
         World world = entity.worldObj;
         ItemChisel.MicroBlockFragment hoveredFragment = ItemChisel.getHoveredFragment(entity, hoverX, hoverY, hoverZ);
@@ -66,13 +67,14 @@ public class ItemBlockFragment extends Item
         if (hoveredFragment != null)
         {
             hoveredFragment = hoveredFragment.getOpposite();
+            BlockCoord fragmentCoord = hoveredFragment.getCoord();
 
-            TileEntity tileEntity = world.getTileEntity(hoveredFragment.getCoord().x, hoveredFragment.getCoord().y, hoveredFragment.getCoord().z);
+            TileEntity tileEntity = world.getTileEntity(fragmentCoord.x, fragmentCoord.y, fragmentCoord.z);
 
             if (!(tileEntity instanceof TileEntityMicroBlock))
             {
-                ItemChisel.convertToMicroBlock(world, hoveredFragment.getCoord());
-                tileEntity = world.getTileEntity(hoveredFragment.getCoord().x, hoveredFragment.getCoord().y, hoveredFragment.getCoord().z);
+                ItemChisel.convertToMicroBlock(world, fragmentCoord);
+                tileEntity = world.getTileEntity(fragmentCoord.x, fragmentCoord.y, fragmentCoord.z);
             }
 
             if (tileEntity instanceof TileEntityMicroBlock)
@@ -94,11 +96,6 @@ public class ItemBlockFragment extends Item
 
         return false;
     }
-
-//    public static BlockCoord getCoordFromHit(IvBlockCollection collection, int x, int y, int z, float hitX, float hitY, float hitZ)
-//    {
-//
-//    }
 
     @Override
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)

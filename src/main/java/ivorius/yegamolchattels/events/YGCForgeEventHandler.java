@@ -10,6 +10,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ivorius.ivtoolkit.rendering.IvRenderHelper;
 import ivorius.yegamolchattels.blocks.TileEntityMicroBlock;
+import ivorius.yegamolchattels.items.ItemBlockFragment;
 import ivorius.yegamolchattels.items.ItemChisel;
 import ivorius.yegamolchattels.items.ItemClubHammer;
 import ivorius.yegamolchattels.items.YGCItems;
@@ -39,14 +40,15 @@ public class YGCForgeEventHandler
     {
         EntityLivingBase renderEntity = Minecraft.getMinecraft().renderViewEntity;
         ItemStack heldItem = renderEntity.getHeldItem();
-        if (heldItem != null && (heldItem.getItem() == YGCItems.chiselIron || heldItem.getItem() == YGCItems.blockFragment))
+        if (heldItem != null && (heldItem.getItem() instanceof ItemChisel || heldItem.getItem() instanceof ItemBlockFragment))
         {
-            renderSelectedMicroblock(event.partialTicks);
+            int size = heldItem.getItem() instanceof ItemChisel ? ((ItemChisel) heldItem.getItem()).getCarvingDistance() : 0;
+            renderSelectedMicroblock(event.partialTicks, size);
         }
     }
 
     @SideOnly(Side.CLIENT)
-    public static void renderSelectedMicroblock(float partialTicks)
+    public static void renderSelectedMicroblock(float partialTicks, int size)
     {
         EntityLivingBase renderEntity = Minecraft.getMinecraft().renderViewEntity;
         MovingObjectPosition hoveredObject = Minecraft.getMinecraft().objectMouseOver;
@@ -57,6 +59,7 @@ public class YGCForgeEventHandler
             double viewerPosX = renderEntity.lastTickPosX + (renderEntity.posX - renderEntity.lastTickPosX) * (double) partialTicks;
             double viewerPosY = renderEntity.lastTickPosY + (renderEntity.posY - renderEntity.lastTickPosY) * (double) partialTicks;
             double viewerPosZ = renderEntity.lastTickPosZ + (renderEntity.posZ - renderEntity.lastTickPosZ) * (double) partialTicks;
+            float boxSize = 0.52f + size;
 
             GL11.glPushMatrix();
             GL11.glTranslated(hoveredFragment.getCoord().x - viewerPosX, hoveredFragment.getCoord().y - viewerPosY, hoveredFragment.getCoord().z - viewerPosZ);
@@ -64,7 +67,7 @@ public class YGCForgeEventHandler
             GL11.glTranslated((hoveredFragment.getInternalCoord().x + 0.5f) / TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_X, (hoveredFragment.getInternalCoord().y + 0.5f) / TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Y, (hoveredFragment.getInternalCoord().z + 0.5f) / TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Z);
             GL11.glColor3f(0.0f, 0.0f, 0.0f);
             GL11.glLineWidth(1.0f);
-            IvRenderHelper.drawCuboid(Tessellator.instance, 0.52f / TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_X, 0.52f / TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Y, 0.52f / TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Z, 1.0f, true);
+            IvRenderHelper.drawCuboid(Tessellator.instance, boxSize / TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_X, boxSize / TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Y, boxSize / TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Z, 1.0f, true);
 
             GL11.glPopMatrix();
         }

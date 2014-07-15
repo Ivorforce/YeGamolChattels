@@ -5,6 +5,7 @@
 
 package ivorius.yegamolchattels.items;
 
+import ivorius.ivtoolkit.blocks.BlockArea;
 import ivorius.ivtoolkit.blocks.BlockCoord;
 import ivorius.ivtoolkit.blocks.IvBlockCollection;
 import ivorius.ivtoolkit.tools.IvInventoryHelper;
@@ -24,6 +25,8 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -31,9 +34,17 @@ import java.util.Set;
  */
 public class ItemChisel extends ItemTool
 {
-    public ItemChisel(float damage, ToolMaterial material, Set damageVSBlocks)
+    private int carvingDistance;
+
+    public ItemChisel(int carvingDistance, float damage, ToolMaterial material, Set damageVSBlocks)
     {
         super(damage, material, damageVSBlocks);
+        this.carvingDistance = carvingDistance;
+    }
+
+    public int getCarvingDistance()
+    {
+        return carvingDistance;
     }
 
     @Override
@@ -42,7 +53,7 @@ public class ItemChisel extends ItemTool
         if (player.inventory.hasItem(YGCItems.clubHammer))
         {
             int clubHammerSlot = IvInventoryHelper.getInventorySlotContainItem(player.inventory, YGCItems.clubHammer);
-            return chiselAway(world, x, y, z, player, itemStack, player.inventory.getStackInSlot(clubHammerSlot));
+            return chiselAway(x, y, z, player, itemStack, player.inventory.getStackInSlot(clubHammerSlot), carvingDistance);
         }
         else
         {
@@ -51,19 +62,22 @@ public class ItemChisel extends ItemTool
         }
     }
 
-    public boolean chiselAway(World world, int x, int y, int z, EntityPlayer player, ItemStack usedStack, ItemStack clubHammer)
+    public static boolean chiselAway(int x, int y, int z, EntityPlayer player, ItemStack usedStack, ItemStack clubHammer, int range)
     {
-        BlockData hitFragmentData = chiselAway(player, x, y, z);
+        List<BlockData> hitFragmentDatas = chiselAway(player, x, y, z, range);
 
-        if (hitFragmentData != null)
+        if (hitFragmentDatas != null && hitFragmentDatas.size() > 0)
         {
-            usedStack.damageItem(1, player);
-            clubHammer.damageItem(1, player);
+            for (BlockData data : hitFragmentDatas)
+            {
+                usedStack.damageItem(1, player);
+                clubHammer.damageItem(1, player);
 
-            ItemStack fragment = new ItemStack(YGCItems.blockFragment);
-            ItemBlockFragment.setFragment(fragment, hitFragmentData);
-            player.inventory.addItemStackToInventory(fragment);
-            player.inventory.markDirty();
+                ItemStack fragment = new ItemStack(YGCItems.blockFragment);
+                ItemBlockFragment.setFragment(fragment, data);
+                player.inventory.addItemStackToInventory(fragment);
+                player.inventory.markDirty();
+            }
 
             return true;
         }
@@ -71,7 +85,7 @@ public class ItemChisel extends ItemTool
         return false;
     }
 
-    public BlockData chiselAway(Entity entity, int hoverX, int hoverY, int hoverZ)
+    public static List<BlockData> chiselAway(Entity entity, int hoverX, int hoverY, int hoverZ, int range)
     {
         World world = entity.worldObj;
         MicroBlockFragment hoveredFragment = getHoveredFragment(entity, hoverX, hoverY, hoverZ);
@@ -91,17 +105,23 @@ public class ItemChisel extends ItemTool
                 TileEntityMicroBlock tileEntityMicroBlock = (TileEntityMicroBlock) tileEntity;
                 IvBlockCollection collection = tileEntityMicroBlock.getBlockCollection();
 
-                Block hitInternalBlock = collection.getBlock(hoveredFragment.getInternalCoord()), block;
-                if (hitInternalBlock.getMaterial() != Material.air)
+                List<BlockData> returnList = new ArrayList<>();
+                for (BlockCoord carveCoord : new BlockArea(hoveredFragment.getInternalCoord().subtract(range, range, range), hoveredFragment.getInternalCoord().add(range, range, range)))
                 {
-                    byte hitInternalMeta = collection.getMetadata(hoveredFragment.getInternalCoord());
+                    Block hitInternalBlock = collection.getBlock(carveCoord);
+                    if (hitInternalBlock.getMaterial() != Material.air)
+                    {
+                        byte hitInternalMeta = collection.getMetadata(carveCoord);
 
-                    collection.setBlockAndMetadata(hoveredFragment.getInternalCoord(), Blocks.air, (byte) 0);
-                    if (tileEntityMicroBlock.validateBeingMicroblock())
-                        tileEntityMicroBlock.markCacheInvalid();
+                        collection.setBlockAndMetadata(carveCoord, Blocks.air, (byte) 0);
+                        if (tileEntityMicroBlock.validateBeingMicroblock())
+                            tileEntityMicroBlock.markCacheInvalid();
 
-                    return new BlockData(hitInternalBlock, hitInternalMeta);
+                        returnList.add(new BlockData(hitInternalBlock, hitInternalMeta));
+                    }
                 }
+
+                return returnList;
             }
         }
 
@@ -132,9 +152,9 @@ public class ItemChisel extends ItemTool
     public static MicroBlockFragment getHoveredFragment(Entity entity, int hoverX, int hoverY, int hoverZ)
     {
         float partialTicks = 1.0f;
-        double entityX = entity.prevPosX + (entity.posX - entity.prevPosX) * (double)partialTicks;
-        double entityY = entity.prevPosY + (entity.posY - entity.prevPosY) * (double)partialTicks + 1.62D - (double)entity.yOffset;
-        double entityZ = entity.prevPosZ + (entity.posZ - entity.prevPosZ) * (double)partialTicks;
+        double entityX = entity.prevPosX + (entity.posX - entity.prevPosX) * (double) partialTicks;
+        double entityY = entity.prevPosY + (entity.posY - entity.prevPosY) * (double) partialTicks + 1.62D - (double) entity.yOffset;
+        double entityZ = entity.prevPosZ + (entity.posZ - entity.prevPosZ) * (double) partialTicks;
         Vec3 entityPos = Vec3.createVectorHelper(entityX, entityY, entityZ);
         return getHoveredFragment(entity.worldObj, hoverX, hoverY, hoverZ, entityPos, entity.getLookVec());
     }
@@ -219,14 +239,52 @@ public class ItemChisel extends ItemTool
 
         public MicroBlockFragment getOpposite()
         {
-            long newX = coord.x * TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_X + internalCoord.x + internalSide.offsetX;
-            long newY = coord.y * TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Y + internalCoord.y + internalSide.offsetY;
-            long newZ = coord.z * TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Z + internalCoord.z + internalSide.offsetZ;
+            int blockX = coord.x;
+            int blockY = coord.y;
+            int blockZ = coord.z;
+            int internalX = internalCoord.x + internalSide.offsetX;
+            int internalY = internalCoord.y + internalSide.offsetY;
+            int internalZ = internalCoord.z + internalSide.offsetZ;
 
-            BlockCoord newCoord = new BlockCoord((int)(newX / TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_X), (int)(newY / TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Y), (int)(newZ / TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Z));
-            BlockCoord newInternalCoord = new BlockCoord((int)(newX % TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_X), (int)(newY % TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Y), (int)(newZ % TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Z));
+            if (internalX < 0)
+            {
+                internalX = TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_X - 1;
+                blockX --;
+            }
+            else if (internalX >= TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_X)
+            {
+                internalX = 0;
+                blockX ++;
+            }
 
-            return new MicroBlockFragment(newCoord, newInternalCoord, internalSide.getOpposite(), hitPoint);
+            if (internalY < 0)
+            {
+                internalY = TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Y - 1;
+                blockY --;
+            }
+            else if (internalY >= TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Y)
+            {
+                internalY = 0;
+                blockY ++;
+            }
+
+            if (internalZ < 0)
+            {
+                internalZ = TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Z - 1;
+                blockZ --;
+            }
+            else if (internalZ >= TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Z)
+            {
+                internalZ = 0;
+                blockZ ++;
+            }
+
+            return new MicroBlockFragment(new BlockCoord(blockX, blockY, blockZ), new BlockCoord(internalX, internalY, internalZ), internalSide.getOpposite(), hitPoint);
+        }
+
+        private static int posModulo(long value, int mod)
+        {
+            return (int)((value % mod) + mod) % mod;
         }
 
         @Override
