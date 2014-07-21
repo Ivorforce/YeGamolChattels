@@ -193,7 +193,7 @@ public class GuiScreenPlanksRefinement extends GuiScreen
         x = MathHelper.clamp_int(x, 0, TileEntityPlanksRefinement.REFINEMENT_SLOTS_X - 1);
         y = MathHelper.clamp_int(y, 0, TileEntityPlanksRefinement.REFINEMENT_SLOTS_Y - 1);
 
-        return Math.min(tileEntity.getRefinement(x, y), 1.4f) * 0.4f;
+        return Math.min(tileEntity.getRefinement(x, y), 1.4f) * 0.15f;
     }
 
     @Override

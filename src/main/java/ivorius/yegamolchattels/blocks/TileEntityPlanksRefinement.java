@@ -31,9 +31,10 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
     public static final int REFINEMENT_SLOTS_X = 16;
     public static final int REFINEMENT_SLOTS_Y = 12;
 
-    public static int MIN_LOW_REFINEMENT_PER_SLOT = 5;
-    public static int MIN_HIGH_REFINEMENT_PER_SLOT = 20;
-    public static int MISSING_REFINEMENT_ALLOWED = 40;
+    public static int MIN_LOW_REFINEMENT_PER_SLOT = 3;
+    public static int MIN_HIGH_REFINEMENT_PER_SLOT = 6;
+    public static int MAX_REFINEMENT_PER_SLOT = 10;
+    public static int MISSING_REFINEMENT_ALLOWED = 30;
 
     public ItemStack containedItem;
 
@@ -142,7 +143,10 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
             {
                 if (slotX >= 0 && slotX < REFINEMENT_SLOTS_X && slotY >= 0 && slotY < REFINEMENT_SLOTS_Y)
                 {
-                    ticksRefinedPerSlot[slotY * REFINEMENT_SLOTS_X + slotX] += speedInfl;
+                    int index = slotY * REFINEMENT_SLOTS_X + slotX;
+                    ticksRefinedPerSlot[index] += speedInfl;
+                    if (ticksRefinedPerSlot[index] > MAX_REFINEMENT_PER_SLOT)
+                        ticksRefinedPerSlot[index] = MAX_REFINEMENT_PER_SLOT;
                 }
             }
         }
@@ -203,7 +207,7 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
     {
         if (slotX >= 0 && slotX < REFINEMENT_SLOTS_X && slotY >= 0 && slotY < REFINEMENT_SLOTS_Y)
         {
-            return ticksRefinedPerSlot[slotY * 16 + slotX] / 20.0f * 0.5f;
+            return ticksRefinedPerSlot[slotY * 16 + slotX] / (float)MIN_HIGH_REFINEMENT_PER_SLOT;
         }
 
         return -1.0f;
