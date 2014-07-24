@@ -91,7 +91,7 @@ public class IvBytePacker
         return values;
     }
 
-    public static long moveMSBToBytePos(long value)
+    private static long moveMSBToBytePos(long value)
     {
         return ((value >>> (Long.SIZE - 8)) & 128) | (value & 127);
     }
