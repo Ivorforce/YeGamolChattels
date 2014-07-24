@@ -51,7 +51,7 @@ public class IvBytePacker
 
             while (currentSavedBits >= 8)
             {
-                packed[currentArrayIndex] = (byte) ((currentVal >>> (currentSavedBits - 8)) - 128);
+                packed[currentArrayIndex] = (byte) (currentVal >>> (currentSavedBits - 8));
                 currentSavedBits -= 8;
 
                 currentVal = deleteLeftBits(currentVal, 64 - currentSavedBits);
@@ -60,7 +60,7 @@ public class IvBytePacker
         }
 
         if (currentSavedBits > 0)
-            packed[currentArrayIndex] = (byte) ((currentVal << (8 - currentSavedBits)) - 128);
+            packed[currentArrayIndex] = (byte) (currentVal << (8 - currentSavedBits));
 
         return packed;
     }
@@ -75,7 +75,7 @@ public class IvBytePacker
 
         for (byte value : packed)
         {
-            currentVal = (currentVal << 8) | ((long)value + 128);
+            currentVal = (currentVal << 8) | moveMSBToBytePos((long) value);
             currentSavedBits += 8;
 
             while (currentSavedBits >= bitLength && currentArrayIndex < valueCount)
@@ -89,6 +89,11 @@ public class IvBytePacker
         }
 
         return values;
+    }
+
+    public static long moveMSBToBytePos(long value)
+    {
+        return ((value >>> (Long.SIZE - 8)) & 128) | (value & 127);
     }
 
     private static long deleteLeftBits(long val, int bits)
