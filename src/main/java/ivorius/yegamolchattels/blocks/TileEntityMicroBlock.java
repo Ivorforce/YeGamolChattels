@@ -31,6 +31,8 @@ public class TileEntityMicroBlock extends TileEntity implements PartialUpdateHan
     public static final int MICROBLOCKS_PER_BLOCK_X = 8;
     public static final int MICROBLOCKS_PER_BLOCK_Y = 8;
     public static final int MICROBLOCKS_PER_BLOCK_Z = 8;
+    public static final int MAX_MICROBLOCK_MAPPINGS = 16;
+
     private IvBlockCollection blockCollection;
 
     private boolean[] isSideOpaque = new boolean[6];
@@ -112,6 +114,10 @@ public class TileEntityMicroBlock extends TileEntity implements PartialUpdateHan
         {
             shouldDropAsItem = false;
             worldObj.setBlock(xCoord, yCoord, zCoord, curBlock, curMeta, 3);
+        }
+        else if (blockCollection.getBlockMultiplicity() > MAX_MICROBLOCK_MAPPINGS)
+        {
+            BlockMicroBlock.dropAllMicroblockFragments(this, 1.0f);
         }
 
         return !allSame;

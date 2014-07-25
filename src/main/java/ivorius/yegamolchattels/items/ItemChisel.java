@@ -35,16 +35,23 @@ import java.util.Set;
 public class ItemChisel extends ItemTool
 {
     private int carvingDistance;
+    private float fragmentPickupChance;
 
-    public ItemChisel(int carvingDistance, float damage, ToolMaterial material, Set damageVSBlocks)
+    public ItemChisel(int carvingDistance, float fragmentPickupChance, float damage, ToolMaterial material, Set damageVSBlocks)
     {
         super(damage, material, damageVSBlocks);
         this.carvingDistance = carvingDistance;
+        this.fragmentPickupChance = fragmentPickupChance;
     }
 
     public int getCarvingDistance()
     {
         return carvingDistance;
+    }
+
+    public float getFragmentPickupChance()
+    {
+        return fragmentPickupChance;
     }
 
     @Override
@@ -53,7 +60,7 @@ public class ItemChisel extends ItemTool
         if (player.inventory.hasItem(YGCItems.clubHammer))
         {
             int clubHammerSlot = IvInventoryHelper.getInventorySlotContainItem(player.inventory, YGCItems.clubHammer);
-            return chiselAway(x, y, z, player, itemStack, player.inventory.getStackInSlot(clubHammerSlot), carvingDistance);
+            return chiselAway(x, y, z, player, itemStack, player.inventory.getStackInSlot(clubHammerSlot), carvingDistance, fragmentPickupChance);
         }
         else
         {
@@ -62,7 +69,7 @@ public class ItemChisel extends ItemTool
         }
     }
 
-    public static boolean chiselAway(int x, int y, int z, EntityPlayer player, ItemStack usedStack, ItemStack clubHammer, int range)
+    public static boolean chiselAway(int x, int y, int z, EntityPlayer player, ItemStack usedStack, ItemStack clubHammer, int range, float fragmentPickupChance)
     {
         List<BlockData> hitFragmentDatas = chiselAway(player, x, y, z, range);
 
@@ -70,13 +77,16 @@ public class ItemChisel extends ItemTool
         {
             for (BlockData data : hitFragmentDatas)
             {
-                usedStack.damageItem(1, player);
-                clubHammer.damageItem(1, player);
+                if (itemRand.nextFloat() < fragmentPickupChance)
+                {
+                    usedStack.damageItem(1, player);
+                    clubHammer.damageItem(1, player);
 
-                ItemStack fragment = new ItemStack(YGCItems.blockFragment);
-                ItemBlockFragment.setFragment(fragment, data);
-                player.inventory.addItemStackToInventory(fragment);
-                player.inventory.markDirty();
+                    ItemStack fragment = new ItemStack(YGCItems.blockFragment);
+                    ItemBlockFragment.setFragment(fragment, data);
+                    player.inventory.addItemStackToInventory(fragment);
+                    player.inventory.markDirty();
+                }
             }
 
             return true;

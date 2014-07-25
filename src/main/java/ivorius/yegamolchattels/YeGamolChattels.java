@@ -258,11 +258,11 @@ public class YeGamolChattels
         GameRegistry.registerBlock(YGCBlocks.microBlock, ItemMicroBlock.class, "ygcMicroBlock");
         GameRegistry.registerTileEntity(TileEntityMicroBlock.class, "ygcMicroBlock");
 
-        YGCItems.detailChiselIron = new ItemChisel(0, 0.0f, Item.ToolMaterial.IRON, new HashSet()).setUnlocalizedName("ygcChiselIron_detail").setTextureName(textureBase + "chiselIron_detail").setCreativeTab(tabMain);
+        YGCItems.detailChiselIron = new ItemChisel(0, 1.0f, 0.0f, Item.ToolMaterial.IRON, new HashSet()).setUnlocalizedName("ygcChiselIron_detail").setTextureName(textureBase + "chiselIron_detail").setCreativeTab(tabMain);
         YGCItems.detailChiselIron.setMaxDamage(200).setMaxStackSize(1).setNoRepair();
         GameRegistry.registerItem(YGCItems.detailChiselIron, "iron_chisel_detail", MODID);
 
-        YGCItems.carvingChiselIron = new ItemChisel(1, 0.0f, Item.ToolMaterial.IRON, new HashSet()).setUnlocalizedName("ygcChiselIron").setTextureName(textureBase + "chiselIron").setCreativeTab(tabMain);
+        YGCItems.carvingChiselIron = new ItemChisel(1, 0.4f, 0.0f, Item.ToolMaterial.IRON, new HashSet()).setUnlocalizedName("ygcChiselIron").setTextureName(textureBase + "chiselIron").setCreativeTab(tabMain);
         YGCItems.carvingChiselIron.setMaxDamage(200).setMaxStackSize(1).setNoRepair();
         GameRegistry.registerItem(YGCItems.carvingChiselIron, "iron_chisel", MODID);
 

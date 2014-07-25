@@ -32,8 +32,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import java.util.Arrays;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * Created by lukas on 11.02.14.
@@ -218,6 +217,13 @@ public class IvBlockCollection implements Iterable<BlockCoord>
             return direction.yCoord > 0.0 ? ForgeDirection.UP : ForgeDirection.DOWN;
         else
             return direction.zCoord > 0.0 ? ForgeDirection.SOUTH : ForgeDirection.NORTH;
+    }
+
+    public int getBlockMultiplicity()
+    {
+        Set<Block> blockSet = new HashSet<>();
+        Collections.addAll(blockSet, blocks);
+        return blockSet.size();
     }
 
     public NBTTagCompound createTagCompound()

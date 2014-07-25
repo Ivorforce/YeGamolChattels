@@ -99,28 +99,35 @@ public class BlockMicroBlock extends BlockContainer
         {
             TileEntity tileEntity = world.getTileEntity(x, y, z);
             if (tileEntity instanceof TileEntityMicroBlock)
+                dropAllMicroblockFragments((TileEntityMicroBlock) tileEntity, 0.7f);
+        }
+    }
+
+    public static void dropAllMicroblockFragments(TileEntityMicroBlock tileEntityMicroBlock, float dropChance)
+    {
+        World world = tileEntityMicroBlock.getWorldObj();
+        int x = tileEntityMicroBlock.xCoord;
+        int y = tileEntityMicroBlock.yCoord;
+        int z = tileEntityMicroBlock.zCoord;
+        IvBlockCollection collection = tileEntityMicroBlock.getBlockCollection();
+
+        if (!world.isRemote)
+        {
+            for (BlockCoord coord : collection)
             {
-                TileEntityMicroBlock tileEntityMicroBlock = (TileEntityMicroBlock) tileEntity;
-                IvBlockCollection collection = tileEntityMicroBlock.getBlockCollection();
-
-                if (!world.isRemote)
+                Block block = collection.getBlock(coord);
+                if (block.getMaterial() != Material.air && world.rand.nextFloat() < dropChance)
                 {
-                    for (BlockCoord coord : collection)
-                    {
-                        if (world.rand.nextBoolean())
-                        {
-                            ItemStack drop = new ItemStack(YGCItems.blockFragment);
-                            ItemBlockFragment.setFragment(drop, new ItemChisel.BlockData(collection.getBlock(coord), collection.getMetadata(coord)));
-                            EntityItem entityItem = new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, drop);
-                            world.spawnEntityInWorld(entityItem);
-                        }
-                    }
+                    ItemStack drop = new ItemStack(YGCItems.blockFragment);
+                    ItemBlockFragment.setFragment(drop, new ItemChisel.BlockData(block, collection.getMetadata(coord)));
+                    EntityItem entityItem = new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, drop);
+                    world.spawnEntityInWorld(entityItem);
                 }
-
-                tileEntityMicroBlock.setShouldDropAsItem(false);
-                world.setBlockToAir(x, y, z);
             }
         }
+
+        tileEntityMicroBlock.setShouldDropAsItem(false);
+        world.setBlockToAir(x, y, z);
     }
 
     @Override
