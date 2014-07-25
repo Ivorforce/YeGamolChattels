@@ -31,7 +31,7 @@ public class TileEntityMicroBlock extends TileEntity implements PartialUpdateHan
     public static final int MICROBLOCKS_PER_BLOCK_X = 8;
     public static final int MICROBLOCKS_PER_BLOCK_Y = 8;
     public static final int MICROBLOCKS_PER_BLOCK_Z = 8;
-    public static final int MAX_MICROBLOCK_MAPPINGS = 256;
+    public static final int MAX_MICROBLOCK_MAPPINGS = 64;
 
     private IvBlockCollection blockCollection;
 
