@@ -10,6 +10,7 @@ import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
 import ivorius.yegamolchattels.blocks.BlockStatue;
 import ivorius.yegamolchattels.blocks.TileEntityStatue;
 import net.minecraft.block.Block;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -77,17 +78,14 @@ public class ItemStatue extends ItemBlock
     @Override
     public String getItemStackDisplayName(ItemStack par1ItemStack)
     {
-        String base = StatCollector.translateToLocal(super.getUnlocalizedName(par1ItemStack) + ".base");
+        String base = super.getUnlocalizedName(par1ItemStack) + ".base";
 
         String entityName = getStatueEntityID(par1ItemStack);
 
-        String innerPart;
         if (entityName != null && entityName.length() > 0)
-            innerPart = StatCollector.translateToLocal("entity." + entityName + ".name");
+            return I18n.format(base, I18n.format("entity." + entityName + ".name"));
         else
-            innerPart = StatCollector.translateToLocal(super.getUnlocalizedName(par1ItemStack) + ".unknown");
-
-        return base.replaceAll("@", innerPart);
+            return I18n.format(base, I18n.format("tile.statue.unknown"));
     }
 
     @Override

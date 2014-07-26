@@ -134,12 +134,10 @@ item.flagLarge.dye13.name=Large Magenta Flag
 item.flagLarge.dye14.name=Large Orange Flag
 item.flagLarge.dye15.name=Large White Flag
 
-tile.statueStone.base=Stone @ Statue
-tile.statuePlanks.base=Wooden @ Statue
-tile.statueGold.base=Golden @ Statue
-tile.statueStone.unknown=Unidentified
-tile.statuePlanks.unknown=Unidentified
-tile.statueGold.unknown=Unidentified
+tile.statueStone.base=Stone %s Statue
+tile.statuePlanks.base=Wooden %s Statue
+tile.statueGold.base=Golden %s Statue
+tile.statue.unknown=Unidentified
 
 entity.ygcGhost.name=Ghost
 
