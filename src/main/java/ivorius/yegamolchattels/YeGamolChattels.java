@@ -20,6 +20,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import ivorius.ivtoolkit.math.IvBytePacker;
 import ivorius.ivtoolkit.network.*;
+import ivorius.yegamolchattels.achievements.YGCAchievementList;
 import ivorius.yegamolchattels.blocks.*;
 import ivorius.yegamolchattels.entities.EntityBanner;
 import ivorius.yegamolchattels.entities.EntityFlag;
@@ -295,6 +296,7 @@ public class YeGamolChattels
         proxy.registerRenderers();
 
         addCrafting();
+        YGCAchievementList.init();
 
         GameRegistry.registerWorldGenerator(new WorldGenFlax(), 100);
     }

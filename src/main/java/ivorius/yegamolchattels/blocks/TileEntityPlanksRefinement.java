@@ -1,6 +1,5 @@
 package ivorius.yegamolchattels.blocks;
 
-import cpw.mods.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
 import ivorius.ivtoolkit.entities.IvEntityHelper;
@@ -9,6 +8,7 @@ import ivorius.ivtoolkit.network.PacketTileEntityClientEvent;
 import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.ivtoolkit.tools.IvSideClient;
 import ivorius.yegamolchattels.YeGamolChattels;
+import ivorius.yegamolchattels.achievements.YGCAchievementList;
 import ivorius.yegamolchattels.gui.YGCGuiHandler;
 import ivorius.yegamolchattels.items.YGCItems;
 import net.minecraft.entity.Entity;
@@ -71,14 +71,19 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
         return false;
     }
 
-    public boolean tryEquippingItemOnPlayer(EntityPlayer entityLiving)
+    public boolean tryEquippingItemOnPlayer(EntityPlayer player)
     {
         if (containedItem != null)
         {
             if (!worldObj.isRemote)
             {
-                if (IvEntityHelper.addAsCurrentItem(entityLiving, containedItem))
+                if (IvEntityHelper.addAsCurrentItem(player, containedItem))
                 {
+                    if (containedItem.getItem() == YGCItems.refinedPlank)
+                    {
+                        player.triggerAchievement(YGCAchievementList.refinedPlank);
+                    }
+
                     containedItem = null;
 
                     markDirty();
@@ -207,7 +212,7 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
     {
         if (slotX >= 0 && slotX < REFINEMENT_SLOTS_X && slotY >= 0 && slotY < REFINEMENT_SLOTS_Y)
         {
-            return ticksRefinedPerSlot[slotY * 16 + slotX] / (float)MIN_HIGH_REFINEMENT_PER_SLOT;
+            return ticksRefinedPerSlot[slotY * 16 + slotX] / (float) MIN_HIGH_REFINEMENT_PER_SLOT;
         }
 
         return -1.0f;

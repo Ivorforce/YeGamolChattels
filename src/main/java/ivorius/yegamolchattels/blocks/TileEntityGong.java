@@ -9,13 +9,16 @@ import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
 import ivorius.ivtoolkit.network.IvNetworkHelperServer;
 import ivorius.ivtoolkit.network.PartialUpdateHandler;
+import ivorius.ivtoolkit.raytracing.IvRaytraceableAxisAlignedBox;
 import ivorius.ivtoolkit.raytracing.IvRaytraceableObject;
 import ivorius.ivtoolkit.raytracing.IvRaytracedIntersection;
 import ivorius.ivtoolkit.raytracing.IvRaytracerMC;
 import ivorius.yegamolchattels.YGCConfig;
 import ivorius.yegamolchattels.YeGamolChattels;
+import ivorius.yegamolchattels.achievements.YGCAchievementList;
 import ivorius.yegamolchattels.items.YGCItems;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -109,8 +112,26 @@ public class TileEntityGong extends IvTileEntityMultiBlock implements PartialUpd
 
         if (intersection != null)
         {
-            Double info = (Double) intersection.getUserInfo();
-            return hitGong(stack, info.floatValue());
+            IvRaytraceableAxisAlignedBox.SurfaceInfo info = (IvRaytraceableAxisAlignedBox.SurfaceInfo) intersection.getUserInfo();
+            Double distance = (Double) info.getBox().userInfo;
+
+            if (isValidHitItem(stack) && entity instanceof EntityPlayer)
+            {
+                switch (getBlockMetadata())
+                {
+                    case 0:
+                        ((EntityPlayer) entity).triggerAchievement(YGCAchievementList.smallGongPlayed);
+                        break;
+                    case 1:
+                        ((EntityPlayer) entity).triggerAchievement(YGCAchievementList.mediumGongPlayed);
+                        break;
+                    case 2:
+                        ((EntityPlayer) entity).triggerAchievement(YGCAchievementList.largeGongPlayed);
+                        break;
+                }
+            }
+
+            return hitGong(stack, distance.floatValue());
         }
 
         return false;
@@ -134,7 +155,7 @@ public class TileEntityGong extends IvTileEntityMultiBlock implements PartialUpd
                 distanceToCenter = worldObj.rand.nextFloat() * 10.0f - 1.0f;
             float pitch = 0.8f + distanceToCenter * 0.4f;
 
-            boolean failedHit = stack == null || stack.getItem() != YGCItems.mallet;
+            boolean failedHit = !isValidHitItem(stack);
 
             if (failedHit)
             {
@@ -188,6 +209,11 @@ public class TileEntityGong extends IvTileEntityMultiBlock implements PartialUpd
         }
 
         return raytraceables;
+    }
+
+    public boolean isValidHitItem(ItemStack stack)
+    {
+        return stack != null && stack.getItem() == YGCItems.mallet;
     }
 
     @Override

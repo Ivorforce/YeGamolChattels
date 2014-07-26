@@ -9,18 +9,23 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ivorius.ivtoolkit.rendering.IvRenderHelper;
+import ivorius.yegamolchattels.achievements.YGCAchievementList;
 import ivorius.yegamolchattels.blocks.TileEntityMicroBlock;
+import ivorius.yegamolchattels.entities.EntityGhost;
 import ivorius.yegamolchattels.items.ItemBlockFragment;
 import ivorius.yegamolchattels.items.ItemChisel;
 import ivorius.yegamolchattels.items.ItemClubHammer;
 import ivorius.yegamolchattels.items.YGCItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import org.lwjgl.opengl.GL11;
 
@@ -82,6 +87,19 @@ public class YGCForgeEventHandler
             if (equipped != null && equipped.getItem() instanceof ItemClubHammer)
             {
                 ((ItemClubHammer) equipped.getItem()).modifyDrops(event.world, event.block, equipped, event.x, event.y, event.z, event.drops);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onLivingDeath(LivingDeathEvent event)
+    {
+        if (event.entityLiving instanceof EntityGhost)
+        {
+            Entity sourceEntity = event.source.getEntity();
+            if (sourceEntity instanceof EntityPlayer)
+            {
+                ((EntityPlayer) sourceEntity).triggerAchievement(YGCAchievementList.ghostKilled);
             }
         }
     }
