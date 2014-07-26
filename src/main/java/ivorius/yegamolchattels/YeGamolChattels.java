@@ -39,8 +39,10 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
@@ -217,13 +219,13 @@ public class YeGamolChattels
 
         // --------------------------------Carpentry--------------------------------
 
-        YGCItems.plank = new ItemPlank().setUnlocalizedName("plank").setCreativeTab(tabMain).setTextureName(textureBase + "plank");
+        YGCItems.plank = new ItemPlank().setUnlocalizedName("plank").setTextureName(textureBase + "plank").setHasSubtypes(true).setMaxDamage(0).setCreativeTab(tabMain);
         GameRegistry.registerItem(YGCItems.plank, "plank", MODID);
 
-        YGCItems.smoothPlank = new ItemPlank().setUnlocalizedName("smoothPlank").setCreativeTab(tabMain).setTextureName(textureBase + "smoothPlank");
+        YGCItems.smoothPlank = new ItemPlank().setUnlocalizedName("smoothPlank").setHasSubtypes(true).setMaxDamage(0).setTextureName(textureBase + "smoothPlank").setCreativeTab(tabMain);
         GameRegistry.registerItem(YGCItems.smoothPlank, "smooth_plank", MODID);
 
-        YGCItems.refinedPlank = new ItemPlank().setUnlocalizedName("refinedPlank").setCreativeTab(tabMain).setTextureName(textureBase + "refinedPlank");
+        YGCItems.refinedPlank = new ItemPlank().setUnlocalizedName("refinedPlank").setHasSubtypes(true).setMaxDamage(0).setTextureName(textureBase + "refinedPlank").setCreativeTab(tabMain);
         GameRegistry.registerItem(YGCItems.refinedPlank, "refined_plank", MODID);
 
         YGCBlocks.plankSaw = new BlockPlankSaw().setBlockName("plankSaw").setCreativeTab(tabMain);
@@ -347,9 +349,9 @@ public class YeGamolChattels
                 GameRegistry.addShapelessRecipe(new ItemStack(YGCItems.flagLarge, 1, i), new ItemStack(YGCItems.flagLarge, 1, 15), new ItemStack(Items.dye, 1, i));
         }
 
-        GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(YGCBlocks.grandfatherClock)), "IOI", "#R#", "SGS", '#', YGCItems.refinedPlank, 'O', Items.clock, 'S', Blocks.cobblestone, 'I', Items.stick, 'R', Items.redstone, 'G', Items.gold_ingot);
+        GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(YGCBlocks.grandfatherClock)), "IOI", "#R#", "SGS", '#', wildcard(YGCItems.refinedPlank), 'O', Items.clock, 'S', Blocks.cobblestone, 'I', Items.stick, 'R', Items.redstone, 'G', Items.gold_ingot);
 
-        GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(YGCBlocks.weaponRack)), "I I", "III", "#I#", '#', YGCItems.refinedPlank, 'I', Items.stick);
+        GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(YGCBlocks.weaponRack)), "I I", "III", "#I#", '#', wildcard(YGCItems.refinedPlank), 'I', Items.stick);
 
         GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(YGCBlocks.grindstone)), "#I#", "W W", '#', Items.stick, 'I', Blocks.stone, 'W', Blocks.log);
         GameRegistry.addRecipe(new ItemStack(YGCItems.grindstoneStone), " # ", "# #", " # ", '#', Blocks.sandstone);
@@ -365,9 +367,9 @@ public class YeGamolChattels
         GameRegistry.addRecipe(new ItemStack(YGCBlocks.pedestal, 1, EnumPedestalEntry.goldPedestal.getIntIdentifier()), " # ", "I#I", "BSB", '#', Blocks.gold_block, 'I', Items.gold_ingot, 'B', Items.book, 'S', Blocks.stone);
         GameRegistry.addRecipe(new ItemStack(YGCBlocks.pedestal, 1, EnumPedestalEntry.diamondPedestal.getIntIdentifier()), "I#I", "III", "BSB", '#', Blocks.diamond_block, 'I', Items.diamond, 'B', Items.book, 'S', Blocks.stone);
 
-        GameRegistry.addRecipe(new ItemStack(YGCBlocks.itemShelf, 1, 0), "###", "# #", '#', YGCItems.refinedPlank);
-        GameRegistry.addRecipe(new ItemStack(YGCBlocks.itemShelf, 1, 1), "##", '#', YGCItems.refinedPlank);
-        GameRegistry.addRecipe(new ItemStack(YGCBlocks.itemShelf, 1, 2), "###", "# #", "#I#", '#', YGCItems.refinedPlank, 'I', Items.iron_ingot);
+        GameRegistry.addRecipe(new ItemStack(YGCBlocks.itemShelf, 1, 0), "###", "# #", '#', wildcard(YGCItems.refinedPlank));
+        GameRegistry.addRecipe(new ItemStack(YGCBlocks.itemShelf, 1, 1), "##", '#', wildcard(YGCItems.refinedPlank));
+        GameRegistry.addRecipe(new ItemStack(YGCBlocks.itemShelf, 1, 2), "###", "# #", "#I#", '#', wildcard(YGCItems.refinedPlank), 'I', Items.iron_ingot);
 
         GameRegistry.addRecipe(new ItemStack(YGCBlocks.snowGlobe), " # ", "#W#", "SIS", '#', Blocks.glass, 'W', Blocks.planks, 'S', Blocks.stone, 'I', Items.iron_ingot);
 
@@ -384,6 +386,11 @@ public class YeGamolChattels
         GameRegistry.addRecipe(new ItemStack(YGCItems.detailChiselIron), " #", "I ", '#', Items.iron_ingot, 'I', Items.stick);
         GameRegistry.addRecipe(new ItemStack(YGCItems.detailChiselIron), "# ", " I", '#', Items.iron_ingot, 'I', Items.stick);
 
-        GameRegistry.addRecipe(new ItemStack(YGCBlocks.lootChest), "#I#", "#R#", '#', YGCItems.refinedPlank, 'I', Items.iron_ingot, 'R', Items.redstone);
+        GameRegistry.addRecipe(new ItemStack(YGCBlocks.lootChest), "#I#", "#R#", '#', wildcard(YGCItems.refinedPlank), 'I', Items.iron_ingot, 'R', Items.redstone);
+    }
+
+    private static ItemStack wildcard(Item item)
+    {
+        return new ItemStack(item, 1, OreDictionary.WILDCARD_VALUE);
     }
 }
