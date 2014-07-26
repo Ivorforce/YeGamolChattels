@@ -25,7 +25,7 @@ public class TileEntityRendererWeaponRack extends TileEntitySpecialRenderer
     public ModelWeaponRack rackModelFloor;
     public float[] weaponSlotPositionsFloor = new float[]{-0.28f, -0.12f, 0.13f, 0.29f};
     public ModelWeaponRackWall rackModelWall;
-    public float[] weaponSlotPositionsWall = new float[]{-0.6f, -1.5f};
+    public float[] weaponSlotPositionsWall = new float[]{0.4f, -0.55f};
 
     public ResourceLocation[] baseTextures = new ResourceLocation[3];
     public ResourceLocation[] baseTexturesWall = new ResourceLocation[3];
@@ -113,7 +113,7 @@ public class TileEntityRendererWeaponRack extends TileEntitySpecialRenderer
 
                 if (type == TileEntityWeaponRack.weaponRackTypeFloor)
                 {
-                    GL11.glTranslatef(weaponSlotPositionsFloor[i], -0.4F, 0.3F);
+                    GL11.glTranslatef(weaponSlotPositionsFloor[i], 0.6F, 0.3F);
                     GL11.glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
                     GL11.glRotatef(-120.0f + swing * 10.0f, 0.0f, 0.0f, 1.0f);
                     GL11.glTranslatef(0.1f, 0.0f, 0.0f);
