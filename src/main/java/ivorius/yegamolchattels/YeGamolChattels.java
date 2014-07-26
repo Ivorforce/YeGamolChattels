@@ -341,9 +341,9 @@ public class YeGamolChattels
                 GameRegistry.addShapelessRecipe(new ItemStack(YGCItems.flagLarge, 1, i), new ItemStack(YGCItems.flagLarge, 1, 15), new ItemStack(Items.dye, 1, i));
         }
 
-        GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(YGCBlocks.grandfatherClock)), "IOI", "#R#", "SGS", '#', Blocks.planks, 'O', Items.clock, 'S', Blocks.cobblestone, 'I', Items.stick, 'R', Items.redstone, 'G', Items.gold_ingot);
+        GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(YGCBlocks.grandfatherClock)), "IOI", "#R#", "SGS", '#', YGCItems.refinedPlank, 'O', Items.clock, 'S', Blocks.cobblestone, 'I', Items.stick, 'R', Items.redstone, 'G', Items.gold_ingot);
 
-        GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(YGCBlocks.weaponRack)), "I I", "III", "#I#", '#', Blocks.planks, 'I', Items.stick);
+        GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(YGCBlocks.weaponRack)), "I I", "III", "#I#", '#', YGCItems.refinedPlank, 'I', Items.stick);
 
         GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(YGCBlocks.grindstone)), "#I#", "W W", '#', Items.stick, 'I', Blocks.stone, 'W', Blocks.log);
         GameRegistry.addRecipe(new ItemStack(YGCItems.grindstoneStone), " # ", "# #", " # ", '#', Blocks.sandstone);
@@ -359,11 +359,11 @@ public class YeGamolChattels
         GameRegistry.addRecipe(new ItemStack(YGCBlocks.pedestal, 1, EnumPedestalEntry.goldPedestal.getIntIdentifier()), " # ", "I#I", "BSB", '#', Blocks.gold_block, 'I', Items.gold_ingot, 'B', Items.book, 'S', Blocks.stone);
         GameRegistry.addRecipe(new ItemStack(YGCBlocks.pedestal, 1, EnumPedestalEntry.diamondPedestal.getIntIdentifier()), "I#I", "III", "BSB", '#', Blocks.diamond_block, 'I', Items.diamond, 'B', Items.book, 'S', Blocks.stone);
 
-        GameRegistry.addRecipe(new ItemStack(YGCBlocks.itemShelf, 1, 0), "#P#", "#-#", '#', Blocks.log, 'P', Blocks.planks, '-', Items.stick);
-        GameRegistry.addRecipe(new ItemStack(YGCBlocks.itemShelf, 1, 1), "#-#", '#', Blocks.planks, '-', Items.stick);
-        GameRegistry.addRecipe(new ItemStack(YGCBlocks.itemShelf, 1, 2), "###", "#S#", "#I#", '#', Blocks.log, 'I', Items.iron_ingot, 'S', Items.stick);
+        GameRegistry.addRecipe(new ItemStack(YGCBlocks.itemShelf, 1, 0), "###", "# #", '#', YGCItems.refinedPlank);
+        GameRegistry.addRecipe(new ItemStack(YGCBlocks.itemShelf, 1, 1), "##", '#', YGCItems.refinedPlank);
+        GameRegistry.addRecipe(new ItemStack(YGCBlocks.itemShelf, 1, 2), "###", "# #", "#I#", '#', YGCItems.refinedPlank, 'I', Items.iron_ingot);
 
-        GameRegistry.addRecipe(new ItemStack(YGCBlocks.snowGlobe), "###", "WWW", "SIS", '#', Blocks.glass, 'W', Blocks.planks, 'S', Blocks.stone, 'I', Items.iron_ingot);
+        GameRegistry.addRecipe(new ItemStack(YGCBlocks.snowGlobe), " # ", "#W#", "SIS", '#', Blocks.glass, 'W', Blocks.planks, 'S', Blocks.stone, 'I', Items.iron_ingot);
 
         for (int i = 0; i < 6; i++)
             GameRegistry.addRecipe(new ItemStack(Blocks.planks, 1, i), "##", "##", '#', new ItemStack(YGCItems.plank, 1, i));
