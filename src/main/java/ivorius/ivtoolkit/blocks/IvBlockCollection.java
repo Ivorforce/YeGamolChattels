@@ -166,7 +166,7 @@ public class IvBlockCollection implements Iterable<BlockCoord>
         {
             position = Vec3.createVectorHelper(intersection.getX(), intersection.getY(), intersection.getZ());
             BlockCoord curCoord = new BlockCoord(MathHelper.floor_double(position.xCoord), MathHelper.floor_double(position.yCoord), MathHelper.floor_double(position.zCoord));
-            ForgeDirection hitSide = ((IvRaytraceableAxisAlignedBox.SurfaceInfo) intersection.getUserInfo()).getSide().getOpposite();
+            ForgeDirection hitSide = ((ForgeDirection) intersection.getHitInfo()).getOpposite();
 
             while (hasCoord(curCoord))
             {

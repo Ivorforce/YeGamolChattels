@@ -9,7 +9,6 @@ import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
 import ivorius.ivtoolkit.network.IvNetworkHelperServer;
 import ivorius.ivtoolkit.network.PartialUpdateHandler;
-import ivorius.ivtoolkit.raytracing.IvRaytraceableAxisAlignedBox;
 import ivorius.ivtoolkit.raytracing.IvRaytraceableObject;
 import ivorius.ivtoolkit.raytracing.IvRaytracedIntersection;
 import ivorius.ivtoolkit.raytracing.IvRaytracerMC;
@@ -112,8 +111,7 @@ public class TileEntityGong extends IvTileEntityMultiBlock implements PartialUpd
 
         if (intersection != null)
         {
-            IvRaytraceableAxisAlignedBox.SurfaceInfo info = (IvRaytraceableAxisAlignedBox.SurfaceInfo) intersection.getUserInfo();
-            Double distance = (Double) info.getBox().userInfo;
+            Double info = (Double) intersection.getUserInfo();
 
             if (isValidHitItem(stack) && entity instanceof EntityPlayer)
             {
@@ -131,7 +129,7 @@ public class TileEntityGong extends IvTileEntityMultiBlock implements PartialUpd
                 }
             }
 
-            return hitGong(stack, distance.floatValue());
+            return hitGong(stack, info.floatValue());
         }
 
         return false;

@@ -149,8 +149,8 @@ public abstract class TileEntityItemShelf extends IvTileEntityMultiBlock
                 }
                 else
                 {
-                    int slotNumber = getSlotNumber(intersection.info);
-                    int triggerNumber = getInfoNumber(intersection.info, "Trigger-");
+                    int slotNumber = getSlotNumber(intersection.getHitObject());
+                    int triggerNumber = getInfoNumber(intersection.getHitObject(), "Trigger-");
 
                     if (slotNumber >= 0)
                     {
