@@ -9,7 +9,9 @@ import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
+import ivorius.ivtoolkit.items.IvItemRendererModel;
 import ivorius.yegamolchattels.YGCProxy;
+import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.blocks.*;
 import ivorius.yegamolchattels.client.rendering.*;
 import ivorius.yegamolchattels.entities.EntityBanner;
@@ -18,6 +20,8 @@ import ivorius.yegamolchattels.entities.EntityGhost;
 import ivorius.yegamolchattels.items.YGCItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
@@ -39,6 +43,7 @@ public class ClientProxy implements YGCProxy
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySnowGlobe.class, new TileEntityRendererSnowGlobe());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPlankSaw.class, new TileEntityRendererPlankSaw());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPlanksRefinement.class, new TileEntityRendererPlanksRefinement());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLootChest.class, new TileEntityRendererLootChest());
 
         RenderingRegistry.registerBlockHandler(new RenderTreasurePile(YGCBlocks.blockTreasurePileRenderType));
         RenderingRegistry.registerBlockHandler(new RenderTikiTorch(YGCBlocks.blockTikiTorchRenderType));
@@ -50,6 +55,7 @@ public class ClientProxy implements YGCProxy
         RenderingRegistry.registerEntityRenderingHandler(EntityGhost.class, new RenderGhost());
 
         MinecraftForgeClient.registerItemRenderer(YGCItems.blockFragment, new RenderBlockFragment());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(YGCBlocks.lootChest), new IvItemRendererModel(new ModelLootChest(), new ResourceLocation(YeGamolChattels.MODID, YeGamolChattels.filePathTextures + "lootChest.png"), 1.0f, new float[]{0.0f, -0.1f, 0.0f}, new float[]{0.0f, 180.0f, 0.0f}));
 
         MinecraftForge.EVENT_BUS.register(this); // For the rendering events
     }

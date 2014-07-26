@@ -5,6 +5,7 @@
 
 package ivorius.yegamolchattels.client.rendering;
 
+import ivorius.ivtoolkit.blocks.IvRotatableBlockRenderHelper;
 import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.blocks.TileEntityWeaponRack;
 import net.minecraft.client.model.ModelBase;
@@ -12,9 +13,11 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityRendererWeaponRack extends TileEntitySpecialRenderer
@@ -77,9 +80,9 @@ public class TileEntityRendererWeaponRack extends TileEntitySpecialRenderer
         int type = tileEntity.getWeaponRackType();
 
         GL11.glPushMatrix();
-        GL11.glTranslatef((float) d + 0.5F, (float) d1 + 1.5f, (float) d2 + 0.5F);
-        GL11.glRotatef(-90.0f * direction + 180.0f, 0.0f, 1.0f, 0.0f);
+        IvRotatableBlockRenderHelper.transformFor(tileEntity, d, d1, d2);
         GL11.glPushMatrix();
+        GL11.glTranslatef(0.0f, 1.0f, 0.0f);
         GL11.glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
 
         int baseTextureIndex = tileEntity.effectsApplied[5] ? 2 : (tileEntity.effectsApplied[4] ? 1 : 0);
@@ -123,18 +126,7 @@ public class TileEntityRendererWeaponRack extends TileEntitySpecialRenderer
 
                 GL11.glScaled(1.8, 1.8, 1.8);
 
-                EntityItem var3 = new EntityItem(tileEntity.getWorldObj(), 0.0D, 0.0D, 0.0D, tileEntity.storedWeapons[i]);
-                var3.hoverStart = 0.0F;
-
-                if (!RenderManager.instance.options.fancyGraphics)
-                    GL11.glDisable(GL11.GL_CULL_FACE);
-
-                RenderItem.renderInFrame = true;
-                RenderManager.instance.renderEntityWithPosYaw(var3, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
-                RenderItem.renderInFrame = false;
-
-                if (!RenderManager.instance.options.fancyGraphics)
-                    GL11.glEnable(GL11.GL_CULL_FACE);
+                renderItem(tileEntity.getWorldObj(), tileEntity.storedWeapons[i]);
 
                 GL11.glPopMatrix();
             }
@@ -144,5 +136,21 @@ public class TileEntityRendererWeaponRack extends TileEntitySpecialRenderer
 
 //		if (Minecraft.getMinecraft().thePlayer.isSneaking())
 //			IvRaytracer.drawStandardOutlinesFromTileEntity(tileEntity.getRaytraceableObjects(), d, d1, d2, tileEntity);
+    }
+
+    public static void renderItem(World world, ItemStack stack)
+    {
+        EntityItem entityItem = new EntityItem(world, 0.0D, 0.0D, 0.0D, stack);
+        entityItem.hoverStart = 0.0F;
+
+        if (!RenderManager.instance.options.fancyGraphics)
+            GL11.glDisable(GL11.GL_CULL_FACE);
+
+        RenderItem.renderInFrame = true;
+        RenderManager.instance.renderEntityWithPosYaw(entityItem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
+        RenderItem.renderInFrame = false;
+
+        if (!RenderManager.instance.options.fancyGraphics)
+            GL11.glEnable(GL11.GL_CULL_FACE);
     }
 }

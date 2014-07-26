@@ -64,6 +64,7 @@ item.ygcChiselIron_wide.name=Wide Chisel
 item.ygcChisel.noHammer=You need a club hammer to use a chisel!
 item.ygcClubHammer.name=Club Hammer
 item.ygcBlockFragment.name=Block Fragment
+tile.ygcLootChest.name=Loot Chest
 
 item.bannerSmall.dye0.name=Small Black Banner
 item.bannerSmall.dye1.name=Small Red Banner

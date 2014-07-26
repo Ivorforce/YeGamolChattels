@@ -272,6 +272,12 @@ public class YeGamolChattels
 
         YGCItems.blockFragment = new ItemBlockFragment().setUnlocalizedName("ygcBlockFragment");
         GameRegistry.registerItem(YGCItems.blockFragment, "block_fragment", MODID);
+
+        // --------------------------------Loot Chest--------------------------------
+
+        YGCBlocks.lootChest = new BlockLootChest().setBlockName("ygcLootChest").setHardness(1.5f).setCreativeTab(tabMain);
+        GameRegistry.registerBlock(YGCBlocks.lootChest, ItemBlock.class, "ygcLootChest");
+        GameRegistry.registerTileEntity(TileEntityLootChest.class, "ygcLootChest");
     }
 
     @EventHandler
@@ -377,5 +383,7 @@ public class YeGamolChattels
         GameRegistry.addRecipe(new ItemStack(YGCItems.clubHammer), "#I#", " I ", " I ", '#', Items.iron_ingot, 'I', Items.stick);
         GameRegistry.addRecipe(new ItemStack(YGCItems.detailChiselIron), " #", "I ", '#', Items.iron_ingot, 'I', Items.stick);
         GameRegistry.addRecipe(new ItemStack(YGCItems.detailChiselIron), "# ", " I", '#', Items.iron_ingot, 'I', Items.stick);
+
+        GameRegistry.addRecipe(new ItemStack(YGCBlocks.lootChest), "#I#", "#R#", '#', YGCItems.refinedPlank, 'I', Items.iron_ingot, 'R', Items.redstone);
     }
 }

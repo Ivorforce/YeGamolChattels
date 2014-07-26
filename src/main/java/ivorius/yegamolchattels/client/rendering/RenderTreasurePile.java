@@ -23,48 +23,49 @@ public class RenderTreasurePile implements ISimpleBlockRenderingHandler
 
     public void renderTreasurePile(IIcon icon, float x, float y, float z, boolean north, boolean east, boolean south, boolean west)
     {
-        float f1 = icon.getMinU();
-        float f2 = icon.getMinV();
-        float f3 = icon.getMaxU();
-        float f4 = icon.getMaxV();
+        float minU = icon.getMinU();
+        float minV = icon.getMinV();
+        float maxU = icon.getMaxU();
+        float maxV = icon.getMaxV();
 
-        float f5 = icon.getMinU() + 0.375f * (icon.getMaxU() - icon.getMinU());
-        float f6 = icon.getMinU() + 0.5f * (icon.getMaxU() - icon.getMinU());
-        float f7 = icon.getMinV() + 0.375f * (icon.getMaxV() - icon.getMinV());
-        float f8 = icon.getMinV() + 0.5f * (icon.getMaxV() - icon.getMinV());
+        float minUInset = icon.getMinU() + 0.375f * (icon.getMaxU() - icon.getMinU());
+        float maxUInset = icon.getMinU() + 0.5f * (icon.getMaxU() - icon.getMinU());
+        float minVInset = icon.getMinV() + 0.375f * (icon.getMaxV() - icon.getMinV());
+        float maxVInset = icon.getMinV() + 0.5f * (icon.getMaxV() - icon.getMinV());
 
         Tessellator tessellator = Tessellator.instance;
-        double d13 = 0.0625D;
+        double sideInset = 0.0625D;
+        double yMax = y + 1.0;
 
-        tessellator.addVertexWithUV(x - 0.5, y, z - 0.5, f1, f2);
-        tessellator.addVertexWithUV(x + 0.5, y, z - 0.5, f3, f2);
-        tessellator.addVertexWithUV(x + 0.5, y, z + 0.5, f3, f4);
-        tessellator.addVertexWithUV(x - 0.5, y, z + 0.5, f1, f4);
+        tessellator.addVertexWithUV(x - 0.5, y, z - 0.5, minU, minV);
+        tessellator.addVertexWithUV(x + 0.5, y, z - 0.5, maxU, minV);
+        tessellator.addVertexWithUV(x + 0.5, y, z + 0.5, maxU, maxV);
+        tessellator.addVertexWithUV(x - 0.5, y, z + 0.5, minU, maxV);
 
-        tessellator.addVertexWithUV(x - (west ? 0.5 : d13), y + 1, z - (south ? 0.5 : d13), (west ? f1 : f5), (south ? f2 : f7));
-        tessellator.addVertexWithUV(x - (west ? 0.5 : d13), y + 1, z + (north ? 0.5 : d13), (west ? f1 : f5), (north ? f4 : f8));
-        tessellator.addVertexWithUV(x + (east ? 0.5 : d13), y + 1, z + (north ? 0.5 : d13), (east ? f3 : f6), (north ? f4 : f8));
-        tessellator.addVertexWithUV(x + (east ? 0.5 : d13), y + 1, z - (south ? 0.5 : d13), (east ? f3 : f6), (south ? f2 : f7));
+        tessellator.addVertexWithUV(x - (west ? 0.5 : sideInset), yMax, z - (south ? 0.5 : sideInset), (west ? minU : minUInset), (south ? minV : minVInset));
+        tessellator.addVertexWithUV(x - (west ? 0.5 : sideInset), yMax, z + (north ? 0.5 : sideInset), (west ? minU : minUInset), (north ? maxV : maxVInset));
+        tessellator.addVertexWithUV(x + (east ? 0.5 : sideInset), yMax, z + (north ? 0.5 : sideInset), (east ? maxU : maxUInset), (north ? maxV : maxVInset));
+        tessellator.addVertexWithUV(x + (east ? 0.5 : sideInset), yMax, z - (south ? 0.5 : sideInset), (east ? maxU : maxUInset), (south ? minV : minVInset));
 
-        tessellator.addVertexWithUV(x - 0.5, y, z - 0.5, f1, f2);
-        tessellator.addVertexWithUV(x - (west ? 0.5 : d13), y + 1, z - (south ? 0.5 : d13), (west ? f1 : f5), f4);
-        tessellator.addVertexWithUV(x + (east ? 0.5 : d13), y + 1, z - (south ? 0.5 : d13), (east ? f3 : f6), f4);
-        tessellator.addVertexWithUV(x + 0.5, y, z - 0.5, f3, f2);
+        tessellator.addVertexWithUV(x - 0.5, y, z - 0.5, minU, minV);
+        tessellator.addVertexWithUV(x - (west ? 0.5 : sideInset), yMax, z - (south ? 0.5 : sideInset), (west ? minU : minUInset), maxV);
+        tessellator.addVertexWithUV(x + (east ? 0.5 : sideInset), yMax, z - (south ? 0.5 : sideInset), (east ? maxU : maxUInset), maxV);
+        tessellator.addVertexWithUV(x + 0.5, y, z - 0.5, maxU, minV);
 
-        tessellator.addVertexWithUV(x - 0.5, y, z + 0.5, f1, f2);
-        tessellator.addVertexWithUV(x + 0.5, y, z + 0.5, f3, f2);
-        tessellator.addVertexWithUV(x + (east ? 0.5 : d13), y + 1, z + (north ? 0.5 : d13), (east ? f3 : f6), f4);
-        tessellator.addVertexWithUV(x - (west ? 0.5 : d13), y + 1, z + (north ? 0.5 : d13), (west ? f1 : f5), f4);
+        tessellator.addVertexWithUV(x - 0.5, y, z + 0.5, minU, minV);
+        tessellator.addVertexWithUV(x + 0.5, y, z + 0.5, maxU, minV);
+        tessellator.addVertexWithUV(x + (east ? 0.5 : sideInset), yMax, z + (north ? 0.5 : sideInset), (east ? maxU : maxUInset), maxV);
+        tessellator.addVertexWithUV(x - (west ? 0.5 : sideInset), yMax, z + (north ? 0.5 : sideInset), (west ? minU : minUInset), maxV);
 
-        tessellator.addVertexWithUV(x - 0.5, y, z - 0.5, f1, f2);
-        tessellator.addVertexWithUV(x - 0.5, y, z + 0.5, f3, f2);
-        tessellator.addVertexWithUV(x - (west ? 0.5 : d13), y + 1, z + (north ? 0.5 : d13), (north ? f3 : f6), f4);
-        tessellator.addVertexWithUV(x - (west ? 0.5 : d13), y + 1, z - (south ? 0.5 : d13), (south ? f1 : f5), f4);
+        tessellator.addVertexWithUV(x - 0.5, y, z - 0.5, minU, minV);
+        tessellator.addVertexWithUV(x - 0.5, y, z + 0.5, maxU, minV);
+        tessellator.addVertexWithUV(x - (west ? 0.5 : sideInset), yMax, z + (north ? 0.5 : sideInset), (north ? maxU : maxUInset), maxV);
+        tessellator.addVertexWithUV(x - (west ? 0.5 : sideInset), yMax, z - (south ? 0.5 : sideInset), (south ? minU : minUInset), maxV);
 
-        tessellator.addVertexWithUV(x + 0.5, y, z - 0.5, f1, f2);
-        tessellator.addVertexWithUV(x + (east ? 0.5 : d13), y + 1, z - (south ? 0.5 : d13), (south ? f1 : f5), f4);
-        tessellator.addVertexWithUV(x + (east ? 0.5 : d13), y + 1, z + (north ? 0.5 : d13), (north ? f3 : f6), f4);
-        tessellator.addVertexWithUV(x + 0.5, y, z + 0.5, f3, f2);
+        tessellator.addVertexWithUV(x + 0.5, y, z - 0.5, minU, minV);
+        tessellator.addVertexWithUV(x + (east ? 0.5 : sideInset), yMax, z - (south ? 0.5 : sideInset), (south ? minU : minUInset), maxV);
+        tessellator.addVertexWithUV(x + (east ? 0.5 : sideInset), yMax, z + (north ? 0.5 : sideInset), (north ? maxU : maxUInset), maxV);
+        tessellator.addVertexWithUV(x + 0.5, y, z + 0.5, maxU, minV);
     }
 
     @Override
