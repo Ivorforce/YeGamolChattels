@@ -198,6 +198,11 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
         return cachedBlockTextureMap;
     }
 
+    public static void clearCachedStitchedTexture()
+    {
+        cachedBlockTextureMap = null;
+    }
+
     private static ResourceLocation getTexture(Entity entity)
     {
         Render renderObject = RenderManager.instance.getEntityRenderObject(entity);

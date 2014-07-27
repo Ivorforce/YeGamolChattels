@@ -11,6 +11,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import ivorius.ivtoolkit.rendering.IvRenderHelper;
 import ivorius.yegamolchattels.achievements.YGCAchievementList;
 import ivorius.yegamolchattels.blocks.TileEntityMicroBlock;
+import ivorius.yegamolchattels.client.rendering.TileEntityRendererStatue;
 import ivorius.yegamolchattels.entities.EntityGhost;
 import ivorius.yegamolchattels.items.ItemBlockFragment;
 import ivorius.yegamolchattels.items.ItemChisel;
@@ -24,6 +25,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -101,6 +103,15 @@ public class YGCForgeEventHandler
             {
                 ((EntityPlayer) sourceEntity).triggerAchievement(YGCAchievementList.ghostKilled);
             }
+        }
+    }
+
+    @SubscribeEvent
+    public void textureStitchPre(TextureStitchEvent event)
+    {
+        if (event instanceof TextureStitchEvent.Pre)
+        {
+            TileEntityRendererStatue.clearCachedStitchedTexture();
         }
     }
 }
