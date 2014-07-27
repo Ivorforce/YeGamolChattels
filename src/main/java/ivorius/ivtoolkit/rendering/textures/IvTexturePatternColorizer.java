@@ -68,6 +68,7 @@ public class IvTexturePatternColorizer implements IvTextureCreatorMC.LoadingImag
         hsb[2] = (0.2126f * colors[1] + 0.7152f * colors[2] + 0.0722f * colors[3]) * 0.5f + hsb[2] * 0.5f;
         float[] patternColor = IvColorHelper.getARBGFloats(Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]));
 
+        colors[0] = 1.0f; // TODO Figure out why alpha is seemingly random
         colors[1] = colors[1] * 0.1f + patternColor[1] * 0.9f;
         colors[2] = colors[2] * 0.1f + patternColor[2] * 0.9f;
         colors[3] = colors[3] * 0.1f + patternColor[3] * 0.9f;

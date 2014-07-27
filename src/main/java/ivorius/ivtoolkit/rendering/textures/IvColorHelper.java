@@ -88,12 +88,12 @@ public class IvColorHelper
         throw new IllegalArgumentException("Unrecognized buffered image type: " + bufferedImageType);
     }
 
-    public static float getFloatVal(int value, int shift)
+    private static float getFloatVal(int value, int shift)
     {
         return ((value >>> shift) & 255) / 255.0f;
     }
 
-    public static int getByteVal(float value, int shift)
+    private static int getByteVal(float value, int shift)
     {
         return MathHelper.floor_float(MathHelper.clamp_float(value, 0.0f, 1.0f) * 255.0f + 0.5f) << shift;
     }
