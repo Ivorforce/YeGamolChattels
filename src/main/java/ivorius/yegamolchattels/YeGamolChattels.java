@@ -89,6 +89,15 @@ public class YeGamolChattels
         }
     };
 
+    public static CreativeTabs tabVitas = new CreativeTabs("ygc_entityvita")
+    {
+        @Override
+        public Item getTabIconItem()
+        {
+            return YGCItems.entityVita;
+        }
+    };
+
     public static int entityGhostGlobalID;
 
     @EventHandler
@@ -137,13 +146,16 @@ public class YeGamolChattels
 
         // --------------------------------Statue--------------------------------
 
-        YGCBlocks.statue = (new BlockStatue(Material.rock, 0)).setHardness(2.0F).setStepSound(Block.soundTypeStone).setBlockName("ygcStatue").setBlockTextureName("statue").setCreativeTab(tabMain);
+        YGCBlocks.statue = (new BlockStatue(Material.rock)).setHardness(2.0F).setStepSound(Block.soundTypeStone).setBlockName("ygcStatue").setBlockTextureName("statue").setCreativeTab(tabMain);
         GameRegistry.registerBlock(YGCBlocks.statue, ItemStatue.class, "statue", 0);
 
         GameRegistry.registerTileEntity(TileEntityStatue.class, "ygcStatue");
 
-        YGCItems.pointChiselIron = new ItemStatueChisel().setUnlocalizedName("ygcChiselIron_point").setTextureName(textureBase + "pointChisel").setCreativeTab(tabMain);
+        YGCItems.pointChiselIron = new ItemStatueChisel().setUnlocalizedName("ygcChiselIron_point").setTextureName(textureBase + "chiselIron_point").setCreativeTab(tabMain);
         GameRegistry.registerItem(YGCItems.pointChiselIron, "iron_chisel_point", MODID);
+
+        YGCItems.entityVita = new ItemEntityVita().setUnlocalizedName("ygcEntityVita").setTextureName(textureBase + "entityVita").setCreativeTab(tabVitas);
+        GameRegistry.registerItem(YGCItems.entityVita, "entity_vita", MODID);
 
         // --------------------------------Treasure piles--------------------------------
 
@@ -320,16 +332,16 @@ public class YeGamolChattels
                 GameRegistry.addShapelessRecipe(new ItemStack(YGCItems.bannerLarge, 1, i), new ItemStack(YGCItems.bannerLarge, 1, 15), new ItemStack(Items.dye, 1, i));
         }
 
-        BlockStatue.initStatueCrafting();
-        for (int r = 0; r < BlockStatue.statueCrafting.length / 2; r++)
-        {
-            String entityName = (String) BlockStatue.statueCrafting[r * 2 + 1];
-            Object craftObject = BlockStatue.statueCrafting[r * 2];
-
-            ItemStack result = ItemStatue.createStatueItemStack(Item.getItemFromBlock(YGCBlocks.statue), entityName, new TileEntityStatue.BlockFragment(Blocks.stone, 0));
-
-            GameRegistry.addRecipe(result, "###", "#O#", "###", '#', Blocks.stone, 'O', craftObject);
-        }
+//        BlockStatue.initStatueCrafting();
+//        for (int r = 0; r < BlockStatue.statueCrafting.length / 2; r++)
+//        {
+//            String entityName = (String) BlockStatue.statueCrafting[r * 2 + 1];
+//            Object craftObject = BlockStatue.statueCrafting[r * 2];
+//
+//            ItemStack result = ItemStatue.createStatueItemStack(Item.getItemFromBlock(YGCBlocks.statue), entityName, new TileEntityStatue.BlockFragment(Blocks.stone, 0));
+//
+//            GameRegistry.addRecipe(result, "###", "#O#", "###", '#', Blocks.stone, 'O', craftObject);
+//        }
 
         GameRegistry.addRecipe(new ItemStack(YGCBlocks.treasurePile, 1), " # ", "###", "###", '#', Items.gold_ingot);
 

@@ -130,12 +130,18 @@ item.flagLarge.dye15.name=Large White Flag
 tile.ygcStatue.base=%s Statue (%s)
 tile.ygcStatue.unknown=Unidentified
 
+item.ygcEntityVita.base=%s Vita
+item.ygcEntityVita.unknown=Unidentified
+
 entity.ygcGhost.name=Ghost
 
 guiPlankSaw.title=Plank Saw
 guiPlanksRefinementFrame.title=Plank Refinement Frame
 
+gui.carve.confirm=Carve
+
 itemGroup.yegamolchattels=Ye Gamol Chattels
+itemGroup.ygc_entityvita=Entity Vitas
 
 yegamolchattels.configgui.title=Ye Gamol Chattels
 yegamolchattels.configgui.general=General

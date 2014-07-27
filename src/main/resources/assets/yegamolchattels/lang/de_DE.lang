@@ -128,12 +128,17 @@ item.flagLarge.dye14.name=Große Orange Flagge
 item.flagLarge.dye15.name=Große Weiße Flagge
 
 tile.ygcStatue.base=%s-Statue (%s)
-tile.ygcStatue.unknown=Unbekannte
+tile.ygcStatue.unknown=Unbekannt
+
+tile.ygcEntityVita.base=%s Vita
+tile.ygcEntityVita.unknown=Unbekanntes
 
 entity.ygcGhost.name=Geist
 
 guiPlankSaw.title=Holzbrettsäge
 guiPlanksRefinementFrame.title=Holzbrett Halterung
+
+gui.carve.confirm=Meißeln
 
 itemGroup.yegamolchattels=Ye Gamol Chattels
 

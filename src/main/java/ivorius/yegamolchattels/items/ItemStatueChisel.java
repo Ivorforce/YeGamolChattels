@@ -7,10 +7,13 @@ package ivorius.yegamolchattels.items;
 
 import ivorius.ivtoolkit.blocks.IvMultiBlockHelper;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
+import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.blocks.TileEntityStatue;
 import ivorius.yegamolchattels.blocks.YGCBlocks;
+import ivorius.yegamolchattels.gui.YGCGuiHandler;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -26,7 +29,7 @@ import java.util.List;
 public class ItemStatueChisel extends Item
 {
     @Override
-    public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World world, int x, int y, int z, int blockSide, float par8, float par9, float par10)
+    public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int blockSide, float par8, float par9, float par10)
     {
         TileEntityStatue.BlockFragment blockFragment = new TileEntityStatue.BlockFragment(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
 
@@ -34,35 +37,47 @@ public class ItemStatueChisel extends Item
         {
             if (!world.isRemote) // Some entities start with random sizes
             {
-                Entity statueEntity = new EntitySpider(world);
+                player.openGui(YeGamolChattels.instance, YGCGuiHandler.statueCarvingGuiID, world, x, y, z);
 
-                int rotation = IvMultiBlockHelper.getRotation(par2EntityPlayer);
-                List<int[]> positions = ItemStatue.getStatuePositions(statueEntity, rotation);
-                List<int[]> validPositions = getValidPositions(positions, world, blockFragment, x, y, z);
-
-                if (validPositions != null)
-                {
-                    IvMultiBlockHelper multiBlockHelper = new IvMultiBlockHelper();
-                    if (multiBlockHelper.beginPlacing(validPositions, world, YGCBlocks.statue, 0, rotation))
-                    {
-                        for (int[] position : multiBlockHelper)
-                        {
-                            IvTileEntityMultiBlock tileEntity = multiBlockHelper.placeBlock(position);
-
-                            if (tileEntity instanceof TileEntityStatue && tileEntity.isParent())
-                            {
-                                TileEntityStatue statue = (TileEntityStatue) tileEntity;
-                                statue.setStatueEntity(statueEntity, true);
-                                statue.setStatueBlock(blockFragment);
-                            }
-                        }
-
-                        par1ItemStack.stackSize--;
-                    }
-                }
             }
 
             return true;
+        }
+
+        return false;
+    }
+
+    public static boolean carveStatue(ItemStack stack, Entity statueEntity, World world, int x, int y, int z, EntityLivingBase entityLivingBase)
+    {
+        TileEntityStatue.BlockFragment blockFragment = new TileEntityStatue.BlockFragment(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
+        int rotation = IvMultiBlockHelper.getRotation(entityLivingBase);
+
+        if (isValidStatueBlock(blockFragment))
+        {
+            List<int[]> positions = ItemStatue.getStatuePositions(statueEntity, rotation);
+            List<int[]> validPositions = getValidPositions(positions, world, blockFragment, x, y, z);
+
+            if (validPositions != null)
+            {
+                IvMultiBlockHelper multiBlockHelper = new IvMultiBlockHelper();
+                if (multiBlockHelper.beginPlacing(validPositions, world, YGCBlocks.statue, 0, rotation))
+                {
+                    for (int[] position : multiBlockHelper)
+                    {
+                        IvTileEntityMultiBlock tileEntity = multiBlockHelper.placeBlock(position);
+
+                        if (tileEntity instanceof TileEntityStatue && tileEntity.isParent())
+                        {
+                            TileEntityStatue statue = (TileEntityStatue) tileEntity;
+                            statue.setStatueEntity(statueEntity, true);
+                            statue.setStatueBlock(blockFragment);
+                        }
+                    }
+
+                    stack.damageItem(1, entityLivingBase);
+                    return true;
+                }
+            }
         }
 
         return false;

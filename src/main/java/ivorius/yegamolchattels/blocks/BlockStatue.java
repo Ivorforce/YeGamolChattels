@@ -20,55 +20,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockStatue extends IvBlockMultiblock
 {
-    public static Object[] statueCrafting;
-
-    public int statueMaterial;
-
-    public static void initStatueCrafting()
-    {
-        statueCrafting = new Object[]{
-                Items.quartz, "ygcGhost",
-                Items.gunpowder, "Creeper",
-                Items.bow, "Skeleton",
-//                new ItemStack(Items.skull), Integer.valueOf(51), //Wither Skeleton // Doesn't have his own ID
-                Items.string, "Spider",
-                new ItemStack(Items.dye, 1, 15), "Giant",
-                Items.rotten_flesh, "Zombie",
-                Items.slime_ball, "Slime",
-                Items.ghast_tear, "Ghast",
-                Items.cooked_porkchop, "PigZombie",
-                Items.ender_pearl, "Enderman",
-                Items.spider_eye, "CaveSpider",
-                Blocks.gravel, "Silverfish",
-                Items.blaze_rod, "Blaze",
-                Items.magma_cream, "LavaSlime",
-                Items.ender_eye, "EnderDragon",
-                Items.nether_star, "WitherBoss",
-                Blocks.stone, "Bat",
-                Items.potionitem, "Witch",
-                Items.porkchop, "Pig",
-                Blocks.wool, "Sheep",
-                Items.milk_bucket, "Cow",
-                Items.feather, "Chicken",
-                new ItemStack(Items.dye, 1, 0), "Squid",
-                Items.bone, "Wolf",
-                Blocks.red_mushroom, "MushroomCow",
-                Items.snowball, "SnowMan",
-                Items.fish, "Ozelot",
-                Blocks.iron_block, "VillagerGolem",
-                Blocks.hay_block, "EntityHorse",
-                Items.leather, "Villager"
-        };
-    }
-
-    public BlockStatue(Material material, int statueMaterial)
+    public BlockStatue(Material material)
     {
         super(material);
-        this.statueMaterial = statueMaterial;
     }
 
     @Override
@@ -146,15 +105,23 @@ public class BlockStatue extends IvBlockMultiblock
     }
 
     @Override
-    public IIcon getIcon(int par1, int par2)
+    public IIcon getIcon(IBlockAccess blockAccess, int x, int y, int z, int side)
     {
-        if (statueMaterial == 0)
-            return Blocks.stone.getIcon(0, 0);
-        if (statueMaterial == 1)
-            return Blocks.planks.getIcon(0, 0);
-        if (statueMaterial == 2)
-            return Blocks.gold_block.getIcon(0, 0);
+        IvTileEntityMultiBlock parent = getValidatedTotalParent(this, blockAccess, x, y, z);
 
+        if (parent instanceof TileEntityStatue)
+        {
+            TileEntityStatue tileEntityStatue = (TileEntityStatue) parent;
+            TileEntityStatue.BlockFragment fragment = tileEntityStatue.getStatueBlock();
+            return fragment.getBlock().getIcon(side, fragment.getMetadata());
+        }
+
+        return super.getIcon(blockAccess, x, y, z, side);
+    }
+
+    @Override
+    public IIcon getIcon(int side, int meta)
+    {
         return Blocks.stone.getIcon(0, 0);
     }
 

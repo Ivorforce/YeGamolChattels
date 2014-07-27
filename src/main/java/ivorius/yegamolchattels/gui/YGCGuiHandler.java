@@ -16,10 +16,14 @@ public class YGCGuiHandler implements IGuiHandler
 {
     public static final int plankSawGuiID = 0;
     public static final int plankRefinementGuiID = 1;
+    public static final int statueCarvingGuiID = 2;
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
     {
+        if (ID == statueCarvingGuiID)
+            return new ContainerCarveStatue(player.inventory, player, x, y, z);
+
         return null;
     }
 
@@ -30,6 +34,8 @@ public class YGCGuiHandler implements IGuiHandler
             return new GuiScreenPlankSaw(world, x, y, z);
         else if (ID == plankRefinementGuiID)
             return new GuiScreenPlanksRefinement(world, x, y, z);
+        else if (ID == statueCarvingGuiID)
+            return new GuiScreenCarveStatue(player, x, y, z);
 
         return null;
     }

@@ -27,7 +27,7 @@ public class PacketGuiAction implements IMessage
         this.payload = payload;
     }
 
-    public PacketGuiAction packetGuiAction(String context, Number... args)
+    public static PacketGuiAction packetGuiAction(String context, Number... args)
     {
         ByteBuf payload = Unpooled.buffer();
         ByteBufUtils.writeUTF8String(payload, context);

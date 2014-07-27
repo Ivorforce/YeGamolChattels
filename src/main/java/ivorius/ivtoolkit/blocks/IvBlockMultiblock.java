@@ -25,6 +25,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.Explosion;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public abstract class IvBlockMultiblock extends BlockContainer
@@ -165,7 +166,7 @@ public abstract class IvBlockMultiblock extends BlockContainer
 //        validateMultiblock(this, par1World, par2, par3, par4);
 //    }
 
-    public static boolean validateMultiblock(Block block, World world, int x, int y, int z)
+    public static boolean validateMultiblock(Block block, IBlockAccess world, int x, int y, int z)
     {
         if (world.getBlock(x, y, z) != block)
         {
@@ -187,7 +188,8 @@ public abstract class IvBlockMultiblock extends BlockContainer
 
         if (destroy)
         {
-            world.setBlockToAir(x, y, z);
+            if (world instanceof World)
+                ((World) world).setBlockToAir(x, y, z);
         }
 
         return isValidChild;
@@ -205,7 +207,7 @@ public abstract class IvBlockMultiblock extends BlockContainer
         return null;
     }
 
-    public static IvTileEntityMultiBlock getValidatedTotalParent(Block block, World world, int x, int y, int z)
+    public static IvTileEntityMultiBlock getValidatedTotalParent(Block block, IBlockAccess world, int x, int y, int z)
     {
         if (validateMultiblock(block, world, x, y, z))
         {

@@ -99,18 +99,18 @@ public class ItemStatue extends ItemBlock
     @Override
     public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List)
     {
-        for (int var4 = 0; var4 < BlockStatue.statueCrafting.length / 2; ++var4)
-        {
-            String mobName = (String) BlockStatue.statueCrafting[var4 * 2 + 1];
-            par3List.add(createStatueItemStack(this, mobName, new TileEntityStatue.BlockFragment(Blocks.brick_block, 0)));
-            par3List.add(createStatueItemStack(this, mobName, new TileEntityStatue.BlockFragment(Blocks.stone, 0)));
-            par3List.add(createStatueItemStack(this, mobName, new TileEntityStatue.BlockFragment(Blocks.planks, 0)));
-            par3List.add(createStatueItemStack(this, mobName, new TileEntityStatue.BlockFragment(Blocks.planks, 1)));
-            par3List.add(createStatueItemStack(this, mobName, new TileEntityStatue.BlockFragment(Blocks.planks, 2)));
-            par3List.add(createStatueItemStack(this, mobName, new TileEntityStatue.BlockFragment(Blocks.planks, 3)));
-            par3List.add(createStatueItemStack(this, mobName, new TileEntityStatue.BlockFragment(Blocks.lit_pumpkin, 0)));
-            par3List.add(createStatueItemStack(this, mobName, new TileEntityStatue.BlockFragment(Blocks.iron_ore, 0)));
-        }
+//        for (int var4 = 0; var4 < BlockStatue.statueCrafting.length / 2; ++var4)
+//        {
+//            String mobName = (String) BlockStatue.statueCrafting[var4 * 2 + 1];
+//            par3List.add(createStatueItemStack(this, mobName, new TileEntityStatue.BlockFragment(Blocks.brick_block, 0)));
+//            par3List.add(createStatueItemStack(this, mobName, new TileEntityStatue.BlockFragment(Blocks.stone, 0)));
+//            par3List.add(createStatueItemStack(this, mobName, new TileEntityStatue.BlockFragment(Blocks.planks, 0)));
+//            par3List.add(createStatueItemStack(this, mobName, new TileEntityStatue.BlockFragment(Blocks.planks, 1)));
+//            par3List.add(createStatueItemStack(this, mobName, new TileEntityStatue.BlockFragment(Blocks.planks, 2)));
+//            par3List.add(createStatueItemStack(this, mobName, new TileEntityStatue.BlockFragment(Blocks.planks, 3)));
+//            par3List.add(createStatueItemStack(this, mobName, new TileEntityStatue.BlockFragment(Blocks.lit_pumpkin, 0)));
+//            par3List.add(createStatueItemStack(this, mobName, new TileEntityStatue.BlockFragment(Blocks.iron_ore, 0)));
+//        }
     }
 
     public static NBTTagCompound getStatueEntityTag(ItemStack stack)
