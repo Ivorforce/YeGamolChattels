@@ -9,14 +9,12 @@ import ivorius.ivtoolkit.blocks.IvMultiBlockHelper;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
 import ivorius.yegamolchattels.blocks.TileEntityStatue;
 import ivorius.yegamolchattels.blocks.YGCBlocks;
-import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.passive.EntityPig;
+import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -36,27 +34,31 @@ public class ItemStatueChisel extends Item
         {
             if (!world.isRemote) // Some entities start with random sizes
             {
-                Entity statueEntity = new EntityPig(world);
+                Entity statueEntity = new EntitySpider(world);
 
                 int rotation = IvMultiBlockHelper.getRotation(par2EntityPlayer);
                 List<int[]> positions = ItemStatue.getStatuePositions(statueEntity, rotation);
+                List<int[]> validPositions = getValidPositions(positions, world, blockFragment, x, y, z);
 
-                IvMultiBlockHelper multiBlockHelper = new IvMultiBlockHelper();
-                if (multiBlockHelper.beginPlacing(getValidPositions(positions, x, y, z), world, YGCBlocks.statue, 0, rotation))
+                if (validPositions != null)
                 {
-                    for (int[] position : multiBlockHelper)
+                    IvMultiBlockHelper multiBlockHelper = new IvMultiBlockHelper();
+                    if (multiBlockHelper.beginPlacing(validPositions, world, YGCBlocks.statue, 0, rotation))
                     {
-                        IvTileEntityMultiBlock tileEntity = multiBlockHelper.placeBlock(position);
-
-                        if (tileEntity instanceof TileEntityStatue && tileEntity.isParent())
+                        for (int[] position : multiBlockHelper)
                         {
-                            TileEntityStatue statue = (TileEntityStatue) tileEntity;
-                            statue.setStatueEntity(statueEntity, true);
-                            statue.setStatueBlock(blockFragment);
-                        }
-                    }
+                            IvTileEntityMultiBlock tileEntity = multiBlockHelper.placeBlock(position);
 
-                    par1ItemStack.stackSize--;
+                            if (tileEntity instanceof TileEntityStatue && tileEntity.isParent())
+                            {
+                                TileEntityStatue statue = (TileEntityStatue) tileEntity;
+                                statue.setStatueEntity(statueEntity, true);
+                                statue.setStatueBlock(blockFragment);
+                            }
+                        }
+
+                        par1ItemStack.stackSize--;
+                    }
                 }
             }
 
@@ -71,15 +73,30 @@ public class ItemStatueChisel extends Item
         return !(fragment.getBlock() instanceof ITileEntityProvider);
     }
 
-    public static List<int[]> getValidPositions(List<int[]> positions, int x, int y, int z)
+    public static List<int[]> getValidPositions(List<int[]> positions, World world, TileEntityStatue.BlockFragment blockFragment, int x, int y, int z)
     {
         List<int[]> validLocations = new ArrayList<>();
 
-        for (int[] position : positions)
+        for (int[] origin : positions)
         {
-            validLocations.add(new int[]{position[0] + x, position[1] + y, position[2] + z});
+            for (int[] position : positions)
+            {
+                int posX = position[0] + x - origin[0];
+                int posY = position[1] + y - origin[1];
+                int posZ = position[2] + z - origin[2];
+
+                if (world.getBlock(posX, posY, posZ) != blockFragment.getBlock() || world.getBlockMetadata(posX, posY, posZ) != blockFragment.getMetadata())
+                    break;
+
+                validLocations.add(new int[]{posX, posY, posZ});
+            }
+
+            if (validLocations.size() == positions.size())
+                return validLocations;
+
+            validLocations.clear();
         }
 
-        return validLocations;
+        return null;
     }
 }
