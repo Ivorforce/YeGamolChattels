@@ -9,9 +9,7 @@ public class YGCBlocks
 {
     public static Block tikiTorch;
 
-    public static Block statuePlanks;
-    public static Block statueStone;
-    public static Block statueGold;
+    public static Block statue;
 
     public static Block treasurePile;
 

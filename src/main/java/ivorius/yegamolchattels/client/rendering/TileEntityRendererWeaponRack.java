@@ -76,7 +76,6 @@ public class TileEntityRendererWeaponRack extends TileEntitySpecialRenderer
 
     public void renderTileEntityWeaponRackAt(TileEntityWeaponRack tileEntity, double d, double d1, double d2, float f)
     {
-        int direction = tileEntity.getDirection();
         int type = tileEntity.getWeaponRackType();
 
         GL11.glPushMatrix();

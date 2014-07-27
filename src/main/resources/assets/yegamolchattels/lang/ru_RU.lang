@@ -1,7 +1,5 @@
 tile.tikiTorch.name=Факел На Подставке
-tile.statueStone.name=Каменная Статуя
-tile.statuePlanks.name=Деревянная Статуя
-tile.statueGold.name=Золотая Статуя
+tile.statue.name=Статуя
 tile.treasurePile.name=Куча Золота
 item.flagSmall.name=Маленький Флаг
 item.flagLarge.name=Большой Флаг
@@ -93,9 +91,7 @@ item.flagLarge.dye13.name=Большой Пурпурный Флаг
 item.flagLarge.dye14.name=Большой Оранжевый Флаг
 item.flagLarge.dye15.name=Большой Белый Флаг
 
-tile.statueStone.base=Каменная Статуя %s
-tile.statuePlanks.base=Деревянная Статуя %s
-tile.statueGold.base=Золотая Статуя %s
-tile.statue.unknown=Неизвестная
+tile.ygcStatue.base=Статуя %s (%s)
+tile.ygcStatue.unknown=Неизвестная
 
 entity.ygcGhost.name=Призрак

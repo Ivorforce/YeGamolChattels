@@ -13,6 +13,8 @@ import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.ivtoolkit.tools.IvDateHelper;
 import ivorius.yegamolchattels.YGCConfig;
 import ivorius.yegamolchattels.YeGamolChattels;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -25,6 +27,7 @@ import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
@@ -37,6 +40,7 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
     public static Class[] dangerousMobs = new Class[]{EntityGiantZombie.class, EntityDragon.class, EntityWither.class};
 
     private Entity statueEntity;
+    private BlockFragment statueBlock;
 
     public Entity getStatueEntity()
     {
@@ -57,6 +61,24 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
     public void setStatueEntityWithNotify(Entity statueEntity, boolean safe)
     {
         setStatueEntity(statueEntity, safe);
+
+        IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "statueData", YeGamolChattels.network);
+        markDirty();
+    }
+
+    public BlockFragment getStatueBlock()
+    {
+        return statueBlock;
+    }
+
+    public void setStatueBlock(BlockFragment statueBlock)
+    {
+        this.statueBlock = statueBlock;
+    }
+
+    public void setStatueBlockWithNotify(BlockFragment statueBlock)
+    {
+        setStatueBlock(statueBlock);
 
         IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "statueData", YeGamolChattels.network);
         markDirty();
@@ -118,12 +140,12 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
 //                    }
 
                     int indefiniteTime = 9999999;
-                    if (getBlockType() == YGCBlocks.statueStone)
+                    if (statueBlock.getBlock().getMaterial() == Material.rock)
                     {
                         ((EntityLiving) statueEntity).addPotionEffect(new PotionEffect(Potion.resistance.id, indefiniteTime, 0, true));
                         ((EntityLiving) statueEntity).addPotionEffect(new PotionEffect(Potion.fireResistance.id, indefiniteTime, 0, true));
                     }
-                    if (getBlockType() == YGCBlocks.statueGold)
+                    else if (statueBlock.getBlock().getMaterial() == Material.iron)
                     {
                         ((EntityLiving) statueEntity).addPotionEffect(new PotionEffect(Potion.fireResistance.id, indefiniteTime, 0, true));
                     }
@@ -165,12 +187,25 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
             statueEntity.writeToNBTOptional(statueCompound);
             compound.setTag("statueEntity", statueCompound);
         }
+
+        if (statueBlock != null)
+        {
+            compound.setString("statueBlock", Block.blockRegistry.getNameForObject(statueBlock.getBlock()));
+            compound.setInteger("statueBlockMetadata", statueBlock.getMetadata());
+        }
     }
 
     public void readStatueDataFromNBT(NBTTagCompound compound)
     {
         if (compound.hasKey("statueEntity"))
             setStatueEntity(EntityList.createEntityFromNBT(compound.getCompoundTag("statueEntity"), worldObj), true);
+
+        if (compound.hasKey("statueBlock"))
+        {
+            statueBlock = new BlockFragment(Block.getBlockFromName(compound.getString("statueBlock")), compound.getInteger("statueBlockMetadata"));
+        }
+        else
+            statueBlock = new BlockFragment(Blocks.stone, 0);
     }
 
     public boolean isEntityEquippable()
@@ -269,18 +304,6 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
         return super.getMaxRenderDistanceSquared();
     }
 
-    public int getTextureType()
-    {
-        if (getBlockType() == YGCBlocks.statueStone)
-            return 1;
-        if (getBlockType() == YGCBlocks.statuePlanks)
-            return 0;
-        if (getBlockType() == YGCBlocks.statueGold)
-            return 2;
-
-        return 0;
-    }
-
     @Override
     public AxisAlignedBB getRenderBoundingBox()
     {
@@ -312,6 +335,50 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
         if ("statueData".equals(context))
         {
             readStatueDataFromNBT(ByteBufUtils.readTag(buffer));
+        }
+    }
+
+    public static class BlockFragment
+    {
+        private Block block;
+        private int metadata;
+
+        public BlockFragment(Block block, int metadata)
+        {
+            this.block = block;
+            this.metadata = metadata;
+        }
+
+        public Block getBlock()
+        {
+            return block;
+        }
+
+        public int getMetadata()
+        {
+            return metadata;
+        }
+
+        @Override
+        public boolean equals(Object o)
+        {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            BlockFragment that = (BlockFragment) o;
+
+            if (metadata != that.metadata) return false;
+            if (!block.equals(that.block)) return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode()
+        {
+            int result = block.hashCode();
+            result = 31 * result + metadata;
+            return result;
         }
     }
 }

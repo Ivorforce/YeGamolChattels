@@ -80,22 +80,10 @@ public class BlockStatue extends IvBlockMultiblock
 
             if (statueEntity != null)
             {
-                Item item = null;
+                ItemStack stack = new ItemStack(Item.getItemFromBlock(YGCBlocks.statue));
+                ItemStatue.setStatueEntity(stack, statueEntity);
 
-                if (statueMaterial == 0)
-                    item = Item.getItemFromBlock(YGCBlocks.statueStone);
-                else if (statueMaterial == 1)
-                    item = Item.getItemFromBlock(YGCBlocks.statuePlanks);
-                else if (statueMaterial == 2)
-                    item = Item.getItemFromBlock(YGCBlocks.statueGold);
-
-                if (item != null)
-                {
-                    ItemStack stack = new ItemStack(item);
-                    ItemStatue.setStatueEntity(stack, statueEntity);
-
-                    dropBlockAsItem(world, x, y, z, stack);
-                }
+                dropBlockAsItem(world, x, y, z, stack);
             }
         }
     }

@@ -16,10 +16,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
@@ -61,10 +63,11 @@ public class ItemStatue extends ItemBlock
                 {
                     IvTileEntityMultiBlock tileEntity = multiBlockHelper.placeBlock(position);
 
-                    if (tileEntity instanceof TileEntityStatue)
+                    if (tileEntity instanceof TileEntityStatue && tileEntity.isParent())
                     {
-                        if (tileEntity.isParent())
-                            ((TileEntityStatue) tileEntity).setStatueEntity(statueEntity, true);
+                        TileEntityStatue statue = (TileEntityStatue) tileEntity;
+                        statue.setStatueEntity(statueEntity, true);
+                        statue.setStatueBlock(getStatueBlockFragment(par1ItemStack));
                     }
                 }
 
@@ -81,11 +84,12 @@ public class ItemStatue extends ItemBlock
         String base = super.getUnlocalizedName(par1ItemStack) + ".base";
 
         String entityName = getStatueEntityID(par1ItemStack);
+        String localizedEntityName = entityName != null && entityName.length() > 0 ? I18n.format("entity." + entityName + ".name") : I18n.format("tile.ygcStatue.unknown");
 
-        if (entityName != null && entityName.length() > 0)
-            return I18n.format(base, I18n.format("entity." + entityName + ".name"));
-        else
-            return I18n.format(base, I18n.format("tile.statue.unknown"));
+        TileEntityStatue.BlockFragment blockFragment = getStatueBlockFragment(par1ItemStack);
+        String localizedBlockName = new ItemStack(blockFragment.getBlock(), 1, blockFragment.getMetadata()).getDisplayName();
+
+        return I18n.format(base, localizedEntityName, localizedBlockName);
     }
 
     @Override
@@ -94,7 +98,14 @@ public class ItemStatue extends ItemBlock
         for (int var4 = 0; var4 < BlockStatue.statueCrafting.length / 2; ++var4)
         {
             String mobName = (String) BlockStatue.statueCrafting[var4 * 2 + 1];
-            par3List.add(createStatueItemStack(this, mobName));
+            par3List.add(createStatueItemStack(this, mobName, new TileEntityStatue.BlockFragment(Blocks.brick_block, 0)));
+            par3List.add(createStatueItemStack(this, mobName, new TileEntityStatue.BlockFragment(Blocks.stone, 0)));
+            par3List.add(createStatueItemStack(this, mobName, new TileEntityStatue.BlockFragment(Blocks.planks, 0)));
+            par3List.add(createStatueItemStack(this, mobName, new TileEntityStatue.BlockFragment(Blocks.planks, 1)));
+            par3List.add(createStatueItemStack(this, mobName, new TileEntityStatue.BlockFragment(Blocks.planks, 2)));
+            par3List.add(createStatueItemStack(this, mobName, new TileEntityStatue.BlockFragment(Blocks.planks, 3)));
+            par3List.add(createStatueItemStack(this, mobName, new TileEntityStatue.BlockFragment(Blocks.lit_pumpkin, 0)));
+            par3List.add(createStatueItemStack(this, mobName, new TileEntityStatue.BlockFragment(Blocks.iron_ore, 0)));
         }
     }
 
@@ -131,10 +142,25 @@ public class ItemStatue extends ItemBlock
         stack.setTagInfo("statueEntity", compound);
     }
 
-    public static ItemStack createStatueItemStack(Item item, String entityName)
+    public static ItemStack createStatueItemStack(Item item, String entityName, TileEntityStatue.BlockFragment blockFragment)
     {
         ItemStack stack = new ItemStack(item);
         setStatueEntityByID(stack, entityName);
+        setStatueBlockFragment(stack, blockFragment);
         return stack;
+    }
+
+    public static TileEntityStatue.BlockFragment getStatueBlockFragment(ItemStack stack)
+    {
+        if (stack.hasTagCompound() && stack.getTagCompound().hasKey("statueBlock"))
+            return new TileEntityStatue.BlockFragment((Block) Block.blockRegistry.getObject(stack.getTagCompound().getString("statueBlock")), stack.getTagCompound().getInteger("statueMetadata"));
+
+        return new TileEntityStatue.BlockFragment(Blocks.stone, 0);
+    }
+
+    public static void setStatueBlockFragment(ItemStack stack, TileEntityStatue.BlockFragment fragment)
+    {
+        stack.setTagInfo("statueBlock", new NBTTagString(Block.blockRegistry.getNameForObject(fragment.getBlock())));
+        stack.setTagInfo("statueMetadata", new NBTTagInt(fragment.getMetadata()));
     }
 }

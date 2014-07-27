@@ -137,14 +137,8 @@ public class YeGamolChattels
 
         // --------------------------------Statue--------------------------------
 
-        YGCBlocks.statueStone = (new BlockStatue(Material.rock, 0)).setHardness(2.0F).setStepSound(Block.soundTypeStone).setBlockName("statueStone").setBlockTextureName("statueStone").setCreativeTab(tabMain);
-        GameRegistry.registerBlock(YGCBlocks.statueStone, ItemStatue.class, "statueStone", 0);
-
-        YGCBlocks.statuePlanks = (new BlockStatue(Material.wood, 1)).setHardness(2.0F).setStepSound(Block.soundTypeWood).setBlockName("statuePlanks").setBlockTextureName("statuePlanks").setCreativeTab(tabMain);
-        GameRegistry.registerBlock(YGCBlocks.statuePlanks, ItemStatue.class, "statuePlanks", 1);
-
-        YGCBlocks.statueGold = (new BlockStatue(Material.iron, 2)).setHardness(2.0F).setStepSound(Block.soundTypeMetal).setBlockName("statueGold").setBlockTextureName("statueGold").setCreativeTab(tabMain);
-        GameRegistry.registerBlock(YGCBlocks.statueGold, ItemStatue.class, "statueGold", 2);
+        YGCBlocks.statue = (new BlockStatue(Material.rock, 0)).setHardness(2.0F).setStepSound(Block.soundTypeStone).setBlockName("ygcStatue").setBlockTextureName("statue").setCreativeTab(tabMain);
+        GameRegistry.registerBlock(YGCBlocks.statue, ItemStatue.class, "statue", 0);
 
         GameRegistry.registerTileEntity(TileEntityStatue.class, "ygcStatue");
 
@@ -329,13 +323,9 @@ public class YeGamolChattels
             String entityName = (String) BlockStatue.statueCrafting[r * 2 + 1];
             Object craftObject = BlockStatue.statueCrafting[r * 2];
 
-            ItemStack resultWood = ItemStatue.createStatueItemStack(Item.getItemFromBlock(YGCBlocks.statuePlanks), entityName);
-            ItemStack resultStone = ItemStatue.createStatueItemStack(Item.getItemFromBlock(YGCBlocks.statueStone), entityName);
-            ItemStack resultGold = ItemStatue.createStatueItemStack(Item.getItemFromBlock(YGCBlocks.statueGold), entityName);
+            ItemStack result = ItemStatue.createStatueItemStack(Item.getItemFromBlock(YGCBlocks.statue), entityName, new TileEntityStatue.BlockFragment(Blocks.stone, 0));
 
-            GameRegistry.addRecipe(resultStone, "###", "#O#", "###", '#', Blocks.stone, 'O', craftObject);
-            GameRegistry.addRecipe(resultWood, "###", "#O#", "###", '#', Blocks.planks, 'O', craftObject);
-            GameRegistry.addRecipe(resultGold, "###", "#O#", "###", '#', Items.gold_ingot, 'O', craftObject);
+            GameRegistry.addRecipe(result, "###", "#O#", "###", '#', Blocks.stone, 'O', craftObject);
         }
 
         GameRegistry.addRecipe(new ItemStack(YGCBlocks.treasurePile, 1), " # ", "###", "###", '#', Items.gold_ingot);

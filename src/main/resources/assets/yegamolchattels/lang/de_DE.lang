@@ -1,7 +1,5 @@
 tile.tikiTorch.name=Tiki-Fackel
-tile.statueStone.name=Steinstatue
-tile.statuePlanks.name=Holzstatue
-tile.statueGold.name=Goldstatue
+tile.ygcStatue.name=Statue
 tile.treasurePile.name=Schatzhaufen
 item.flagSmall.name=Kleine Flagge
 item.flagLarge.name=Große Flagge
@@ -128,10 +126,8 @@ item.flagLarge.dye13.name=Große Magentafarbene Flagge
 item.flagLarge.dye14.name=Große Orange Flagge
 item.flagLarge.dye15.name=Große Weiße Flagge
 
-tile.statueStone.base=%s-Steinstatue
-tile.statuePlanks.base=%s-Holzstatue
-tile.statueGold.base=%s-Goldstatue
-tile.statue.unknown=Unbekannte
+tile.ygcStatue.base=%s-Statue (%s)
+tile.ygcStatue.unknown=Unbekannte
 
 entity.ygcGhost.name=Geist
 
