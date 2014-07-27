@@ -31,7 +31,7 @@ public class ContainerCarveStatue extends Container implements PacketGuiAction.A
     private int statueY;
     private int statueZ;
 
-    private IInventory statueEntityCarvingInventory = new InventoryBasic("StatueCarve", true, 1)
+    public IInventory statueEntityCarvingInventory = new InventoryBasic("StatueCarve", true, 1)
     {
         @Override
         public boolean isItemValidForSlot(int par1, ItemStack itemStack)
@@ -53,7 +53,7 @@ public class ContainerCarveStatue extends Container implements PacketGuiAction.A
         this.statueY = statueY;
         this.statueZ = statueZ;
 
-        this.addSlotToContainer(new Slot(this.statueEntityCarvingInventory, 0, 134, 40));
+        this.addSlotToContainer(new Slot(this.statueEntityCarvingInventory, 0, 44, 42));
 
         for (int i = 0; i < 3; ++i)
         {
