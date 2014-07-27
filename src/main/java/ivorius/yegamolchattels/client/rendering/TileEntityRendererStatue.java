@@ -9,6 +9,7 @@ package ivorius.yegamolchattels.client.rendering;
 import ivorius.ivtoolkit.blocks.IvMultiBlockRenderHelper;
 import ivorius.ivtoolkit.rendering.textures.IvTexturePatternColorizer;
 import ivorius.ivtoolkit.rendering.textures.ModifiedTexture;
+import ivorius.ivtoolkit.rendering.textures.PreBufferedTexture;
 import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.blocks.TileEntityStatue;
 import net.minecraft.block.Block;
@@ -26,9 +27,14 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
+import org.apache.commons.io.FileUtils;
 import org.lwjgl.opengl.GL11;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -76,8 +82,6 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
 
             if (patternImage != null)
             {
-                ResourceLocation patternResource = new ResourceLocation(YeGamolChattels.MODID, "Block|" + Block.blockRegistry.getNameForObject(fragment.getBlock()) + "_" + fragment.getMetadata());
-
                 ResourceLocation entityResourceLocation = getTexture(entity);
                 if (entityResourceLocation != null)
                 {
@@ -93,6 +97,11 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
                 }
                 else
                 {
+                    ResourceLocation patternResource = new ResourceLocation(YeGamolChattels.MODID, "Block|" + Block.blockRegistry.getNameForObject(fragment.getBlock()) + "_" + fragment.getMetadata());
+
+                    if (Minecraft.getMinecraft().getTextureManager().getTexture(patternResource) == null)
+                        Minecraft.getMinecraft().getTextureManager().loadTexture(patternResource, new PreBufferedTexture(patternImage));
+
                     renderEngineOverride.textureOverride = patternResource;
                 }
             }
@@ -207,6 +216,20 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
     public static void clearCachedStitchedTexture()
     {
         cachedBlockTextureMap = null;
+    }
+
+    public static void saveCachedTexture(BufferedImage bufferedImage, String name)
+    {
+        try
+        {
+            String filename = "Rendered_" + Math.random();
+            ImageIO.write(bufferedImage, "jpg", new File(Minecraft.getMinecraft().mcDataDir, filename + ".jpg"));
+            FileUtils.writeStringToFile(new File(Minecraft.getMinecraft().mcDataDir, filename + ".txt"), name);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private static ResourceLocation getTexture(Entity entity)

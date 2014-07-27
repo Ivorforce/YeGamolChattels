@@ -63,6 +63,11 @@ public class IvMultiBlockHelper implements Iterable<int[]>
             return false;
         }
 
+        return beginPlacing(validLocations, world, block, metadata, direction);
+    }
+
+    public boolean beginPlacing(List<int[]> validLocations, World world, Block block, int metadata, int direction)
+    {
         this.world = world;
         this.block = block;
         this.metadata = metadata;

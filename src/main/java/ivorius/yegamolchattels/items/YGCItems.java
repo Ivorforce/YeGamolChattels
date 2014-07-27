@@ -28,4 +28,6 @@ public class YGCItems
     public static Item blockFragment;
     public static Item detailChiselIron;
     public static Item carvingChiselIron;
+
+    public static Item pointChiselIron;
 }

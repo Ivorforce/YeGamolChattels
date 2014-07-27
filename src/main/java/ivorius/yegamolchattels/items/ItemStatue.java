@@ -24,7 +24,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -50,11 +49,8 @@ public class ItemStatue extends ItemBlock
             if (statueEntity == null)
                 statueEntity = new EntityPig(par3World);
 
-            int statueWidth = MathHelper.ceiling_float_int(statueEntity.width);
-            int statueHeight = MathHelper.ceiling_float_int(statueEntity.height);
-
             int rotation = IvMultiBlockHelper.getRotation(par2EntityPlayer);
-            List<int[]> positions = IvMultiBlockHelper.getRotatedPositions(rotation, statueWidth, statueHeight, statueWidth);
+            List<int[]> positions = getStatuePositions(statueEntity, rotation);
 
             IvMultiBlockHelper multiBlockHelper = new IvMultiBlockHelper();
             if (multiBlockHelper.beginPlacing(positions, par3World, x, y, z, blockSide, par1ItemStack, par2EntityPlayer, this.field_150939_a, 0, rotation))
@@ -76,6 +72,14 @@ public class ItemStatue extends ItemBlock
         }
 
         return true;
+    }
+
+    public static List<int[]> getStatuePositions(Entity entity, int rotation)
+    {
+        int statueWidth = MathHelper.ceiling_float_int(entity.width);
+        int statueHeight = MathHelper.ceiling_float_int(entity.height);
+
+        return IvMultiBlockHelper.getRotatedPositions(rotation, statueWidth, statueHeight, statueWidth);
     }
 
     @Override

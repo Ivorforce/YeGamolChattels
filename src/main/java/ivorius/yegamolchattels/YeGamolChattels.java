@@ -142,6 +142,9 @@ public class YeGamolChattels
 
         GameRegistry.registerTileEntity(TileEntityStatue.class, "ygcStatue");
 
+        YGCItems.pointChiselIron = new ItemStatueChisel().setUnlocalizedName("iron_chisel_point").setTextureName(textureBase + "pointChisel").setCreativeTab(tabMain);
+        GameRegistry.registerItem(YGCItems.pointChiselIron, "iron_chisel_point", MODID);
+
         // --------------------------------Treasure piles--------------------------------
 
         YGCBlocks.treasurePile = new BlockTreasurePile().setHardness(0.2F).setStepSound(Block.soundTypeMetal).setBlockName("treasurePile").setBlockTextureName(textureBase + "treasurePile").setCreativeTab(tabMain);
