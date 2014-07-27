@@ -34,7 +34,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -159,12 +158,12 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
         int textureWidth = MathHelper.floor_float(1.0f / (icon.getMaxU() - icon.getMinU()) + 0.5f) * icon.getIconWidth();
         int textureHeight = MathHelper.floor_float(1.0f / (icon.getMaxV() - icon.getMinV()) + 0.5f) * icon.getIconHeight();
 
-        int minX = MathHelper.floor_float(icon.getMinU() * textureWidth);
-        int minY = MathHelper.floor_float(icon.getMinV() * textureHeight);
+        int minX = MathHelper.floor_float(icon.getMinU() * textureWidth + 0.5f);
+        int minY = MathHelper.floor_float(icon.getMinV() * textureHeight + 0.5f);
 
         int[] subImage = getStitchedTextureSubImage(minX, minY, icon.getIconWidth(), icon.getIconHeight(), textureWidth, textureHeight);
         BufferedImage image = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
-        image.setRGB(0, 0, icon.getIconWidth(), icon.getIconHeight(), subImage, 0, 1);
+        image.setRGB(0, 0, icon.getIconWidth(), icon.getIconHeight(), subImage, 0, icon.getIconWidth());
         return image;
     }
 
@@ -173,11 +172,13 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
         int[] stitched = getStitchedTexture(textureWidth, textureHeight);
 
         int[] returnTex = new int[width * height];
-        for (int curX = 0; curX < width; curX++)
-            for (int curY = 0; curY < height; curY++)
+        for (int curY = 0; curY < height; curY++)
+        {
+            for (int curX = 0; curX < width; curX++)
             {
                 returnTex[curX + curY * width] = stitched[x + curX + (y + curY) * textureWidth];
             }
+        }
 
         return returnTex;
     }
@@ -223,7 +224,7 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
         try
         {
             String filename = "Rendered_" + Math.random();
-            ImageIO.write(bufferedImage, "jpg", new File(Minecraft.getMinecraft().mcDataDir, filename + ".jpg"));
+            ImageIO.write(bufferedImage, "png", new File(Minecraft.getMinecraft().mcDataDir, filename + ".png"));
             FileUtils.writeStringToFile(new File(Minecraft.getMinecraft().mcDataDir, filename + ".txt"), name);
         }
         catch (IOException e)

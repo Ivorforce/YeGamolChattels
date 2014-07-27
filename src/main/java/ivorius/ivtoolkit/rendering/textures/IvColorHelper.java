@@ -20,6 +20,8 @@ package ivorius.ivtoolkit.rendering.textures;
 
 import net.minecraft.util.MathHelper;
 
+import java.awt.image.BufferedImage;
+
 /**
  * Created by lukas on 26.07.14.
  */
@@ -28,6 +30,11 @@ public class IvColorHelper
     public static int[] getARBGInts(int argb)
     {
         return new int[]{argb >>> 24, (argb >>> 16) & 255, (argb >>> 8) & 255, argb & 255};
+    }
+
+    public static int[] getARBGInts(float[] argb)
+    {
+        return new int[]{MathHelper.floor_float(argb[0] * 255.0f + 0.5f), MathHelper.floor_float(argb[1] * 255.0f + 0.5f), MathHelper.floor_float(argb[2] * 255.0f + 0.5f), MathHelper.floor_float(argb[3] * 255.0f + 0.5f)};
     }
 
     public static float[] getARBGFloats(int[] argb)
@@ -53,5 +60,41 @@ public class IvColorHelper
         int blue = MathHelper.clamp_int(MathHelper.floor_float(argb[3] * 255.0f + 0.5f), 0, 255);
 
         return (alpha << 24) | (red << 16) | (green << 8) | blue;
+    }
+
+    public static float[] getARGB(int data, int bufferedImageType)
+    {
+        switch (bufferedImageType)
+        {
+            case BufferedImage.TYPE_4BYTE_ABGR:
+                return new float[]{getFloatVal(data, 0), getFloatVal(data, 24), getFloatVal(data, 16), getFloatVal(data, 8)};
+            case BufferedImage.TYPE_INT_ARGB:
+                return new float[]{getFloatVal(data, 24), getFloatVal(data, 16), getFloatVal(data, 8), getFloatVal(data, 0)};
+        }
+
+        throw new IllegalArgumentException("Unrecognized buffered image type: " + bufferedImageType);
+    }
+
+    public static int getData(float[] argb, int bufferedImageType)
+    {
+        switch (bufferedImageType)
+        {
+            case BufferedImage.TYPE_4BYTE_ABGR:
+                return getByteVal(argb[0], 0) | getByteVal(argb[3], 8) | getByteVal(argb[2], 16) | getByteVal(argb[1], 24);
+            case BufferedImage.TYPE_INT_ARGB:
+                return getByteVal(argb[0], 24) | getByteVal(argb[1], 16) | getByteVal(argb[2], 8) | getByteVal(argb[3], 0);
+        }
+
+        throw new IllegalArgumentException("Unrecognized buffered image type: " + bufferedImageType);
+    }
+
+    public static float getFloatVal(int value, int shift)
+    {
+        return ((value >>> shift) & 255) / 255.0f;
+    }
+
+    public static int getByteVal(float value, int shift)
+    {
+        return MathHelper.floor_float(MathHelper.clamp_float(value, 0.0f, 1.0f) * 255.0f + 0.5f) << shift;
     }
 }

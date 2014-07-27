@@ -18,6 +18,8 @@
 
 package ivorius.ivtoolkit.rendering.textures;
 
+import net.minecraft.util.MathHelper;
+
 import java.awt.image.BufferedImage;
 
 /**
@@ -27,12 +29,12 @@ public class IvTextureCreator
 {
     public static BufferedImage applyEffect(BufferedImage texture, ImageEffect effect)
     {
-        BufferedImage modified = new BufferedImage(texture.getWidth(), texture.getHeight(), texture.getType());
+        BufferedImage modified = new BufferedImage(texture.getWidth(), texture.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
         for (int x = 0; x < texture.getWidth(); x++)
             for (int y = 0; y < texture.getHeight(); y++)
             {
-                modified.setRGB(x, y, effect.getRGBA(texture.getRGB(x, y), x, y));
+                modified.setRGB(x, y, effect.getPixel(texture.getRGB(x, y), x, y, texture.getType(), modified.getType()));
             }
 
         return modified;
@@ -40,6 +42,6 @@ public class IvTextureCreator
 
     public static interface ImageEffect
     {
-        int getRGBA(int argb, int x, int y);
+        int getPixel(int pixel, int x, int y, int sourceDataType, int destDataType);
     }
 }

@@ -57,6 +57,7 @@ item.ygcChisel.noHammer=Um einen Meißel zu verwenden, benötigst du einen Fäus
 item.ygcClubHammer.name=Fäustel
 item.ygcBlockFragment.name=Blockfragment
 tile.ygcLootChest.name=Beuteschatztruhe
+item.ygcChiselIron_point.name=Spitzmeißel
 
 item.bannerSmall.dye0.name=Kleines Schwarzes Banner
 item.bannerSmall.dye1.name=Kleines Rotes Banner

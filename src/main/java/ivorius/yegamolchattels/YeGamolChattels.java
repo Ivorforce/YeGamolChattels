@@ -142,7 +142,7 @@ public class YeGamolChattels
 
         GameRegistry.registerTileEntity(TileEntityStatue.class, "ygcStatue");
 
-        YGCItems.pointChiselIron = new ItemStatueChisel().setUnlocalizedName("iron_chisel_point").setTextureName(textureBase + "pointChisel").setCreativeTab(tabMain);
+        YGCItems.pointChiselIron = new ItemStatueChisel().setUnlocalizedName("ygcChiselIron_point").setTextureName(textureBase + "pointChisel").setCreativeTab(tabMain);
         GameRegistry.registerItem(YGCItems.pointChiselIron, "iron_chisel_point", MODID);
 
         // --------------------------------Treasure piles--------------------------------

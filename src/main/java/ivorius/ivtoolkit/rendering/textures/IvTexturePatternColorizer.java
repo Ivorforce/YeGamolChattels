@@ -25,6 +25,7 @@ import org.apache.logging.log4j.Logger;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Created by lukas on 26.07.14.
@@ -56,21 +57,21 @@ public class IvTexturePatternColorizer implements IvTextureCreatorMC.LoadingImag
     }
 
     @Override
-    public int getRGBA(int argb, int x, int y)
+    public int getPixel(int pixel, int x, int y, int sourceDataType, int destDataType)
     {
-        float[] colors = IvColorHelper.getARBGFloats(argb);
+        float[] colors = IvColorHelper.getARGB(pixel, sourceDataType);
 
-        int patternARGB = bufferedImage.getRGB(x % bufferedImage.getWidth(), y % bufferedImage.getHeight());
-        int[] patternARGBInts = IvColorHelper.getARBGInts(patternARGB);
+        float[] patternColors = IvColorHelper.getARGB(bufferedImage.getRGB(x % bufferedImage.getWidth(), y % bufferedImage.getHeight()), bufferedImage.getType());
+        int[] patternARGBInts = IvColorHelper.getARBGInts(patternColors);
 
         float[] hsb = Color.RGBtoHSB(patternARGBInts[1], patternARGBInts[2], patternARGBInts[3], null);
-        hsb[2] = (0.2126f * colors[1] + 0.7152f * colors[2] + 0.0722f * colors[3]) * 0.3f + hsb[2] * 0.7f;
+        hsb[2] = (0.2126f * colors[1] + 0.7152f * colors[2] + 0.0722f * colors[3]) * 0.5f + hsb[2] * 0.5f;
         float[] patternColor = IvColorHelper.getARBGFloats(Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]));
 
-        colors[1] = colors[1] * 0.05f + patternColor[1] * 0.95f;
-        colors[2] = colors[2] * 0.05f + patternColor[2] * 0.95f;
-        colors[3] = colors[3] * 0.05f + patternColor[3] * 0.95f;
+        colors[1] = colors[1] * 0.1f + patternColor[1] * 0.9f;
+        colors[2] = colors[2] * 0.1f + patternColor[2] * 0.9f;
+        colors[3] = colors[3] * 0.1f + patternColor[3] * 0.9f;
 
-        return IvColorHelper.getARBGInt(colors);
+        return IvColorHelper.getData(colors, destDataType);
     }
 }
