@@ -180,22 +180,28 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
             TextureMap blocksTexture = (TextureMap) Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.locationBlocksTexture);
             int blocksTextureID = blocksTexture.getGlTextureId();
 
-            byte[] pixels = new byte[textureWidth * textureHeight * 4];
-            ByteBuffer buffer = ByteBuffer.allocateDirect(pixels.length).order(ByteOrder.nativeOrder());
-
-//                glPixelStorei( GL_UNPACK_ROW_LENGTH, blocksTexture. );
-            glBindTexture(GL_TEXTURE_2D, blocksTextureID);
-            glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-            buffer.get(pixels);
-
-            cachedBlockTextureMap = new int[pixels.length / 4];
-            for (int i = 0; i < cachedBlockTextureMap.length; i++)
-            {
-                cachedBlockTextureMap[i] = ((pixels[i * 4 + 3] & 0xff) << 24) | ((pixels[i * 4] & 0xff) << 16) | ((pixels[i * 4 + 1] & 0xff) << 8) | (pixels[i * 4 + 2] & 0xff);
-            }
+            cachedBlockTextureMap = getStitchedTexture(textureWidth, textureHeight, blocksTextureID);
         }
 
         return cachedBlockTextureMap;
+    }
+
+    public static int[] getStitchedTexture(int textureWidth, int textureHeight, int textureID)
+    {
+        byte[] pixels = new byte[textureWidth * textureHeight * 4];
+        ByteBuffer buffer = ByteBuffer.allocateDirect(pixels.length).order(ByteOrder.nativeOrder());
+
+//                glPixelStorei( GL_UNPACK_ROW_LENGTH, blocksTexture. );
+        glBindTexture(GL_TEXTURE_2D, textureID);
+        glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+        buffer.get(pixels);
+
+        int[] texture = new int[pixels.length / 4];
+        for (int i = 0; i < texture.length; i++)
+        {
+            texture[i] = ((pixels[i * 4 + 3] & 0xff) << 24) | ((pixels[i * 4] & 0xff) << 16) | ((pixels[i * 4 + 1] & 0xff) << 8) | (pixels[i * 4 + 2] & 0xff);
+        }
+        return texture;
     }
 
     public static void clearCachedStitchedTexture()
