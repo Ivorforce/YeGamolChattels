@@ -11,6 +11,12 @@ import net.minecraft.entity.player.EntityPlayer;
 public class ServerProxy implements YGCProxy
 {
     @Override
+    public void loadConfig(String categoryID)
+    {
+
+    }
+
+    @Override
     public void registerRenderers()
     {
 

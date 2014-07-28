@@ -15,9 +15,7 @@ import ivorius.yegamolchattels.achievements.YGCAchievementList;
 import ivorius.yegamolchattels.blocks.TileEntityItemShelfModel0;
 import ivorius.yegamolchattels.blocks.YGCBlocks;
 import ivorius.yegamolchattels.items.YGCItems;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.config.Configuration;
 
 /**
  * Created by lukas on 24.05.14.
@@ -34,10 +32,7 @@ public class YGCFMLEventHandler
     {
         if (event instanceof ConfigChangedEvent.OnConfigChangedEvent && event.modID.equals(YeGamolChattels.MODID))
         {
-            if (event.configID.equals(Configuration.CATEGORY_GENERAL))
-            {
-                YGCConfig.loadConfig(event.configID);
-            }
+            YGCConfig.loadConfig(event.configID);
         }
     }
 

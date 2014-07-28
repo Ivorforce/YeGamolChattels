@@ -8,9 +8,9 @@ package ivorius.yegamolchattels.client;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
 import ivorius.ivtoolkit.items.IvItemRendererModel;
 import ivorius.ivtoolkit.rendering.RenderFakePlayer;
+import ivorius.yegamolchattels.YGCConfig;
 import ivorius.yegamolchattels.YGCProxy;
 import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.blocks.*;
@@ -32,6 +32,15 @@ import net.minecraftforge.event.world.WorldEvent;
 
 public class ClientProxy implements YGCProxy
 {
+    @Override
+    public void loadConfig(String categoryID)
+    {
+        if (categoryID == null || "visual".equals(categoryID))
+        {
+            YGCConfig.doStatueTextureMagic = YeGamolChattels.config.get("visual", "doStatueTextureMagic", true).getBoolean();
+        }
+    }
+
     @Override
     public void registerRenderers()
     {

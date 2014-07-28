@@ -10,6 +10,7 @@ import ivorius.ivtoolkit.blocks.IvMultiBlockRenderHelper;
 import ivorius.ivtoolkit.rendering.textures.IvTexturePatternColorizer;
 import ivorius.ivtoolkit.rendering.textures.ModifiedTexture;
 import ivorius.ivtoolkit.rendering.textures.PreBufferedTexture;
+import ivorius.yegamolchattels.YGCConfig;
 import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.blocks.TileEntityStatue;
 import net.minecraft.block.Block;
@@ -76,37 +77,38 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
 
             int statusBarLength = BossStatus.statusBarTime; //Don't render boss health
 
-            TileEntityStatue.BlockFragment fragment = tileEntityStatue.getStatueBlock();
-            BufferedImage patternImage = getTexture(fragment.getBlock(), fragment.getMetadata());
+            renderEngineOverride.textureOverride = statueFallbackTexture;
 
-            if (patternImage != null)
+            if (YGCConfig.doStatueTextureMagic)
             {
-                ResourceLocation entityResourceLocation = getTexture(entity);
-                if (entityResourceLocation != null)
-                {
-                    ResourceLocation textureColorized = new ResourceLocation(entityResourceLocation + "|YGC_COL_" + fragment.getBlock() + "_" + fragment.getMetadata());
+                TileEntityStatue.BlockFragment fragment = tileEntityStatue.getStatueBlock();
+                BufferedImage patternImage = getTexture(fragment.getBlock(), fragment.getMetadata());
 
-                    if (Minecraft.getMinecraft().getTextureManager().getTexture(textureColorized) == null)
+                if (patternImage != null)
+                {
+                    ResourceLocation entityResourceLocation = getTexture(entity);
+                    if (entityResourceLocation != null)
                     {
-                        ModifiedTexture modifiedTexture = new ModifiedTexture(entityResourceLocation, new IvTexturePatternColorizer(patternImage, YeGamolChattels.logger), YeGamolChattels.logger);
-                        Minecraft.getMinecraft().getTextureManager().loadTexture(textureColorized, modifiedTexture);
+                        ResourceLocation textureColorized = new ResourceLocation(entityResourceLocation + "|YGC_COL_" + fragment.getBlock() + "_" + fragment.getMetadata());
+
+                        if (Minecraft.getMinecraft().getTextureManager().getTexture(textureColorized) == null)
+                        {
+                            ModifiedTexture modifiedTexture = new ModifiedTexture(entityResourceLocation, new IvTexturePatternColorizer(patternImage, YeGamolChattels.logger), YeGamolChattels.logger);
+                            Minecraft.getMinecraft().getTextureManager().loadTexture(textureColorized, modifiedTexture);
+                        }
+
+                        renderEngineOverride.textureOverride = textureColorized;
                     }
+                    else
+                    {
+                        ResourceLocation patternResource = new ResourceLocation(YeGamolChattels.MODID, "Block|" + Block.blockRegistry.getNameForObject(fragment.getBlock()) + "_" + fragment.getMetadata());
 
-                    renderEngineOverride.textureOverride = textureColorized;
+                        if (Minecraft.getMinecraft().getTextureManager().getTexture(patternResource) == null)
+                            Minecraft.getMinecraft().getTextureManager().loadTexture(patternResource, new PreBufferedTexture(patternImage));
+
+                        renderEngineOverride.textureOverride = patternResource;
+                    }
                 }
-                else
-                {
-                    ResourceLocation patternResource = new ResourceLocation(YeGamolChattels.MODID, "Block|" + Block.blockRegistry.getNameForObject(fragment.getBlock()) + "_" + fragment.getMetadata());
-
-                    if (Minecraft.getMinecraft().getTextureManager().getTexture(patternResource) == null)
-                        Minecraft.getMinecraft().getTextureManager().loadTexture(patternResource, new PreBufferedTexture(patternImage));
-
-                    renderEngineOverride.textureOverride = patternResource;
-                }
-            }
-            else
-            {
-                renderEngineOverride.textureOverride = statueFallbackTexture;
             }
 
             renderEngineOverride.renderEngine = RenderManager.instance.renderEngine;

@@ -62,6 +62,7 @@ public class YGCConfigGuiFactory implements IModGuiFactory
         {
             List<IConfigElement> list = new ArrayList<>();
             list.add(new DummyCategoryElement("yegamolchattels.configgui.general", "yegamolchattels.configgui.ctgy.general", GeneralEntry.class));
+            list.add(new DummyCategoryElement("yegamolchattels.configgui.visual", "yegamolchattels.configgui.ctgy.visual", VisualEntry.class));
             return list;
         }
 
@@ -78,6 +79,24 @@ public class YGCConfigGuiFactory implements IModGuiFactory
                 return new GuiConfig(this.owningScreen,
                         (new ConfigElement(YeGamolChattels.config.getCategory(Configuration.CATEGORY_GENERAL))).getChildElements(),
                         this.owningScreen.modID, Configuration.CATEGORY_GENERAL, this.configElement.requiresWorldRestart() || this.owningScreen.allRequireWorldRestart,
+                        this.configElement.requiresMcRestart() || this.owningScreen.allRequireMcRestart,
+                        GuiConfig.getAbridgedConfigPath(YeGamolChattels.config.toString()));
+            }
+        }
+
+        public static class VisualEntry extends GuiConfigEntries.CategoryEntry
+        {
+            public VisualEntry(GuiConfig owningScreen, GuiConfigEntries owningEntryList, IConfigElement prop)
+            {
+                super(owningScreen, owningEntryList, prop);
+            }
+
+            @Override
+            protected GuiScreen buildChildScreen()
+            {
+                return new GuiConfig(this.owningScreen,
+                        (new ConfigElement(YeGamolChattels.config.getCategory("visual"))).getChildElements(),
+                        this.owningScreen.modID, "visual", this.configElement.requiresWorldRestart() || this.owningScreen.allRequireWorldRestart,
                         this.configElement.requiresMcRestart() || this.owningScreen.allRequireMcRestart,
                         GuiConfig.getAbridgedConfigPath(YeGamolChattels.config.toString()));
             }

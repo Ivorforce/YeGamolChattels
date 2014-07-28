@@ -7,6 +7,8 @@ import net.minecraft.entity.player.EntityPlayer;
  */
 public interface YGCProxy
 {
+    void loadConfig(String categoryID);
+
     void registerRenderers();
 
     EntityPlayer getClientPlayer();

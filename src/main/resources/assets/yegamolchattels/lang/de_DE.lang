@@ -149,6 +149,8 @@ itemGroup.yegamolchattels=Ye Gamol Chattels
 yegamolchattels.configgui.title=Ye Gamol Chattels
 yegamolchattels.configgui.general=Allgemein
 yegamolchattels.configgui.ctgy.general.tooltip=Allgemeine Einstellungen
+yegamolchattels.configgui.visual=Grafik
+yegamolchattels.configgui.ctgy.visual.tooltip=Visuelle Einstellungen
 
 achievement.refinedPlank=Ich liebe dieses Brett
 achievement.refinedPlank.desc=Veredele ein Holzbrett
