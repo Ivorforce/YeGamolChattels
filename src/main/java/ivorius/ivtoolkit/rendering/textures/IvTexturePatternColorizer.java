@@ -37,6 +37,10 @@ public class IvTexturePatternColorizer implements IvTextureCreatorMC.LoadingImag
 
     private Logger logger;
 
+    private int[] patternColorComponents = new int[4];
+    private float[] patternColor = new float[4];
+    private float[] hsb = new float[4];
+
     public IvTexturePatternColorizer(ResourceLocation resourceLocation, Logger logger)
     {
         this.resourceLocation = resourceLocation;
@@ -57,22 +61,17 @@ public class IvTexturePatternColorizer implements IvTextureCreatorMC.LoadingImag
     }
 
     @Override
-    public int getPixel(int pixel, int x, int y, int sourceDataType, int destDataType)
+    public void getPixel(float[] color, float[] colorDest, int x, int y)
     {
-        float[] colors = IvColorHelper.getARGB(pixel, sourceDataType);
+        bufferedImage.getRaster().getPixel(x % bufferedImage.getWidth(), y % bufferedImage.getHeight(), patternColorComponents);
 
-        float[] patternColors = IvColorHelper.getARGB(bufferedImage.getRGB(x % bufferedImage.getWidth(), y % bufferedImage.getHeight()), bufferedImage.getType());
-        int[] patternARGBInts = IvColorHelper.getARBGInts(patternColors);
+        hsb = Color.RGBtoHSB(patternColorComponents[0], patternColorComponents[1], patternColorComponents[2], null);
+        hsb[2] = (0.2126f * color[0] / 255.0f + 0.7152f * color[1] / 255.0f + 0.0722f * color[2] / 255.0f) * 0.5f + hsb[2] * 0.5f;
+        patternColor = IvColorHelper.getARBGFloats(Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]));
 
-        float[] hsb = Color.RGBtoHSB(patternARGBInts[1], patternARGBInts[2], patternARGBInts[3], null);
-        hsb[2] = (0.2126f * colors[1] + 0.7152f * colors[2] + 0.0722f * colors[3]) * 0.5f + hsb[2] * 0.5f;
-        float[] patternColor = IvColorHelper.getARBGFloats(Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]));
-
-        colors[0] = 1.0f; // TODO Figure out why alpha is seemingly random
-        colors[1] = colors[1] * 0.1f + patternColor[1] * 0.9f;
-        colors[2] = colors[2] * 0.1f + patternColor[2] * 0.9f;
-        colors[3] = colors[3] * 0.1f + patternColor[3] * 0.9f;
-
-        return IvColorHelper.getData(colors, destDataType);
+        colorDest[0] = color[0] * 0.1f + patternColor[1] * 255.0f * 0.9f;
+        colorDest[1] = color[1] * 0.1f + patternColor[2] * 255.0f * 0.9f;
+        colorDest[2] = color[2] * 0.1f + patternColor[3] * 255.0f * 0.9f;
+        colorDest[3] = color[3];
     }
 }

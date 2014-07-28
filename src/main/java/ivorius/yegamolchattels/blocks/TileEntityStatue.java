@@ -42,6 +42,11 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
     private Entity statueEntity;
     private BlockFragment statueBlock;
 
+    private float statueYawHead;
+    private float statuePitchHead;
+    private float statueSwing;
+    private float statueStance;
+
     public Entity getStatueEntity()
     {
         return statueEntity;
@@ -58,14 +63,6 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
         this.statueEntity = statueEntity;
     }
 
-    public void setStatueEntityWithNotify(Entity statueEntity, boolean safe)
-    {
-        setStatueEntity(statueEntity, safe);
-
-        IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "statueData", YeGamolChattels.network);
-        markDirty();
-    }
-
     public BlockFragment getStatueBlock()
     {
         return statueBlock;
@@ -76,12 +73,60 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
         this.statueBlock = statueBlock;
     }
 
-    public void setStatueBlockWithNotify(BlockFragment statueBlock)
+    public float getStatueYawHead()
     {
-        setStatueBlock(statueBlock);
+        return statueYawHead;
+    }
 
+    public void setStatueYawHead(float statueYawHead)
+    {
+        this.statueYawHead = statueYawHead;
+        updateStatueRotations();
+    }
+
+    public float getStatuePitchHead()
+    {
+        return statuePitchHead;
+    }
+
+    public void setStatuePitchHead(float statuePitchHead)
+    {
+        this.statuePitchHead = statuePitchHead;
+        updateStatueRotations();
+    }
+
+    public float getStatueSwing()
+    {
+        return statueSwing;
+    }
+
+    public void setStatueSwing(float statueSwing)
+    {
+        this.statueSwing = statueSwing;
+        updateStatueRotations();
+    }
+
+    public float getStatueStance()
+    {
+        return statueStance;
+    }
+
+    public void setStatueStance(float statueStance)
+    {
+        this.statueStance = statueStance;
+        updateStatueRotations();
+    }
+
+    public void statueDataChanged()
+    {
         IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "statueData", YeGamolChattels.network);
         markDirty();
+    }
+
+    private void updateStatueRotations()
+    {
+        if (statueEntity instanceof EntityLivingBase)
+            setRotations((EntityLivingBase) statueEntity, statueYawHead, statuePitchHead, statueSwing, statueStance);
     }
 
     @Override
@@ -188,6 +233,11 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
             compound.setTag("statueEntity", statueCompound);
         }
 
+        compound.setFloat("statueYawHead", statueYawHead);
+        compound.setFloat("statuePitchHead", statuePitchHead);
+        compound.setFloat("statueSwing", statueSwing);
+        compound.setFloat("statueStance", statueStance);
+
         if (statueBlock != null)
         {
             compound.setString("statueBlock", Block.blockRegistry.getNameForObject(statueBlock.getBlock()));
@@ -199,6 +249,13 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
     {
         if (compound.hasKey("statueEntity"))
             setStatueEntity(EntityList.createEntityFromNBT(compound.getCompoundTag("statueEntity"), worldObj), true);
+
+        statueYawHead = compound.getFloat("statueYawHead");
+        statuePitchHead = compound.getFloat("statuePitchHead");
+        statueSwing = compound.getFloat("statueSwing");
+        statueStance = compound.getFloat("statueStance");
+
+        updateStatueRotations();
 
         if (compound.hasKey("statueBlock"))
         {
@@ -336,6 +393,23 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
         {
             readStatueDataFromNBT(ByteBufUtils.readTag(buffer));
         }
+    }
+
+    public static void setRotations(EntityLivingBase entityLivingBase, float yawHead, float pitchHead, float swing, float stance)
+    {
+        entityLivingBase.swingProgress = swing;
+        entityLivingBase.prevSwingProgress = swing;
+
+        entityLivingBase.limbSwing = stance;
+        entityLivingBase.limbSwingAmount = 0.0f;
+        entityLivingBase.prevLimbSwingAmount = 1.0f;
+
+//                    entityLivingBase.renderYawOffset = sliderYawHead.getValue();
+        entityLivingBase.rotationYaw = yawHead;
+        entityLivingBase.rotationPitch = pitchHead;
+        entityLivingBase.prevRotationPitch = pitchHead;
+        entityLivingBase.rotationYawHead = entityLivingBase.rotationYaw;
+        entityLivingBase.prevRotationYawHead = entityLivingBase.rotationYaw;
     }
 
     public static class BlockFragment

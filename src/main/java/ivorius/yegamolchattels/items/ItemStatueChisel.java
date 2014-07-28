@@ -47,7 +47,7 @@ public class ItemStatueChisel extends Item
         return false;
     }
 
-    public static boolean carveStatue(ItemStack stack, Entity statueEntity, World world, int x, int y, int z, EntityLivingBase entityLivingBase)
+    public static TileEntityStatue carveStatue(ItemStack stack, Entity statueEntity, World world, int x, int y, int z, EntityLivingBase entityLivingBase)
     {
         TileEntityStatue.BlockFragment blockFragment = new TileEntityStatue.BlockFragment(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
         int rotation = IvMultiBlockHelper.getRotation(entityLivingBase);
@@ -62,12 +62,15 @@ public class ItemStatueChisel extends Item
                 IvMultiBlockHelper multiBlockHelper = new IvMultiBlockHelper();
                 if (multiBlockHelper.beginPlacing(validPositions, world, YGCBlocks.statue, 0, rotation))
                 {
+                    TileEntityStatue parent = null;
+
                     for (int[] position : multiBlockHelper)
                     {
                         IvTileEntityMultiBlock tileEntity = multiBlockHelper.placeBlock(position);
 
                         if (tileEntity instanceof TileEntityStatue && tileEntity.isParent())
                         {
+                            parent = (TileEntityStatue) tileEntity;
                             TileEntityStatue statue = (TileEntityStatue) tileEntity;
                             statue.setStatueEntity(statueEntity, true);
                             statue.setStatueBlock(blockFragment);
@@ -75,12 +78,12 @@ public class ItemStatueChisel extends Item
                     }
 
                     stack.damageItem(1, entityLivingBase);
-                    return true;
+                    return parent;
                 }
             }
         }
 
-        return false;
+        return null;
     }
 
     public static boolean isValidStatueBlock(TileEntityStatue.BlockFragment fragment)

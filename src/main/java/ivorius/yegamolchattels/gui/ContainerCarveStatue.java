@@ -7,18 +7,18 @@ package ivorius.yegamolchattels.gui;
 
 import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.network.PacketGuiAction;
-import ivorius.ivtoolkit.network.PacketGuiActionHandler;
+import ivorius.yegamolchattels.blocks.TileEntityStatue;
 import ivorius.yegamolchattels.items.ItemEntityVita;
 import ivorius.yegamolchattels.items.ItemStatueChisel;
 import ivorius.yegamolchattels.items.YGCItems;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.monster.EntitySpider;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.*;
-import net.minecraft.item.ItemMonsterPlacer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryBasic;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -113,17 +113,29 @@ public class ContainerCarveStatue extends Container implements PacketGuiAction.A
     {
         if ("carveStatue".equals(context))
         {
+            float yawHead = buffer.readFloat();
+            float pitchHead = buffer.readFloat();
+            float swing = buffer.readFloat();
+            float stance = buffer.readFloat();
+
             ItemStack statueStack = statueEntityCarvingInventory.getStackInSlot(0);
             if (statueStack != null)
             {
                 Entity statueEntity = ItemEntityVita.createEntity(statueStack, usingPlayer.getEntityWorld());
+                TileEntityStatue createdStatue = ItemStatueChisel.carveStatue(usingPlayer.inventory.getCurrentItem(), statueEntity, statueEntity.worldObj, statueX, statueY, statueZ, usingPlayer);
 
-                if (ItemStatueChisel.carveStatue(usingPlayer.inventory.getCurrentItem(), statueEntity, statueEntity.worldObj, statueX, statueY, statueZ, usingPlayer))
+                if (createdStatue != null)
                 {
+                    createdStatue.setStatueYawHead(yawHead);
+                    createdStatue.setStatuePitchHead(pitchHead);
+                    createdStatue.setStatueSwing(swing);
+                    createdStatue.setStatueStance(stance);
+
                     statueEntityCarvingInventory.decrStackSize(0, 1);
                     usingPlayer.closeScreen();
                 }
             }
         }
     }
+
 }

@@ -18,9 +18,8 @@
 
 package ivorius.ivtoolkit.rendering.textures;
 
-import net.minecraft.util.MathHelper;
-
 import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
 
 /**
  * Created by lukas on 26.07.14.
@@ -30,11 +29,18 @@ public class IvTextureCreator
     public static BufferedImage applyEffect(BufferedImage texture, ImageEffect effect)
     {
         BufferedImage modified = new BufferedImage(texture.getWidth(), texture.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        WritableRaster sourceRaster = texture.getRaster();
+        WritableRaster destRaster = modified.getRaster();
+
+        float[] normalizedPixelColors = new float[4];
+        float[] normalizedPixelColorsDest = new float[4];
 
         for (int x = 0; x < texture.getWidth(); x++)
             for (int y = 0; y < texture.getHeight(); y++)
             {
-                modified.setRGB(x, y, effect.getPixel(texture.getRGB(x, y), x, y, texture.getType(), modified.getType()));
+                sourceRaster.getPixel(x, y, normalizedPixelColors);
+                effect.getPixel(normalizedPixelColors, normalizedPixelColorsDest, x, y);
+                destRaster.setPixel(x, y, normalizedPixelColorsDest);
             }
 
         return modified;
@@ -42,6 +48,6 @@ public class IvTextureCreator
 
     public static interface ImageEffect
     {
-        int getPixel(int pixel, int x, int y, int sourceDataType, int destDataType);
+        void getPixel(float[] color, float[] colorDest, int x, int y);
     }
 }

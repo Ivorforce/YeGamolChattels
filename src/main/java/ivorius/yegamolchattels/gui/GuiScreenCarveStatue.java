@@ -5,12 +5,14 @@
 
 package ivorius.yegamolchattels.gui;
 
+import ivorius.ivtoolkit.gui.GuiControlListener;
+import ivorius.ivtoolkit.gui.GuiSlider;
 import ivorius.ivtoolkit.network.PacketGuiAction;
 import ivorius.yegamolchattels.YeGamolChattels;
+import ivorius.yegamolchattels.blocks.TileEntityStatue;
 import ivorius.yegamolchattels.items.ItemEntityVita;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -27,9 +29,15 @@ import org.lwjgl.opengl.GL12;
 /**
  * Created by lukas on 27.07.14.
  */
-public class GuiScreenCarveStatue extends GuiContainer
+public class GuiScreenCarveStatue extends GuiContainer implements GuiControlListener<GuiSlider>
 {
     private static ResourceLocation guiTexture = new ResourceLocation(YeGamolChattels.MODID, YeGamolChattels.filePathTextures + "guiCarving.png");
+
+    private GuiSlider sliderSwing;
+    private GuiSlider sliderStance;
+
+    private GuiSlider sliderYawHead;
+    private GuiSlider sliderPitchHead;
 
     public GuiScreenCarveStatue(EntityPlayer player, int x, int y, int z)
     {
@@ -42,6 +50,22 @@ public class GuiScreenCarveStatue extends GuiContainer
         super.initGui();
 
         buttonList.add(new GuiButton(0, width / 2 - 80, height / 2 - 22, 85, 20, I18n.format("gui.carve.confirm")));
+        buttonList.add(sliderSwing = new GuiSlider(50, width / 2 - 80, height / 2 - 80, 85, 20, I18n.format("gui.carve.swing")));
+        sliderSwing.addListener(this);
+        sliderSwing.setMinValue(0.0f);
+        sliderSwing.setMaxValue(5.0f);
+        buttonList.add(sliderStance = new GuiSlider(50, width / 2 - 80, height / 2 - 60, 85, 20, I18n.format("gui.carve.stance")));
+        sliderStance.addListener(this);
+        sliderStance.setMinValue(0.0f);
+        sliderStance.setMaxValue(5.0f);
+        buttonList.add(sliderYawHead = new GuiSlider(50, width / 2 - 80, height / 2 - 100, 85, 20, I18n.format("gui.carve.head.yaw")));
+        sliderYawHead.addListener(this);
+        sliderYawHead.setMinValue(-60.0f);
+        sliderYawHead.setMaxValue(60.0f);
+        buttonList.add(sliderPitchHead = new GuiSlider(50, width / 2 - 80, height / 2 - 120, 85, 20, I18n.format("gui.carve.head.pitch")));
+        sliderPitchHead.addListener(this);
+        sliderPitchHead.setMinValue(-60.0f);
+        sliderPitchHead.setMaxValue(60.0f);
     }
 
     @Override
@@ -49,7 +73,7 @@ public class GuiScreenCarveStatue extends GuiContainer
     {
         if (button.id == 0)
         {
-            YeGamolChattels.network.sendToServer(PacketGuiAction.packetGuiAction("carveStatue"));
+            YeGamolChattels.network.sendToServer(PacketGuiAction.packetGuiAction("carveStatue", sliderYawHead.getValue(), sliderPitchHead.getValue(), sliderSwing.getValue(), sliderStance.getValue()));
         }
     }
 
@@ -65,8 +89,15 @@ public class GuiScreenCarveStatue extends GuiContainer
         if (currentVita != null)
         {
             Entity entity = ItemEntityVita.createEntity(currentVita, mc.theWorld);
-            float scale = 50f / (entity instanceof EntitySquid ? 2.5f : entity.height);
-            renderEntity(width / 2 + 45, height / 2 - 20, scale, entity);
+
+            if (entity != null)
+            {
+                if (entity instanceof EntityLivingBase)
+                    TileEntityStatue.setRotations((EntityLivingBase) entity, sliderYawHead.getValue(), sliderPitchHead.getValue(), sliderSwing.getValue(), sliderStance.getValue());
+
+                float scale = 50f / (entity instanceof EntitySquid ? 2.5f : entity.height);
+                renderEntity(width / 2 + 45, height / 2 - 20, scale, entity);
+            }
         }
     }
 
@@ -89,5 +120,11 @@ public class GuiScreenCarveStatue extends GuiContainer
         OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
+    }
+
+    @Override
+    public void valueChanged(GuiSlider gui)
+    {
+
     }
 }

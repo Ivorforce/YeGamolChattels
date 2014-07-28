@@ -30,7 +30,6 @@ public class PacketGuiAction implements IMessage
     public static PacketGuiAction packetGuiAction(String context, Number... args)
     {
         ByteBuf payload = Unpooled.buffer();
-        ByteBufUtils.writeUTF8String(payload, context);
 
         for (Number num : args)
         {
