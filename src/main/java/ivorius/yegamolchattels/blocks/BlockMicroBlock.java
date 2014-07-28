@@ -14,6 +14,7 @@ import ivorius.yegamolchattels.items.YGCItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -200,6 +201,12 @@ public class BlockMicroBlock extends BlockContainer
     public boolean shouldSideBeRendered(IBlockAccess blockAccess, int x, int y, int z, int side)
     {
         return renderSideCache[side];
+    }
+
+    @Override
+    public void registerBlockIcons(IIconRegister p_149651_1_)
+    {
+
     }
 
     @Override

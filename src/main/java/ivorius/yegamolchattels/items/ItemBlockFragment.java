@@ -10,6 +10,7 @@ import ivorius.ivtoolkit.blocks.IvBlockCollection;
 import ivorius.yegamolchattels.blocks.TileEntityMicroBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -107,4 +108,9 @@ public class ItemBlockFragment extends Item
             par3List.add(ItemMicroBlock.getLocalizedName(data));
     }
 
+    @Override
+    public void registerIcons(IIconRegister par1IconRegister)
+    {
+
+    }
 }
