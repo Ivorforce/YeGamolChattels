@@ -15,7 +15,10 @@ import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.blocks.TileEntityStatue;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.BossStatus;
@@ -110,21 +113,32 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
             if (patternImage != null)
             {
                 ResourceLocation entityResourceLocation = YGCConfig.doStatueTextureMerge ? StatueTextureHandler.getTexture(entity) : null;
+
                 if (entityResourceLocation != null)
                 {
-                    ResourceLocation textureColorized = new ResourceLocation(YeGamolChattels.MODID, "colorized/" + entityResourceLocation + "_" + Block.blockRegistry.getNameForObject(fragment.getBlock()) + "_" + fragment.getMetadata());
+                    TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
 
-                    if (Minecraft.getMinecraft().getTextureManager().getTexture(textureColorized) == null)
+                    ITextureObject entityResourceTexture = textureManager.getTexture(entityResourceLocation);
+                    if (entityResourceTexture == null || (entityResourceTexture instanceof ThreadDownloadImageData && !((ThreadDownloadImageData) entityResourceTexture).isTextureUploaded()))
                     {
-                        ModifiedTexture modifiedTexture = new ModifiedTexture(entityResourceLocation, new IvTexturePatternColorizer(patternImage, YeGamolChattels.logger), YeGamolChattels.logger);
-
-                        if (Minecraft.getMinecraft().getTextureManager().loadTexture(textureColorized, modifiedTexture))
-                            return textureColorized;
-                        else
-                            return null;
+                        return null; // Wait
                     }
                     else
-                        return textureColorized;
+                    {
+                        ResourceLocation textureColorized = new ResourceLocation(YeGamolChattels.MODID, "colorized/" + entityResourceLocation + "_" + Block.blockRegistry.getNameForObject(fragment.getBlock()) + "_" + fragment.getMetadata());
+
+                        if (textureManager.getTexture(textureColorized) == null)
+                        {
+                            ModifiedTexture modifiedTexture = new ModifiedTexture(entityResourceLocation, new IvTexturePatternColorizer(patternImage, YeGamolChattels.logger), YeGamolChattels.logger);
+
+                            if (Minecraft.getMinecraft().getTextureManager().loadTexture(textureColorized, modifiedTexture))
+                                return textureColorized;
+                            else
+                                return null;
+                        }
+                        else
+                            return textureColorized;
+                    }
                 }
                 else
                 {
