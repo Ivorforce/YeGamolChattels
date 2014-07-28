@@ -112,7 +112,7 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
                 ResourceLocation entityResourceLocation = YGCConfig.doStatueTextureMerge ? StatueTextureHandler.getTexture(entity) : null;
                 if (entityResourceLocation != null)
                 {
-                    ResourceLocation textureColorized = new ResourceLocation(entityResourceLocation + "|YGC_COL_" + fragment.getBlock() + "_" + fragment.getMetadata());
+                    ResourceLocation textureColorized = new ResourceLocation(YeGamolChattels.MODID, "colorized/" + entityResourceLocation + "_" + Block.blockRegistry.getNameForObject(fragment.getBlock()) + "_" + fragment.getMetadata());
 
                     if (Minecraft.getMinecraft().getTextureManager().getTexture(textureColorized) == null)
                     {
@@ -128,7 +128,7 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
                 }
                 else
                 {
-                    ResourceLocation patternResource = new ResourceLocation(YeGamolChattels.MODID, "Block|" + Block.blockRegistry.getNameForObject(fragment.getBlock()) + "_" + fragment.getMetadata());
+                    ResourceLocation patternResource = new ResourceLocation(YeGamolChattels.MODID, "blockextract/" + Block.blockRegistry.getNameForObject(fragment.getBlock()) + "_" + fragment.getMetadata());
 
                     if (Minecraft.getMinecraft().getTextureManager().getTexture(patternResource) == null)
                         Minecraft.getMinecraft().getTextureManager().loadTexture(patternResource, new PreBufferedTexture(patternImage));
