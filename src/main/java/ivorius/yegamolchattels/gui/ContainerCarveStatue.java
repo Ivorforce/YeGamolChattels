@@ -44,6 +44,12 @@ public class ContainerCarveStatue extends Container implements PacketGuiAction.A
             return getEntity(itemStack, ContainerCarveStatue.this.usingPlayer.getEntityWorld()) != null;
         }
 
+        @Override
+        public int getInventoryStackLimit()
+        {
+            return 1;
+        }
+
         public void markDirty()
         {
             super.markDirty();

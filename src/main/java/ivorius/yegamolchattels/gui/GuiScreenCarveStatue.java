@@ -72,6 +72,7 @@ public class GuiScreenCarveStatue extends GuiContainer implements GuiControlList
         sliderStance.addListener(this);
         sliderStance.setMinValue(0.0f);
         sliderStance.setMaxValue(5.0f);
+        sliderStance.setValue(2.4f);
         buttonList.add(sliderYawHead = new GuiSlider(50, width / 2 - 80, height / 2 - 66, 85, 14, I18n.format("gui.carve.head.yaw")));
         sliderYawHead.addListener(this);
         sliderYawHead.setMinValue(-60.0f);

@@ -66,7 +66,7 @@ public class IvTexturePatternColorizer implements IvTextureCreatorMC.LoadingImag
         bufferedImage.getRaster().getPixel(x % bufferedImage.getWidth(), y % bufferedImage.getHeight(), patternColorComponents);
 
         hsb = Color.RGBtoHSB(patternColorComponents[0], patternColorComponents[1], patternColorComponents[2], null);
-        hsb[2] = (0.2126f * color[0] / 255.0f + 0.7152f * color[1] / 255.0f + 0.0722f * color[2] / 255.0f) * 0.5f + hsb[2] * 0.5f;
+        hsb[2] = (0.2126f * color[0] / 255.0f + 0.7152f * color[1] / 255.0f + 0.0722f * color[2] / 255.0f) * 0.3f + hsb[2] * 0.7f;
         patternColor = IvColorHelper.getARBGFloats(Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]));
 
         colorDest[0] = color[0] * 0.1f + patternColor[1] * 255.0f * 0.9f;
