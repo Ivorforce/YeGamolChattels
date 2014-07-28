@@ -37,7 +37,8 @@ public class ClientProxy implements YGCProxy
     {
         if (categoryID == null || "visual".equals(categoryID))
         {
-            YGCConfig.doStatueTextureMagic = YeGamolChattels.config.get("visual", "doStatueTextureMagic", true).getBoolean();
+            YGCConfig.fetchDynamicStatueTextures = YeGamolChattels.config.get("visual", "fetchDynamicStatueTextures", true).getBoolean();
+            YGCConfig.doStatueTextureMerge = YeGamolChattels.config.get("visual", "doStatueTextureMerge", true).getBoolean();
         }
     }
 

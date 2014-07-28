@@ -79,14 +79,14 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
 
             renderEngineOverride.textureOverride = statueFallbackTexture;
 
-            if (YGCConfig.doStatueTextureMagic)
+            if (YGCConfig.fetchDynamicStatueTextures)
             {
                 TileEntityStatue.BlockFragment fragment = tileEntityStatue.getStatueBlock();
                 BufferedImage patternImage = getTexture(fragment.getBlock(), fragment.getMetadata());
 
                 if (patternImage != null)
                 {
-                    ResourceLocation entityResourceLocation = getTexture(entity);
+                    ResourceLocation entityResourceLocation = YGCConfig.doStatueTextureMerge ? getTexture(entity) : null;
                     if (entityResourceLocation != null)
                     {
                         ResourceLocation textureColorized = new ResourceLocation(entityResourceLocation + "|YGC_COL_" + fragment.getBlock() + "_" + fragment.getMetadata());

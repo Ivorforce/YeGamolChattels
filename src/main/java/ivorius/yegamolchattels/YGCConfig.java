@@ -15,7 +15,9 @@ public class YGCConfig
     public static boolean areDangerousStatuesAllowed;
     public static boolean areLifeStatuesAllowed;
     public static boolean easterEggsAllowed;
-    public static boolean doStatueTextureMagic;
+
+    public static boolean fetchDynamicStatueTextures;
+    public static boolean doStatueTextureMerge;
 
     public static void loadConfig(String configID)
     {
