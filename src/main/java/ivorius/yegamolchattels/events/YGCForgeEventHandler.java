@@ -11,12 +11,13 @@ import cpw.mods.fml.relauncher.SideOnly;
 import ivorius.ivtoolkit.rendering.IvRenderHelper;
 import ivorius.yegamolchattels.achievements.YGCAchievementList;
 import ivorius.yegamolchattels.blocks.TileEntityMicroBlock;
-import ivorius.yegamolchattels.client.rendering.TileEntityRendererStatue;
+import ivorius.yegamolchattels.blocks.TileEntitySnowGlobe;
+import ivorius.yegamolchattels.blocks.TileEntityStatue;
+import ivorius.yegamolchattels.client.rendering.StatueTextureHandler;
 import ivorius.yegamolchattels.entities.EntityGhost;
 import ivorius.yegamolchattels.items.ItemBlockFragment;
 import ivorius.yegamolchattels.items.ItemChisel;
 import ivorius.yegamolchattels.items.ItemClubHammer;
-import ivorius.yegamolchattels.items.YGCItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.Entity;
@@ -29,7 +30,11 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.ChunkEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import org.lwjgl.opengl.GL11;
+
+import java.util.Collection;
 
 /**
  * Created by lukas on 24.05.14.
@@ -81,6 +86,36 @@ public class YGCForgeEventHandler
     }
 
     @SubscribeEvent
+    public void unloadWorld(WorldEvent.Unload event)
+    {
+        if (event.world.isRemote)
+            unloadAllGLObjects(event.world.loadedTileEntityList);
+    }
+
+    @SubscribeEvent
+    public void unloadChunk(ChunkEvent.Unload event)
+    {
+        if (event.world.isRemote)
+            unloadAllGLObjects(event.getChunk().chunkTileEntityMap.values());
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void unloadAllGLObjects(Collection tileEntities)
+    {
+        for (Object tileEntity : tileEntities)
+        {
+            if (tileEntity instanceof TileEntitySnowGlobe)
+            {
+                ((TileEntitySnowGlobe) tileEntity).addCallListForDestruction();
+            }
+            else if (tileEntity instanceof TileEntityStatue)
+            {
+                ((TileEntityStatue) tileEntity).releaseTexture();
+            }
+        }
+    }
+
+    @SubscribeEvent
     public void blockHarvested(BlockEvent.HarvestDropsEvent event)
     {
         if (event.harvester != null)
@@ -111,7 +146,7 @@ public class YGCForgeEventHandler
     {
         if (event instanceof TextureStitchEvent.Pre)
         {
-            TileEntityRendererStatue.clearCachedStitchedTexture();
+            StatueTextureHandler.clearCachedStitchedTexture();
         }
     }
 }

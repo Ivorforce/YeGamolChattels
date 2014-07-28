@@ -7,7 +7,6 @@ package ivorius.yegamolchattels.client;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import ivorius.ivtoolkit.items.IvItemRendererModel;
 import ivorius.ivtoolkit.rendering.RenderFakePlayer;
 import ivorius.yegamolchattels.YGCConfig;
@@ -24,11 +23,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.world.ChunkEvent;
-import net.minecraftforge.event.world.WorldEvent;
 
 public class ClientProxy implements YGCProxy
 {
@@ -69,39 +64,11 @@ public class ClientProxy implements YGCProxy
 
         MinecraftForgeClient.registerItemRenderer(YGCItems.blockFragment, new RenderBlockFragment());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(YGCBlocks.lootChest), new IvItemRendererModel(new ModelLootChest(), new ResourceLocation(YeGamolChattels.MODID, YeGamolChattels.filePathTextures + "lootChest.png"), 1.0f, new float[]{0.0f, -0.1f, 0.0f}, new float[]{0.0f, 180.0f, 0.0f}));
-
-        MinecraftForge.EVENT_BUS.register(this); // For the rendering events
     }
 
     @Override
     public EntityPlayer getClientPlayer()
     {
         return Minecraft.getMinecraft().thePlayer;
-    }
-
-    @SubscribeEvent
-    public void unloadCunk(ChunkEvent.Unload event)
-    {
-        Chunk chunk = event.getChunk();
-
-        for (Object tileEntity : chunk.chunkTileEntityMap.values())
-        {
-            if (tileEntity instanceof TileEntitySnowGlobe)
-            {
-                ((TileEntitySnowGlobe) tileEntity).destructCallList();
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public void unloadWorld(WorldEvent.Unload event)
-    {
-        for (Object tileEntity : event.world.loadedTileEntityList)
-        {
-            if (tileEntity instanceof TileEntitySnowGlobe)
-            {
-                ((TileEntitySnowGlobe) tileEntity).destructCallList();
-            }
-        }
     }
 }

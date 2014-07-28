@@ -58,18 +58,6 @@ public class BlockSnowGlobe extends BlockContainer
     }
 
     @Override
-    public void breakBlock(World par1World, int par2, int par3, int par4, Block par5, int par6)
-    {
-        super.breakBlock(par1World, par2, par3, par4, par5, par6);
-
-        TileEntity tileEntity = par1World.getTileEntity(par2, par3, par4);
-        if (tileEntity instanceof TileEntitySnowGlobe)
-        {
-            ((TileEntitySnowGlobe) tileEntity).destructCallList();
-        }
-    }
-
-    @Override
     public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5Player, int p_149727_6_, float p_149727_7_, float p_149727_8_, float p_149727_9_)
     {
         TileEntity tileEntity = par1World.getTileEntity(par2, par3, par4);

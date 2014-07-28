@@ -5,6 +5,8 @@
 
 package ivorius.yegamolchattels.blocks;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.blocks.IvTileEntityHelper;
 import ivorius.ivtoolkit.math.IvMathHelper;
@@ -12,6 +14,7 @@ import ivorius.ivtoolkit.network.IvNetworkHelperServer;
 import ivorius.ivtoolkit.network.PacketTileEntityData;
 import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.yegamolchattels.YeGamolChattels;
+import ivorius.yegamolchattels.client.rendering.SnowGlobeCallListHandler;
 import ivorius.yegamolchattels.client.rendering.TileEntityRendererSnowGlobe;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -24,7 +27,6 @@ import net.minecraft.util.AxisAlignedBB;
 
 public class TileEntitySnowGlobe extends TileEntity implements PartialUpdateHandler
 {
-    public int glCallListIndex = -1;
     public boolean needsVisualUpdate = true;
     private int timeUntilVisualUpdate = 100;
 
@@ -119,19 +121,6 @@ public class TileEntitySnowGlobe extends TileEntity implements PartialUpdateHand
         return (0.3f - Math.abs(realityGlobeRatio - 0.5f)) * 0.1f;
     }
 
-    public void destructCallList()
-    {
-        TileEntityRendererSnowGlobe.destructCallList(this);
-    }
-
-    @Override
-    protected void finalize() throws Throwable
-    {
-        super.finalize();
-
-        destructCallList();
-    }
-
     @Override
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt)
     {
@@ -179,5 +168,41 @@ public class TileEntitySnowGlobe extends TileEntity implements PartialUpdateHand
     public boolean shouldRenderInPass(int pass)
     {
         return pass == 1 || pass == 0;
+    }
+
+    @Override
+    public void invalidate()
+    {
+        super.invalidate();
+
+        if (worldObj.isRemote)
+            addCallListForDestruction();
+    }
+
+    // Client
+
+    @SideOnly(Side.CLIENT)
+    private int glCallListIndex = -1;
+
+    @SideOnly(Side.CLIENT)
+    public int getGlCallListIndex()
+    {
+        return glCallListIndex;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void setGlCallListIndex(int glCallListIndex)
+    {
+        this.glCallListIndex = glCallListIndex;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void addCallListForDestruction()
+    {
+        if (glCallListIndex >= 0)
+        {
+            SnowGlobeCallListHandler.addCallListToDestroy(glCallListIndex);
+            glCallListIndex = -1;
+        }
     }
 }

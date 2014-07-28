@@ -6,6 +6,8 @@
 package ivorius.yegamolchattels.blocks;
 
 import cpw.mods.fml.common.network.ByteBufUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
 import ivorius.ivtoolkit.network.IvNetworkHelperServer;
@@ -13,6 +15,7 @@ import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.ivtoolkit.tools.IvDateHelper;
 import ivorius.yegamolchattels.YGCConfig;
 import ivorius.yegamolchattels.YeGamolChattels;
+import ivorius.yegamolchattels.client.rendering.StatueTextureHandler;
 import ivorius.yegamolchattels.entities.EntityFakePlayer;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -35,6 +38,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ResourceLocation;
 
 public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialUpdateHandler
 {
@@ -420,6 +424,17 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
         }
     }
 
+    @Override
+    public void invalidate()
+    {
+        super.invalidate();
+
+        if (worldObj.isRemote)
+        {
+            releaseTexture();
+        }
+    }
+
     public static void setRotations(EntityLivingBase entityLivingBase, float yawHead, float pitchHead, float swing, float stance)
     {
         entityLivingBase.swingProgress = swing;
@@ -479,5 +494,32 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
             result = 31 * result + metadata;
             return result;
         }
+    }
+
+    // Client
+
+    @SideOnly(Side.CLIENT)
+    private ResourceLocation statueTexture;
+
+    @SideOnly(Side.CLIENT)
+    public void releaseTexture()
+    {
+        if (statueTexture != null)
+        {
+            StatueTextureHandler.releaseTexture(statueTexture);
+            statueTexture = null;
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public ResourceLocation getStatueTexture()
+    {
+        return statueTexture;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void setStatueTexture(ResourceLocation statueTexture)
+    {
+        this.statueTexture = statueTexture;
     }
 }

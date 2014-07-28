@@ -110,7 +110,7 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
 
         if (playerDistSQ < 4 * 4 && pass == 0)
         {
-            if (realityGlobe.glCallListIndex < 0)
+            if (realityGlobe.getGlCallListIndex() < 0)
                 constructCallList(realityGlobe, this.blockRenderer);
             else if (realityGlobe.needsVisualUpdate)
             {
@@ -122,7 +122,7 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
             double sizePY = 1.0 / (double) (SIZE_X * 2 + 1);
             double sizePZ = 1.0 / (double) (SIZE_X * 2 + 1);
 
-            if (realityGlobe.glCallListIndex >= 0)
+            if (realityGlobe.getGlCallListIndex() >= 0)
             {
                 GL11.glPushMatrix();
                 setupWorldTransform(rumble);
@@ -143,14 +143,14 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
                     GL11.glShadeModel(GL11.GL_FLAT);
                 }
 
-                if (realityGlobe.glCallListIndex >= 0)
+                if (realityGlobe.getGlCallListIndex() >= 0)
                 {
-                    GL11.glCallList(realityGlobe.glCallListIndex);
+                    GL11.glCallList(realityGlobe.getGlCallListIndex());
 
                     if (!realityGlobe.displaysDefaultHouse())
                     {
                         setupWorldTransform(rumble);
-                        GL11.glCallList(realityGlobe.glCallListIndex);
+                        GL11.glCallList(realityGlobe.getGlCallListIndex());
                     }
                 }
 
@@ -255,7 +255,7 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
 
     public static void constructCallList(TileEntitySnowGlobe tileEntity, RenderBlocks blockRenderer)
     {
-        tileEntity.glCallListIndex = GLAllocation.generateDisplayLists(1);
+        tileEntity.setGlCallListIndex(GLAllocation.generateDisplayLists(1));
 
         drawInCallList(tileEntity, blockRenderer);
     }
@@ -264,7 +264,7 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
     {
         Tessellator var10 = Tessellator.instance;
 
-        GL11.glNewList(tileEntity.glCallListIndex, GL11.GL_COMPILE);
+        GL11.glNewList(tileEntity.getGlCallListIndex(), GL11.GL_COMPILE);
 
         var10.startDrawingQuads();
 
@@ -381,15 +381,6 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
         GL11.glEndList();
 
 //        captureAndWriteToFile("defaultGlobe.nbt", new BlockCoord(tileEntity), tileEntity.getWorldObj());
-    }
-
-    public static void destructCallList(TileEntitySnowGlobe tileEntity)
-    {
-        if (tileEntity.glCallListIndex >= 0)
-        {
-            GLAllocation.deleteDisplayLists(tileEntity.glCallListIndex);
-            tileEntity.glCallListIndex = -1;
-        }
     }
 
     public static void captureAndWriteToFile(String fileName, BlockCoord coord, World world)
