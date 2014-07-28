@@ -5,6 +5,7 @@
 
 package ivorius.yegamolchattels.client.rendering;
 
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import ivorius.ivtoolkit.logic.ReferenceCounter;
 import ivorius.yegamolchattels.YeGamolChattels;
 import net.minecraft.block.Block;
@@ -29,6 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.Map;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -56,6 +58,8 @@ public class StatueTextureHandler
         for (ResourceLocation textureObject : textureObjects.deallocateAllFreeObjects())
         {
             textureManager.deleteTexture(textureObject);
+            Map textureMap = ReflectionHelper.getPrivateValue(TextureManager.class, textureManager, "mapTextureObjects", "field_110585_a");
+            textureMap.remove(textureObject);
         }
     }
 
