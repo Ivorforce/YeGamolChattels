@@ -49,6 +49,10 @@ public class ModifiedTexture extends AbstractTexture
     {
         imageEffect.load(var1);
         BufferedImage image = IvTextureCreatorMC.getImage(var1, resourceLocation, logger);
+
+        if (image == null)
+            throw new IOException();
+
         BufferedImage modified = IvTextureCreator.applyEffect(image, imageEffect);
 
         TextureUtil.uploadTextureImageAllocate(this.getGlTextureId(), modified, false, false);

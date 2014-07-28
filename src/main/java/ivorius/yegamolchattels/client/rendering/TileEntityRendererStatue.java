@@ -117,10 +117,14 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
                     if (Minecraft.getMinecraft().getTextureManager().getTexture(textureColorized) == null)
                     {
                         ModifiedTexture modifiedTexture = new ModifiedTexture(entityResourceLocation, new IvTexturePatternColorizer(patternImage, YeGamolChattels.logger), YeGamolChattels.logger);
-                        Minecraft.getMinecraft().getTextureManager().loadTexture(textureColorized, modifiedTexture);
-                    }
 
-                    return textureColorized;
+                        if (Minecraft.getMinecraft().getTextureManager().loadTexture(textureColorized, modifiedTexture))
+                            return textureColorized;
+                        else
+                            return null;
+                    }
+                    else
+                        return textureColorized;
                 }
                 else
                 {
