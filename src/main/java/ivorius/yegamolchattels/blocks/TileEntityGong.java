@@ -113,19 +113,26 @@ public class TileEntityGong extends IvTileEntityMultiBlock implements PartialUpd
         {
             Double info = (Double) intersection.getUserInfo();
 
-            if (isValidHitItem(stack) && entity instanceof EntityPlayer)
+            if (entity instanceof EntityPlayer)
             {
-                switch (getBlockMetadata())
+                if (isValidHitItem(stack))
                 {
-                    case 0:
-                        ((EntityPlayer) entity).triggerAchievement(YGCAchievementList.smallGongPlayed);
-                        break;
-                    case 1:
-                        ((EntityPlayer) entity).triggerAchievement(YGCAchievementList.mediumGongPlayed);
-                        break;
-                    case 2:
-                        ((EntityPlayer) entity).triggerAchievement(YGCAchievementList.largeGongPlayed);
-                        break;
+                    switch (getBlockMetadata())
+                    {
+                        case 0:
+                            ((EntityPlayer) entity).triggerAchievement(YGCAchievementList.smallGongPlayed);
+                            break;
+                        case 1:
+                            ((EntityPlayer) entity).triggerAchievement(YGCAchievementList.mediumGongPlayed);
+                            break;
+                        case 2:
+                            ((EntityPlayer) entity).triggerAchievement(YGCAchievementList.largeGongPlayed);
+                            break;
+                    }
+                }
+                else if (stack != null && stack.getItem() == Items.ender_pearl)
+                {
+                    ((EntityPlayer) entity).triggerAchievement(YGCAchievementList.gongSecret);
                 }
             }
 

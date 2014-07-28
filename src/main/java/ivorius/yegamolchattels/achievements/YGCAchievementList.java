@@ -9,9 +9,8 @@ import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.blocks.TileEntityItemShelfModel0;
 import ivorius.yegamolchattels.blocks.YGCBlocks;
 import ivorius.yegamolchattels.items.YGCItems;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraftforge.common.AchievementPage;
@@ -24,9 +23,14 @@ public class YGCAchievementList
     public static AchievementPage page;
 
     public static Achievement refinedPlank;
+
     public static Achievement wardrobeCrafted;
+    public static Achievement wardrobeSecret;
+
     public static Achievement grandfatherClockCrafted;
+
     public static Achievement weaponRackCrafted;
+    public static Achievement weaponRackVariant;
 
     public static Achievement largeFlagCrafted;
     public static Achievement largeBannerCrafted;
@@ -34,26 +38,39 @@ public class YGCAchievementList
     public static Achievement smallGongPlayed;
     public static Achievement mediumGongPlayed;
     public static Achievement largeGongPlayed;
+    public static Achievement gongSecret;
 
     public static Achievement ghostKilled;
+
+    public static Achievement zombieStatueReanimated;
+    public static Achievement superExpensiveStatue;
 
     public static void init()
     {
         refinedPlank = new Achievement("achievement.refinedPlank", "refinedPlank", 0, 0, new ItemStack(YGCItems.refinedPlank), null).registerStat();
+
         wardrobeCrafted = new Achievement("achievement.wardrobeCrafted", "wardrobeCrafted", 2, 0, new ItemStack(YGCBlocks.itemShelf, 0, TileEntityItemShelfModel0.shelfWardrobe), refinedPlank).registerStat();
+        wardrobeSecret = new Achievement("achievement.wardrobeSecret", "wardrobeSecret", 3, 0, new ItemStack(YGCBlocks.itemShelf, 1, TileEntityItemShelfModel0.shelfWardrobe), wardrobeCrafted).registerStat();
+
         grandfatherClockCrafted = new Achievement("achievement.grandfatherClockCrafted", "grandfatherClockCrafted", 2, 1, new ItemStack(YGCBlocks.grandfatherClock), refinedPlank).registerStat();
+
         weaponRackCrafted = new Achievement("achievement.weaponRackCrafted", "weaponRackCrafted", 2, -1, new ItemStack(YGCBlocks.weaponRack), refinedPlank).registerStat();
+        weaponRackVariant = new Achievement("achievement.weaponRackVariant", "weaponRackVariant", 3, -1, new ItemStack(YGCBlocks.weaponRack), weaponRackCrafted).registerStat();
 
         largeFlagCrafted = new Achievement("achievement.largeFlagCrafted", "largeFlagCrafted", -2, -2, new ItemStack(YGCItems.flagLarge), null).registerStat();
         largeBannerCrafted = new Achievement("achievement.largeBannerCrafted", "largeBannerCrafted", -1, -2, new ItemStack(YGCItems.bannerLarge), null).registerStat();
 
         smallGongPlayed = new Achievement("achievement.smallGongPlayed", "smallGongPlayed", -3, 1, new ItemStack(YGCBlocks.gong, 1, 0), null).registerStat();
-        mediumGongPlayed = new Achievement("achievement.mediumGongPlayed", "mediumGongPlayed", -3, 2, new ItemStack(YGCBlocks.gong, 1, 1), null).registerStat();
-        largeGongPlayed = new Achievement("achievement.largeGongPlayed", "largeGongPlayed", -3, 3, new ItemStack(YGCBlocks.gong, 1, 2), null).registerStat();
+        mediumGongPlayed = new Achievement("achievement.mediumGongPlayed", "mediumGongPlayed", -4, 1, new ItemStack(YGCBlocks.gong, 1, 1), null).registerStat();
+        largeGongPlayed = new Achievement("achievement.largeGongPlayed", "largeGongPlayed", -3, 2, new ItemStack(YGCBlocks.gong, 1, 2), null).registerStat();
+        gongSecret = new Achievement("achievement.gongSecret", "gongSecret", -4, 2, new ItemStack(YGCBlocks.gong, 1), null).registerStat();
 
-        ghostKilled = new Achievement("achievement.ghostKilled", "ghostKilled", 2, 3, new ItemStack(Blocks.wool), null).registerStat();
+        ghostKilled = new Achievement("achievement.ghostKilled", "ghostKilled", 0, 3, new ItemStack(Blocks.wool), null).registerStat();
 
-        page = new AchievementPage(YeGamolChattels.NAME, refinedPlank, wardrobeCrafted, grandfatherClockCrafted, weaponRackCrafted, largeFlagCrafted, largeBannerCrafted, smallGongPlayed, mediumGongPlayed, largeGongPlayed, ghostKilled);
+        zombieStatueReanimated = new Achievement("achievement.zombieStatueReanimated", "zombieStatueReanimated", 3, 4, new ItemStack(Items.skull, 1, 2), null).registerStat();
+        superExpensiveStatue = new Achievement("achievement.superExpensiveStatue", "superExpensiveStatue", 3, 3, new ItemStack(Blocks.gold_block), null).registerStat();
+
+        page = new AchievementPage(YeGamolChattels.NAME, refinedPlank, wardrobeCrafted, wardrobeSecret, grandfatherClockCrafted, weaponRackCrafted, weaponRackVariant, largeFlagCrafted, largeBannerCrafted, smallGongPlayed, mediumGongPlayed, largeGongPlayed, gongSecret, ghostKilled, zombieStatueReanimated, superExpensiveStatue);
         AchievementPage.registerAchievementPage(page);
     }
 }

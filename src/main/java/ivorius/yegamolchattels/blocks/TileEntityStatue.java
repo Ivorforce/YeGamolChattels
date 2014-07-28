@@ -15,6 +15,7 @@ import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.ivtoolkit.tools.IvDateHelper;
 import ivorius.yegamolchattels.YGCConfig;
 import ivorius.yegamolchattels.YeGamolChattels;
+import ivorius.yegamolchattels.achievements.YGCAchievementList;
 import ivorius.yegamolchattels.client.rendering.StatueTextureHandler;
 import ivorius.yegamolchattels.entities.EntityFakePlayer;
 import net.minecraft.block.Block;
@@ -201,10 +202,14 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
                         ((EntityLiving) statueEntity).addPotionEffect(new PotionEffect(Potion.fireResistance.id, indefiniteTime, 0, true));
                     }
 
-                    worldObj.spawnEntityInWorld(statueEntity);
+                    if ("Zombie".equals(EntityList.getEntityString(statueEntity)))
+                    {
+                        EntityPlayer player = worldObj.getClosestPlayer(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, 10.0);
+                        if (player != null)
+                            player.triggerAchievement(YGCAchievementList.zombieStatueReanimated);
+                    }
 
-                    IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "statueData", YeGamolChattels.network);
-                    markDirty();
+                    worldObj.spawnEntityInWorld(statueEntity);
                 }
 
                 return true;

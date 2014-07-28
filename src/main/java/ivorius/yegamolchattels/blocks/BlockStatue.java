@@ -8,6 +8,7 @@ package ivorius.yegamolchattels.blocks;
 import ivorius.ivtoolkit.blocks.IvBlockMultiblock;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
 import ivorius.yegamolchattels.YeGamolChattels;
+import ivorius.yegamolchattels.achievements.YGCAchievementList;
 import ivorius.yegamolchattels.items.ItemStatue;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -17,6 +18,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
@@ -92,6 +94,13 @@ public class BlockStatue extends IvBlockMultiblock
             TileEntityStatue tileEntityStatue = (TileEntityStatue) parent;
             if (tileEntityStatue.tryEquipping(player.getHeldItem()))
             {
+                ItemStack[] statueEquip = tileEntityStatue.getStatueEntity().getLastActiveItems();
+                if (tileEntityStatue.getBlockType() == Blocks.gold_block
+                        && isDiamond(statueEquip[1]) && isDiamond(statueEquip[2]) && isDiamond(statueEquip[3]) && isDiamond(statueEquip[4]))
+                {
+                    player.triggerAchievement(YGCAchievementList.superExpensiveStatue);
+                }
+
                 return true;
             }
             else
@@ -104,6 +113,11 @@ public class BlockStatue extends IvBlockMultiblock
         }
 
         return super.onBlockActivated(world, x, y, z, player, par6, par7, par8, par9);
+    }
+
+    private boolean isDiamond(ItemStack stack)
+    {
+        return stack != null && stack.getItem() instanceof ItemArmor && ((ItemArmor) stack.getItem()).getArmorMaterial() == ItemArmor.ArmorMaterial.DIAMOND;
     }
 
     @Override

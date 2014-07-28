@@ -16,6 +16,7 @@ import ivorius.ivtoolkit.raytracing.IvRaytraceableObject;
 import ivorius.ivtoolkit.raytracing.IvRaytracedIntersection;
 import ivorius.ivtoolkit.raytracing.IvRaytracerMC;
 import ivorius.yegamolchattels.YeGamolChattels;
+import ivorius.yegamolchattels.achievements.YGCAchievementList;
 import ivorius.yegamolchattels.items.YGCItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -97,6 +98,9 @@ public class TileEntityWeaponRack extends IvTileEntityRotatable implements Parti
                 {
                     effectsApplied[slot] = true;
                     stack.stackSize--;
+
+                    if (entity instanceof EntityPlayer)
+                        ((EntityPlayer) entity).triggerAchievement(YGCAchievementList.weaponRackVariant);
                 }
 
                 return true;

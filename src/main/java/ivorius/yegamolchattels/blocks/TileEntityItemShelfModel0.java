@@ -13,6 +13,7 @@ import ivorius.ivtoolkit.raytracing.IvRaytraceableObject;
 import ivorius.ivtoolkit.raytracing.IvRaytracedIntersection;
 import ivorius.yegamolchattels.YGCConfig;
 import ivorius.yegamolchattels.YeGamolChattels;
+import ivorius.yegamolchattels.achievements.YGCAchievementList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemArmor;
@@ -357,6 +358,8 @@ public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements Pa
                         player.inventory.mainInventory[player.inventory.currentItem].stackSize--;
                         if (player.inventory.mainInventory[player.inventory.currentItem].stackSize <= 0)
                             player.inventory.mainInventory[player.inventory.currentItem] = null;
+
+                        player.triggerAchievement(YGCAchievementList.wardrobeSecret);
 
                         narniaActivating = !narniaActivating;
                         IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "narniaProgress", YeGamolChattels.network);
