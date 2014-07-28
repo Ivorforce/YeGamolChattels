@@ -104,7 +104,7 @@ public class ItemStatueChisel extends Item
 
     public static boolean isValidStatueBlock(TileEntityStatue.BlockFragment fragment)
     {
-        return !(fragment.getBlock() instanceof ITileEntityProvider);
+        return !(fragment.getBlock() instanceof ITileEntityProvider && fragment.getBlock().isOpaqueCube());
     }
 
     public static List<int[]> getValidPositions(List<int[]> positions, World world, TileEntityStatue.BlockFragment blockFragment, int x, int y, int z)
