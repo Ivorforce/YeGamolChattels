@@ -186,4 +186,62 @@ public class ContainerCarveStatue extends Container implements PacketGuiAction.A
         }
     }
 
+    @Override
+    public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2)
+    {
+        ItemStack itemstack = null;
+        Slot slot = (Slot)this.inventorySlots.get(par2);
+
+        if (slot != null && slot.getHasStack())
+        {
+            ItemStack itemstack1 = slot.getStack();
+            itemstack = itemstack1.copy();
+
+            if (par2 == 0)
+            {
+                if (!this.mergeItemStack(itemstack1, 1, 37, true))
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                if (((Slot)this.inventorySlots.get(0)).getHasStack() || !((Slot)this.inventorySlots.get(0)).isItemValid(itemstack1))
+                {
+                    return null;
+                }
+
+                if (itemstack1.hasTagCompound() && itemstack1.stackSize == 1)
+                {
+                    ((Slot)this.inventorySlots.get(0)).putStack(itemstack1.copy());
+                    itemstack1.stackSize = 0;
+                }
+                else if (itemstack1.stackSize >= 1)
+                {
+                    ItemStack oneItemStack = itemstack1.copy();
+                    oneItemStack.stackSize = 1;
+                    ((Slot)this.inventorySlots.get(0)).putStack(oneItemStack);
+                    --itemstack1.stackSize;
+                }
+            }
+
+            if (itemstack1.stackSize == 0)
+            {
+                slot.putStack((ItemStack)null);
+            }
+            else
+            {
+                slot.onSlotChanged();
+            }
+
+            if (itemstack1.stackSize == itemstack.stackSize)
+            {
+                return null;
+            }
+
+            slot.onPickupFromSlot(par1EntityPlayer, itemstack1);
+        }
+
+        return itemstack;
+    }
 }
