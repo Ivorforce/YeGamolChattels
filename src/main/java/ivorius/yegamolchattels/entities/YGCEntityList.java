@@ -9,4 +9,5 @@ public class YGCEntityList
     public static final int flagID = 1;
 
     public static final int ghostID = 100;
+    public static final int fakePlayerID = 101;
 }

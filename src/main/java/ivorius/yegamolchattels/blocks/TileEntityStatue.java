@@ -13,6 +13,7 @@ import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.ivtoolkit.tools.IvDateHelper;
 import ivorius.yegamolchattels.YGCConfig;
 import ivorius.yegamolchattels.YeGamolChattels;
+import ivorius.yegamolchattels.entities.EntityFakePlayer;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -158,7 +159,7 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
 
     public boolean letStatueComeAlive()
     {
-        if (statueEntity != null && YGCConfig.areLifeStatuesAllowed)
+        if (statueEntity != null && YGCConfig.areLifeStatuesAllowed && !(statueEntity instanceof EntityFakePlayer))
         {
             boolean dangerous = false;
             for (Class c : dangerousMobs)

@@ -73,8 +73,8 @@ public class GuiSlider extends GuiButton
 
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             float drawVal = (this.value - this.minValue) / (this.maxValue - this.minValue);
-            this.drawTexturedModalRect(this.xPosition + (int) (drawVal * (float) (this.width - 8)), this.yPosition, 0, 66, 4, 20);
-            this.drawTexturedModalRect(this.xPosition + (int) (drawVal * (float) (this.width - 8)) + 4, this.yPosition, 196, 66, 4, 20);
+            this.drawTexturedModalRect(this.xPosition + (int) (drawVal * (float) (this.width - 8)), this.yPosition, 0, 66, 4, height);
+            this.drawTexturedModalRect(this.xPosition + (int) (drawVal * (float) (this.width - 8)) + 4, this.yPosition, 196, 66, 4, height);
         }
     }
 

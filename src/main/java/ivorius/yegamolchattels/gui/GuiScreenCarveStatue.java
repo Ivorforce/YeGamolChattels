@@ -11,6 +11,7 @@ import ivorius.ivtoolkit.network.PacketGuiAction;
 import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.blocks.TileEntityStatue;
 import ivorius.yegamolchattels.items.ItemEntityVita;
+import ivorius.yegamolchattels.items.ItemStatueChisel;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -39,9 +40,21 @@ public class GuiScreenCarveStatue extends GuiContainer implements GuiControlList
     private GuiSlider sliderYawHead;
     private GuiSlider sliderPitchHead;
 
+    private GuiButton confirmButton;
+
+    private Entity lastCraftedEntity;
+    private int x;
+    private int y;
+    private int z;
+
     public GuiScreenCarveStatue(EntityPlayer player, int x, int y, int z)
     {
         super(new ContainerCarveStatue(player.inventory, player, x, y, z));
+
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        ySize = 166 + 5;
     }
 
     @Override
@@ -49,23 +62,37 @@ public class GuiScreenCarveStatue extends GuiContainer implements GuiControlList
     {
         super.initGui();
 
-        buttonList.add(new GuiButton(0, width / 2 - 80, height / 2 - 22, 85, 20, I18n.format("gui.carve.confirm")));
-        buttonList.add(sliderSwing = new GuiSlider(50, width / 2 - 80, height / 2 - 80, 85, 20, I18n.format("gui.carve.swing")));
+        buttonList.add(confirmButton = new GuiButton(0, width / 2 - 60, height / 2 - 20, 65, 20, I18n.format("gui.carve.confirm")));
+        confirmButton.enabled = false;
+        buttonList.add(sliderSwing = new GuiSlider(50, width / 2 - 80, height / 2 - 51, 85, 14, I18n.format("gui.carve.swing")));
         sliderSwing.addListener(this);
         sliderSwing.setMinValue(0.0f);
         sliderSwing.setMaxValue(5.0f);
-        buttonList.add(sliderStance = new GuiSlider(50, width / 2 - 80, height / 2 - 60, 85, 20, I18n.format("gui.carve.stance")));
+        buttonList.add(sliderStance = new GuiSlider(50, width / 2 - 80, height / 2 - 36, 85, 14, I18n.format("gui.carve.stance")));
         sliderStance.addListener(this);
         sliderStance.setMinValue(0.0f);
         sliderStance.setMaxValue(5.0f);
-        buttonList.add(sliderYawHead = new GuiSlider(50, width / 2 - 80, height / 2 - 100, 85, 20, I18n.format("gui.carve.head.yaw")));
+        buttonList.add(sliderYawHead = new GuiSlider(50, width / 2 - 80, height / 2 - 66, 85, 14, I18n.format("gui.carve.head.yaw")));
         sliderYawHead.addListener(this);
         sliderYawHead.setMinValue(-60.0f);
         sliderYawHead.setMaxValue(60.0f);
-        buttonList.add(sliderPitchHead = new GuiSlider(50, width / 2 - 80, height / 2 - 120, 85, 20, I18n.format("gui.carve.head.pitch")));
+        buttonList.add(sliderPitchHead = new GuiSlider(50, width / 2 - 80, height / 2 - 81, 85, 14, I18n.format("gui.carve.head.pitch")));
         sliderPitchHead.addListener(this);
         sliderPitchHead.setMinValue(-60.0f);
         sliderPitchHead.setMaxValue(60.0f);
+    }
+
+    @Override
+    public void updateScreen()
+    {
+        super.updateScreen();
+
+        Entity newCraftedEntity = ((ContainerCarveStatue) inventorySlots).getCurrentCraftedEntity();
+        if (lastCraftedEntity != newCraftedEntity)
+        {
+            lastCraftedEntity = newCraftedEntity;
+            confirmButton.enabled = newCraftedEntity != null && ItemStatueChisel.canCarveStatue(newCraftedEntity, mc.theWorld, x, y, z);
+        }
     }
 
     @Override
@@ -85,18 +112,21 @@ public class GuiScreenCarveStatue extends GuiContainer implements GuiControlList
         int l = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
 
-        ItemStack currentVita = ((ContainerCarveStatue) inventorySlots).statueEntityCarvingInventory.getStackInSlot(0);
-        if (currentVita != null)
+        Entity entity = lastCraftedEntity;
+
+        if (entity != null)
         {
-            Entity entity = ItemEntityVita.createEntity(currentVita, mc.theWorld);
+            if (entity instanceof EntityLivingBase)
+                TileEntityStatue.setRotations((EntityLivingBase) entity, sliderYawHead.getValue(), sliderPitchHead.getValue(), sliderSwing.getValue(), sliderStance.getValue());
 
-            if (entity != null)
+            if (entity instanceof EntitySquid)
             {
-                if (entity instanceof EntityLivingBase)
-                    TileEntityStatue.setRotations((EntityLivingBase) entity, sliderYawHead.getValue(), sliderPitchHead.getValue(), sliderSwing.getValue(), sliderStance.getValue());
-
-                float scale = 50f / (entity instanceof EntitySquid ? 2.5f : entity.height);
-                renderEntity(width / 2 + 45, height / 2 - 20, scale, entity);
+                renderEntity(width / 2 + 45, height / 2 - 44, 45.0f / (entity.height * 2.0f), entity);
+            }
+            else
+            {
+                float scale = 45f / entity.height;
+                renderEntity(width / 2 + 45, height / 2 - 14, scale, entity);
             }
         }
     }

@@ -77,8 +77,8 @@ public class GuiSliderMultivalue extends GuiButton
             for (float value : values)
             {
                 float drawVal = (value - this.minValue) / (this.maxValue - this.minValue);
-                this.drawTexturedModalRect(this.xPosition + (int) (drawVal * (float) (this.width - 8)), this.yPosition, 0, 66, 4, 20);
-                this.drawTexturedModalRect(this.xPosition + (int) (drawVal * (float) (this.width - 8)) + 4, this.yPosition, 196, 66, 4, 20);
+                this.drawTexturedModalRect(this.xPosition + (int) (drawVal * (float) (this.width - 8)), this.yPosition, 0, 66, 4, height);
+                this.drawTexturedModalRect(this.xPosition + (int) (drawVal * (float) (this.width - 8)) + 4, this.yPosition, 196, 66, 4, height);
             }
         }
     }

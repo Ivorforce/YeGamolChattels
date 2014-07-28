@@ -139,6 +139,10 @@ guiPlankSaw.title=Plank Saw
 guiPlanksRefinementFrame.title=Plank Refinement Frame
 
 gui.carve.confirm=Carve
+gui.carve.swing=Swing
+gui.carve.stance=Stance
+gui.carve.head.yaw=Yaw
+gui.carve.head.pitch=Pitch
 
 itemGroup.yegamolchattels=Ye Gamol Chattels
 itemGroup.ygc_entityvita=Entity Vitas

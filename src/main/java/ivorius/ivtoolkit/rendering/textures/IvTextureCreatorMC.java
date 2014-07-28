@@ -18,6 +18,10 @@
 
 package ivorius.ivtoolkit.rendering.textures;
 
+import cpw.mods.fml.relauncher.ReflectionHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ThreadDownloadImageData;
+import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
@@ -36,6 +40,12 @@ public class IvTextureCreatorMC
     public static BufferedImage getImage(IResourceManager resourceManager, ResourceLocation location, Logger logger) throws IOException
     {
         InputStream inputstream = null;
+
+        ITextureObject textureObject = Minecraft.getMinecraft().getTextureManager().getTexture(location);
+        if (textureObject instanceof ThreadDownloadImageData)
+        {
+            return ReflectionHelper.getPrivateValue(ThreadDownloadImageData.class, (ThreadDownloadImageData) textureObject, "bufferedImage", "field_110560_d");
+        }
 
         try
         {

@@ -8,6 +8,7 @@ package ivorius.yegamolchattels.gui;
 import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.network.PacketGuiAction;
 import ivorius.yegamolchattels.blocks.TileEntityStatue;
+import ivorius.yegamolchattels.entities.EntityFakePlayer;
 import ivorius.yegamolchattels.items.ItemEntityVita;
 import ivorius.yegamolchattels.items.ItemStatueChisel;
 import ivorius.yegamolchattels.items.YGCItems;
@@ -15,11 +16,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 /**
  * Created by lukas on 27.07.14.
@@ -31,12 +34,14 @@ public class ContainerCarveStatue extends Container implements PacketGuiAction.A
     private int statueY;
     private int statueZ;
 
+    private Entity currentCraftedEntity;
+
     public IInventory statueEntityCarvingInventory = new InventoryBasic("StatueCarve", true, 1)
     {
         @Override
         public boolean isItemValidForSlot(int par1, ItemStack itemStack)
         {
-            return itemStack.getItem() == YGCItems.entityVita;
+            return getEntity(itemStack, ContainerCarveStatue.this.usingPlayer.getEntityWorld()) != null;
         }
 
         public void markDirty()
@@ -53,19 +58,19 @@ public class ContainerCarveStatue extends Container implements PacketGuiAction.A
         this.statueY = statueY;
         this.statueZ = statueZ;
 
-        this.addSlotToContainer(new Slot(this.statueEntityCarvingInventory, 0, 44, 42));
+        this.addSlotToContainer(new Slot(this.statueEntityCarvingInventory, 0, 8, 69));
 
         for (int i = 0; i < 3; ++i)
         {
             for (int j = 0; j < 9; ++j)
             {
-                this.addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+                this.addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9, 8 + j * 18, 89 + i * 18));
             }
         }
 
         for (int i = 0; i < 9; ++i)
         {
-            this.addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
+            this.addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18, 147));
         }
     }
 
@@ -88,7 +93,30 @@ public class ContainerCarveStatue extends Container implements PacketGuiAction.A
 
     public void updateEntityOutput()
     {
+        currentCraftedEntity = getEntity(statueEntityCarvingInventory.getStackInSlot(0), usingPlayer.getEntityWorld());
+    }
 
+    public Entity getCurrentCraftedEntity()
+    {
+        return currentCraftedEntity;
+    }
+
+    public static Entity getEntity(ItemStack stack, World world)
+    {
+        if (stack != null)
+        {
+            if (stack.getItem() == YGCItems.entityVita)
+                return ItemEntityVita.createEntity(stack, world);
+            else if (stack.getItem() == Items.skull)
+            {
+                if (stack.hasTagCompound() && stack.getTagCompound().hasKey("SkullOwner"))
+                {
+                    return new EntityFakePlayer(world, stack.getTagCompound().getString("SkullOwner"));
+                }
+            }
+        }
+
+        return null;
     }
 
     @Override
@@ -121,7 +149,7 @@ public class ContainerCarveStatue extends Container implements PacketGuiAction.A
             ItemStack statueStack = statueEntityCarvingInventory.getStackInSlot(0);
             if (statueStack != null)
             {
-                Entity statueEntity = ItemEntityVita.createEntity(statueStack, usingPlayer.getEntityWorld());
+                Entity statueEntity = getEntity(statueStack, usingPlayer.getEntityWorld());
                 TileEntityStatue createdStatue = ItemStatueChisel.carveStatue(usingPlayer.inventory.getCurrentItem(), statueEntity, statueEntity.worldObj, statueX, statueY, statueZ, usingPlayer);
 
                 if (createdStatue != null)

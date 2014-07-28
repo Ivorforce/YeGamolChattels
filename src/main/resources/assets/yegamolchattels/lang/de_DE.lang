@@ -139,6 +139,10 @@ guiPlankSaw.title=Holzbrettsäge
 guiPlanksRefinementFrame.title=Holzbrett Halterung
 
 gui.carve.confirm=Meißeln
+gui.carve.swing=Angriff
+gui.carve.stance=Haltung
+gui.carve.head.yaw=Drehung
+gui.carve.head.pitch=Neigung
 
 itemGroup.yegamolchattels=Ye Gamol Chattels
 

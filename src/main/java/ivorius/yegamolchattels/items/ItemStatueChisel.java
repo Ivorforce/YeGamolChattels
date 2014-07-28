@@ -47,6 +47,22 @@ public class ItemStatueChisel extends Item
         return false;
     }
 
+    public static boolean canCarveStatue(Entity statueEntity, World world, int x, int y, int z)
+    {
+        TileEntityStatue.BlockFragment blockFragment = new TileEntityStatue.BlockFragment(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
+
+        if (isValidStatueBlock(blockFragment))
+        {
+            List<int[]> positions = ItemStatue.getStatuePositions(statueEntity, 0);
+            List<int[]> validPositions = getValidPositions(positions, world, blockFragment, x, y, z);
+
+            if (validPositions != null)
+                return true;
+        }
+
+        return false;
+    }
+
     public static TileEntityStatue carveStatue(ItemStack stack, Entity statueEntity, World world, int x, int y, int z, EntityLivingBase entityLivingBase)
     {
         TileEntityStatue.BlockFragment blockFragment = new TileEntityStatue.BlockFragment(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));

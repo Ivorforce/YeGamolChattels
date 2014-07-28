@@ -10,11 +10,13 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import ivorius.ivtoolkit.items.IvItemRendererModel;
+import ivorius.ivtoolkit.rendering.RenderFakePlayer;
 import ivorius.yegamolchattels.YGCProxy;
 import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.blocks.*;
 import ivorius.yegamolchattels.client.rendering.*;
 import ivorius.yegamolchattels.entities.EntityBanner;
+import ivorius.yegamolchattels.entities.EntityFakePlayer;
 import ivorius.yegamolchattels.entities.EntityFlag;
 import ivorius.yegamolchattels.entities.EntityGhost;
 import ivorius.yegamolchattels.items.YGCItems;
@@ -53,6 +55,7 @@ public class ClientProxy implements YGCProxy
         RenderingRegistry.registerEntityRenderingHandler(EntityBanner.class, new RenderBanner());
 
         RenderingRegistry.registerEntityRenderingHandler(EntityGhost.class, new RenderGhost());
+        RenderingRegistry.registerEntityRenderingHandler(EntityFakePlayer.class, new RenderFakePlayer());
 
         MinecraftForgeClient.registerItemRenderer(YGCItems.blockFragment, new RenderBlockFragment());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(YGCBlocks.lootChest), new IvItemRendererModel(new ModelLootChest(), new ResourceLocation(YeGamolChattels.MODID, YeGamolChattels.filePathTextures + "lootChest.png"), 1.0f, new float[]{0.0f, -0.1f, 0.0f}, new float[]{0.0f, 180.0f, 0.0f}));

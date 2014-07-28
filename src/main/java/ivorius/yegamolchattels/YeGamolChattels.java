@@ -22,10 +22,7 @@ import ivorius.ivtoolkit.math.IvBytePacker;
 import ivorius.ivtoolkit.network.*;
 import ivorius.yegamolchattels.achievements.YGCAchievementList;
 import ivorius.yegamolchattels.blocks.*;
-import ivorius.yegamolchattels.entities.EntityBanner;
-import ivorius.yegamolchattels.entities.EntityFlag;
-import ivorius.yegamolchattels.entities.EntityGhost;
-import ivorius.yegamolchattels.entities.YGCEntityList;
+import ivorius.yegamolchattels.entities.*;
 import ivorius.yegamolchattels.events.YGCFMLEventHandler;
 import ivorius.yegamolchattels.events.YGCForgeEventHandler;
 import ivorius.yegamolchattels.gui.YGCGuiHandler;
@@ -156,6 +153,8 @@ public class YeGamolChattels
 
         YGCItems.entityVita = new ItemEntityVita().setUnlocalizedName("ygcEntityVita").setTextureName(textureBase + "entityVita").setCreativeTab(tabVitas);
         GameRegistry.registerItem(YGCItems.entityVita, "entity_vita", MODID);
+
+        EntityRegistry.registerModEntity(EntityFakePlayer.class, "ygcFakePlayer", YGCEntityList.fakePlayerID, this, 80, 3, false);
 
         // --------------------------------Treasure piles--------------------------------
 
