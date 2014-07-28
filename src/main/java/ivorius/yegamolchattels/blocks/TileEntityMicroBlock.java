@@ -44,6 +44,12 @@ public class TileEntityMicroBlock extends TileEntity implements PartialUpdateHan
         this.blockCollection = new IvBlockCollection(MICROBLOCKS_PER_BLOCK_X, MICROBLOCKS_PER_BLOCK_Y, MICROBLOCKS_PER_BLOCK_Z);
     }
 
+    @Override
+    public boolean canUpdate()
+    {
+        return false;
+    }
+
     public IvBlockCollection getBlockCollection()
     {
         return blockCollection;
