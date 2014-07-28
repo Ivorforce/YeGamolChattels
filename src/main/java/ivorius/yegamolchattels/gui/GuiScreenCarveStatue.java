@@ -67,7 +67,7 @@ public class GuiScreenCarveStatue extends GuiContainer implements GuiControlList
         buttonList.add(sliderSwing = new GuiSlider(50, width / 2 - 80, height / 2 - 51, 85, 14, I18n.format("gui.carve.swing")));
         sliderSwing.addListener(this);
         sliderSwing.setMinValue(0.0f);
-        sliderSwing.setMaxValue(5.0f);
+        sliderSwing.setMaxValue(2.0f);
         buttonList.add(sliderStance = new GuiSlider(50, width / 2 - 80, height / 2 - 36, 85, 14, I18n.format("gui.carve.stance")));
         sliderStance.addListener(this);
         sliderStance.setMinValue(0.0f);
