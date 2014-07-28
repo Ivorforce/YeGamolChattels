@@ -108,7 +108,7 @@ public class EntityFakePlayer extends EntityMob
 
         playerUsername = tagCompound.getString("playerUsername");
 
-        if (worldObj.isRemote)
+        if (worldObj != null && worldObj.isRemote)
             setupCustomSkin();
     }
 

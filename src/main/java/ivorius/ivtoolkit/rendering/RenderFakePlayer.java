@@ -21,6 +21,7 @@ package ivorius.ivtoolkit.rendering;
 import ivorius.yegamolchattels.entities.EntityFakePlayer;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -28,7 +29,7 @@ import net.minecraft.util.ResourceLocation;
 /**
  * Created by lukas on 28.07.14.
  */
-public class RenderFakePlayer extends RendererLivingEntity
+public class RenderFakePlayer extends RenderBiped
 {
     public RenderFakePlayer()
     {
@@ -40,4 +41,5 @@ public class RenderFakePlayer extends RendererLivingEntity
     {
         return ((EntityFakePlayer) var1).getLocationSkin();
     }
+
 }

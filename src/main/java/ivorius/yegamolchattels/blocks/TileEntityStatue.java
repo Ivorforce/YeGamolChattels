@@ -37,7 +37,7 @@ import net.minecraft.util.AxisAlignedBB;
 
 public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialUpdateHandler
 {
-    public static Class[] equippableMobs = new Class[]{EntityZombie.class, EntitySkeleton.class};
+    public static Class[] equippableMobs = new Class[]{EntityZombie.class, EntitySkeleton.class, EntityFakePlayer.class};
     public static Class[] dangerousMobs = new Class[]{EntityGiantZombie.class, EntityDragon.class, EntityWither.class};
 
     private Entity statueEntity;
@@ -295,6 +295,8 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
                         statueEntity.setCurrentItemOrArmor(slot, item.copy());
                         item.stackSize = 0;
 
+                        updateStatueRotations();
+
                         IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "statueData", YeGamolChattels.network);
                         markDirty();
                     }
@@ -343,6 +345,7 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
                     }
                 }
 
+                updateStatueRotations();
                 IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "statueData", YeGamolChattels.network);
                 markDirty();
             }
