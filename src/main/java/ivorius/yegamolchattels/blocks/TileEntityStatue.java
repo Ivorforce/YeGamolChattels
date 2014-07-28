@@ -28,6 +28,7 @@ import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -323,32 +324,52 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
         return false;
     }
 
-    public void dropEquipment()
+    public void addEquipmentToInventory(EntityPlayer player)
     {
         if (statueEntity != null)
         {
+            for (int i = 0; i < statueEntity.getLastActiveItems().length; i++)
+            {
+                if (statueEntity.getLastActiveItems()[i] != null)
+                {
+                    if (player.inventory.addItemStackToInventory(statueEntity.getLastActiveItems()[i]))
+                        statueEntity.getLastActiveItems()[i] = null;
+                }
+            }
+
+            updateStatueRotations();
+
             if (!worldObj.isRemote)
             {
-                for (int i = 0; i < statueEntity.getLastActiveItems().length; i++)
-                {
-                    if (statueEntity.getLastActiveItems()[i] != null)
-                    {
-                        float var7 = 0.7F;
-                        double var8 = worldObj.rand.nextFloat() * var7 + (1.0F - var7) * 0.5D;
-                        double var10 = worldObj.rand.nextFloat() * var7 + (1.0F - var7) * 0.2D + 0.6D;
-                        double var12 = worldObj.rand.nextFloat() * var7 + (1.0F - var7) * 0.5D;
-                        EntityItem var14 = new EntityItem(worldObj, xCoord + var8, yCoord + var10, zCoord + var12, statueEntity.getLastActiveItems()[i]);
-                        var14.delayBeforeCanPickup = 10;
-                        worldObj.spawnEntityInWorld(var14);
-
-                        statueEntity.getLastActiveItems()[i] = null;
-                    }
-                }
-
-                updateStatueRotations();
                 IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "statueData", YeGamolChattels.network);
                 markDirty();
             }
+        }
+    }
+
+    public void dropEquipment()
+    {
+        if (statueEntity != null && !worldObj.isRemote)
+        {
+            for (int i = 0; i < statueEntity.getLastActiveItems().length; i++)
+            {
+                if (statueEntity.getLastActiveItems()[i] != null)
+                {
+                    float var7 = 0.7F;
+                    double var8 = worldObj.rand.nextFloat() * var7 + (1.0F - var7) * 0.5D;
+                    double var10 = worldObj.rand.nextFloat() * var7 + (1.0F - var7) * 0.2D + 0.6D;
+                    double var12 = worldObj.rand.nextFloat() * var7 + (1.0F - var7) * 0.5D;
+                    EntityItem var14 = new EntityItem(worldObj, xCoord + var8, yCoord + var10, zCoord + var12, statueEntity.getLastActiveItems()[i]);
+                    var14.delayBeforeCanPickup = 10;
+                    worldObj.spawnEntityInWorld(var14);
+
+                    statueEntity.getLastActiveItems()[i] = null;
+                }
+            }
+
+            updateStatueRotations();
+            IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "statueData", YeGamolChattels.network);
+            markDirty();
         }
     }
 

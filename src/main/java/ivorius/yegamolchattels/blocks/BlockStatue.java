@@ -96,7 +96,9 @@ public class BlockStatue extends IvBlockMultiblock
             }
             else
             {
-                tileEntityStatue.dropEquipment();
+                tileEntityStatue.addEquipmentToInventory(player);
+//                tileEntityStatue.dropEquipment();
+
                 return true;
             }
         }
