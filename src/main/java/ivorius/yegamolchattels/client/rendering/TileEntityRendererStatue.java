@@ -119,7 +119,7 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
                     TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
 
                     ITextureObject entityResourceTexture = textureManager.getTexture(entityResourceLocation);
-                    if (entityResourceTexture != null && (entityResourceTexture instanceof ThreadDownloadImageData && !((ThreadDownloadImageData) entityResourceTexture).isTextureUploaded()))
+                    if (entityResourceTexture instanceof ThreadDownloadImageData && !((ThreadDownloadImageData) entityResourceTexture).isTextureUploaded())
                     {
                         return null; // Wait
                     }
