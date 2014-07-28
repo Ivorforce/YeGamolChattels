@@ -64,7 +64,9 @@ public class ItemChisel extends ItemTool
         }
         else
         {
-            player.addChatComponentMessage(new ChatComponentTranslation("item.ygcChisel.noHammer"));
+            if (!world.isRemote)
+                player.addChatComponentMessage(new ChatComponentTranslation("item.ygcChisel.noHammer"));
+
             return false;
         }
     }

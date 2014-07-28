@@ -41,6 +41,7 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Collections;
 import java.util.HashSet;
 
 @Mod(modid = YeGamolChattels.MODID, version = YeGamolChattels.VERSION, name = YeGamolChattels.NAME, guiFactory = "ivorius.yegamolchattels.gui.YGCConfigGuiFactory")
@@ -145,6 +146,7 @@ public class YeGamolChattels
         GameRegistry.registerTileEntity(TileEntityStatue.class, "ygcStatue");
 
         YGCItems.pointChiselIron = new ItemStatueChisel().setUnlocalizedName("ygcChiselIron_point").setTextureName(textureBase + "chiselIron_point").setCreativeTab(tabMain);
+        YGCItems.pointChiselIron.setMaxDamage(10).setMaxStackSize(1).setNoRepair();
         GameRegistry.registerItem(YGCItems.pointChiselIron, "iron_chisel_point", MODID);
 
         YGCItems.entityVita = new ItemEntityVita().setUnlocalizedName("ygcEntityVita").setTextureName(textureBase + "entityVita").setCreativeTab(tabVitas);
@@ -265,15 +267,15 @@ public class YeGamolChattels
         GameRegistry.registerBlock(YGCBlocks.microBlock, ItemMicroBlock.class, "ygcMicroBlock");
         GameRegistry.registerTileEntity(TileEntityMicroBlock.class, "ygcMicroBlock");
 
-        YGCItems.detailChiselIron = new ItemChisel(0, 1.0f, 0.0f, Item.ToolMaterial.IRON, new HashSet()).setUnlocalizedName("ygcChiselIron_detail").setTextureName(textureBase + "chiselIron_detail").setCreativeTab(tabMain);
+        YGCItems.detailChiselIron = new ItemChisel(0, 1.0f, 0.0f, Item.ToolMaterial.IRON, Collections.emptySet()).setUnlocalizedName("ygcChiselIron_detail").setTextureName(textureBase + "chiselIron_detail").setCreativeTab(tabMain);
         YGCItems.detailChiselIron.setMaxDamage(200).setMaxStackSize(1).setNoRepair();
         GameRegistry.registerItem(YGCItems.detailChiselIron, "iron_chisel_detail", MODID);
 
-        YGCItems.carvingChiselIron = new ItemChisel(1, 0.4f, 0.0f, Item.ToolMaterial.IRON, new HashSet()).setUnlocalizedName("ygcChiselIron").setTextureName(textureBase + "chiselIron").setCreativeTab(tabMain);
+        YGCItems.carvingChiselIron = new ItemChisel(1, 0.4f, 0.0f, Item.ToolMaterial.IRON, Collections.emptySet()).setUnlocalizedName("ygcChiselIron").setTextureName(textureBase + "chiselIron").setCreativeTab(tabMain);
         YGCItems.carvingChiselIron.setMaxDamage(200).setMaxStackSize(1).setNoRepair();
         GameRegistry.registerItem(YGCItems.carvingChiselIron, "iron_chisel", MODID);
 
-        YGCItems.clubHammer = (ItemClubHammer) new ItemClubHammer(0.0f, Item.ToolMaterial.IRON, new HashSet()).setUnlocalizedName("ygcClubHammer").setTextureName(textureBase + "clubHammer").setCreativeTab(tabMain);
+        YGCItems.clubHammer = (ItemClubHammer) new ItemClubHammer(0.0f, Item.ToolMaterial.IRON, Collections.emptySet()).setUnlocalizedName("ygcClubHammer").setTextureName(textureBase + "clubHammer").setCreativeTab(tabMain);
         YGCItems.clubHammer.setMaxDamage(200).setMaxStackSize(1).setNoRepair();
         GameRegistry.registerItem(YGCItems.clubHammer, "club_hammer", MODID);
 

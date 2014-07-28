@@ -7,6 +7,8 @@ package ivorius.yegamolchattels.gui;
 
 import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.network.PacketGuiAction;
+import ivorius.ivtoolkit.tools.IvInventoryHelper;
+import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.blocks.TileEntityStatue;
 import ivorius.yegamolchattels.entities.EntityFakePlayer;
 import ivorius.yegamolchattels.items.ItemEntityVita;
@@ -22,6 +24,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 /**
@@ -155,19 +159,29 @@ public class ContainerCarveStatue extends Container implements PacketGuiAction.A
             ItemStack statueStack = statueEntityCarvingInventory.getStackInSlot(0);
             if (statueStack != null)
             {
-                Entity statueEntity = getEntity(statueStack, usingPlayer.getEntityWorld());
-                TileEntityStatue createdStatue = ItemStatueChisel.carveStatue(usingPlayer.inventory.getCurrentItem(), statueEntity, statueEntity.worldObj, statueX, statueY, statueZ, usingPlayer);
-
-                if (createdStatue != null)
+                if (usingPlayer.inventory.hasItem(YGCItems.clubHammer))
                 {
-                    createdStatue.setStatueYawHead(yawHead);
-                    createdStatue.setStatuePitchHead(pitchHead);
-                    createdStatue.setStatueSwing(swing);
-                    createdStatue.setStatueStance(stance);
+                    Entity statueEntity = getEntity(statueStack, usingPlayer.getEntityWorld());
+                    TileEntityStatue createdStatue = ItemStatueChisel.carveStatue(usingPlayer.inventory.getCurrentItem(), statueEntity, statueEntity.worldObj, statueX, statueY, statueZ, usingPlayer);
 
-                    statueEntityCarvingInventory.decrStackSize(0, 1);
-                    usingPlayer.closeScreen();
+                    if (createdStatue != null)
+                    {
+                        createdStatue.setStatueYawHead(yawHead);
+                        createdStatue.setStatuePitchHead(pitchHead);
+                        createdStatue.setStatueSwing(swing);
+                        createdStatue.setStatueStance(stance);
+
+                        int clubHammerSlot = IvInventoryHelper.getInventorySlotContainItem(usingPlayer.inventory, YGCItems.clubHammer);
+                        usingPlayer.inventory.getStackInSlot(clubHammerSlot).damageItem(1, usingPlayer);
+                        statueEntityCarvingInventory.decrStackSize(0, 1);
+                    }
                 }
+                else
+                {
+                    usingPlayer.addChatComponentMessage(new ChatComponentTranslation("item.ygcChisel.noHammer"));
+                }
+
+                usingPlayer.closeScreen();
             }
         }
     }

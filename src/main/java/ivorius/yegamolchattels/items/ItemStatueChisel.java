@@ -14,10 +14,10 @@ import ivorius.yegamolchattels.gui.YGCGuiHandler;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -31,17 +31,24 @@ public class ItemStatueChisel extends Item
     @Override
     public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int blockSide, float par8, float par9, float par10)
     {
-        TileEntityStatue.BlockFragment blockFragment = new TileEntityStatue.BlockFragment(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
-
-        if (isValidStatueBlock(blockFragment))
+        if (player.inventory.hasItem(YGCItems.clubHammer))
         {
-            if (!world.isRemote) // Some entities start with random sizes
+            TileEntityStatue.BlockFragment blockFragment = new TileEntityStatue.BlockFragment(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
+
+            if (isValidStatueBlock(blockFragment))
             {
-                player.openGui(YeGamolChattels.instance, YGCGuiHandler.statueCarvingGuiID, world, x, y, z);
+                if (!world.isRemote) // Some entities start with random sizes
+                {
+                    player.openGui(YeGamolChattels.instance, YGCGuiHandler.statueCarvingGuiID, world, x, y, z);
+                }
 
+                return true;
             }
-
-            return true;
+        }
+        else
+        {
+            if (!world.isRemote)
+                player.addChatComponentMessage(new ChatComponentTranslation("item.ygcChisel.noHammer"));
         }
 
         return false;
