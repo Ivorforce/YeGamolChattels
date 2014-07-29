@@ -43,6 +43,7 @@ public class IvTextureCreatorMC
     public static BufferedImage getImage(IResourceManager resourceManager, ResourceLocation location, Logger logger) throws IOException
     {
         ITextureObject textureObject = Minecraft.getMinecraft().getTextureManager().getTexture(location);
+
         if (textureObject instanceof ThreadDownloadImageData)
         {
             return ReflectionHelper.getPrivateValue(ThreadDownloadImageData.class, (ThreadDownloadImageData) textureObject, "bufferedImage", "field_110560_d");
@@ -51,15 +52,13 @@ public class IvTextureCreatorMC
         {
             BufferedImage bufferedimage = null;
 
-            for (Object layeredTextureName : ((LayeredTexture) textureObject).layeredTextureNames)
+            for (Object layeredTextureNameObj : ((LayeredTexture) textureObject).layeredTextureNames)
             {
-                String s = (String) layeredTextureName;
+                String layeredTextureName = (String) layeredTextureNameObj;
 
-                if (s != null)
+                if (layeredTextureName != null)
                 {
-                    InputStream inputstream = resourceManager.getResource(new ResourceLocation(s)).getInputStream();
-
-                    try
+                    try (InputStream inputstream = resourceManager.getResource(new ResourceLocation(layeredTextureName)).getInputStream())
                     {
                         BufferedImage bufferImageLayer = ImageIO.read(inputstream);
 
@@ -69,10 +68,6 @@ public class IvTextureCreatorMC
                         }
 
                         bufferedimage.getGraphics().drawImage(bufferImageLayer, 0, 0, null);
-                    }
-                    finally
-                    {
-                        inputstream.close();
                     }
                 }
             }
@@ -85,21 +80,11 @@ public class IvTextureCreatorMC
         }
         else
         {
-            InputStream inputstream = null;
-            try
-            {
-                IResource iresource = resourceManager.getResource(location);
-                inputstream = iresource.getInputStream();
-                BufferedImage bufferedimage = ImageIO.read(inputstream);
+            IResource iresource = resourceManager.getResource(location);
 
-                return bufferedimage;
-            }
-            finally
+            try (InputStream inputstream = iresource.getInputStream())
             {
-                if (inputstream != null)
-                {
-                    inputstream.close();
-                }
+                return ImageIO.read(inputstream);
             }
         }
     }

@@ -22,6 +22,7 @@ public class RenderEngineOverride extends TextureManager
         super(null);
     }
 
+    @Override
     public void bindTexture(ResourceLocation par1ResourceLocation)
     {
         if (textureOverride == null)
@@ -42,46 +43,55 @@ public class RenderEngineOverride extends TextureManager
         }
     }
 
+    @Override
     public ResourceLocation getResourceLocation(int par1)
     {
         return renderEngine.getResourceLocation(par1);
     }
 
+    @Override
     public boolean loadTextureMap(ResourceLocation par1ResourceLocation, TextureMap par2TextureMap)
     {
         return renderEngine.loadTextureMap(par1ResourceLocation, par2TextureMap);
     }
 
+    @Override
     public boolean loadTickableTexture(ResourceLocation par1ResourceLocation, ITickableTextureObject par2TickableTextureObject)
     {
         return renderEngine.loadTickableTexture(par1ResourceLocation, par2TickableTextureObject);
     }
 
+    @Override
     public boolean loadTexture(ResourceLocation par1ResourceLocation, final ITextureObject par2TextureObject)
     {
         return renderEngine.loadTexture(par1ResourceLocation, par2TextureObject);
     }
 
+    @Override
     public ITextureObject getTexture(ResourceLocation par1ResourceLocation)
     {
         return renderEngine.getTexture(par1ResourceLocation);
     }
 
+    @Override
     public ResourceLocation getDynamicTextureLocation(String par1Str, DynamicTexture par2DynamicTexture)
     {
         return renderEngine.getDynamicTextureLocation(par1Str, par2DynamicTexture);
     }
 
+    @Override
     public void tick()
     {
         renderEngine.tick();
     }
 
+    @Override
     public void deleteTexture(ResourceLocation p_147645_1_)
     {
         renderEngine.deleteTexture(p_147645_1_);
     }
 
+    @Override
     public void onResourceManagerReload(IResourceManager par1ResourceManager)
     {
         renderEngine.onResourceManagerReload(par1ResourceManager);
