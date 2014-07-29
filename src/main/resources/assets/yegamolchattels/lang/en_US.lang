@@ -149,9 +149,9 @@ itemGroup.yegamolchattels=Ye Gamol Chattels
 itemGroup.ygc_entityvita=Entity Vitas
 
 yegamolchattels.configgui.title=Ye Gamol Chattels
-yegamolchattels.configgui.general=General
+yegamolchattels.configgui.ctgy.general=General
 yegamolchattels.configgui.ctgy.general.tooltip=General Settings
-yegamolchattels.configgui.visual=Visual
+yegamolchattels.configgui.ctgy.visual=Visual
 yegamolchattels.configgui.ctgy.visual.tooltip=Visual Settings
 
 achievement.refinedPlank=I love this plank
