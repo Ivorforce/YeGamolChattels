@@ -39,12 +39,14 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
 public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialUpdateHandler
 {
     public static Class[] equippableMobs = new Class[]{EntityZombie.class, EntitySkeleton.class, EntityFakePlayer.class};
     public static Class[] dangerousMobs = new Class[]{EntityGiantZombie.class, EntityDragon.class, EntityWither.class};
 
+    private NBTTagCompound storedStatueTag;
     private Statue statue;
 
     public Statue getStatue()
@@ -61,6 +63,18 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
     {
         IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "statueData", YeGamolChattels.network);
         markDirty();
+    }
+
+    @Override
+    public void setWorldObj(World world)
+    {
+        super.setWorldObj(world);
+
+        if (storedStatueTag != null)
+        {
+            createStatueFromNBT(storedStatueTag);
+            storedStatueTag = null;
+        }
     }
 
     @Override
@@ -172,6 +186,18 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
 
     public void readStatueDataFromNBT(NBTTagCompound compound)
     {
+        if (worldObj != null)
+        {
+            createStatueFromNBT(compound);
+        }
+        else
+        {
+            storedStatueTag = compound;
+        }
+    }
+
+    private void createStatueFromNBT(NBTTagCompound compound)
+    {
         if (compound.hasKey("statue"))
             statue = new Statue(compound.getCompoundTag("statue"), worldObj);
         else if (isParent())
@@ -182,36 +208,43 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
 
     public boolean isEntityEquippable()
     {
-        boolean isEqquipable = false;
+        if (statue != null)
+        {
+            boolean isEqquipable = false;
 
-        Entity statueEntity = statue.getEntity();
-        for (Class eq : equippableMobs)
-            if (eq.isAssignableFrom(statueEntity.getClass()))
-                isEqquipable = true;
+            Entity statueEntity = statue.getEntity();
+            for (Class eq : equippableMobs)
+                if (eq.isAssignableFrom(statueEntity.getClass()))
+                    isEqquipable = true;
 
-        return isEqquipable;
+            return isEqquipable;
+        }
+
+        return false;
     }
 
     public boolean tryEquipping(ItemStack item)
     {
-        if (isEntityEquippable())
+        if (item != null && statue != null)
         {
-            Entity statueEntity = statue.getEntity();
-            int slot = item == null ? -1 : EntityLiving.getArmorPosition(item);
-
-            if (slot >= 0 && statueEntity.getLastActiveItems()[slot] == null)
+            if (isEntityEquippable())
             {
-                if (!worldObj.isRemote)
+                Entity statueEntity = statue.getEntity();
+                int slot = EntityLiving.getArmorPosition(item);
+
+                if (slot >= 0 && statueEntity.getLastActiveItems()[slot] == null)
                 {
-                    statueEntity.setCurrentItemOrArmor(slot, item.copy());
-                    item.stackSize = 0;
+                    if (!worldObj.isRemote)
+                    {
+                        statueEntity.setCurrentItemOrArmor(slot, item.copy());
+                        item.stackSize = 0;
 
-                    statueDataChanged();
+                        statueDataChanged();
+                    }
+
+                    return true;
                 }
-
-                return true;
             }
-        }
 
 //            if (statueEntity instanceof EntityHorse)
 //            {
@@ -226,31 +259,35 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
 //
 //                }
 //            }
+        }
 
         return false;
     }
 
     public void addEquipmentToInventory(EntityPlayer player)
     {
-        Entity statueEntity = statue.getEntity();
-        for (int i = 0; i < statueEntity.getLastActiveItems().length; i++)
+        if (statue != null)
         {
-            if (statueEntity.getLastActiveItems()[i] != null)
+            Entity statueEntity = statue.getEntity();
+            for (int i = 0; i < statueEntity.getLastActiveItems().length; i++)
             {
-                if (player.inventory.addItemStackToInventory(statueEntity.getLastActiveItems()[i]))
-                    statueEntity.getLastActiveItems()[i] = null;
+                if (statueEntity.getLastActiveItems()[i] != null)
+                {
+                    if (player.inventory.addItemStackToInventory(statueEntity.getLastActiveItems()[i]))
+                        statueEntity.getLastActiveItems()[i] = null;
+                }
             }
-        }
 
-        if (!worldObj.isRemote)
-        {
-            statueDataChanged();
+            if (!worldObj.isRemote)
+            {
+                statueDataChanged();
+            }
         }
     }
 
     public void dropEquipment()
     {
-        if (!worldObj.isRemote)
+        if (!worldObj.isRemote && statue != null)
         {
             Entity statueEntity = statue.getEntity();
 

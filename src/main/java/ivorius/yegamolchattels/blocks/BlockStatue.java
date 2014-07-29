@@ -94,7 +94,7 @@ public class BlockStatue extends IvBlockMultiblock
             if (tileEntityStatue.tryEquipping(player.getHeldItem()))
             {
                 ItemStack[] statueEquip = tileEntityStatue.getStatue().getEntity().getLastActiveItems();
-                if (tileEntityStatue.getBlockType() == Blocks.gold_block
+                if (tileEntityStatue.getStatue().getMaterial().getBlock() == Blocks.gold_block
                         && isDiamond(statueEquip[1]) && isDiamond(statueEquip[2]) && isDiamond(statueEquip[3]) && isDiamond(statueEquip[4]))
                 {
                     player.triggerAchievement(YGCAchievementList.superExpensiveStatue);
