@@ -22,6 +22,7 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.client.renderer.texture.LayeredTexture;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
@@ -29,8 +30,10 @@ import org.apache.logging.log4j.Logger;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
 
 /**
  * Created by lukas on 26.07.14.
@@ -39,47 +42,64 @@ public class IvTextureCreatorMC
 {
     public static BufferedImage getImage(IResourceManager resourceManager, ResourceLocation location, Logger logger) throws IOException
     {
-        InputStream inputstream = null;
-
         ITextureObject textureObject = Minecraft.getMinecraft().getTextureManager().getTexture(location);
         if (textureObject instanceof ThreadDownloadImageData)
         {
             return ReflectionHelper.getPrivateValue(ThreadDownloadImageData.class, (ThreadDownloadImageData) textureObject, "bufferedImage", "field_110560_d");
         }
-
-        try
+        else if (textureObject instanceof LayeredTexture)
         {
-            IResource iresource = resourceManager.getResource(location);
-            inputstream = iresource.getInputStream();
-            BufferedImage bufferedimage = ImageIO.read(inputstream);
-//            boolean flag = false;
-//            boolean flag1 = false;
-//
-//            if (iresource.hasMetadata())
-//            {
-//                try
-//                {
-//                    TextureMetadataSection texturemetadatasection = (TextureMetadataSection) iresource.getMetadata("texture");
-//
-//                    if (texturemetadatasection != null)
-//                    {
-//                        flag = texturemetadatasection.getTextureBlur();
-//                        flag1 = texturemetadatasection.getTextureClamp();
-//                    }
-//                }
-//                catch (RuntimeException runtimeexception)
-//                {
-//                    logger.warn("Failed reading metadata of: " + location, runtimeexception);
-//                }
-//            }
+            BufferedImage bufferedimage = null;
+
+            for (Object layeredTextureName : ((LayeredTexture) textureObject).layeredTextureNames)
+            {
+                String s = (String) layeredTextureName;
+
+                if (s != null)
+                {
+                    InputStream inputstream = resourceManager.getResource(new ResourceLocation(s)).getInputStream();
+
+                    try
+                    {
+                        BufferedImage bufferImageLayer = ImageIO.read(inputstream);
+
+                        if (bufferedimage == null)
+                        {
+                            bufferedimage = new BufferedImage(bufferImageLayer.getWidth(), bufferImageLayer.getHeight(), 2);
+                        }
+
+                        bufferedimage.getGraphics().drawImage(bufferImageLayer, 0, 0, null);
+                    }
+                    finally
+                    {
+                        inputstream.close();
+                    }
+                }
+            }
 
             return bufferedimage;
         }
-        finally
+        else if (textureObject instanceof PreBufferedTexture)
         {
-            if (inputstream != null)
+            return ((PreBufferedTexture) textureObject).getBufferedImage();
+        }
+        else
+        {
+            InputStream inputstream = null;
+            try
             {
-                inputstream.close();
+                IResource iresource = resourceManager.getResource(location);
+                inputstream = iresource.getInputStream();
+                BufferedImage bufferedimage = ImageIO.read(inputstream);
+
+                return bufferedimage;
+            }
+            finally
+            {
+                if (inputstream != null)
+                {
+                    inputstream.close();
+                }
             }
         }
     }

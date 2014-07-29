@@ -37,6 +37,11 @@ public class PreBufferedTexture extends AbstractTexture
         this.bufferedImage = bufferedImage;
     }
 
+    public BufferedImage getBufferedImage()
+    {
+        return bufferedImage;
+    }
+
     @Override
     public void loadTexture(IResourceManager var1) throws IOException
     {
