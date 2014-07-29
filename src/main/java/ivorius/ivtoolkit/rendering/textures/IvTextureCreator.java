@@ -28,6 +28,13 @@ public class IvTextureCreator
 {
     public static BufferedImage applyEffect(BufferedImage texture, ImageEffect effect)
     {
+        if (texture.getType() == BufferedImage.TYPE_BYTE_INDEXED) // INDEXED does not work... TODO?
+        {
+            BufferedImage notIndexed = new BufferedImage(texture.getWidth(), texture.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            notIndexed.getGraphics().drawImage(texture, 0, 0, null);
+            texture = notIndexed;
+        }
+
         BufferedImage modified = new BufferedImage(texture.getWidth(), texture.getHeight(), BufferedImage.TYPE_INT_ARGB);
         WritableRaster sourceRaster = texture.getRaster();
         WritableRaster destRaster = modified.getRaster();
