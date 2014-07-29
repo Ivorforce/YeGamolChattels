@@ -152,7 +152,7 @@ public class YeGamolChattels
         YGCItems.entityVita = new ItemEntityVita().setUnlocalizedName("ygcEntityVita").setTextureName(textureBase + "entityVita").setCreativeTab(tabVitas);
         GameRegistry.registerItem(YGCItems.entityVita, "entity_vita", MODID);
 
-        EntityRegistry.registerModEntity(EntityFakePlayer.class, "ygcFakePlayer", YGCEntityList.fakePlayerID, this, 80, 3, false);
+        EntityRegistry.registerModEntity(EntityFakePlayer.class, "fakePlayer", YGCEntityList.fakePlayerID, this, 80, 3, false);
 
         // --------------------------------Treasure piles--------------------------------
 

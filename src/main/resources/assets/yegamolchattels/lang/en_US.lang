@@ -134,6 +134,7 @@ item.ygcEntityVita.base=%s Vita
 item.ygcEntityVita.unknown=Unidentified
 
 entity.ygcGhost.name=Ghost
+entity.yegamolchattels.fakePlayer.name=Player
 
 guiPlankSaw.title=Plank Saw
 guiPlanksRefinementFrame.title=Plank Refinement Frame

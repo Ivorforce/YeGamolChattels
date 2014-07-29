@@ -18,7 +18,6 @@ import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.achievements.YGCAchievementList;
 import ivorius.yegamolchattels.client.rendering.StatueTextureHandler;
 import ivorius.yegamolchattels.entities.EntityFakePlayer;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -46,82 +45,16 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
     public static Class[] equippableMobs = new Class[]{EntityZombie.class, EntitySkeleton.class, EntityFakePlayer.class};
     public static Class[] dangerousMobs = new Class[]{EntityGiantZombie.class, EntityDragon.class, EntityWither.class};
 
-    private Entity statueEntity;
-    private BlockFragment statueBlock;
+    private Statue statue;
 
-    private float statueYawHead;
-    private float statuePitchHead;
-    private float statueSwing;
-    private float statueStance;
-
-    public Entity getStatueEntity()
+    public Statue getStatue()
     {
-        return statueEntity;
+        return statue;
     }
 
-    public void setStatueEntity(Entity statueEntity, boolean safe)
+    public void setStatue(Statue statue)
     {
-        if (safe && statueEntity == null)
-        {
-            YeGamolChattels.logger.error("Could not read entity for statue! Using pig instead. (isRemote=" + worldObj.isRemote + ")");
-            statueEntity = new EntityPig(getWorldObj());
-        }
-
-        this.statueEntity = statueEntity;
-    }
-
-    public BlockFragment getStatueBlock()
-    {
-        return statueBlock;
-    }
-
-    public void setStatueBlock(BlockFragment statueBlock)
-    {
-        this.statueBlock = statueBlock;
-    }
-
-    public float getStatueYawHead()
-    {
-        return statueYawHead;
-    }
-
-    public void setStatueYawHead(float statueYawHead)
-    {
-        this.statueYawHead = statueYawHead;
-        updateStatueRotations();
-    }
-
-    public float getStatuePitchHead()
-    {
-        return statuePitchHead;
-    }
-
-    public void setStatuePitchHead(float statuePitchHead)
-    {
-        this.statuePitchHead = statuePitchHead;
-        updateStatueRotations();
-    }
-
-    public float getStatueSwing()
-    {
-        return statueSwing;
-    }
-
-    public void setStatueSwing(float statueSwing)
-    {
-        this.statueSwing = statueSwing;
-        updateStatueRotations();
-    }
-
-    public float getStatueStance()
-    {
-        return statueStance;
-    }
-
-    public void setStatueStance(float statueStance)
-    {
-        this.statueStance = statueStance;
-        updateStatueRotations();
+        this.statue = statue;
     }
 
     public void statueDataChanged()
@@ -130,41 +63,38 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
         markDirty();
     }
 
-    private void updateStatueRotations()
-    {
-        if (statueEntity instanceof EntityLivingBase)
-            setRotations((EntityLivingBase) statueEntity, statueYawHead, statuePitchHead, statueSwing, statueStance);
-    }
-
     @Override
-    public void updateEntity()
+    public void updateEntityParent()
     {
-        super.updateEntity();
-
-        if (YGCConfig.easterEggsAllowed && worldObj.isRemote && statueEntity instanceof EntityLiving && IvDateHelper.isHalloween())
+        if (statue != null)
         {
-            EntityLiving livingStatue = (EntityLiving) statueEntity;
+            Entity statueEntity = statue.getEntity();
+            if (YGCConfig.easterEggsAllowed && worldObj.isRemote && statueEntity instanceof EntityLiving && IvDateHelper.isHalloween())
+            {
+                EntityLiving livingStatue = (EntityLiving) statueEntity;
 
-            double[] center = getActiveCenterCoords();
-            EntityLivingBase player = YeGamolChattels.proxy.getClientPlayer();
-            statueEntity.setPosition(center[0], center[1], center[2]);
+                double[] center = getActiveCenterCoords();
+                EntityLivingBase player = YeGamolChattels.proxy.getClientPlayer();
+                statueEntity.setPosition(center[0], center[1], center[2]);
 
-            if (livingStatue instanceof EntityVillager)
-                livingStatue.rotationYawHead = livingStatue.rotationYawHead + 180.0f; // Don't ask
+                if (livingStatue instanceof EntityVillager)
+                    livingStatue.rotationYawHead = livingStatue.rotationYawHead + 180.0f; // Don't ask
 
-            livingStatue.getLookHelper().setLookPositionWithEntity(player, 2.0f, 2.0f);
-            livingStatue.getLookHelper().onUpdateLook();
+                livingStatue.getLookHelper().setLookPositionWithEntity(player, 2.0f, 2.0f);
+                livingStatue.getLookHelper().onUpdateLook();
 
-            if (livingStatue instanceof EntityVillager)
-                livingStatue.rotationYawHead = livingStatue.rotationYawHead + 180.0f; // Don't ask
+                if (livingStatue instanceof EntityVillager)
+                    livingStatue.rotationYawHead = livingStatue.rotationYawHead + 180.0f; // Don't ask
 
-            livingStatue.prevRotationYawHead = livingStatue.rotationYawHead;
-            livingStatue.prevRotationPitch = livingStatue.rotationPitch;
+                livingStatue.prevRotationYawHead = livingStatue.rotationYawHead;
+                livingStatue.prevRotationPitch = livingStatue.rotationPitch;
+            }
         }
     }
 
     public boolean letStatueComeAlive()
     {
+        Entity statueEntity = statue.getEntity();
         if (statueEntity != null && YGCConfig.areLifeStatuesAllowed && !(statueEntity instanceof EntityFakePlayer))
         {
             boolean dangerous = false;
@@ -175,10 +105,8 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
             {
                 if (!worldObj.isRemote)
                 {
-                    int r = getBlockMetadata();
-
                     double[] center = getActiveCenterCoords();
-                    statueEntity.setLocationAndAngles(center[0], center[1] - centerCoordsSize[1], center[2], (-r + 2) * 90, 0);
+                    statueEntity.setLocationAndAngles(center[0], center[1] - centerCoordsSize[1], center[2], (-getDirection() + 2) * 90, 0);
                     statueEntity.prevRotationYaw = statueEntity.rotationYaw;
                     statueEntity.prevRotationPitch = statueEntity.rotationPitch;
 
@@ -191,6 +119,7 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
 //                        ((EntityLivingBase) statueEntity).prevRenderYawOffset = statueEntity.rotationYaw;
 //                    }
 
+                    Statue.BlockFragment statueBlock = statue.getMaterial();
                     int indefiniteTime = 9999999;
                     if (statueBlock.getBlock().getMaterial() == Material.rock)
                     {
@@ -237,83 +166,52 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
 
     public void writeStatueDataToNBT(NBTTagCompound compound)
     {
-        if (statueEntity != null)
-        {
-            NBTTagCompound statueCompound = new NBTTagCompound();
-            statueEntity.writeToNBTOptional(statueCompound);
-            compound.setTag("statueEntity", statueCompound);
-        }
-
-        compound.setFloat("statueYawHead", statueYawHead);
-        compound.setFloat("statuePitchHead", statuePitchHead);
-        compound.setFloat("statueSwing", statueSwing);
-        compound.setFloat("statueStance", statueStance);
-
-        if (statueBlock != null)
-        {
-            compound.setString("statueBlock", Block.blockRegistry.getNameForObject(statueBlock.getBlock()));
-            compound.setInteger("statueBlockMetadata", statueBlock.getMetadata());
-        }
+        if (statue != null)
+            compound.setTag("statue", statue.createTagCompound());
     }
 
     public void readStatueDataFromNBT(NBTTagCompound compound)
     {
-        if (compound.hasKey("statueEntity"))
-            setStatueEntity(EntityList.createEntityFromNBT(compound.getCompoundTag("statueEntity"), worldObj), true);
-
-        statueYawHead = compound.getFloat("statueYawHead");
-        statuePitchHead = compound.getFloat("statuePitchHead");
-        statueSwing = compound.getFloat("statueSwing");
-        statueStance = compound.getFloat("statueStance");
-
-        updateStatueRotations();
-
-        if (compound.hasKey("statueBlock"))
-        {
-            statueBlock = new BlockFragment(Block.getBlockFromName(compound.getString("statueBlock")), compound.getInteger("statueBlockMetadata"));
-        }
+        if (compound.hasKey("statue"))
+            statue = new Statue(compound.getCompoundTag("statue"), worldObj);
+        else if (isParent())
+            statue = new Statue(new EntityPig(worldObj), new Statue.BlockFragment(Blocks.stone, 0), 0.0f, 0.0f, 0.0f, 2.4f);
         else
-            statueBlock = new BlockFragment(Blocks.stone, 0);
+            statue = null;
     }
 
     public boolean isEntityEquippable()
     {
         boolean isEqquipable = false;
 
-        if (statueEntity != null)
-        {
-            for (Class eq : equippableMobs)
-                if (eq.isAssignableFrom(statueEntity.getClass()))
-                    isEqquipable = true;
-        }
+        Entity statueEntity = statue.getEntity();
+        for (Class eq : equippableMobs)
+            if (eq.isAssignableFrom(statueEntity.getClass()))
+                isEqquipable = true;
 
         return isEqquipable;
     }
 
     public boolean tryEquipping(ItemStack item)
     {
-        if (statueEntity != null)
+        if (isEntityEquippable())
         {
-            if (isEntityEquippable())
+            Entity statueEntity = statue.getEntity();
+            int slot = item == null ? -1 : EntityLiving.getArmorPosition(item);
+
+            if (slot >= 0 && statueEntity.getLastActiveItems()[slot] == null)
             {
-                int slot = item == null ? -1 : EntityLiving.getArmorPosition(item);
-
-                if (slot >= 0 && statueEntity.getLastActiveItems()[slot] == null)
+                if (!worldObj.isRemote)
                 {
-                    if (!worldObj.isRemote)
-                    {
-                        statueEntity.setCurrentItemOrArmor(slot, item.copy());
-                        item.stackSize = 0;
+                    statueEntity.setCurrentItemOrArmor(slot, item.copy());
+                    item.stackSize = 0;
 
-                        updateStatueRotations();
-
-                        IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "statueData", YeGamolChattels.network);
-                        markDirty();
-                    }
-
-                    return true;
+                    statueDataChanged();
                 }
+
+                return true;
             }
+        }
 
 //            if (statueEntity instanceof EntityHorse)
 //            {
@@ -328,38 +226,34 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
 //
 //                }
 //            }
-        }
 
         return false;
     }
 
     public void addEquipmentToInventory(EntityPlayer player)
     {
-        if (statueEntity != null)
+        Entity statueEntity = statue.getEntity();
+        for (int i = 0; i < statueEntity.getLastActiveItems().length; i++)
         {
-            for (int i = 0; i < statueEntity.getLastActiveItems().length; i++)
+            if (statueEntity.getLastActiveItems()[i] != null)
             {
-                if (statueEntity.getLastActiveItems()[i] != null)
-                {
-                    if (player.inventory.addItemStackToInventory(statueEntity.getLastActiveItems()[i]))
-                        statueEntity.getLastActiveItems()[i] = null;
-                }
+                if (player.inventory.addItemStackToInventory(statueEntity.getLastActiveItems()[i]))
+                    statueEntity.getLastActiveItems()[i] = null;
             }
+        }
 
-            updateStatueRotations();
-
-            if (!worldObj.isRemote)
-            {
-                IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "statueData", YeGamolChattels.network);
-                markDirty();
-            }
+        if (!worldObj.isRemote)
+        {
+            statueDataChanged();
         }
     }
 
     public void dropEquipment()
     {
-        if (statueEntity != null && !worldObj.isRemote)
+        if (!worldObj.isRemote)
         {
+            Entity statueEntity = statue.getEntity();
+
             for (int i = 0; i < statueEntity.getLastActiveItems().length; i++)
             {
                 if (statueEntity.getLastActiveItems()[i] != null)
@@ -376,37 +270,38 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
                 }
             }
 
-            updateStatueRotations();
-            IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "statueData", YeGamolChattels.network);
-            markDirty();
+            statueDataChanged();
         }
     }
 
     @Override
     public double getMaxRenderDistanceSquared()
     {
-        if (statueEntity != null)
+        if (statue != null)
         {
+            Entity statueEntity = statue.getEntity();
             double var3 = statueEntity.boundingBox.getAverageEdgeLength();
             var3 *= 64.0D * statueEntity.renderDistanceWeight;
 
             return var3 * var3;
         }
-        return super.getMaxRenderDistanceSquared();
+
+        return 0.0;
     }
 
     @Override
     public AxisAlignedBB getRenderBoundingBox()
     {
-        if (statueEntity != null)
+        if (statue != null)
         {
+            Entity statueEntity = statue.getEntity();
             if (statueEntity.ignoreFrustumCheck)
                 return INFINITE_EXTENT_AABB;
 
             return getBoxAroundCenter(statueEntity.width / 2, statueEntity.height / 2, statueEntity.width / 2);
         }
 
-        else return super.getRenderBoundingBox();
+        return super.getRenderBoundingBox();
     }
 
     @Override
@@ -437,67 +332,6 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
         if (worldObj.isRemote)
         {
             releaseTexture();
-        }
-    }
-
-    public static void setRotations(EntityLivingBase entityLivingBase, float yawHead, float pitchHead, float swing, float stance)
-    {
-        entityLivingBase.swingProgress = swing;
-        entityLivingBase.prevSwingProgress = swing;
-
-        entityLivingBase.limbSwing = stance;
-        entityLivingBase.limbSwingAmount = 0.0f;
-        entityLivingBase.prevLimbSwingAmount = 1.0f;
-
-//                    entityLivingBase.renderYawOffset = sliderYawHead.getValue();
-        entityLivingBase.rotationYaw = yawHead;
-        entityLivingBase.rotationPitch = pitchHead;
-        entityLivingBase.prevRotationPitch = pitchHead;
-        entityLivingBase.rotationYawHead = entityLivingBase.rotationYaw;
-        entityLivingBase.prevRotationYawHead = entityLivingBase.rotationYaw;
-    }
-
-    public static class BlockFragment
-    {
-        private Block block;
-        private int metadata;
-
-        public BlockFragment(Block block, int metadata)
-        {
-            this.block = block;
-            this.metadata = metadata;
-        }
-
-        public Block getBlock()
-        {
-            return block;
-        }
-
-        public int getMetadata()
-        {
-            return metadata;
-        }
-
-        @Override
-        public boolean equals(Object o)
-        {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            BlockFragment that = (BlockFragment) o;
-
-            if (metadata != that.metadata) return false;
-            if (!block.equals(that.block)) return false;
-
-            return true;
-        }
-
-        @Override
-        public int hashCode()
-        {
-            int result = block.hashCode();
-            result = 31 * result + metadata;
-            return result;
         }
     }
 

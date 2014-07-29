@@ -9,6 +9,7 @@ import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.network.PacketGuiAction;
 import ivorius.ivtoolkit.tools.IvInventoryHelper;
 import ivorius.yegamolchattels.YeGamolChattels;
+import ivorius.yegamolchattels.blocks.Statue;
 import ivorius.yegamolchattels.blocks.TileEntityStatue;
 import ivorius.yegamolchattels.entities.EntityFakePlayer;
 import ivorius.yegamolchattels.items.ItemEntityVita;
@@ -162,15 +163,11 @@ public class ContainerCarveStatue extends Container implements PacketGuiAction.A
                 if (usingPlayer.inventory.hasItem(YGCItems.clubHammer))
                 {
                     Entity statueEntity = getEntity(statueStack, usingPlayer.getEntityWorld());
-                    TileEntityStatue createdStatue = ItemStatueChisel.carveStatue(usingPlayer.inventory.getCurrentItem(), statueEntity, statueEntity.worldObj, statueX, statueY, statueZ, usingPlayer);
+                    Statue statue = new Statue(statueEntity, null, yawHead, pitchHead, swing, stance);
+                    TileEntityStatue createdStatue = ItemStatueChisel.carveStatue(usingPlayer.inventory.getCurrentItem(), statue, statueEntity.worldObj, statueX, statueY, statueZ, usingPlayer);
 
                     if (createdStatue != null)
                     {
-                        createdStatue.setStatueYawHead(yawHead);
-                        createdStatue.setStatuePitchHead(pitchHead);
-                        createdStatue.setStatueSwing(swing);
-                        createdStatue.setStatueStance(stance);
-
                         int clubHammerSlot = IvInventoryHelper.getInventorySlotContainItem(usingPlayer.inventory, YGCItems.clubHammer);
                         usingPlayer.inventory.getStackInSlot(clubHammerSlot).damageItem(1, usingPlayer);
                         statueEntityCarvingInventory.decrStackSize(0, 1);

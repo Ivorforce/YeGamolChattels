@@ -16,7 +16,6 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -37,12 +36,12 @@ public class BlockStatue extends IvBlockMultiblock
     {
         if (tileEntity instanceof TileEntityStatue)
         {
-            Entity statueEntity = ((TileEntityStatue) tileEntity).getStatueEntity();
+            Statue statue = ((TileEntityStatue) tileEntity).getStatue();
 
-            if (statueEntity != null)
+            if (statue != null)
             {
                 ItemStack stack = new ItemStack(Item.getItemFromBlock(YGCBlocks.statue));
-                ItemStatue.setStatueEntity(stack, statueEntity);
+                ItemStatue.setStatue(stack, statue);
 
                 dropBlockAsItem(world, x, y, z, stack);
             }
@@ -94,7 +93,7 @@ public class BlockStatue extends IvBlockMultiblock
             TileEntityStatue tileEntityStatue = (TileEntityStatue) parent;
             if (tileEntityStatue.tryEquipping(player.getHeldItem()))
             {
-                ItemStack[] statueEquip = tileEntityStatue.getStatueEntity().getLastActiveItems();
+                ItemStack[] statueEquip = tileEntityStatue.getStatue().getEntity().getLastActiveItems();
                 if (tileEntityStatue.getBlockType() == Blocks.gold_block
                         && isDiamond(statueEquip[1]) && isDiamond(statueEquip[2]) && isDiamond(statueEquip[3]) && isDiamond(statueEquip[4]))
                 {
@@ -128,7 +127,7 @@ public class BlockStatue extends IvBlockMultiblock
         if (parent instanceof TileEntityStatue)
         {
             TileEntityStatue tileEntityStatue = (TileEntityStatue) parent;
-            TileEntityStatue.BlockFragment fragment = tileEntityStatue.getStatueBlock();
+            Statue.BlockFragment fragment = tileEntityStatue.getStatue().getMaterial();
             return fragment.getBlock().getIcon(side, fragment.getMetadata());
         }
 

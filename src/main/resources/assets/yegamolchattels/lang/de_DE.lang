@@ -134,6 +134,7 @@ tile.ygcEntityVita.base=%s Vita
 tile.ygcEntityVita.unknown=Unbekanntes
 
 entity.ygcGhost.name=Geist
+entity.yegamolchattels.fakePlayer.name=Spieler
 
 guiPlankSaw.title=Holzbrettsäge
 guiPlanksRefinementFrame.title=Holzbrett Halterung

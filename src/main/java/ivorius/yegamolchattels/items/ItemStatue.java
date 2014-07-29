@@ -7,7 +7,7 @@ package ivorius.yegamolchattels.items;
 
 import ivorius.ivtoolkit.blocks.IvMultiBlockHelper;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
-import ivorius.yegamolchattels.blocks.BlockStatue;
+import ivorius.yegamolchattels.blocks.Statue;
 import ivorius.yegamolchattels.blocks.TileEntityStatue;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
@@ -43,35 +43,37 @@ public class ItemStatue extends ItemBlock
     @Override
     public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int x, int y, int z, int blockSide, float hitX, float hitY, float hitZ)
     {
-        if (!par3World.isRemote) // Some entities start with random sizes
+        Statue statue = createStatue(par1ItemStack, par3World);
+
+        if (statue != null)
         {
-            Entity statueEntity = createStatueEntity(par1ItemStack, par3World);
-            if (statueEntity == null)
-                statueEntity = new EntityPig(par3World);
-
-            int rotation = IvMultiBlockHelper.getRotation(par2EntityPlayer);
-            List<int[]> positions = getStatuePositions(statueEntity, rotation);
-
-            IvMultiBlockHelper multiBlockHelper = new IvMultiBlockHelper();
-            if (multiBlockHelper.beginPlacing(positions, par3World, x, y, z, blockSide, par1ItemStack, par2EntityPlayer, this.field_150939_a, 0, rotation))
+            if (!par3World.isRemote) // Some entities start with random sizes
             {
-                for (int[] position : multiBlockHelper)
+                int rotation = IvMultiBlockHelper.getRotation(par2EntityPlayer);
+                List<int[]> positions = getStatuePositions(statue.getEntity(), rotation);
+
+                IvMultiBlockHelper multiBlockHelper = new IvMultiBlockHelper();
+                if (multiBlockHelper.beginPlacing(positions, par3World, x, y, z, blockSide, par1ItemStack, par2EntityPlayer, this.field_150939_a, 0, rotation))
                 {
-                    IvTileEntityMultiBlock tileEntity = multiBlockHelper.placeBlock(position);
-
-                    if (tileEntity instanceof TileEntityStatue && tileEntity.isParent())
+                    for (int[] position : multiBlockHelper)
                     {
-                        TileEntityStatue statue = (TileEntityStatue) tileEntity;
-                        statue.setStatueEntity(statueEntity, true);
-                        statue.setStatueBlock(getStatueBlockFragment(par1ItemStack));
-                    }
-                }
+                        IvTileEntityMultiBlock tileEntity = multiBlockHelper.placeBlock(position);
 
-                par1ItemStack.stackSize--;
+                        if (tileEntity instanceof TileEntityStatue && tileEntity.isParent())
+                        {
+                            TileEntityStatue tileEntityStatue = (TileEntityStatue) tileEntity;
+                            tileEntityStatue.setStatue(statue);
+                        }
+                    }
+
+                    par1ItemStack.stackSize--;
+                }
             }
+
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     public static List<int[]> getStatuePositions(Entity entity, int rotation)
@@ -90,7 +92,7 @@ public class ItemStatue extends ItemBlock
         String entityName = getStatueEntityID(par1ItemStack);
         String localizedEntityName = entityName != null && entityName.length() > 0 ? I18n.format("entity." + entityName + ".name") : I18n.format("tile.ygcStatue.unknown");
 
-        TileEntityStatue.BlockFragment blockFragment = getStatueBlockFragment(par1ItemStack);
+        Statue.BlockFragment blockFragment = getStatueBlockFragment(par1ItemStack);
         String localizedBlockName = new ItemStack(blockFragment.getBlock(), 1, blockFragment.getMetadata()).getDisplayName();
 
         return I18n.format(base, localizedEntityName, localizedBlockName);
@@ -113,58 +115,32 @@ public class ItemStatue extends ItemBlock
 //        }
     }
 
-    public static NBTTagCompound getStatueEntityTag(ItemStack stack)
+    public static Statue createStatue(ItemStack stack, World world)
     {
-        return stack.hasTagCompound() ? stack.getTagCompound().getCompoundTag("statueEntity") : new NBTTagCompound();
+        if (stack.hasTagCompound() && stack.getTagCompound().hasKey("statue"))
+            return new Statue(stack.getTagCompound().getCompoundTag("statue"), world);
+
+        return null;
+    }
+
+    public static void setStatue(ItemStack stack, Statue statue)
+    {
+        stack.setTagInfo("statue", statue.createTagCompound());
+    }
+
+    public static Statue.BlockFragment getStatueBlockFragment(ItemStack stack)
+    {
+        if (stack.hasTagCompound() && stack.getTagCompound().hasKey("statue"))
+            return Statue.getMaterial(stack.getTagCompound().getCompoundTag("statue"));
+
+        return null;
     }
 
     public static String getStatueEntityID(ItemStack stack)
     {
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey("statueEntity"))
-            return getStatueEntityTag(stack).getString("id");
+        if (stack.hasTagCompound() && stack.getTagCompound().hasKey("statue"))
+            return Statue.getEntityID(stack.getTagCompound().getCompoundTag("statue"));
 
-        return stack.hasTagCompound() ? stack.getTagCompound().getString("statueEntityID") : "";
-    }
-
-    public static Entity createStatueEntity(ItemStack stack, World world)
-    {
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey("statueEntity"))
-            return EntityList.createEntityFromNBT(getStatueEntityTag(stack), world);
-        else
-            return EntityList.createEntityByName(getStatueEntityID(stack), world);
-    }
-
-    public static void setStatueEntityByID(ItemStack stack, String entityName)
-    {
-        stack.setTagInfo("statueEntityID", new NBTTagString(entityName));
-    }
-
-    public static void setStatueEntity(ItemStack stack, Entity entity)
-    {
-        NBTTagCompound compound = new NBTTagCompound();
-        entity.writeToNBTOptional(compound);
-        stack.setTagInfo("statueEntity", compound);
-    }
-
-    public static ItemStack createStatueItemStack(Item item, String entityName, TileEntityStatue.BlockFragment blockFragment)
-    {
-        ItemStack stack = new ItemStack(item);
-        setStatueEntityByID(stack, entityName);
-        setStatueBlockFragment(stack, blockFragment);
-        return stack;
-    }
-
-    public static TileEntityStatue.BlockFragment getStatueBlockFragment(ItemStack stack)
-    {
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey("statueBlock"))
-            return new TileEntityStatue.BlockFragment((Block) Block.blockRegistry.getObject(stack.getTagCompound().getString("statueBlock")), stack.getTagCompound().getInteger("statueMetadata"));
-
-        return new TileEntityStatue.BlockFragment(Blocks.stone, 0);
-    }
-
-    public static void setStatueBlockFragment(ItemStack stack, TileEntityStatue.BlockFragment fragment)
-    {
-        stack.setTagInfo("statueBlock", new NBTTagString(Block.blockRegistry.getNameForObject(fragment.getBlock())));
-        stack.setTagInfo("statueMetadata", new NBTTagInt(fragment.getMetadata()));
+        return null;
     }
 }

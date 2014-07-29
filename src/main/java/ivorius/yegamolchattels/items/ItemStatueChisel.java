@@ -8,6 +8,7 @@ package ivorius.yegamolchattels.items;
 import ivorius.ivtoolkit.blocks.IvMultiBlockHelper;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
 import ivorius.yegamolchattels.YeGamolChattels;
+import ivorius.yegamolchattels.blocks.Statue;
 import ivorius.yegamolchattels.blocks.TileEntityStatue;
 import ivorius.yegamolchattels.blocks.YGCBlocks;
 import ivorius.yegamolchattels.gui.YGCGuiHandler;
@@ -33,7 +34,7 @@ public class ItemStatueChisel extends Item
     {
         if (player.inventory.hasItem(YGCItems.clubHammer))
         {
-            TileEntityStatue.BlockFragment blockFragment = new TileEntityStatue.BlockFragment(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
+            Statue.BlockFragment blockFragment = new Statue.BlockFragment(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
 
             if (isValidStatueBlock(blockFragment))
             {
@@ -56,7 +57,7 @@ public class ItemStatueChisel extends Item
 
     public static boolean canCarveStatue(Entity statueEntity, World world, int x, int y, int z)
     {
-        TileEntityStatue.BlockFragment blockFragment = new TileEntityStatue.BlockFragment(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
+        Statue.BlockFragment blockFragment = new Statue.BlockFragment(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
 
         if (isValidStatueBlock(blockFragment))
         {
@@ -70,14 +71,14 @@ public class ItemStatueChisel extends Item
         return false;
     }
 
-    public static TileEntityStatue carveStatue(ItemStack stack, Entity statueEntity, World world, int x, int y, int z, EntityLivingBase entityLivingBase)
+    public static TileEntityStatue carveStatue(ItemStack stack, Statue statue, World world, int x, int y, int z, EntityLivingBase entityLivingBase)
     {
-        TileEntityStatue.BlockFragment blockFragment = new TileEntityStatue.BlockFragment(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
+        Statue.BlockFragment blockFragment = new Statue.BlockFragment(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
         int rotation = IvMultiBlockHelper.getRotation(entityLivingBase);
 
         if (isValidStatueBlock(blockFragment))
         {
-            List<int[]> positions = ItemStatue.getStatuePositions(statueEntity, rotation);
+            List<int[]> positions = ItemStatue.getStatuePositions(statue.getEntity(), rotation);
             List<int[]> validPositions = getValidPositions(positions, world, blockFragment, x, y, z);
 
             if (validPositions != null)
@@ -94,9 +95,9 @@ public class ItemStatueChisel extends Item
                         if (tileEntity instanceof TileEntityStatue && tileEntity.isParent())
                         {
                             parent = (TileEntityStatue) tileEntity;
-                            TileEntityStatue statue = (TileEntityStatue) tileEntity;
-                            statue.setStatueEntity(statueEntity, true);
-                            statue.setStatueBlock(blockFragment);
+                            TileEntityStatue tileEntityStatue = (TileEntityStatue) tileEntity;
+                            statue.setMaterial(blockFragment);
+                            tileEntityStatue.setStatue(statue);
                         }
                     }
 
@@ -109,12 +110,12 @@ public class ItemStatueChisel extends Item
         return null;
     }
 
-    public static boolean isValidStatueBlock(TileEntityStatue.BlockFragment fragment)
+    public static boolean isValidStatueBlock(Statue.BlockFragment fragment)
     {
         return !(fragment.getBlock() instanceof ITileEntityProvider && fragment.getBlock().isOpaqueCube());
     }
 
-    public static List<int[]> getValidPositions(List<int[]> positions, World world, TileEntityStatue.BlockFragment blockFragment, int x, int y, int z)
+    public static List<int[]> getValidPositions(List<int[]> positions, World world, Statue.BlockFragment blockFragment, int x, int y, int z)
     {
         List<int[]> validLocations = new ArrayList<>();
 

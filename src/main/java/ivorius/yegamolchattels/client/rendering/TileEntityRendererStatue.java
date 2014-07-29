@@ -12,6 +12,7 @@ import ivorius.ivtoolkit.rendering.textures.ModifiedTexture;
 import ivorius.ivtoolkit.rendering.textures.PreBufferedTexture;
 import ivorius.yegamolchattels.YGCConfig;
 import ivorius.yegamolchattels.YeGamolChattels;
+import ivorius.yegamolchattels.blocks.Statue;
 import ivorius.yegamolchattels.blocks.TileEntityStatue;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -21,6 +22,7 @@ import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.BossStatus;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -42,12 +44,7 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
     @Override
     public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, float f)
     {
-        TileEntityStatue statueEntity = (TileEntityStatue) tileentity;
-
-        if (statueEntity.getStatueEntity() != null)
-        {
-            renderTileEntityStatueAt(statueEntity, d, d1, d2, f);
-        }
+        renderTileEntityStatueAt((TileEntityStatue) tileentity, d, d1, d2, f);
     }
 
     public void renderTileEntityStatueAt(TileEntityStatue tileEntityStatue, double d, double d1, double d2, float f)
@@ -58,7 +55,7 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
             GL11.glTranslated(0.0, -tileEntityStatue.centerCoordsSize[1], 0.0);
             IvMultiBlockRenderHelper.transformFor(tileEntityStatue, d, d1, d2);
 
-            Entity entity = tileEntityStatue.getStatueEntity();
+            Entity entity = tileEntityStatue.getStatue().getEntity();
             entity.setWorld(tileEntityStatue.getWorldObj());
 
             int statusBarLength = BossStatus.statusBarTime; //Don't render boss health
@@ -86,6 +83,7 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
 
             try
             {
+                tileEntityStatue.getStatue().updateEntityRotations();
                 RenderManager.instance.renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0f, 0.0F);
             }
             catch (Exception ex)
@@ -105,9 +103,9 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
     {
         if (YGCConfig.fetchDynamicStatueTextures)
         {
-            Entity entity = tileEntityStatue.getStatueEntity();
+            Entity entity = tileEntityStatue.getStatue().getEntity();
 
-            TileEntityStatue.BlockFragment fragment = tileEntityStatue.getStatueBlock();
+            Statue.BlockFragment fragment = tileEntityStatue.getStatue().getMaterial();
             BufferedImage patternImage = StatueTextureHandler.getTexture(fragment.getBlock(), fragment.getMetadata());
 
             if (patternImage != null)

@@ -9,8 +9,7 @@ import ivorius.ivtoolkit.gui.GuiControlListener;
 import ivorius.ivtoolkit.gui.GuiSlider;
 import ivorius.ivtoolkit.network.PacketGuiAction;
 import ivorius.yegamolchattels.YeGamolChattels;
-import ivorius.yegamolchattels.blocks.TileEntityStatue;
-import ivorius.yegamolchattels.items.ItemEntityVita;
+import ivorius.yegamolchattels.blocks.Statue;
 import ivorius.yegamolchattels.items.ItemStatueChisel;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -22,7 +21,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -118,7 +116,7 @@ public class GuiScreenCarveStatue extends GuiContainer implements GuiControlList
         if (entity != null)
         {
             if (entity instanceof EntityLivingBase)
-                TileEntityStatue.setRotations((EntityLivingBase) entity, sliderYawHead.getValue(), sliderPitchHead.getValue(), sliderSwing.getValue(), sliderStance.getValue());
+                Statue.setRotations((EntityLivingBase) entity, sliderYawHead.getValue(), sliderPitchHead.getValue(), sliderSwing.getValue(), sliderStance.getValue());
 
             if (entity instanceof EntitySquid)
             {
