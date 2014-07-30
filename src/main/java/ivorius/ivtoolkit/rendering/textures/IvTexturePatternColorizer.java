@@ -72,6 +72,6 @@ public class IvTexturePatternColorizer implements IvTextureCreatorMC.LoadingImag
         colorDest[0] = color[0] * 0.1f + patternColor[1] * 255.0f * 0.9f;
         colorDest[1] = color[1] * 0.1f + patternColor[2] * 255.0f * 0.9f;
         colorDest[2] = color[2] * 0.1f + patternColor[3] * 255.0f * 0.9f;
-        colorDest[3] = color[3];
+        colorDest[3] = color[3] * (patternColorComponents[3] / 255.0f);
     }
 }
