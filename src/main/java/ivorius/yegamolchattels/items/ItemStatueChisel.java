@@ -74,7 +74,7 @@ public class ItemStatueChisel extends Item
     public static TileEntityStatue carveStatue(ItemStack stack, Statue statue, World world, int x, int y, int z, EntityLivingBase entityLivingBase)
     {
         Statue.BlockFragment blockFragment = new Statue.BlockFragment(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
-        int rotation = IvMultiBlockHelper.getRotation(entityLivingBase);
+        int rotation = 0;
 
         if (isValidStatueBlock(blockFragment))
         {
@@ -98,6 +98,7 @@ public class ItemStatueChisel extends Item
                             TileEntityStatue tileEntityStatue = (TileEntityStatue) tileEntity;
                             statue.setMaterial(blockFragment);
                             tileEntityStatue.setStatue(statue);
+                            tileEntityStatue.setStatueRotationYaw((entityLivingBase.rotationYaw + 180.0f) % 180.0f);
                         }
                     }
 

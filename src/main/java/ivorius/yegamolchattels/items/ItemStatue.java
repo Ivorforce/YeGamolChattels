@@ -49,7 +49,7 @@ public class ItemStatue extends ItemBlock
         {
             if (!par3World.isRemote) // Some entities start with random sizes
             {
-                int rotation = IvMultiBlockHelper.getRotation(par2EntityPlayer);
+                int rotation = 0;
                 List<int[]> positions = getStatuePositions(statue.getEntity(), rotation);
 
                 IvMultiBlockHelper multiBlockHelper = new IvMultiBlockHelper();
@@ -63,6 +63,7 @@ public class ItemStatue extends ItemBlock
                         {
                             TileEntityStatue tileEntityStatue = (TileEntityStatue) tileEntity;
                             tileEntityStatue.setStatue(statue);
+                            tileEntityStatue.setStatueRotationYaw((par2EntityPlayer.rotationYaw + 180.0f) % 180.0f);
                         }
                     }
 

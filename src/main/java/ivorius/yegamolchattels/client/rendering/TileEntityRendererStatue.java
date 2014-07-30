@@ -84,6 +84,7 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
             try
             {
                 tileEntityStatue.getStatue().updateEntityRotations();
+                GL11.glRotatef(180.0f - entity.rotationYaw, 0.0f, 1.0f, 0.0f);
                 RenderManager.instance.renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0f, 0.0F);
             }
             catch (Exception ex)

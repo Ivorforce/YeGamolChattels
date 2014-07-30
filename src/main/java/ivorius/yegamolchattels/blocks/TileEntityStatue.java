@@ -43,8 +43,8 @@ import net.minecraft.world.World;
 
 public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialUpdateHandler
 {
-    public static Class[] equippableMobs = new Class[]{EntityZombie.class, EntitySkeleton.class, EntityFakePlayer.class};
-    public static Class[] dangerousMobs = new Class[]{EntityGiantZombie.class, EntityDragon.class, EntityWither.class};
+    public static Class[] equippableMobs = {EntityZombie.class, EntitySkeleton.class, EntityFakePlayer.class};
+    public static Class[] dangerousMobs = {EntityGiantZombie.class, EntityDragon.class, EntityWither.class};
 
     private NBTTagCompound storedStatueTag;
     private Statue statue;
@@ -63,6 +63,16 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
     {
         IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "statueData", YeGamolChattels.network);
         markDirty();
+    }
+
+    public void setStatueRotationYaw(float rotation)
+    {
+        Entity statueEntity = statue.getEntity();
+        statueEntity.rotationYaw = rotation;
+        statueEntity.prevRotationYaw = rotation;
+
+        if (statueEntity instanceof EntityLivingBase)
+            ((EntityLivingBase) statueEntity).renderYawOffset = rotation;
     }
 
     @Override
@@ -120,9 +130,8 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
                 if (!worldObj.isRemote)
                 {
                     double[] center = getActiveCenterCoords();
-                    statueEntity.setLocationAndAngles(center[0], center[1] - centerCoordsSize[1], center[2], (-getDirection() + 2) * 90, 0);
-                    statueEntity.prevRotationYaw = statueEntity.rotationYaw;
-                    statueEntity.prevRotationPitch = statueEntity.rotationPitch;
+                    statueEntity.setPosition(center[0], center[1] - centerCoordsSize[1], center[2]);
+                    statue.updateEntityRotations();
 
                     // Rotation doesn't get transmitted ;_;
 //                    if (statueEntity instanceof EntityLivingBase)
@@ -181,7 +190,10 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
     public void writeStatueDataToNBT(NBTTagCompound compound)
     {
         if (statue != null)
+        {
             compound.setTag("statue", statue.createTagCompound());
+            compound.setFloat("statueRotationYaw", statue.getEntity().rotationYaw); // Entity doesn't save this
+        }
     }
 
     public void readStatueDataFromNBT(NBTTagCompound compound)
@@ -204,6 +216,11 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
             statue = new Statue(new EntityPig(worldObj), new Statue.BlockFragment(Blocks.stone, 0), 0.0f, 0.0f, 0.0f, 2.4f);
         else
             statue = null;
+
+        if (statue != null)
+        {
+            setStatueRotationYaw(compound.getFloat("statueRotationYaw"));
+        }
     }
 
     public boolean isEntityEquippable()

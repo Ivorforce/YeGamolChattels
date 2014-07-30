@@ -66,12 +66,12 @@ public class Statue
         entityLivingBase.limbSwingAmount = 0.0f;
         entityLivingBase.prevLimbSwingAmount = 1.0f;
 
-//                    entityLivingBase.renderYawOffset = sliderYawHead.getValue();
-        entityLivingBase.rotationYaw = yawHead;
+//        entityLivingBase.renderYawOffset = yawHead;
+//        entityLivingBase.rotationYaw = yawHead;
+        entityLivingBase.rotationYawHead = yawHead;
+        entityLivingBase.prevRotationYawHead = yawHead;
         entityLivingBase.rotationPitch = pitchHead;
         entityLivingBase.prevRotationPitch = pitchHead;
-        entityLivingBase.rotationYawHead = entityLivingBase.rotationYaw;
-        entityLivingBase.prevRotationYawHead = entityLivingBase.rotationYaw;
     }
 
     public static String getEntityID(NBTTagCompound compound)
