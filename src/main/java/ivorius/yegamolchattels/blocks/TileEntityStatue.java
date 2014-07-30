@@ -415,4 +415,12 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
     {
         this.statueTexture = statueTexture;
     }
+
+    @Override
+    public boolean shouldRenderInPass(int pass)
+    {
+        if (statue != null)
+            return statue.getMaterial().getBlock().canRenderInPass(pass);
+        return false;
+    }
 }

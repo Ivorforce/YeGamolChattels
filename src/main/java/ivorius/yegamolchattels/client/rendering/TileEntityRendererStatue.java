@@ -26,6 +26,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.BossStatus;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.MinecraftForgeClient;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.image.BufferedImage;
@@ -47,13 +48,15 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
         renderTileEntityStatueAt((TileEntityStatue) tileentity, d, d1, d2, f);
     }
 
-    public void renderTileEntityStatueAt(TileEntityStatue tileEntityStatue, double d, double d1, double d2, float f)
+    public void renderTileEntityStatueAt(TileEntityStatue tileEntityStatue, double x, double y, double z, float partialTicks)
     {
         if (tileEntityStatue.isParent())
         {
+            int renderPass = MinecraftForgeClient.getRenderPass();
+
             GL11.glPushMatrix();
             GL11.glTranslated(0.0, -tileEntityStatue.centerCoordsSize[1], 0.0);
-            IvMultiBlockRenderHelper.transformFor(tileEntityStatue, d, d1, d2);
+            IvMultiBlockRenderHelper.transformFor(tileEntityStatue, x, y, z);
 
             Entity entity = tileEntityStatue.getStatue().getEntity();
             entity.setWorld(tileEntityStatue.getWorldObj());
@@ -81,6 +84,13 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
             renderEngineOverride.renderEngine = RenderManager.instance.renderEngine;
             RenderManager.instance.renderEngine = renderEngineOverride;
 
+            if (renderPass > 0) // Somehow 'false' is default
+            {
+                GL11.glDepthMask(true);
+                GL11.glEnable(GL11.GL_BLEND);
+                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            }
+
             try
             {
                 tileEntityStatue.getStatue().updateEntityRotations();
@@ -90,6 +100,12 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
             catch (Exception ex)
             {
                 YeGamolChattels.logger.warn("Exception on rendering statue!", ex);
+            }
+
+            if (renderPass > 0)
+            {
+                GL11.glDepthMask(false);
+                GL11.glDisable(GL11.GL_BLEND);
             }
 
             RenderManager.instance.renderEngine = renderEngineOverride.renderEngine;
