@@ -22,7 +22,6 @@ import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.BossStatus;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -72,7 +71,7 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
                 if (texture != null)
                 {
                     tileEntityStatue.setStatueTexture(texture);
-                    StatueTextureHandler.retainTexture(texture);
+                    TextureAllocationHandler.retainTexture(texture);
                     renderEngineOverride.textureOverride = texture;
                 }
                 else
@@ -123,11 +122,11 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
             Entity entity = tileEntityStatue.getStatue().getEntity();
 
             Statue.BlockFragment fragment = tileEntityStatue.getStatue().getMaterial();
-            BufferedImage patternImage = StatueTextureHandler.getTexture(fragment.getBlock(), fragment.getMetadata());
+            BufferedImage patternImage = EntityBlockTextureMerger.getTexture(fragment.getBlock(), fragment.getMetadata());
 
             if (patternImage != null)
             {
-                ResourceLocation entityResourceLocation = YGCConfig.doStatueTextureMerge ? StatueTextureHandler.getTexture(entity) : null;
+                ResourceLocation entityResourceLocation = YGCConfig.doStatueTextureMerge ? EntityBlockTextureMerger.getTexture(entity) : null;
 
                 if (entityResourceLocation != null)
                 {

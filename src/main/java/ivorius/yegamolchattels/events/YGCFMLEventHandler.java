@@ -18,7 +18,7 @@ import ivorius.yegamolchattels.achievements.YGCAchievementList;
 import ivorius.yegamolchattels.blocks.TileEntityItemShelfModel0;
 import ivorius.yegamolchattels.blocks.YGCBlocks;
 import ivorius.yegamolchattels.client.rendering.SnowGlobeCallListHandler;
-import ivorius.yegamolchattels.client.rendering.StatueTextureHandler;
+import ivorius.yegamolchattels.client.rendering.TextureAllocationHandler;
 import ivorius.yegamolchattels.items.YGCItems;
 import net.minecraft.item.ItemStack;
 
@@ -46,7 +46,7 @@ public class YGCFMLEventHandler
     {
         if (renderTickEvent.phase == TickEvent.Phase.START)
         {
-            StatueTextureHandler.deallocateAllFreeTextures();
+            TextureAllocationHandler.deallocateAllFreeTextures();
             SnowGlobeCallListHandler.destroyAllStoredCallLists();
         }
     }

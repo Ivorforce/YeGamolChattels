@@ -16,7 +16,7 @@ import ivorius.ivtoolkit.tools.IvDateHelper;
 import ivorius.yegamolchattels.YGCConfig;
 import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.achievements.YGCAchievementList;
-import ivorius.yegamolchattels.client.rendering.StatueTextureHandler;
+import ivorius.yegamolchattels.client.rendering.TextureAllocationHandler;
 import ivorius.yegamolchattels.entities.EntityFakePlayer;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -399,7 +399,7 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
     {
         if (statueTexture != null)
         {
-            StatueTextureHandler.releaseTexture(statueTexture);
+            TextureAllocationHandler.releaseTexture(statueTexture);
             statueTexture = null;
         }
     }

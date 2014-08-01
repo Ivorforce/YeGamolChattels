@@ -37,31 +37,9 @@ import static org.lwjgl.opengl.GL11.*;
 /**
  * Created by lukas on 28.07.14.
  */
-public class StatueTextureHandler
+public class EntityBlockTextureMerger
 {
     private static int[] cachedBlockTextureMap;
-    private static ReferenceCounter<ResourceLocation> textureObjects = new ReferenceCounter<>();
-
-    public static void retainTexture(ResourceLocation object)
-    {
-        textureObjects.retain(object, 1);
-    }
-
-    public static void releaseTexture(ResourceLocation object)
-    {
-        textureObjects.release(object, 1);
-    }
-
-    public static void deallocateAllFreeTextures()
-    {
-        TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
-        for (ResourceLocation textureObject : textureObjects.deallocateAllFreeObjects())
-        {
-            textureManager.deleteTexture(textureObject);
-            Map textureMap = ReflectionHelper.getPrivateValue(TextureManager.class, textureManager, "mapTextureObjects", "field_110585_a");
-            textureMap.remove(textureObject);
-        }
-    }
 
     public static BufferedImage getTexture(Block block, int metadata)
     {

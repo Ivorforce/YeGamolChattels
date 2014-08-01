@@ -13,7 +13,7 @@ import ivorius.yegamolchattels.achievements.YGCAchievementList;
 import ivorius.yegamolchattels.blocks.TileEntityMicroBlock;
 import ivorius.yegamolchattels.blocks.TileEntitySnowGlobe;
 import ivorius.yegamolchattels.blocks.TileEntityStatue;
-import ivorius.yegamolchattels.client.rendering.StatueTextureHandler;
+import ivorius.yegamolchattels.client.rendering.EntityBlockTextureMerger;
 import ivorius.yegamolchattels.entities.EntityGhost;
 import ivorius.yegamolchattels.items.ItemBlockFragment;
 import ivorius.yegamolchattels.items.ItemChisel;
@@ -146,7 +146,7 @@ public class YGCForgeEventHandler
     {
         if (event instanceof TextureStitchEvent.Pre)
         {
-            StatueTextureHandler.clearCachedStitchedTexture();
+            EntityBlockTextureMerger.clearCachedStitchedTexture();
         }
     }
 }
