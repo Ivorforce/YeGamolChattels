@@ -6,13 +6,16 @@
 package ivorius.yegamolchattels.items;
 
 import ivorius.yegamolchattels.entities.EntityBanner;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityHanging;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemHangingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -22,7 +25,8 @@ public class ItemBanner extends ItemHangingEntity
     public int bannerSize;
     public String namePrefix;
 
-    public static final int[] bannerColors = new int[]{0x1e1b1b, 0xb3312c, 0x3b511a, 0x51301a, 0x253192, 0x7b2fbe, 0x287697, 0x888888, 0x434343, 0xd88198, 0x41cd34, 0xdecf2a, 0x6689d3, 0xc354cd, 0xeb8844, 0xf0f0f0};
+    private IIcon poleIcon;
+    private IIcon clothIcon;
 
     public ItemBanner(int bannerSize, String namePrefix)
     {
@@ -82,9 +86,34 @@ public class ItemBanner extends ItemHangingEntity
     }
 
     @Override
-    public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
+    public boolean requiresMultipleRenderPasses()
     {
-        return ItemBanner.bannerColors[par1ItemStack.getItemDamage()];
+        return true;
+    }
+
+    @Override
+    public int getRenderPasses(int metadata)
+    {
+        return 2;
+    }
+
+    @Override
+    public IIcon getIconFromDamageForRenderPass(int damage, int pass)
+    {
+        return pass == 0 ? poleIcon : clothIcon;
+    }
+
+    @Override
+    public int getColorFromItemStack(ItemStack par1ItemStack, int pass)
+    {
+        return pass == 1 ? ItemDye.field_150922_c[par1ItemStack.getItemDamage() % ItemDye.field_150922_c.length] : 0xffffffff;
+    }
+
+    @Override
+    public void registerIcons(IIconRegister iconRegister)
+    {
+        poleIcon = iconRegister.registerIcon(getIconString() + "_" + "pole");
+        clothIcon = iconRegister.registerIcon(getIconString() + "_" + "cloth");
     }
 
     @Override
