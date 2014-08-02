@@ -130,12 +130,13 @@ public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements Partia
         }
     }
 
-    public void moveSaw(EntityPlayer player, float x, float y)
+    public float moveSaw(EntityPlayer player, float x, float y)
     {
         sawingPlayerID = player.getEntityId();
 
         if (containedItem != null)
         {
+            float plusScore = 0.0f;
             float yPlus = isInWood ? Math.min(y, woodCutY - sawPositionY) : y;
 
             moveSawInConstraints(isInWood ? x * 0.5f : x, yPlus);
@@ -154,7 +155,8 @@ public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements Partia
 
                     moveSawInConstraints(0.0f, yPlusLeft * sideMovInf);
 
-                    woodCutScore += yPlusLeft * sideMovInf * sideMovInf * sideMovInf;
+                    plusScore = yPlusLeft * sideMovInf * sideMovInf * sideMovInf;
+                    woodCutScore += plusScore;
                 }
 
                 if (sawPositionY > woodCutY && isInWood)
@@ -169,6 +171,8 @@ public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements Partia
 
             if (woodCutY >= 1.0f)
                 chopOffWood(woodCutScore, player);
+
+            return plusScore;
         }
         else
         {
@@ -177,6 +181,8 @@ public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements Partia
             if (worldObj.isRemote)
                 YeGamolChattels.network.sendToServer(PacketTileEntityClientEvent.packetEntityData(this, "sawMove"));
         }
+
+        return 0.0f;
     }
 
     public void moveSawInConstraints(float x, float y)
