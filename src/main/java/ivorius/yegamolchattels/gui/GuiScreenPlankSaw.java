@@ -131,7 +131,7 @@ public class GuiScreenPlankSaw extends GuiScreen
         this.mc.getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
         Tessellator.instance.startDrawingQuads();
         for (EntityFX entityFX : particles)
-            entityFX.renderParticle(Tessellator.instance, partialTicks, 0.5f, -0.5f, 0.0f, 0.0f, 0.0f);
+            entityFX.renderParticle(Tessellator.instance, partialTicks, 1.0f, -1.0f, 0.0f, 0.0f, 0.0f);
         Tessellator.instance.draw();
 
         EntityFX.interpPosX = prevInterX;
@@ -259,6 +259,7 @@ public class GuiScreenPlankSaw extends GuiScreen
                         double fxY = tileEntityPlankSaw.yCoord + (1.05f - tileEntityPlankSaw.sawPositionY);
                         double fxZ = tileEntityPlankSaw.zCoord + 0.5;
                         EntityFX particle = new EntityDiggingFX(tileEntityPlankSaw.getWorldObj(), fxX, fxY, fxZ, movX * 0.02f, -0.1, 0.0, containedBlock, containedMetadata, 2);
+                        particle.multipleParticleScaleBy(0.5f);
                         IvParticleHelper.spawnParticle(particle);
                         this.particles.add(particle);
                     }
