@@ -19,10 +19,10 @@ apply plugin: 'forge'
 
 version = "1.0"
 group= "ivorius.yegamolchattels" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "yegamolchattels"
+archivesBaseName = "YeGamolChattels"
 
 minecraft {
-    version = "1.7.2-10.12.2.1147"
+    version = "1.7.10-10.13.0.1191"
     assetDir = "eclipse/assets"
 }
 

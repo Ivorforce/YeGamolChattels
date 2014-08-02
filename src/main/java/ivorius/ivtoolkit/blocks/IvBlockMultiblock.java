@@ -109,7 +109,7 @@ public abstract class IvBlockMultiblock extends BlockContainer
     }
 
     @Override
-    public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z)
+    public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest)
     {
         IvTileEntityMultiBlock tileEntityMultiBlock = getValidatedTotalParent(this, world, x, y, z);
 
@@ -117,13 +117,13 @@ public abstract class IvBlockMultiblock extends BlockContainer
         {
             int blockMeta = world.getBlockMetadata(x, y, z);
 
-            if (!world.isRemote && canHarvestBlock(player, blockMeta))
+            if (!world.isRemote && willHarvest)
             {
                 this.parentBlockHarvestItem(world, tileEntityMultiBlock, x, y, z, this, blockMeta);
             }
         }
 
-        return super.removedByPlayer(world, player, x, y, z);
+        return super.removedByPlayer(world, player, x, y, z, willHarvest);
     }
 
     @Override

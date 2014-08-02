@@ -44,7 +44,7 @@ public class GuiSliderMultivalue extends GuiButton
     }
 
     @Override
-    protected int getHoverState(boolean mouseHovering)
+    public int getHoverState(boolean mouseHovering)
     {
         return 0;
     }

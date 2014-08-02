@@ -6,7 +6,9 @@
 package ivorius.yegamolchattels.client.rendering;
 
 
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import ivorius.ivtoolkit.blocks.IvMultiBlockRenderHelper;
+import ivorius.ivtoolkit.logic.IvObjects;
 import ivorius.ivtoolkit.rendering.textures.IvTexturePatternColorizer;
 import ivorius.ivtoolkit.rendering.textures.ModifiedTexture;
 import ivorius.ivtoolkit.rendering.textures.PreBufferedTexture;
@@ -29,6 +31,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.image.BufferedImage;
+import java.lang.reflect.Field;
 
 public class TileEntityRendererStatue extends TileEntitySpecialRenderer
 {
@@ -62,17 +65,27 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
 
             int statusBarLength = BossStatus.statusBarTime; //Don't render boss health
 
+            ResourceLocation entityResourceLocation = YGCConfig.doStatueTextureMerge ? EntityBlockTextureMerger.getTexture(entity) : null;
+
+            if (!IvObjects.equals(entityResourceLocation, tileEntityStatue.getUsedEntityTexture()))
+            {
+                tileEntityStatue.releaseTexture();
+                tileEntityStatue.setUsedEntityTexture(null);
+            }
+
             if (tileEntityStatue.getStatueTexture() != null)
                 renderEngineOverride.textureOverride = tileEntityStatue.getStatueTexture();
             else
             {
-                ResourceLocation texture = createTexture(tileEntityStatue);
+                ResourceLocation colorizedTexture = createTexture(tileEntityStatue, entityResourceLocation);
 
-                if (texture != null)
+                tileEntityStatue.setUsedEntityTexture(entityResourceLocation);
+
+                if (colorizedTexture != null)
                 {
-                    tileEntityStatue.setStatueTexture(texture);
-                    TextureAllocationHandler.retainTexture(texture);
-                    renderEngineOverride.textureOverride = texture;
+                    tileEntityStatue.setStatueTexture(colorizedTexture);
+                    TextureAllocationHandler.retainTexture(colorizedTexture);
+                    renderEngineOverride.textureOverride = colorizedTexture;
                 }
                 else
                 {
@@ -115,25 +128,21 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
         }
     }
 
-    public ResourceLocation createTexture(TileEntityStatue tileEntityStatue)
+    public ResourceLocation createTexture(TileEntityStatue tileEntityStatue, ResourceLocation entityResourceLocation)
     {
         if (YGCConfig.fetchDynamicStatueTextures)
         {
-            Entity entity = tileEntityStatue.getStatue().getEntity();
-
             Statue.BlockFragment fragment = tileEntityStatue.getStatue().getMaterial();
             BufferedImage patternImage = EntityBlockTextureMerger.getTexture(fragment.getBlock(), fragment.getMetadata());
 
             if (patternImage != null)
             {
-                ResourceLocation entityResourceLocation = YGCConfig.doStatueTextureMerge ? EntityBlockTextureMerger.getTexture(entity) : null;
-
                 if (entityResourceLocation != null)
                 {
                     TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
 
                     ITextureObject entityResourceTexture = textureManager.getTexture(entityResourceLocation);
-                    if (entityResourceTexture instanceof ThreadDownloadImageData && !((ThreadDownloadImageData) entityResourceTexture).isTextureUploaded())
+                    if (!isTextureFinal(entityResourceTexture))
                     {
                         return null; // Wait
                     }
@@ -148,7 +157,7 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
                             if (Minecraft.getMinecraft().getTextureManager().loadTexture(textureColorized, modifiedTexture))
                                 return textureColorized;
                             else
-                                return null;
+                                return null; // Merging failed
                         }
                         else
                             return textureColorized;
@@ -167,5 +176,10 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
         }
 
         return null;
+    }
+
+    public static boolean isTextureFinal(ITextureObject resourceLocation)
+    {
+        return true;
     }
 }

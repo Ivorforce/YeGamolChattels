@@ -395,6 +395,9 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
     private ResourceLocation statueTexture;
 
     @SideOnly(Side.CLIENT)
+    private ResourceLocation usedEntityTexture;
+
+    @SideOnly(Side.CLIENT)
     public void releaseTexture()
     {
         if (statueTexture != null)
@@ -414,6 +417,16 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
     public void setStatueTexture(ResourceLocation statueTexture)
     {
         this.statueTexture = statueTexture;
+    }
+
+    public ResourceLocation getUsedEntityTexture()
+    {
+        return usedEntityTexture;
+    }
+
+    public void setUsedEntityTexture(ResourceLocation usedEntityTexture)
+    {
+        this.usedEntityTexture = usedEntityTexture;
     }
 
     @Override

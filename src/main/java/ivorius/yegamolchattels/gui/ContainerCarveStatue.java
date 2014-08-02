@@ -5,6 +5,7 @@
 
 package ivorius.yegamolchattels.gui;
 
+import com.mojang.authlib.GameProfile;
 import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.network.PacketGuiAction;
 import ivorius.ivtoolkit.tools.IvInventoryHelper;
@@ -25,9 +26,14 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
+
+import java.util.UUID;
 
 /**
  * Created by lukas on 27.07.14.
@@ -120,9 +126,25 @@ public class ContainerCarveStatue extends Container implements PacketGuiAction.A
                 return ItemEntityVita.createEntity(stack, world);
             else if (stack.getItem() == Items.skull)
             {
-                if (stack.hasTagCompound() && stack.getTagCompound().hasKey("SkullOwner"))
+                NBTTagCompound compound = stack.getTagCompound();
+
+                if (stack.hasTagCompound() && compound.hasKey("SkullOwner"))
                 {
-                    return new EntityFakePlayer(world, stack.getTagCompound().getString("SkullOwner"));
+                    GameProfile gameprofile = null;
+
+                    if (compound.hasKey("SkullOwner", Constants.NBT.TAG_COMPOUND))
+                    {
+                        gameprofile = NBTUtil.func_152459_a(compound.getCompoundTag("SkullOwner"));
+                    }
+                    else if (compound.hasKey("SkullOwner", Constants.NBT.TAG_STRING) && compound.getString("SkullOwner").length() > 0)
+                    {
+                        if (!world.isRemote)
+                            gameprofile =  EntityFakePlayer.createGameProfile(stack.getTagCompound().getString("SkullOwner"));
+                        else
+                            gameprofile = new GameProfile(null, stack.getTagCompound().getString("SkullOwner"));
+                    }
+
+                    return new EntityFakePlayer(world, gameprofile);
                 }
             }
         }

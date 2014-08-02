@@ -5,30 +5,35 @@
 
 package ivorius.yegamolchattels.entities;
 
+import com.google.common.collect.Iterables;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+import com.mojang.authlib.properties.Property;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
+import net.minecraft.client.resources.SkinManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeModContainer;
+import net.minecraftforge.common.util.Constants;
 
 /**
  * Created by lukas on 28.07.14.
  */
-public class EntityFakePlayer extends EntityMob
+public class EntityFakePlayer extends EntityMob implements SkinManager.SkinAvailableCallback
 {
-    private String playerUsername;
+    private GameProfile playerProfile;
 
-    @SideOnly(Side.CLIENT)
-    private ThreadDownloadImageData downloadImageSkin;
-    @SideOnly(Side.CLIENT)
-    private ThreadDownloadImageData downloadImageCape;
     @SideOnly(Side.CLIENT)
     private ResourceLocation locationSkin;
     @SideOnly(Side.CLIENT)
@@ -41,56 +46,24 @@ public class EntityFakePlayer extends EntityMob
         this.setSize(0.6F, 1.8F);
     }
 
-    public EntityFakePlayer(World par1World, String playerUsername)
+    public EntityFakePlayer(World par1World, GameProfile playerProfile)
     {
         super(par1World);
-        this.playerUsername = playerUsername;
+
+        this.playerProfile = playerProfile;
 
         if (worldObj.isRemote)
             setupCustomSkin();
     }
 
-    @SideOnly(Side.CLIENT)
-    private void setupCustomSkin()
-    {
-        String s = getPlayerUsername();
-
-        if (!s.isEmpty())
-        {
-            this.locationSkin = AbstractClientPlayer.getLocationSkin(s);
-            this.locationCape = AbstractClientPlayer.getLocationCape(s);
-            this.downloadImageSkin = AbstractClientPlayer.getDownloadImageSkin(this.locationSkin, s);
-            this.downloadImageCape = AbstractClientPlayer.getDownloadImageCape(this.locationCape, s);
-        }
-    }
-
-    @SideOnly(Side.CLIENT)
-    public ThreadDownloadImageData getTextureSkin()
-    {
-        return this.downloadImageSkin;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public ThreadDownloadImageData getTextureCape()
-    {
-        return this.downloadImageCape;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public ResourceLocation getLocationSkin()
-    {
-        return this.locationSkin;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public ResourceLocation getLocationCape()
-    {
-        return this.locationCape;
-    }
-
     public String getPlayerUsername()
     {
-        return playerUsername;
+        return playerProfile != null ? playerProfile.getName() : null;
+    }
+
+    public GameProfile getPlayerProfile()
+    {
+        return playerProfile;
     }
 
     @Override
@@ -98,7 +71,12 @@ public class EntityFakePlayer extends EntityMob
     {
         super.writeEntityToNBT(tagCompound);
 
-        tagCompound.setString("playerUsername", playerUsername);
+        if (this.playerProfile != null)
+        {
+            NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+            NBTUtil.func_152460_a(nbttagcompound1, this.playerProfile);
+            tagCompound.setTag("PlayerProfile", nbttagcompound1);
+        }
     }
 
     @Override
@@ -106,7 +84,10 @@ public class EntityFakePlayer extends EntityMob
     {
         super.readEntityFromNBT(tagCompound);
 
-        playerUsername = tagCompound.getString("playerUsername");
+        if (tagCompound.hasKey("PlayerProfile", Constants.NBT.TAG_COMPOUND))
+        {
+            this.playerProfile = NBTUtil.func_152459_a(tagCompound.getCompoundTag("PlayerProfile"));
+        }
 
         if (worldObj != null && worldObj.isRemote)
             setupCustomSkin();
@@ -120,5 +101,61 @@ public class EntityFakePlayer extends EntityMob
         this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(40.0D);
         this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.23000000417232513D);
         this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(3.0D);
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void setupCustomSkin()
+    {
+        String s = getPlayerUsername();
+
+        if (s != null && !s.isEmpty())
+        {
+            SkinManager skinmanager = Minecraft.getMinecraft().func_152342_ad();
+            skinmanager.func_152790_a(playerProfile, this, true);
+        }
+    }
+
+    public static GameProfile createGameProfile(String playerUsername)
+    {
+        GameProfile gameprofile = MinecraftServer.getServer().func_152358_ax().func_152655_a(playerUsername);
+
+        if (gameprofile != null)
+        {
+            Property property = (Property) Iterables.getFirst(gameprofile.getProperties().get("textures"), (Object) null);
+
+            if (property == null)
+            {
+                gameprofile = MinecraftServer.getServer().func_147130_as().fillProfileProperties(gameprofile, true);
+            }
+
+            return gameprofile;
+        }
+
+        return null;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public ResourceLocation getLocationSkin()
+    {
+        return this.locationSkin != null ? this.locationSkin : AbstractClientPlayer.locationStevePng;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public ResourceLocation getLocationCape()
+    {
+        return this.locationCape;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void func_152121_a(MinecraftProfileTexture.Type type, ResourceLocation resourceLocation)
+    {
+        switch (type)
+        {
+            case CAPE:
+                this.locationCape = resourceLocation;
+            case SKIN:
+                this.locationSkin = resourceLocation;
+        }
     }
 }
