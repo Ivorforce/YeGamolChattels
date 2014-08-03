@@ -7,16 +7,12 @@ package ivorius.yegamolchattels.worldgen;
 
 import cpw.mods.fml.common.IWorldGenerator;
 import ivorius.yegamolchattels.blocks.YGCBlocks;
-import net.minecraft.block.BlockFlower;
-import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenFlowers;
-import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.BiomeDictionary;
 
-import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -41,7 +37,7 @@ public class WorldGenFlax implements IWorldGenerator
         {
             int flaxPlants = 0;
             while (random.nextFloat() < 0.8f && flaxPlants < 10)
-                flaxPlants ++;
+                flaxPlants++;
 
             for (int flower = 0; flower < flaxPlants; ++flower)
             {

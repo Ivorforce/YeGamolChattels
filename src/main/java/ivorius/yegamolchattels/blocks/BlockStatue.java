@@ -7,7 +7,6 @@ package ivorius.yegamolchattels.blocks;
 
 import ivorius.ivtoolkit.blocks.IvBlockMultiblock;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
-import ivorius.ivtoolkit.rendering.IvParticleHelper;
 import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.achievements.YGCAchievementList;
 import ivorius.yegamolchattels.items.ItemStatue;
@@ -17,7 +16,6 @@ import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityDiggingFX;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -150,38 +148,38 @@ public class BlockStatue extends IvBlockMultiblock
             Statue.BlockFragment fragment = tileEntityStatue.getStatue().getMaterial();
 
             float f = 0.1F;
-            double d0 = (double)target.blockX + worldObj.rand.nextDouble() * (getBlockBoundsMaxX() - getBlockBoundsMinX() - (double)(f * 2.0F)) + (double)f + getBlockBoundsMinX();
-            double d1 = (double)target.blockY + worldObj.rand.nextDouble() * (getBlockBoundsMaxY() - getBlockBoundsMinY() - (double)(f * 2.0F)) + (double)f + getBlockBoundsMinY();
-            double d2 = (double)target.blockZ + worldObj.rand.nextDouble() * (getBlockBoundsMaxZ() - getBlockBoundsMinZ() - (double)(f * 2.0F)) + (double)f + getBlockBoundsMinZ();
+            double d0 = (double) target.blockX + worldObj.rand.nextDouble() * (getBlockBoundsMaxX() - getBlockBoundsMinX() - (double) (f * 2.0F)) + (double) f + getBlockBoundsMinX();
+            double d1 = (double) target.blockY + worldObj.rand.nextDouble() * (getBlockBoundsMaxY() - getBlockBoundsMinY() - (double) (f * 2.0F)) + (double) f + getBlockBoundsMinY();
+            double d2 = (double) target.blockZ + worldObj.rand.nextDouble() * (getBlockBoundsMaxZ() - getBlockBoundsMinZ() - (double) (f * 2.0F)) + (double) f + getBlockBoundsMinZ();
 
             if (target.sideHit == 0)
             {
-                d1 = (double)target.blockY + getBlockBoundsMinY() - (double)f;
+                d1 = (double) target.blockY + getBlockBoundsMinY() - (double) f;
             }
 
             if (target.sideHit == 1)
             {
-                d1 = (double)target.blockY + getBlockBoundsMaxY() + (double)f;
+                d1 = (double) target.blockY + getBlockBoundsMaxY() + (double) f;
             }
 
             if (target.sideHit == 2)
             {
-                d2 = (double)target.blockZ + getBlockBoundsMinZ() - (double)f;
+                d2 = (double) target.blockZ + getBlockBoundsMinZ() - (double) f;
             }
 
             if (target.sideHit == 3)
             {
-                d2 = (double)target.blockZ + getBlockBoundsMaxZ() + (double)f;
+                d2 = (double) target.blockZ + getBlockBoundsMaxZ() + (double) f;
             }
 
             if (target.sideHit == 4)
             {
-                d0 = (double)target.blockX + getBlockBoundsMinX() - (double)f;
+                d0 = (double) target.blockX + getBlockBoundsMinX() - (double) f;
             }
 
             if (target.sideHit == 5)
             {
-                d0 = (double)target.blockX + getBlockBoundsMaxX() + (double)f;
+                d0 = (double) target.blockX + getBlockBoundsMaxX() + (double) f;
             }
 
             EntityFX diggingFX = new EntityDiggingFX(worldObj, d0, d1, d2, 0.0D, 0.0D, 0.0D, fragment.getBlock(), fragment.getMetadata()).applyColourMultiplier(target.blockX, target.blockY, target.blockZ).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F);

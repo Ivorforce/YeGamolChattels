@@ -6,7 +6,6 @@
 package ivorius.yegamolchattels.client.rendering;
 
 
-import cpw.mods.fml.relauncher.ReflectionHelper;
 import ivorius.ivtoolkit.blocks.IvMultiBlockRenderHelper;
 import ivorius.ivtoolkit.logic.IvObjects;
 import ivorius.ivtoolkit.rendering.textures.IvTexturePatternColorizer;
@@ -18,7 +17,6 @@ import ivorius.yegamolchattels.blocks.Statue;
 import ivorius.yegamolchattels.blocks.TileEntityStatue;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -31,7 +29,6 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.image.BufferedImage;
-import java.lang.reflect.Field;
 
 public class TileEntityRendererStatue extends TileEntitySpecialRenderer
 {

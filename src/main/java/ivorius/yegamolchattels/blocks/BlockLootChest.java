@@ -15,9 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockLootChest extends BlockContainer
@@ -39,9 +37,9 @@ public class BlockLootChest extends BlockContainer
     }
 
     @Override
-	public boolean onBlockActivated( World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9 )
-	{
-		TileEntityLootChest entity = (TileEntityLootChest) world.getTileEntity(x, y, z);
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
+    {
+        TileEntityLootChest entity = (TileEntityLootChest) world.getTileEntity(x, y, z);
 
         if (!world.isRemote)
         {
@@ -68,8 +66,8 @@ public class BlockLootChest extends BlockContainer
             }
         }
 
-		return true;
-	}
+        return true;
+    }
 
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLivingBase, ItemStack itemStack)
@@ -87,28 +85,28 @@ public class BlockLootChest extends BlockContainer
     }
 
     @Override
-	public int getRenderType()
-	{
-		return -1;
-	}
+    public int getRenderType()
+    {
+        return -1;
+    }
 
-	@Override
-	public boolean isOpaqueCube()
-	{
-		return false;
-	}
+    @Override
+    public boolean isOpaqueCube()
+    {
+        return false;
+    }
 
-	@Override
-	public boolean renderAsNormalBlock()
-	{
-		return false;
-	}
+    @Override
+    public boolean renderAsNormalBlock()
+    {
+        return false;
+    }
 
-	@Override
-	public IIcon getIcon( int var1, int var2 )
-	{
-		return Blocks.planks.getIcon(0, 1);
-	}
+    @Override
+    public IIcon getIcon(int var1, int var2)
+    {
+        return Blocks.planks.getIcon(0, 1);
+    }
 
     @Override
     public void registerBlockIcons(IIconRegister iconRegister)

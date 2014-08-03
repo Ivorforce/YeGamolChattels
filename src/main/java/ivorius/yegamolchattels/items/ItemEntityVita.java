@@ -5,7 +5,6 @@
 
 package ivorius.yegamolchattels.items;
 
-import ivorius.yegamolchattels.blocks.TileEntityStatue;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;

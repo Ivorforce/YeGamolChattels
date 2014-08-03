@@ -10,7 +10,6 @@ import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.blocks.IvTileEntityRotatable;
 import ivorius.ivtoolkit.entities.IvEntityHelper;
 import ivorius.ivtoolkit.network.IvNetworkHelperServer;
-import ivorius.ivtoolkit.network.PacketTileEntityData;
 import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.ivtoolkit.raytracing.IvRaytraceableObject;
 import ivorius.ivtoolkit.raytracing.IvRaytracedIntersection;

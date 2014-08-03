@@ -16,13 +16,11 @@
  * No additional restrictions — You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.
  */
 
-package ivorius.ivtoolkit.rendering;
+package ivorius.yegamolchattels.client.rendering;
 
 import ivorius.yegamolchattels.entities.EntityFakePlayer;
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderBiped;
-import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 

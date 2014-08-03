@@ -4,7 +4,6 @@ import ivorius.ivtoolkit.blocks.IvBlockMultiblock;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
 import ivorius.ivtoolkit.network.IvNetworkHelperServer;
 import ivorius.yegamolchattels.YeGamolChattels;
-import ivorius.yegamolchattels.gui.YGCGuiHandler;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;

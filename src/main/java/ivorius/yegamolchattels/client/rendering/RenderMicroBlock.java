@@ -10,12 +10,10 @@ import ivorius.ivtoolkit.blocks.BlockCoord;
 import ivorius.ivtoolkit.blocks.IvBlockCollection;
 import ivorius.yegamolchattels.blocks.BlockMicroBlock;
 import ivorius.yegamolchattels.blocks.TileEntityMicroBlock;
-import ivorius.yegamolchattels.items.ItemMicroBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 

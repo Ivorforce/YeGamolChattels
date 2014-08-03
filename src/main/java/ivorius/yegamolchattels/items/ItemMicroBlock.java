@@ -10,12 +10,9 @@ import ivorius.ivtoolkit.blocks.IvBlockCollection;
 import ivorius.ivtoolkit.tools.MCRegistryDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 import java.util.HashSet;
 import java.util.List;
@@ -78,7 +75,7 @@ public class ItemMicroBlock extends ItemBlock
                         curCount = 0;
                         par3List.add(blockNames.toString());
                         blockNames = new StringBuilder();
-                        lineCount ++;
+                        lineCount++;
 
                         if (lineCount > 3)
                         {

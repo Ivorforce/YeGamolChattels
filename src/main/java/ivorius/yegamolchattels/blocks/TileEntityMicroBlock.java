@@ -15,7 +15,6 @@ import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.ivtoolkit.tools.MCRegistryDefault;
 import ivorius.yegamolchattels.YeGamolChattels;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;

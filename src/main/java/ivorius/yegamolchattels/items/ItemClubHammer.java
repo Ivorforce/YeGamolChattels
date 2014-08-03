@@ -5,14 +5,10 @@
 
 package ivorius.yegamolchattels.items;
 
-import ivorius.ivtoolkit.blocks.BlockCoord;
-import ivorius.ivtoolkit.blocks.IvBlockCollection;
-import ivorius.yegamolchattels.blocks.TileEntityMicroBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import java.util.List;

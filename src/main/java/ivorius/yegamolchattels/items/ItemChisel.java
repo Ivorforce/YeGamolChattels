@@ -261,34 +261,34 @@ public class ItemChisel extends ItemTool
             if (internalX < 0)
             {
                 internalX = TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_X - 1;
-                blockX --;
+                blockX--;
             }
             else if (internalX >= TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_X)
             {
                 internalX = 0;
-                blockX ++;
+                blockX++;
             }
 
             if (internalY < 0)
             {
                 internalY = TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Y - 1;
-                blockY --;
+                blockY--;
             }
             else if (internalY >= TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Y)
             {
                 internalY = 0;
-                blockY ++;
+                blockY++;
             }
 
             if (internalZ < 0)
             {
                 internalZ = TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Z - 1;
-                blockZ --;
+                blockZ--;
             }
             else if (internalZ >= TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Z)
             {
                 internalZ = 0;
-                blockZ ++;
+                blockZ++;
             }
 
             return new MicroBlockFragment(new BlockCoord(blockX, blockY, blockZ), new BlockCoord(internalX, internalY, internalZ), internalSide.getOpposite(), hitPoint);

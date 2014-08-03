@@ -9,7 +9,6 @@ import com.mojang.authlib.GameProfile;
 import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.network.PacketGuiAction;
 import ivorius.ivtoolkit.tools.IvInventoryHelper;
-import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.blocks.Statue;
 import ivorius.yegamolchattels.blocks.TileEntityStatue;
 import ivorius.yegamolchattels.entities.EntityFakePlayer;
@@ -17,7 +16,6 @@ import ivorius.yegamolchattels.items.ItemEntityVita;
 import ivorius.yegamolchattels.items.ItemStatueChisel;
 import ivorius.yegamolchattels.items.YGCItems;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
@@ -29,11 +27,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-
-import java.util.UUID;
 
 /**
  * Created by lukas on 27.07.14.
@@ -139,7 +134,7 @@ public class ContainerCarveStatue extends Container implements PacketGuiAction.A
                     else if (compound.hasKey("SkullOwner", Constants.NBT.TAG_STRING) && compound.getString("SkullOwner").length() > 0)
                     {
                         if (!world.isRemote)
-                            gameprofile =  EntityFakePlayer.createGameProfile(stack.getTagCompound().getString("SkullOwner"));
+                            gameprofile = EntityFakePlayer.createGameProfile(stack.getTagCompound().getString("SkullOwner"));
                         else
                             gameprofile = new GameProfile(null, stack.getTagCompound().getString("SkullOwner"));
                     }
@@ -209,7 +204,7 @@ public class ContainerCarveStatue extends Container implements PacketGuiAction.A
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2)
     {
         ItemStack itemstack = null;
-        Slot slot = (Slot)this.inventorySlots.get(par2);
+        Slot slot = (Slot) this.inventorySlots.get(par2);
 
         if (slot != null && slot.getHasStack())
         {
@@ -225,28 +220,28 @@ public class ContainerCarveStatue extends Container implements PacketGuiAction.A
             }
             else
             {
-                if (((Slot)this.inventorySlots.get(0)).getHasStack() || !((Slot)this.inventorySlots.get(0)).isItemValid(itemstack1))
+                if (((Slot) this.inventorySlots.get(0)).getHasStack() || !((Slot) this.inventorySlots.get(0)).isItemValid(itemstack1))
                 {
                     return null;
                 }
 
                 if (itemstack1.hasTagCompound() && itemstack1.stackSize == 1)
                 {
-                    ((Slot)this.inventorySlots.get(0)).putStack(itemstack1.copy());
+                    ((Slot) this.inventorySlots.get(0)).putStack(itemstack1.copy());
                     itemstack1.stackSize = 0;
                 }
                 else if (itemstack1.stackSize >= 1)
                 {
                     ItemStack oneItemStack = itemstack1.copy();
                     oneItemStack.stackSize = 1;
-                    ((Slot)this.inventorySlots.get(0)).putStack(oneItemStack);
+                    ((Slot) this.inventorySlots.get(0)).putStack(oneItemStack);
                     --itemstack1.stackSize;
                 }
             }
 
             if (itemstack1.stackSize == 0)
             {
-                slot.putStack((ItemStack)null);
+                slot.putStack((ItemStack) null);
             }
             else
             {

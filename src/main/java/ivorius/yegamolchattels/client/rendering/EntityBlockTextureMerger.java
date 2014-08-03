@@ -5,17 +5,13 @@
 
 package ivorius.yegamolchattels.client.rendering;
 
-import cpw.mods.fml.relauncher.ReflectionHelper;
-import ivorius.ivtoolkit.logic.ReferenceCounter;
 import ivorius.yegamolchattels.YeGamolChattels;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.YGCEntityRendererAccessor;
-import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.IIcon;
@@ -30,7 +26,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.Map;
 
 import static org.lwjgl.opengl.GL11.*;
 

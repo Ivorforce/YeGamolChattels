@@ -8,7 +8,6 @@ package ivorius.yegamolchattels.client;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import ivorius.ivtoolkit.items.IvItemRendererModel;
-import ivorius.ivtoolkit.rendering.RenderFakePlayer;
 import ivorius.yegamolchattels.YGCConfig;
 import ivorius.yegamolchattels.YGCProxy;
 import ivorius.yegamolchattels.YeGamolChattels;

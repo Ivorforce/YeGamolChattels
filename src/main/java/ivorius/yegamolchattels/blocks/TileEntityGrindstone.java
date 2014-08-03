@@ -8,7 +8,6 @@ package ivorius.yegamolchattels.blocks;
 import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.blocks.IvTileEntityHelper;
 import ivorius.ivtoolkit.network.IvNetworkHelperServer;
-import ivorius.ivtoolkit.network.PacketTileEntityData;
 import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.items.YGCItems;

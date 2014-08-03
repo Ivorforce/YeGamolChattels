@@ -5,24 +5,18 @@
 
 package ivorius.yegamolchattels.client.rendering;
 
-import java.awt.Color;
-
-import ivorius.ivtoolkit.blocks.IvMultiBlockRenderHelper;
 import ivorius.ivtoolkit.blocks.IvRotatableBlockRenderHelper;
 import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.blocks.TileEntityLootChest;
-
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 public class TileEntityRendererLootChest extends TileEntitySpecialRenderer
 {
-	private ModelLootChest chestModel;
+    private ModelLootChest chestModel;
     private ResourceLocation chestTexture;
 
     public TileEntityRendererLootChest()
@@ -32,8 +26,8 @@ public class TileEntityRendererLootChest extends TileEntitySpecialRenderer
     }
 
     @Override
-	public void renderTileEntityAt( TileEntity entity, double x, double y, double z, float var8 )
-	{
+    public void renderTileEntityAt(TileEntity entity, double x, double y, double z, float var8)
+    {
         TileEntityLootChest lootChest = (TileEntityLootChest) entity;
 
         GL11.glPushMatrix();
@@ -66,5 +60,5 @@ public class TileEntityRendererLootChest extends TileEntitySpecialRenderer
         }
 
         GL11.glPopMatrix();
-	}
+    }
 }

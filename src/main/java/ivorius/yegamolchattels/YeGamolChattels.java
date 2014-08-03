@@ -42,7 +42,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Collections;
-import java.util.HashSet;
 
 @Mod(modid = YeGamolChattels.MODID, version = YeGamolChattels.VERSION, name = YeGamolChattels.NAME, guiFactory = "ivorius.yegamolchattels.gui.YGCConfigGuiFactory")
 public class YeGamolChattels
@@ -293,11 +292,11 @@ public class YeGamolChattels
     public void load(FMLInitializationEvent event)
     {
         network = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
-        YeGamolChattels.network.registerMessage(PacketExtendedEntityPropertiesDataHandler.class, PacketExtendedEntityPropertiesData.class, 0, Side.CLIENT);
-        YeGamolChattels.network.registerMessage(PacketEntityDataHandler.class, PacketEntityData.class, 1, Side.CLIENT);
-        YeGamolChattels.network.registerMessage(PacketTileEntityDataHandler.class, PacketTileEntityData.class, 3, Side.CLIENT);
-        YeGamolChattels.network.registerMessage(PacketGuiActionHandler.class, PacketGuiAction.class, 4, Side.SERVER);
-        YeGamolChattels.network.registerMessage(PacketTileEntityClientEventHandler.class, PacketTileEntityClientEvent.class, 5, Side.SERVER);
+        network.registerMessage(PacketExtendedEntityPropertiesDataHandler.class, PacketExtendedEntityPropertiesData.class, 0, Side.CLIENT);
+        network.registerMessage(PacketEntityDataHandler.class, PacketEntityData.class, 1, Side.CLIENT);
+        network.registerMessage(PacketTileEntityDataHandler.class, PacketTileEntityData.class, 3, Side.CLIENT);
+        network.registerMessage(PacketGuiActionHandler.class, PacketGuiAction.class, 4, Side.SERVER);
+        network.registerMessage(PacketTileEntityClientEventHandler.class, PacketTileEntityClientEvent.class, 5, Side.SERVER);
 
         proxy.registerRenderers();
 
