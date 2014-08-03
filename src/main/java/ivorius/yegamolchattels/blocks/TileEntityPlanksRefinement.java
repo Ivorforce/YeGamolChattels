@@ -198,7 +198,7 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
             {
                 if (entry.matchesSource(containedItem))
                 {
-                    containedItem = entry.getResult();
+                    containedItem = entry.getResult(containedItem);
                     break;
                 }
             }

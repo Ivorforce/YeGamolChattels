@@ -11,5 +11,5 @@ public interface IPlanksRefinementEntry
 
     public boolean matchesTool(ItemStack tool);
 
-    public ItemStack getResult();
+    public ItemStack getResult(ItemStack source);
 }

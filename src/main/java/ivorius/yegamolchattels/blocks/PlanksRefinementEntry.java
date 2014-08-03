@@ -12,11 +12,19 @@ public class PlanksRefinementEntry implements IPlanksRefinementEntry
     public Item tool;
     public ItemStack destination;
 
+    public boolean copyMetadata;
+
     public PlanksRefinementEntry(Item source, Item tool, ItemStack destination)
     {
+        this(source, tool, destination, false);
+    }
+
+    public PlanksRefinementEntry(Item source, Item tool, ItemStack destination, boolean copyMetadata)
+    {
         this.source = source;
-        this.destination = destination;
         this.tool = tool;
+        this.destination = destination;
+        this.copyMetadata = copyMetadata;
     }
 
     @Override
@@ -32,8 +40,16 @@ public class PlanksRefinementEntry implements IPlanksRefinementEntry
     }
 
     @Override
-    public ItemStack getResult()
+    public ItemStack getResult(ItemStack source)
     {
-        return destination != null ? destination.copy() : null;
+        if (destination != null)
+        {
+            ItemStack stack = destination.copy();
+            if (copyMetadata)
+                stack.setItemDamage(source.getItemDamage());
+            return stack;
+        }
+        else
+            return null;
     }
 }
