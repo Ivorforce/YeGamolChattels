@@ -22,7 +22,7 @@ group= "ivorius.yegamolchattels" // http://maven.apache.org/guides/mini/guide-na
 archivesBaseName = "YeGamolChattels"
 
 minecraft {
-    version = "1.7.10-10.13.0.1191"
+    version = "1.7.10-10.13.0.1194"
     assetDir = "eclipse/assets"
 }
 
