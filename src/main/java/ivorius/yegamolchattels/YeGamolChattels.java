@@ -262,7 +262,7 @@ public class YeGamolChattels
 
         // --------------------------------Microblocks--------------------------------
 
-        YGCBlocks.microBlock = new BlockMicroBlock().setBlockName("ygc_micro_block").setHardness(1.0F);
+        YGCBlocks.microBlock = new BlockMicroBlock().setBlockName("ygcMicroBlock").setHardness(1.0F);
         GameRegistry.registerBlock(YGCBlocks.microBlock, ItemMicroBlock.class, "ygc_micro_block");
         GameRegistry.registerTileEntity(TileEntityMicroBlock.class, "ygcMicroBlock");
 
