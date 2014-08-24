@@ -57,7 +57,8 @@ public class YGCFMLEventHandler
         if (event instanceof ConfigChangedEvent.OnConfigChangedEvent && event.modID.equals(YeGamolChattels.MODID))
         {
             YGCConfig.loadConfig(event.configID);
-            YeGamolChattels.config.save();
+            if (YeGamolChattels.config.hasChanged())
+                YeGamolChattels.config.save();
         }
     }
 
