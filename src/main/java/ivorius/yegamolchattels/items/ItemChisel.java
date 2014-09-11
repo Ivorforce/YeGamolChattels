@@ -167,6 +167,10 @@ public class ItemChisel extends ItemTool
         double entityX = entity.prevPosX + (entity.posX - entity.prevPosX) * (double) partialTicks;
         double entityY = entity.prevPosY + (entity.posY - entity.prevPosY) * (double) partialTicks + 1.62D - (double) entity.yOffset;
         double entityZ = entity.prevPosZ + (entity.posZ - entity.prevPosZ) * (double) partialTicks;
+
+        if (!entity.worldObj.isRemote && entity instanceof EntityPlayer && entity.isSneaking())
+            entityY -= 0.1f; // TODO Find a way not to hardcode this
+
         Vec3 entityPos = Vec3.createVectorHelper(entityX, entityY, entityZ);
         return getHoveredFragment(entity.worldObj, hoverX, hoverY, hoverZ, entityPos, entity.getLookVec());
     }
