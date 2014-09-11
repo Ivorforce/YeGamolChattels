@@ -62,6 +62,7 @@ public class RenderMicroBlock implements ISimpleBlockRenderingHandler
         tessellator.setBrightness(innerBrightness);
         tessellator.setColorOpaque_F(1.0f, 1.0f, 1.0f);
 
+        renderer.field_152631_f = true; // Fixes random block texture rotations for small textures... Used in renderBlockFence
         for (BlockCoord coord : blockCollection)
         {
             Block block = blockCollection.getBlock(coord);
@@ -99,6 +100,7 @@ public class RenderMicroBlock implements ISimpleBlockRenderingHandler
 //                    renderer.renderFaceYNeg(origBlock, x, y, z, block.getIcon(ForgeDirection.DOWN.ordinal(), meta));
             }
         }
+        renderer.field_152631_f = false;
 
         origBlock.setBlockBoundsBasedOnState(world, x, y, z);
         origBlock.renderBlockCache = null;
