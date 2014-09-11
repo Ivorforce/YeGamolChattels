@@ -28,5 +28,7 @@ public class SnowGlobeCallListHandler
         {
             GLAllocation.deleteDisplayLists(i);
         }
+
+        callListsToDestroy.clear();
     }
 }
