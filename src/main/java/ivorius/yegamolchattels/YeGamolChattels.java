@@ -26,6 +26,7 @@ import ivorius.yegamolchattels.events.YGCFMLEventHandler;
 import ivorius.yegamolchattels.events.YGCForgeEventHandler;
 import ivorius.yegamolchattels.gui.YGCGuiHandler;
 import ivorius.yegamolchattels.items.*;
+import ivorius.yegamolchattels.materials.YGCMaterials;
 import ivorius.yegamolchattels.worldgen.WorldGenFlax;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -111,6 +112,8 @@ public class YeGamolChattels
         forgeEventHandler = new YGCForgeEventHandler();
         forgeEventHandler.register();
 
+        YGCMaterials.init();
+
         YGCBlocks.blockTreasurePileRenderType = RenderingRegistry.getNextAvailableRenderId();
         YGCBlocks.blockTikiTorchRenderType = RenderingRegistry.getNextAvailableRenderId();
         YGCBlocks.blockMicroBlockRenderType = RenderingRegistry.getNextAvailableRenderId();
@@ -139,7 +142,7 @@ public class YeGamolChattels
 
         // --------------------------------Statue--------------------------------
 
-        YGCBlocks.statue = (new BlockStatue(Material.rock)).setHardness(2.0F).setStepSound(Block.soundTypeStone).setBlockName("ygcStatue").setBlockTextureName("statue").setCreativeTab(tabMain);
+        YGCBlocks.statue = (new BlockStatue()).setHardness(2.0F).setStepSound(Block.soundTypeStone).setBlockName("ygcStatue").setBlockTextureName("statue").setCreativeTab(tabMain);
         GameRegistry.registerBlock(YGCBlocks.statue, ItemStatue.class, "statue", 0);
 
         GameRegistry.registerTileEntity(TileEntityStatue.class, "ygcStatue");
@@ -204,7 +207,7 @@ public class YeGamolChattels
 
         // --------------------------------Pedestal--------------------------------
 
-        YGCBlocks.pedestal = (new BlockPedestal(Material.wood)).setHardness(1.5F).setStepSound(Block.soundTypeWood).setBlockName("pedestal");
+        YGCBlocks.pedestal = (new BlockPedestal()).setHardness(1.5F).setStepSound(Block.soundTypeWood).setBlockName("pedestal");
         GameRegistry.registerBlock(YGCBlocks.pedestal, ItemPedestal.class, "pedestal");
 
         GameRegistry.registerTileEntityWithAlternatives(TileEntityPedestal.class, "ygcPedestal", "Pedestal");

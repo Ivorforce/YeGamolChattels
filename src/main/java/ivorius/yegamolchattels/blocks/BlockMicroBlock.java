@@ -11,6 +11,7 @@ import ivorius.yegamolchattels.items.ItemBlockFragment;
 import ivorius.yegamolchattels.items.ItemChisel;
 import ivorius.yegamolchattels.items.ItemMicroBlock;
 import ivorius.yegamolchattels.items.YGCItems;
+import ivorius.yegamolchattels.materials.YGCMaterials;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -45,7 +46,7 @@ public class BlockMicroBlock extends BlockContainer
 
     public BlockMicroBlock()
     {
-        super(Material.wood);
+        super(YGCMaterials.mixed);
     }
 
     @Override

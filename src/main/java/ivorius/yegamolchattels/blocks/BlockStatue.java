@@ -10,6 +10,7 @@ import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
 import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.achievements.YGCAchievementList;
 import ivorius.yegamolchattels.items.ItemStatue;
+import ivorius.yegamolchattels.materials.YGCMaterials;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.EffectRenderer;
@@ -29,9 +30,9 @@ import net.minecraft.world.World;
 
 public class BlockStatue extends IvBlockMultiblock
 {
-    public BlockStatue(Material material)
+    public BlockStatue()
     {
-        super(material);
+        super(YGCMaterials.mixed);
     }
 
     @Override

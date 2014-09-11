@@ -8,6 +8,7 @@ package ivorius.yegamolchattels.blocks;
 import ivorius.ivtoolkit.blocks.IvBlockMultiblock;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
 import ivorius.yegamolchattels.YeGamolChattels;
+import ivorius.yegamolchattels.materials.YGCMaterials;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -22,9 +23,9 @@ public class BlockPedestal extends IvBlockMultiblock
 {
     public IIcon[] icons;
 
-    public BlockPedestal(Material par2Material)
+    public BlockPedestal()
     {
-        super(par2Material);
+        super(YGCMaterials.mixed);
 
         setCreativeTab(YeGamolChattels.tabMain);
     }
