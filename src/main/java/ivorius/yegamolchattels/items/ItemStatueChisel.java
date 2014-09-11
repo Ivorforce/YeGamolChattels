@@ -98,7 +98,7 @@ public class ItemStatueChisel extends Item
                             TileEntityStatue tileEntityStatue = (TileEntityStatue) tileEntity;
                             statue.setMaterial(blockFragment);
                             tileEntityStatue.setStatue(statue);
-                            tileEntityStatue.setStatueRotationYaw((entityLivingBase.rotationYaw + 180.0f) % 180.0f);
+                            tileEntityStatue.setStatueRotationYaw((entityLivingBase.rotationYaw + 180.0f) % 360.0f);
                         }
                     }
 

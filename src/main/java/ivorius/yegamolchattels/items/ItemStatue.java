@@ -57,7 +57,7 @@ public class ItemStatue extends ItemBlock
                         {
                             TileEntityStatue tileEntityStatue = (TileEntityStatue) tileEntity;
                             tileEntityStatue.setStatue(statue);
-                            tileEntityStatue.setStatueRotationYaw((par2EntityPlayer.rotationYaw + 180.0f) % 180.0f);
+                            tileEntityStatue.setStatueRotationYaw((par2EntityPlayer.rotationYaw + 180.0f) % 360.0f);
                         }
                     }
 
