@@ -129,6 +129,7 @@ item.flagLarge.dye15.name=Large White Flag
 
 tile.ygcStatue.base=%s Statue (%s)
 tile.ygcStatue.unknown=Unidentified
+tile.ygcStatue.nomaterial=Unknown Material
 
 item.ygcEntityVita.base=%s Vita
 item.ygcEntityVita.unknown=Unidentified

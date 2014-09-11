@@ -88,7 +88,7 @@ public class ItemStatue extends ItemBlock
         String localizedEntityName = entityName != null && entityName.length() > 0 ? I18n.format("entity." + entityName + ".name") : I18n.format("tile.ygcStatue.unknown");
 
         Statue.BlockFragment blockFragment = getStatueBlockFragment(par1ItemStack);
-        String localizedBlockName = new ItemStack(blockFragment.getBlock(), 1, blockFragment.getMetadata()).getDisplayName();
+        String localizedBlockName = blockFragment != null ? new ItemStack(blockFragment.getBlock(), 1, blockFragment.getMetadata()).getDisplayName() : I18n.format("tile.ygcStatue.nomaterial");
 
         return I18n.format(base, localizedEntityName, localizedBlockName);
     }
