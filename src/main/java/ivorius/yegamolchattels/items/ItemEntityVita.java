@@ -9,6 +9,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -111,6 +112,28 @@ public class ItemEntityVita extends Item
     {
         ItemStack stack = new ItemStack(item);
         setEntityByID(stack, entityName);
+        return stack;
+    }
+
+    public static ItemStack createVitaItemStackAsNewbornEntity(Item item, Entity entity)
+    {
+        ItemStack stack = new ItemStack(item);
+        setEntity(stack, entity);
+
+        Entity savedEntity = createEntity(stack, entity.worldObj);
+        savedEntity.isDead = false;
+
+        if (savedEntity instanceof EntityLivingBase)
+        {
+            EntityLivingBase entityLiving = (EntityLivingBase) savedEntity;
+            entityLiving.deathTime = 0;
+            entityLiving.attackTime = 0;
+            entityLiving.hurtTime = 0;
+            entityLiving.setHealth(entityLiving.getMaxHealth());
+        }
+
+        setEntity(stack, savedEntity);
+
         return stack;
     }
 }

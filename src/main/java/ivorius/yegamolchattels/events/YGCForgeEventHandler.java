@@ -15,13 +15,12 @@ import ivorius.yegamolchattels.blocks.TileEntitySnowGlobe;
 import ivorius.yegamolchattels.blocks.TileEntityStatue;
 import ivorius.yegamolchattels.client.rendering.EntityBlockTextureMerger;
 import ivorius.yegamolchattels.entities.EntityGhost;
-import ivorius.yegamolchattels.items.ItemBlockFragment;
-import ivorius.yegamolchattels.items.ItemChisel;
-import ivorius.yegamolchattels.items.ItemClubHammer;
+import ivorius.yegamolchattels.items.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
@@ -29,6 +28,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -141,8 +141,18 @@ public class YGCForgeEventHandler
         }
     }
 
+//    @SubscribeEvent
+//    public void onLivingDrops(LivingDropsEvent event)
+//    {
+//        if (event.entityLiving.getRNG().nextFloat() < 0.5f)
+//        {
+//            ItemStack vitaStack = ItemEntityVita.createVitaItemStackAsNewbornEntity(YGCItems.entityVita, event.entityLiving);
+//            event.drops.add(new EntityItem(event.entity.worldObj, event.entity.posX, event.entity.posY, event.entity.posZ, vitaStack));
+//       }
+//    }
+
     @SubscribeEvent
-    public void textureStitchPre(TextureStitchEvent event)
+    public void textureStitch(TextureStitchEvent event)
     {
         if (event instanceof TextureStitchEvent.Pre)
         {
