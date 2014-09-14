@@ -36,9 +36,7 @@ public class ItemStatueChisel extends Item
     {
         if (player.inventory.hasItem(YGCItems.clubHammer))
         {
-            Statue.BlockFragment blockFragment = new Statue.BlockFragment(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
-
-            if (isValidStatueBlock(blockFragment))
+            if (isValidStatueBlock(world, x, y, z))
             {
                 if (!world.isRemote) // Some entities start with random sizes
                 {
@@ -59,10 +57,10 @@ public class ItemStatueChisel extends Item
 
     public static boolean canCarveStatue(Entity statueEntity, World world, int x, int y, int z)
     {
-        Statue.BlockFragment blockFragment = new Statue.BlockFragment(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
-
-        if (isValidStatueBlock(blockFragment))
+        if (isValidStatueBlock(world, x, y, z))
         {
+            Statue.BlockFragment blockFragment = new Statue.BlockFragment(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
+
             List<int[]> positions = ItemStatue.getStatuePositions(statueEntity, 0);
             List<int[]> validPositions = getValidPositions(positions, world, blockFragment, x, y, z);
 
@@ -75,11 +73,11 @@ public class ItemStatueChisel extends Item
 
     public static TileEntityStatue carveStatue(ItemStack stack, Statue statue, World world, int x, int y, int z, EntityLivingBase entityLivingBase)
     {
-        Statue.BlockFragment blockFragment = new Statue.BlockFragment(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
-        int rotation = 0;
-
-        if (isValidStatueBlock(blockFragment))
+        if (isValidStatueBlock(world, x, y, z))
         {
+            Statue.BlockFragment blockFragment = new Statue.BlockFragment(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
+            int rotation = 0;
+
             List<int[]> positions = ItemStatue.getStatuePositions(statue.getEntity(), rotation);
             List<int[]> validPositions = getValidPositions(positions, world, blockFragment, x, y, z);
 
@@ -113,7 +111,13 @@ public class ItemStatueChisel extends Item
         return null;
     }
 
-    public static boolean isValidStatueBlock(Statue.BlockFragment fragment)
+    public static boolean isValidStatueBlock(World world, int x, int y, int z)
+    {
+        Statue.BlockFragment blockFragment = new Statue.BlockFragment(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
+        return blockFragment.getBlock().getBlockHardness(world, x, y, z) >= 0.0f && isValidStatueBlock(blockFragment);
+    }
+
+    private static boolean isValidStatueBlock(Statue.BlockFragment fragment)
     {
         Block block = fragment.getBlock();
         return !(block instanceof ITileEntityProvider) && (block.isOpaqueCube() || block == Blocks.glass || block == Blocks.stained_glass);
