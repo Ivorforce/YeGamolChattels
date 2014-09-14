@@ -143,7 +143,7 @@ public class ItemChisel extends ItemTool
     public static void convertToMicroBlock(World world, BlockCoord coord)
     {
         Block block = coord.getBlock(world);
-        if (ItemClubHammer.isMicroblockable(block) || block.getMaterial() == Material.air)
+        if (ItemClubHammer.isMicroblockable(world, coord.x, coord.y, coord.z) || block.getMaterial() == Material.air)
         {
             byte metadata = (byte) coord.getMetadata(world);
 
@@ -186,7 +186,7 @@ public class ItemChisel extends ItemTool
             TileEntityMicroBlock tileEntityMicroBlock = (TileEntityMicroBlock) tileEntity;
             collection = tileEntityMicroBlock.getBlockCollection();
         }
-        else if (ItemClubHammer.isMicroblockable(origBlock))
+        else if (ItemClubHammer.isMicroblockable(world, hoverX, hoverY, hoverZ))
         {
             collection = new IvBlockCollection(TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_X, TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Y, TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Z);
 

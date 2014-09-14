@@ -38,7 +38,7 @@ public class ItemClubHammer extends ItemTool
 
     public void modifyDrops(World world, Block block, ItemStack stack, int x, int y, int z, List<ItemStack> drops)
     {
-        if (isMicroblockable(block))
+        if (isMicroblockable(world, x, y, z))
         {
             drops.clear();
 
@@ -54,8 +54,9 @@ public class ItemClubHammer extends ItemTool
         }
     }
 
-    public static boolean isMicroblockable(Block block)
+    public static boolean isMicroblockable(World world, int x, int y, int z)
     {
-        return block.isOpaqueCube() && !(block instanceof ITileEntityProvider);
+        Block block = world.getBlock(x, y, z);
+        return block.isOpaqueCube() && !(block instanceof ITileEntityProvider) && block.getBlockHardness(world, x, y, z) >= 0.0f;
     }
 }
