@@ -12,10 +12,12 @@ import ivorius.yegamolchattels.blocks.Statue;
 import ivorius.yegamolchattels.blocks.TileEntityStatue;
 import ivorius.yegamolchattels.blocks.YGCBlocks;
 import ivorius.yegamolchattels.gui.YGCGuiHandler;
+import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentTranslation;
@@ -113,7 +115,8 @@ public class ItemStatueChisel extends Item
 
     public static boolean isValidStatueBlock(Statue.BlockFragment fragment)
     {
-        return !(fragment.getBlock() instanceof ITileEntityProvider) && fragment.getBlock().isOpaqueCube();
+        Block block = fragment.getBlock();
+        return !(block instanceof ITileEntityProvider) && (block.isOpaqueCube() || block == Blocks.glass || block == Blocks.stained_glass);
     }
 
     public static List<int[]> getValidPositions(List<int[]> positions, World world, Statue.BlockFragment blockFragment, int x, int y, int z)
