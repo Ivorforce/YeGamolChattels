@@ -347,35 +347,35 @@ public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements Pa
     @Override
     public boolean handleRightClickOnIntersection(EntityPlayer player, ItemStack stack, int side, IvRaytracedIntersection intersection)
     {
-        if (getShelfType() == shelfWardrobe)
-        {
-            if (YGCConfig.easterEggsAllowed && "WallPortal".equals(intersection.getUserInfo()))
-            {
-                if (stack != null && stack.getItem() == Items.ender_pearl)
-                {
-                    if (!worldObj.isRemote)
-                    {
-                        player.inventory.mainInventory[player.inventory.currentItem].stackSize--;
-                        if (player.inventory.mainInventory[player.inventory.currentItem].stackSize <= 0)
-                            player.inventory.mainInventory[player.inventory.currentItem] = null;
-
-                        player.triggerAchievement(YGCAchievementList.wardrobeSecret);
-
-                        narniaActivating = !narniaActivating;
-                        IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "narniaProgress", YeGamolChattels.network);
-                    }
-
-                    return true;
-                }
-                else if (narniaProgress > 0.8f)
-                {
-                    if (!worldObj.isRemote)
-                        player.addChatMessage(new ChatComponentText("You don't fit through!"));
-
-                    return true;
-                }
-            }
-        }
+//        if (getShelfType() == shelfWardrobe)
+//        {
+//            if (YGCConfig.easterEggsAllowed && "WallPortal".equals(intersection.getUserInfo()))
+//            {
+//                if (stack != null && stack.getItem() == Items.ender_pearl)
+//                {
+//                    if (!worldObj.isRemote)
+//                    {
+//                        player.inventory.mainInventory[player.inventory.currentItem].stackSize--;
+//                        if (player.inventory.mainInventory[player.inventory.currentItem].stackSize <= 0)
+//                            player.inventory.mainInventory[player.inventory.currentItem] = null;
+//
+//                        player.triggerAchievement(YGCAchievementList.wardrobeSecret);
+//
+//                        narniaActivating = !narniaActivating;
+//                        IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "narniaProgress", YeGamolChattels.network);
+//                    }
+//
+//                    return true;
+//                }
+//                else if (narniaProgress > 0.8f)
+//                {
+//                    if (!worldObj.isRemote)
+//                        player.addChatMessage(new ChatComponentText("You don't fit through!"));
+//
+//                    return true;
+//                }
+//            }
+//        }
 
         return false;
     }
