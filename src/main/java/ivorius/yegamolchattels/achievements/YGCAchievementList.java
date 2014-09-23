@@ -57,8 +57,8 @@ public class YGCAchievementList
 
         wardrobeCrafted = new Achievement("achievement.wardrobeCrafted", "wardrobeCrafted", 2, 0, new ItemStack(YGCBlocks.itemShelf, 0, TileEntityItemShelfModel0.shelfWardrobe), refinedPlank).registerStat();
         achievements.add(wardrobeCrafted);
-        wardrobeSecret = new Achievement("achievement.wardrobeSecret", "wardrobeSecret", 3, 0, new ItemStack(YGCBlocks.itemShelf, 1, TileEntityItemShelfModel0.shelfWardrobe), wardrobeCrafted).registerStat();
-        achievements.add(wardrobeSecret);
+//        wardrobeSecret = new Achievement("achievement.wardrobeSecret", "wardrobeSecret", 3, 0, new ItemStack(YGCBlocks.itemShelf, 1, TileEntityItemShelfModel0.shelfWardrobe), wardrobeCrafted).registerStat();
+//        achievements.add(wardrobeSecret);
 
         grandfatherClockCrafted = new Achievement("achievement.grandfatherClockCrafted", "grandfatherClockCrafted", 2, 1, new ItemStack(YGCBlocks.grandfatherClock), refinedPlank).registerStat();
         achievements.add(grandfatherClockCrafted);
