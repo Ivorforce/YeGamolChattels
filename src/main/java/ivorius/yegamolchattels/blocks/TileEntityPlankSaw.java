@@ -15,6 +15,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.MathHelper;
 
 /**
@@ -23,7 +24,7 @@ import net.minecraft.util.MathHelper;
 public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements PartialUpdateHandler
 {
     public ItemStack containedItem;
-    public static final int cutsPerLog = 6;
+    public static final int cutsPerLog = 4;
 
     public int sawingPlayerID;
     public float sawPositionX;
@@ -43,17 +44,25 @@ public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements Partia
             {
                 if (!worldObj.isRemote)
                 {
-                    containedItem = stack.copy();
-                    containedItem.stackSize = 1;
-                    cutsLeft = cutsPerLog;
-                    woodCutScore = 0.0f;
-                    woodCutY = 0.0f;
-                    calculateIsInWood();
+                    if (stack.stackSize >= 2)
+                    {
+                        containedItem = stack.copy();
+                        containedItem.stackSize = 2;
+                        cutsLeft = cutsPerLog;
+                        woodCutScore = 0.0f;
+                        woodCutY = 0.0f;
+                        calculateIsInWood();
 
-                    stack.stackSize--;
+                        stack.stackSize -= 2;
 
-                    markDirty();
-                    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                        markDirty();
+                        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                    }
+                    else
+                    {
+                        if (entity instanceof EntityPlayer)
+                            ((EntityPlayer) entity).addChatMessage(new ChatComponentTranslation("tile.sawBench.morewood"));
+                    }
                 }
 
                 return true;
@@ -104,7 +113,7 @@ public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements Partia
         if (!worldObj.isRemote)
         {
             float finalScore = score * score * 0.7f + score * 0.3f;
-            int planks = MathHelper.floor_float(finalScore * 6.0f + 0.5f);
+            int planks = MathHelper.floor_float(finalScore * 4.0f + 0.5f);
 
             if (planks > 0)
             {

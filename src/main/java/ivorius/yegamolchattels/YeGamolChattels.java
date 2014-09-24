@@ -380,7 +380,7 @@ public class YeGamolChattels
         GameRegistry.addRecipe(new ItemStack(YGCBlocks.snowGlobe), " # ", "#W#", "SIS", '#', Blocks.glass, 'W', Blocks.planks, 'S', Blocks.stone, 'I', Items.iron_ingot);
 
         for (int i = 0; i < 6; i++)
-            GameRegistry.addRecipe(new ItemStack(Blocks.planks, 1, i), "##", "##", '#', new ItemStack(YGCItems.plank, 1, i));
+            GameRegistry.addRecipe(new ItemStack(Blocks.planks, 2, i), "#", "#", "#", '#', new ItemStack(YGCItems.plank, 1, i));
 
         TileEntityPlanksRefinement.addRefinement(new PlanksRefinementEntry(YGCItems.plank, YGCItems.sandpaper, new ItemStack(YGCItems.smoothPlank), true));
         TileEntityPlanksRefinement.addRefinement(new PlanksRefinementEntry(YGCItems.smoothPlank, YGCItems.linseedOil, new ItemStack(YGCItems.refinedPlank), true));

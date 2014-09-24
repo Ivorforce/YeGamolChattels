@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -26,8 +27,8 @@ public class TileEntityRendererPlankSaw extends TileEntitySpecialRenderer
 
     public TileEntityRendererPlankSaw()
     {
-        model = new ModelGrindstoneBase();
-        texture = new ResourceLocation(YeGamolChattels.MODID, YeGamolChattels.filePathTextures + "grindstoneBase.png");
+        model = new ModelSawBench();
+        texture = new ResourceLocation(YeGamolChattels.MODID, YeGamolChattels.filePathTextures + "sawBench.png");
     }
 
     @Override
@@ -48,8 +49,7 @@ public class TileEntityRendererPlankSaw extends TileEntitySpecialRenderer
             Entity emptyEntity = new EntityArrow(tileEntity.getWorldObj());
 
             bindTexture(texture);
-            GL11.glTranslated(0.0f, -1.0f, 0.0f);
-            GL11.glScalef(2.0f, 1.0f, 1.0f);
+            GL11.glTranslated(-0.5f, -0.501f, 0.5f);
             model.render(emptyEntity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
 
             GL11.glPopMatrix();
@@ -57,16 +57,22 @@ public class TileEntityRendererPlankSaw extends TileEntitySpecialRenderer
             if (tileEntity.containedItem != null)
             {
                 GL11.glPushMatrix();
-                GL11.glScaled(1.8, 1.8, 1.8);
+                GL11.glScalef(3.1f, 3.1f, 3.1f);
 
-                EntityItem var3 = new EntityItem(tileEntity.getWorldObj(), 0.0D, 0.0D, 0.0D, tileEntity.containedItem);
-                var3.hoverStart = 0.0F;
+                ItemStack renderItem = tileEntity.containedItem.copy();
+                renderItem.stackSize = 1;
+
+                EntityItem itemEntity = new EntityItem(tileEntity.getWorldObj(), 0.0D, 0.0D, 0.0D, renderItem);
+                itemEntity.hoverStart = 0.0F;
 
                 if (!RenderManager.instance.options.fancyGraphics)
                     GL11.glDisable(GL11.GL_CULL_FACE);
 
                 RenderItem.renderInFrame = true;
-                RenderManager.instance.renderEntityWithPosYaw(var3, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
+                GL11.glTranslatef(0.1f, -0.05f, -0.09f);
+                RenderManager.instance.renderEntityWithPosYaw(itemEntity, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
+                GL11.glTranslatef(0.0f, -0.312f, 0.0f);
+                RenderManager.instance.renderEntityWithPosYaw(itemEntity, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F);
                 RenderItem.renderInFrame = false;
 
                 if (!RenderManager.instance.options.fancyGraphics)

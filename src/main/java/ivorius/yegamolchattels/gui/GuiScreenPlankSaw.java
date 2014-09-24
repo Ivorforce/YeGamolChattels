@@ -159,7 +159,7 @@ public class GuiScreenPlankSaw extends GuiScreen
         int shiftX = shiftY / 3;
 
         GL11.glColor3f(1.0f, 1.0f, 1.0f);
-        drawTexturedTrapezoidFromIcon(width / 2, 80 + shiftY, blockTexture, 100, 100 + shiftX, 100 - shiftY, isTop ? 0.0f : (isBottom ? 1.0f : 0.3f), isTop ? 1.0f : (isBottom ? 0.0f : 0.6f));
+        drawTexturedTrapezoidFromIcon(width / 2, 80 + shiftY, blockTexture, 50, 50 + shiftX, 100 - shiftY, isTop ? 0.0f : (isBottom ? 1.0f : 0.3f), isTop ? 1.0f : (isBottom ? 0.0f : 0.6f));
 //        drawTexturedModelRectFromIcon(width / 2 - 50, 80, blockTexture, 100, 100);
     }
 

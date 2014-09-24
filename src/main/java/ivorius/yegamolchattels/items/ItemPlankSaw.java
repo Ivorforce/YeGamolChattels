@@ -26,7 +26,7 @@ public class ItemPlankSaw extends ItemBlock
     public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10)
     {
         int rotation = IvMultiBlockHelper.getRotation(par2EntityPlayer);
-        List<int[]> positions = IvMultiBlockHelper.getRotatedPositions(rotation, 2, 1, 1);
+        List<int[]> positions = IvMultiBlockHelper.getRotatedPositions(rotation, 2, 2, 2);
 
         IvMultiBlockHelper multiBlockHelper = new IvMultiBlockHelper();
         if (multiBlockHelper.beginPlacing(positions, par3World, par4, par5, par6, par7, par1ItemStack, par2EntityPlayer, this.field_150939_a, 0, rotation))
