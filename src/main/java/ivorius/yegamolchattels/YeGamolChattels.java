@@ -312,7 +312,7 @@ public class YeGamolChattels
     @EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
-
+        YGCOutboundCommunicationHandler.init();
     }
 
     private void addCrafting()
