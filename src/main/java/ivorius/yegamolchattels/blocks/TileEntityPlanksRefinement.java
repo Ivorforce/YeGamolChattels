@@ -3,9 +3,7 @@ package ivorius.yegamolchattels.blocks;
 import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
 import ivorius.ivtoolkit.entities.IvEntityHelper;
-import ivorius.ivtoolkit.network.IvNetworkHelperServer;
-import ivorius.ivtoolkit.network.PacketTileEntityClientEvent;
-import ivorius.ivtoolkit.network.PartialUpdateHandler;
+import ivorius.ivtoolkit.network.*;
 import ivorius.ivtoolkit.tools.IvSideClient;
 import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.achievements.YGCAchievementList;
@@ -14,6 +12,7 @@ import ivorius.yegamolchattels.items.YGCItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -24,7 +23,7 @@ import java.util.ArrayList;
 /**
  * Created by lukas on 04.05.14.
  */
-public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implements PartialUpdateHandler
+public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implements PartialUpdateHandler, ClientEventHandler
 {
     private static ArrayList<IPlanksRefinementEntry> planksRefinementEntries = new ArrayList<IPlanksRefinementEntry>();
 
@@ -157,7 +156,7 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
         }
 
         if (worldObj.isRemote)
-            YeGamolChattels.network.sendToServer(PacketTileEntityClientEvent.packetEntityData(this, "plankRefinement"));
+            IvNetworkHelperClient.sendTileEntityUpdatePacket(this, "plankRefinement", YeGamolChattels.network);
 
         if (isRefinementComplete())
         {
@@ -250,14 +249,7 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
     @Override
     public void writeUpdateData(ByteBuf buffer, String context)
     {
-        if ("plankRefinement".equals(context))
-        {
-            for (int tickRefinedPerSlot : ticksRefinedPerSlot)
-            {
-                buffer.writeInt(tickRefinedPerSlot);
-            }
-        }
-        else if ("refinementGui".equals(context))
+        if ("refinementGui".equals(context))
         {
             for (int tickRefinedPerSlot : ticksRefinedPerSlot)
             {
@@ -268,6 +260,32 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
 
     @Override
     public void readUpdateData(ByteBuf buffer, String context)
+    {
+        if ("refinementGui".equals(context))
+        {
+            for (int i = 0; i < ticksRefinedPerSlot.length; i++)
+            {
+                ticksRefinedPerSlot[i] = buffer.readInt();
+            }
+
+            IvSideClient.getClientPlayer().openGui(YeGamolChattels.instance, YGCGuiHandler.plankRefinementGuiID, worldObj, xCoord, yCoord, zCoord);
+        }
+    }
+
+    @Override
+    public void assembleClientEvent(ByteBuf buffer, String context, Object... params)
+    {
+        if ("plankRefinement".equals(context))
+        {
+            for (int tickRefinedPerSlot : ticksRefinedPerSlot)
+            {
+                buffer.writeInt(tickRefinedPerSlot);
+            }
+        }
+    }
+
+    @Override
+    public void onClientEvent(ByteBuf buffer, String context, EntityPlayerMP player)
     {
         if ("plankRefinement".equals(context))
         {
@@ -280,15 +298,6 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
             {
                 completeRefinement();
             }
-        }
-        else if ("refinementGui".equals(context))
-        {
-            for (int i = 0; i < ticksRefinedPerSlot.length; i++)
-            {
-                ticksRefinedPerSlot[i] = buffer.readInt();
-            }
-
-            IvSideClient.getClientPlayer().openGui(YeGamolChattels.instance, YGCGuiHandler.plankRefinementGuiID, worldObj, xCoord, yCoord, zCoord);
         }
     }
 }

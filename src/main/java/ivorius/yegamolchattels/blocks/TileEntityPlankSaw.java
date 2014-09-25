@@ -3,6 +3,8 @@ package ivorius.yegamolchattels.blocks;
 import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
 import ivorius.ivtoolkit.entities.IvEntityHelper;
+import ivorius.ivtoolkit.network.ClientEventHandler;
+import ivorius.ivtoolkit.network.IvNetworkHelperClient;
 import ivorius.ivtoolkit.network.PacketTileEntityClientEvent;
 import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.ivtoolkit.tools.IvSideClient;
@@ -11,6 +13,7 @@ import ivorius.yegamolchattels.gui.YGCGuiHandler;
 import ivorius.yegamolchattels.items.YGCItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -21,7 +24,7 @@ import net.minecraft.util.MathHelper;
 /**
  * Created by lukas on 04.05.14.
  */
-public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements PartialUpdateHandler
+public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements PartialUpdateHandler, ClientEventHandler
 {
     public ItemStack containedItem;
     public static final int cutsPerLog = 4;
@@ -174,7 +177,7 @@ public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements Partia
                 calculateIsInWood();
 
             if (worldObj.isRemote)
-                YeGamolChattels.network.sendToServer(PacketTileEntityClientEvent.packetEntityData(this, "sawMove"));
+                IvNetworkHelperClient.sendTileEntityUpdatePacket(this, "sawMove", YeGamolChattels.network);
 
             if (woodCutY >= 1.0f)
                 chopOffWood(woodCutScore, player);
@@ -186,7 +189,7 @@ public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements Partia
             moveSawInConstraints(x, y);
 
             if (worldObj.isRemote)
-                YeGamolChattels.network.sendToServer(PacketTileEntityClientEvent.packetEntityData(this, "sawMove"));
+                IvNetworkHelperClient.sendTileEntityUpdatePacket(this, "sawMove", YeGamolChattels.network);
         }
 
         return 0.0f;
@@ -241,16 +244,7 @@ public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements Partia
     @Override
     public void writeUpdateData(ByteBuf buffer, String context)
     {
-        if ("sawMove".equals(context))
-        {
-            buffer.writeInt(sawingPlayerID);
-            buffer.writeFloat(sawPositionX);
-            buffer.writeFloat(sawPositionY);
-            buffer.writeFloat(woodCutY);
-            buffer.writeFloat(woodCutScore);
-            buffer.writeBoolean(isInWood);
-        }
-        else if ("sawOpenGui".equals(context))
+        if ("sawOpenGui".equals(context))
         {
             buffer.writeFloat(sawPositionX);
             buffer.writeFloat(sawPositionY);
@@ -262,6 +256,35 @@ public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements Partia
 
     @Override
     public void readUpdateData(ByteBuf buffer, String context)
+    {
+        if ("sawOpenGui".equals(context))
+        {
+            sawPositionX = buffer.readFloat();
+            sawPositionY = buffer.readFloat();
+            woodCutY = buffer.readFloat();
+            woodCutScore = buffer.readFloat();
+            isInWood = buffer.readBoolean();
+
+            IvSideClient.getClientPlayer().openGui(YeGamolChattels.instance, YGCGuiHandler.plankSawGuiID, worldObj, xCoord, yCoord, zCoord);
+        }
+    }
+
+    @Override
+    public void assembleClientEvent(ByteBuf buffer, String context, Object... params)
+    {
+        if ("sawMove".equals(context))
+        {
+            buffer.writeInt(sawingPlayerID);
+            buffer.writeFloat(sawPositionX);
+            buffer.writeFloat(sawPositionY);
+            buffer.writeFloat(woodCutY);
+            buffer.writeFloat(woodCutScore);
+            buffer.writeBoolean(isInWood);
+        }
+    }
+
+    @Override
+    public void onClientEvent(ByteBuf buffer, String context, EntityPlayerMP player)
     {
         if ("sawMove".equals(context))
         {
@@ -278,16 +301,6 @@ public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements Partia
                 if (woodCutY >= 1.0f && containedItem != null)
                     chopOffWood(woodCutScore, (EntityPlayer) entity);
             }
-        }
-        else if ("sawOpenGui".equals(context))
-        {
-            sawPositionX = buffer.readFloat();
-            sawPositionY = buffer.readFloat();
-            woodCutY = buffer.readFloat();
-            woodCutScore = buffer.readFloat();
-            isInWood = buffer.readBoolean();
-
-            IvSideClient.getClientPlayer().openGui(YeGamolChattels.instance, YGCGuiHandler.plankSawGuiID, worldObj, xCoord, yCoord, zCoord);
         }
     }
 }

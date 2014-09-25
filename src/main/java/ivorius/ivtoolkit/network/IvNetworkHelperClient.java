@@ -18,28 +18,21 @@
 
 package ivorius.ivtoolkit.network;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import ivorius.ivtoolkit.tools.IvSideClient;
-import net.minecraft.server.MinecraftServer;
+import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 
 /**
- * Created by lukas on 02.07.14.
+ * Created by lukas on 25.09.14.
  */
-public class PacketTileEntityClientEventHandler implements IMessageHandler<PacketTileEntityClientEvent, IMessage>
+public class IvNetworkHelperClient
 {
-    @Override
-    public IMessage onMessage(PacketTileEntityClientEvent message, MessageContext ctx)
+    public static <ETileEntity extends TileEntity & ClientEventHandler> void sendTileEntityUpdatePacket(ETileEntity tileEntity, String context, SimpleNetworkWrapper network, Object... params)
     {
-        World world = MinecraftServer.getServer().worldServerForDimension(message.getDimension());
-        TileEntity entity = world.getTileEntity(message.getX(), message.getY(), message.getZ());
+        if (!(tileEntity.getWorldObj().isRemote))
+            throw new UnsupportedOperationException();
 
-        if (entity != null)
-            ((ClientEventHandler) entity).onClientEvent(message.getPayload(), message.getContext(), ctx.getServerHandler().playerEntity);
-
-        return null;
+        network.sendToServer(PacketTileEntityClientEvent.packetEntityData(tileEntity, context, params));
     }
 }

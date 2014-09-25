@@ -18,28 +18,28 @@
 
 package ivorius.ivtoolkit.network;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import ivorius.ivtoolkit.tools.IvSideClient;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 /**
- * Created by lukas on 02.07.14.
+ * A interface for some object types that need extra information to be communicated
+ * between the client and server on client input.
  */
-public class PacketTileEntityClientEventHandler implements IMessageHandler<PacketTileEntityClientEvent, IMessage>
+public interface ClientEventHandler
 {
-    @Override
-    public IMessage onMessage(PacketTileEntityClientEvent message, MessageContext ctx)
-    {
-        World world = MinecraftServer.getServer().worldServerForDimension(message.getDimension());
-        TileEntity entity = world.getTileEntity(message.getX(), message.getY(), message.getZ());
+    /**
+     * Called on the client when constructing the event packet.
+     * Data should be added to the provided stream.
+     *
+     * @param buffer The packet data stream
+     */
+    void assembleClientEvent(ByteBuf buffer, String context, Object... params);
 
-        if (entity != null)
-            ((ClientEventHandler) entity).onClientEvent(message.getPayload(), message.getContext(), ctx.getServerHandler().playerEntity);
-
-        return null;
-    }
+    /**
+     * Called on the server when it receives an update packet.
+     * Data should be read out of the stream in the same way as it was written.
+     *
+     * @param buffer The packet data stream
+     */
+    void onClientEvent(ByteBuf buffer, String context, EntityPlayerMP player);
 }
