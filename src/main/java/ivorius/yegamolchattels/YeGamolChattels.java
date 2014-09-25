@@ -237,7 +237,7 @@ public class YeGamolChattels
         YGCItems.refinedPlank = new ItemPlank().setUnlocalizedName("refinedPlank").setHasSubtypes(true).setMaxDamage(0).setTextureName(textureBase + "refined_plank").setCreativeTab(tabMain);
         GameRegistry.registerItem(YGCItems.refinedPlank, "refined_plank", MODID);
 
-        YGCBlocks.plankSaw = new BlockPlankSaw().setBlockName("plankSaw").setCreativeTab(tabMain);
+        YGCBlocks.plankSaw = new BlockPlankSaw().setBlockName("ygcSawBench").setCreativeTab(tabMain);
         GameRegistry.registerBlock(YGCBlocks.plankSaw, ItemPlankSaw.class, "plank_saw");
         GameRegistry.registerTileEntity(TileEntityPlankSaw.class, "ygcPlankSaw");
 

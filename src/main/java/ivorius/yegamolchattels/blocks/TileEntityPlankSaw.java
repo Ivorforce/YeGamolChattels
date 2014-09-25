@@ -61,7 +61,7 @@ public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements Partia
                     else
                     {
                         if (entity instanceof EntityPlayer)
-                            ((EntityPlayer) entity).addChatMessage(new ChatComponentTranslation("tile.sawBench.morewood"));
+                            ((EntityPlayer) entity).addChatMessage(new ChatComponentTranslation("tile.ygcSawBench.morewood"));
                     }
                 }
 
