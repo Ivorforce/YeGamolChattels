@@ -253,6 +253,10 @@ public class YeGamolChattels
         YGCItems.linseedOil.setMaxDamage(800).setMaxStackSize(1).setNoRepair();
         GameRegistry.registerItem(YGCItems.linseedOil, "linseed_oil", MODID);
 
+        YGCItems.ironSaw = new ItemSaw().setUnlocalizedName("ygcSaw").setTextureName(textureBase + "saw_iron").setCreativeTab(tabMain);
+        YGCItems.ironSaw.setMaxDamage(400).setMaxStackSize(1);
+        GameRegistry.registerItem(YGCItems.ironSaw, "iron_saw", MODID);
+
         // --------------------------------Flax--------------------------------
 
         YGCBlocks.flaxPlant = new BlockFlaxPlant().setBlockName("ygcFlaxPlant").setBlockTextureName(textureBase + "flax");
