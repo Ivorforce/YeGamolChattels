@@ -138,7 +138,7 @@ public class TileEntitySnowGlobe extends TileEntity implements PartialUpdateHand
     }
 
     @Override
-    public void writeUpdateData(ByteBuf buffer, String context)
+    public void writeUpdateData(ByteBuf buffer, String context, Object... params)
     {
         if ("snowGlobeData".equals(context))
         {

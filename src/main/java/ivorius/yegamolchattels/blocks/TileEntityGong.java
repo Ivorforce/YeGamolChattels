@@ -244,7 +244,7 @@ public class TileEntityGong extends IvTileEntityMultiBlock implements PartialUpd
     }
 
     @Override
-    public void writeUpdateData(ByteBuf buffer, String context)
+    public void writeUpdateData(ByteBuf buffer, String context, Object... params)
     {
         if ("vibrationData".equals(context))
         {

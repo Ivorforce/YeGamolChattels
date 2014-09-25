@@ -179,7 +179,7 @@ public class TileEntityLootChest extends IvTileEntityRotatable implements Partia
     }
 
     @Override
-    public void writeUpdateData(ByteBuf buffer, String context)
+    public void writeUpdateData(ByteBuf buffer, String context, Object... params)
     {
         if ("openState".equals(context))
         {

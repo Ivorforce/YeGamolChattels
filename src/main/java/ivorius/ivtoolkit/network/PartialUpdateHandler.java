@@ -14,7 +14,7 @@ public interface PartialUpdateHandler
      *
      * @param buffer The packet data stream
      */
-    void writeUpdateData(ByteBuf buffer, String context);
+    void writeUpdateData(ByteBuf buffer, String context, Object... params);
 
     /**
      * Called on the client when it receives an update packet.

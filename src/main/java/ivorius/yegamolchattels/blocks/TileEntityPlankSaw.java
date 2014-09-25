@@ -242,7 +242,7 @@ public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements Partia
     }
 
     @Override
-    public void writeUpdateData(ByteBuf buffer, String context)
+    public void writeUpdateData(ByteBuf buffer, String context, Object... params)
     {
         if ("sawOpenGui".equals(context))
         {

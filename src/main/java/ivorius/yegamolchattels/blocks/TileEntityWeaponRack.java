@@ -355,7 +355,7 @@ public class TileEntityWeaponRack extends IvTileEntityRotatable implements Parti
     }
 
     @Override
-    public void writeUpdateData(ByteBuf buffer, String context)
+    public void writeUpdateData(ByteBuf buffer, String context, Object... params)
     {
         if ("weaponRackData".equals(context))
         {

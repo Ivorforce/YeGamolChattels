@@ -359,7 +359,7 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
     }
 
     @Override
-    public void writeUpdateData(ByteBuf buffer, String context)
+    public void writeUpdateData(ByteBuf buffer, String context, Object... params)
     {
         if ("statueData".equals(context))
         {

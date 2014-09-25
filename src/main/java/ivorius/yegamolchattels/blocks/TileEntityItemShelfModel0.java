@@ -399,7 +399,7 @@ public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements Pa
     }
 
     @Override
-    public void writeUpdateData(ByteBuf buffer, String context)
+    public void writeUpdateData(ByteBuf buffer, String context, Object... params)
     {
         if ("narniaProgress".equals(context))
         {

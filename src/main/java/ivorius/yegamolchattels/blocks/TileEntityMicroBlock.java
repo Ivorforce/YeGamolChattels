@@ -191,7 +191,7 @@ public class TileEntityMicroBlock extends TileEntity implements PartialUpdateHan
     }
 
     @Override
-    public void writeUpdateData(ByteBuf buffer, String context)
+    public void writeUpdateData(ByteBuf buffer, String context, Object... params)
     {
         if ("microBlocks".equals(context))
         {
