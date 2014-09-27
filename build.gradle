@@ -18,12 +18,16 @@ buildscript {
 apply plugin: 'forge'
 
 version = "1.0"
-group= "ivorius.yegamolchattels" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = "ivorius.yegamolchattels" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "YeGamolChattels"
 
 minecraft {
     version = "1.7.10-10.13.0.1194"
     assetDir = "eclipse/assets"
+}
+
+dependencies {
+    compile 'ivorius.ivtoolkit:IvToolkit:1.0:dev'
 }
 
 processResources
