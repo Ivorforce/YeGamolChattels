@@ -246,15 +246,15 @@ public class YeGamolChattels
         GameRegistry.registerTileEntity(TileEntityPlanksRefinement.class, "ygcPlanksRefinement");
 
         YGCItems.sandpaper = new Item().setUnlocalizedName("sandpaper").setTextureName(textureBase + "sandpaper").setCreativeTab(tabMain);
-        YGCItems.sandpaper.setMaxDamage(800).setMaxStackSize(1).setNoRepair();
+        YGCItems.sandpaper.setMaxDamage(2048).setMaxStackSize(1).setNoRepair();
         GameRegistry.registerItem(YGCItems.sandpaper, "sandpaper", MODID);
 
         YGCItems.linseedOil = new Item().setUnlocalizedName("ygcLinseedOil").setTextureName(textureBase + "linseed_oil").setCreativeTab(tabMain);
-        YGCItems.linseedOil.setMaxDamage(800).setMaxStackSize(1).setNoRepair();
+        YGCItems.linseedOil.setMaxDamage(2048).setMaxStackSize(1).setNoRepair();
         GameRegistry.registerItem(YGCItems.linseedOil, "linseed_oil", MODID);
 
         YGCItems.ironSaw = new ItemSaw().setUnlocalizedName("ygcSaw").setTextureName(textureBase + "saw_iron").setCreativeTab(tabMain);
-        YGCItems.ironSaw.setMaxDamage(400).setMaxStackSize(1);
+        YGCItems.ironSaw.setMaxDamage(128).setMaxStackSize(1);
         GameRegistry.registerItem(YGCItems.ironSaw, "iron_saw", MODID);
 
         // --------------------------------Flax--------------------------------
