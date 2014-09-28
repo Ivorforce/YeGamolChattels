@@ -270,7 +270,7 @@ public class YeGamolChattels
         // --------------------------------Microblocks--------------------------------
 
         YGCBlocks.microBlock = new BlockMicroBlock().setBlockName("ygcMicroBlock").setHardness(1.0F);
-        GameRegistry.registerBlock(YGCBlocks.microBlock, ItemMicroBlock.class, "ygc_micro_block");
+        GameRegistry.registerBlock(YGCBlocks.microBlock, ItemMicroBlock.class, "micro_block");
         GameRegistry.registerTileEntity(TileEntityMicroBlock.class, "ygcMicroBlock");
 
         YGCItems.detailChiselIron = new ItemChisel(0, 1.0f, 0.0f, Item.ToolMaterial.IRON, Collections.emptySet()).setUnlocalizedName("ygcChiselIron_detail").setTextureName(textureBase + "chisel_iron_detail").setCreativeTab(tabMain);
@@ -291,7 +291,7 @@ public class YeGamolChattels
         // --------------------------------Loot Chest--------------------------------
 
         YGCBlocks.lootChest = new BlockLootChest().setBlockName("ygcLootChest").setHardness(1.5f).setCreativeTab(tabMain);
-        GameRegistry.registerBlock(YGCBlocks.lootChest, ItemBlock.class, "ygc_loot_chest");
+        GameRegistry.registerBlock(YGCBlocks.lootChest, ItemBlock.class, "loot_chest");
         GameRegistry.registerTileEntity(TileEntityLootChest.class, "ygcLootChest");
     }
 
