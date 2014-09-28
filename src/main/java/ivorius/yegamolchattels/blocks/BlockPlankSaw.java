@@ -4,6 +4,8 @@ import ivorius.ivtoolkit.blocks.IvBlockMultiblock;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
 import ivorius.ivtoolkit.network.IvNetworkHelperServer;
 import ivorius.yegamolchattels.YeGamolChattels;
+import ivorius.yegamolchattels.items.ItemSaw;
+import ivorius.yegamolchattels.items.YGCItems;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -50,7 +52,7 @@ public class BlockPlankSaw extends IvBlockMultiblock
                 return true;
             else if (player.isSneaking() && plankSaw.tryEquippingItemOnPlayer(player))
                 return true;
-            else
+            else if (player.getHeldItem() != null && player.getHeldItem().getItem() instanceof ItemSaw)
             {
                 if (!world.isRemote)
                 {

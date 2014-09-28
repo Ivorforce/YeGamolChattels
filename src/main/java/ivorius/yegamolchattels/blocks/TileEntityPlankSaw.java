@@ -29,7 +29,6 @@ public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements Partia
     public ItemStack containedItem;
     public static final int cutsPerLog = 4;
 
-    public int sawingPlayerID;
     public float sawPositionX;
     public float sawPositionY;
     public float woodCutY;
@@ -106,12 +105,13 @@ public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements Partia
 //        moveSawInConstraints(0.0f, yPlus);
     }
 
-    public void chopOffWood(float score, EntityPlayer player)
+    public void chopOffWood(float score, EntityPlayer player, ItemStack usedItem)
     {
         cutsLeft--;
         woodCutScore = 0.0f;
         woodCutY = 0.0f;
         calculateIsInWood();
+        usedItem.damageItem(1, player);
 
         if (!worldObj.isRemote)
         {
@@ -140,10 +140,8 @@ public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements Partia
         }
     }
 
-    public float moveSaw(EntityPlayer player, float x, float y)
+    public float moveSaw(EntityPlayer player, float x, float y, int usedItemIndex)
     {
-        sawingPlayerID = player.getEntityId();
-
         if (containedItem != null)
         {
             float plusScore = 0.0f;
@@ -180,7 +178,12 @@ public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements Partia
                 IvNetworkHelperClient.sendTileEntityUpdatePacket(this, "sawMove", YeGamolChattels.network);
 
             if (woodCutY >= 1.0f)
-                chopOffWood(woodCutScore, player);
+            {
+                chopOffWood(woodCutScore, player, player.inventory.getStackInSlot(usedItemIndex));
+
+                if (worldObj.isRemote)
+                    IvNetworkHelperClient.sendTileEntityUpdatePacket(this, "woodChop", YeGamolChattels.network, usedItemIndex);
+            }
 
             return plusScore;
         }
@@ -274,12 +277,15 @@ public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements Partia
     {
         if ("sawMove".equals(context))
         {
-            buffer.writeInt(sawingPlayerID);
             buffer.writeFloat(sawPositionX);
             buffer.writeFloat(sawPositionY);
             buffer.writeFloat(woodCutY);
             buffer.writeFloat(woodCutScore);
             buffer.writeBoolean(isInWood);
+        }
+        else if ("woodChop".equals(context))
+        {
+            buffer.writeInt((Integer) params[0]);
         }
     }
 
@@ -288,18 +294,20 @@ public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements Partia
     {
         if ("sawMove".equals(context))
         {
-            int playerID = buffer.readInt();
             sawPositionX = buffer.readFloat();
             sawPositionY = buffer.readFloat();
             woodCutY = buffer.readFloat();
             woodCutScore = buffer.readFloat();
             isInWood = buffer.readBoolean();
+        }
+        else if ("woodChop".equals(context))
+        {
+            int itemIndex = buffer.readInt();
 
-            Entity entity = worldObj.getEntityByID(playerID);
-            if (entity instanceof EntityPlayer)
+            if (woodCutY >= 1.0f && isInWood && containedItem != null)
             {
-                if (woodCutY >= 1.0f && containedItem != null)
-                    chopOffWood(woodCutScore, (EntityPlayer) entity);
+                ItemStack usedStack = player.inventory.getStackInSlot(itemIndex);
+                chopOffWood(woodCutScore, player, usedStack);
             }
         }
     }

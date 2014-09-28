@@ -244,7 +244,7 @@ public class GuiScreenPlankSaw extends GuiScreen
             {
                 ItemStack containedItem = tileEntityPlankSaw.containedItem;
 
-                float addScore = tileEntityPlankSaw.moveSaw(player, movX * 0.01f, movY * 0.01f);
+                float addScore = tileEntityPlankSaw.moveSaw(player, movX * 0.01f, movY * 0.01f, mc.thePlayer.inventory.currentItem);
 
                 if (containedItem != null && containedItem.getItem() instanceof ItemBlock)
                 {
