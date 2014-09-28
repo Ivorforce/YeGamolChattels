@@ -389,8 +389,8 @@ public class YeGamolChattels
         GameRegistry.addRecipe(new ItemStack(Blocks.wool, 1), "##", "##", '#', YGCItems.flaxFiber);
 
         GameRegistry.addRecipe(new ItemStack(YGCItems.clubHammer), "#I#", " I ", " I ", '#', Items.iron_ingot, 'I', Items.stick);
-        GameRegistry.addRecipe(new ItemStack(YGCItems.detailChiselIron), " #", "I ", '#', Items.iron_ingot, 'I', Items.stick);
-        GameRegistry.addRecipe(new ItemStack(YGCItems.detailChiselIron), "# ", " I", '#', Items.iron_ingot, 'I', Items.stick);
+        GameRegistry.addRecipe(new ItemStack(YGCItems.detailChiselIron), "#", "I", "W", '#', Items.iron_ingot, 'I', Items.stick, 'L', Items.leather, 'W', Blocks.planks);
+        GameRegistry.addRecipe(new ItemStack(YGCItems.carvingChiselIron), "###", " I ", " W ", '#', Items.iron_ingot, 'I', Items.stick, 'L', Items.leather, 'W', Blocks.planks);
 
         GameRegistry.addRecipe(new ItemStack(YGCBlocks.lootChest), "#I#", "#R#", '#', wildcard(YGCItems.refinedPlank), 'I', Items.iron_ingot, 'R', Items.redstone);
     }
