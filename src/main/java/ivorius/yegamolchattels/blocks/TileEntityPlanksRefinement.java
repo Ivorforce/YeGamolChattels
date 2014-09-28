@@ -129,11 +129,11 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
         return false;
     }
 
-    public void refineWithItem(ItemStack usedTool, EntityLivingBase entityLivingBase, float x, float y, float speed)
+    public void refineWithItem(ItemStack usedTool, EntityPlayer entityPlayer, float x, float y, float speed)
     {
         speed = speed * 0.3f;
         int speedInfl = MathHelper.floor_float(speed) + ((worldObj.rand.nextFloat() < speed % 1.0f) ? 1 : 0);
-        usedTool.damageItem(1 + speedInfl, entityLivingBase);
+        usedTool.damageItem(1 + speedInfl, entityPlayer);
 
         int startSlotX = MathHelper.floor_float(x - 1.5f + 0.5f);
         int endSlotX = MathHelper.floor_float(x + 1.5f + 0.5f);
@@ -156,7 +156,7 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
         }
 
         if (worldObj.isRemote)
-            IvNetworkHelperClient.sendTileEntityUpdatePacket(this, "plankRefinement", YeGamolChattels.network);
+            IvNetworkHelperClient.sendTileEntityUpdatePacket(this, "plankRefinement", YeGamolChattels.network, entityPlayer.inventory.currentItem, speedInfl);
 
         if (isRefinementComplete())
         {
@@ -277,6 +277,9 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
     {
         if ("plankRefinement".equals(context))
         {
+            buffer.writeInt((Integer) params[0]);
+            buffer.writeInt((Integer) params[1]);
+
             for (int tickRefinedPerSlot : ticksRefinedPerSlot)
             {
                 buffer.writeInt(tickRefinedPerSlot);
@@ -289,10 +292,16 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
     {
         if ("plankRefinement".equals(context))
         {
+            int usedItem = buffer.readInt();
+            int speedInfl = buffer.readInt();
+
             for (int i = 0; i < ticksRefinedPerSlot.length; i++)
             {
                 ticksRefinedPerSlot[i] = buffer.readInt();
             }
+
+            ItemStack usedStack = player.inventory.getStackInSlot(usedItem);
+            usedStack.damageItem(1 + speedInfl, player);
 
             if (isRefinementComplete())
             {
