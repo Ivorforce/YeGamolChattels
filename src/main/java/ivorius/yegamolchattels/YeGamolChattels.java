@@ -148,7 +148,7 @@ public class YeGamolChattels
         GameRegistry.registerTileEntity(TileEntityStatue.class, "ygcStatue");
 
         YGCItems.pointChiselIron = new ItemStatueChisel().setUnlocalizedName("ygcChiselIron_point").setTextureName(textureBase + "chisel_iron_point").setCreativeTab(tabMain);
-        YGCItems.pointChiselIron.setMaxDamage(10).setMaxStackSize(1).setNoRepair();
+        YGCItems.pointChiselIron.setMaxDamage(8).setMaxStackSize(1).setNoRepair();
         GameRegistry.registerItem(YGCItems.pointChiselIron, "iron_chisel_point", MODID);
 
         YGCItems.entityVita = new ItemEntityVita().setUnlocalizedName("ygcEntityVita").setTextureName(textureBase + "entity_vita").setCreativeTab(tabVitas);
@@ -274,15 +274,15 @@ public class YeGamolChattels
         GameRegistry.registerTileEntity(TileEntityMicroBlock.class, "ygcMicroBlock");
 
         YGCItems.detailChiselIron = new ItemChisel(0, 1.0f, 0.0f, Item.ToolMaterial.IRON, Collections.emptySet()).setUnlocalizedName("ygcChiselIron_detail").setTextureName(textureBase + "chisel_iron_detail").setCreativeTab(tabMain);
-        YGCItems.detailChiselIron.setMaxDamage(200).setMaxStackSize(1).setNoRepair();
+        YGCItems.detailChiselIron.setMaxDamage(256).setMaxStackSize(1).setNoRepair();
         GameRegistry.registerItem(YGCItems.detailChiselIron, "iron_chisel_detail", MODID);
 
         YGCItems.carvingChiselIron = new ItemChisel(1, 0.4f, 0.0f, Item.ToolMaterial.IRON, Collections.emptySet()).setUnlocalizedName("ygcChiselIron").setTextureName(textureBase + "chisel_iron").setCreativeTab(tabMain);
-        YGCItems.carvingChiselIron.setMaxDamage(200).setMaxStackSize(1).setNoRepair();
+        YGCItems.carvingChiselIron.setMaxDamage(256).setMaxStackSize(1).setNoRepair();
         GameRegistry.registerItem(YGCItems.carvingChiselIron, "iron_chisel", MODID);
 
         YGCItems.clubHammer = (ItemClubHammer) new ItemClubHammer(0.0f, Item.ToolMaterial.IRON, Collections.emptySet()).setUnlocalizedName("ygcClubHammer").setTextureName(textureBase + "club_hammer").setCreativeTab(tabMain);
-        YGCItems.clubHammer.setMaxDamage(200).setMaxStackSize(1).setNoRepair();
+        YGCItems.clubHammer.setMaxDamage(512).setMaxStackSize(1).setNoRepair();
         GameRegistry.registerItem(YGCItems.clubHammer, "club_hammer", MODID);
 
         YGCItems.blockFragment = new ItemBlockFragment().setUnlocalizedName("ygcBlockFragment");
