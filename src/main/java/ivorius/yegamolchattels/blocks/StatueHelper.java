@@ -1,60 +1,24 @@
-/*
- *  Copyright (c) 2014, Lukas Tenbrink.
- *  * http://lukas.axxim.net
- */
-
-package ivorius.yegamolchattels.items;
+package ivorius.yegamolchattels.blocks;
 
 import ivorius.ivtoolkit.blocks.IvMultiBlockHelper;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
-import ivorius.yegamolchattels.YeGamolChattels;
-import ivorius.yegamolchattels.blocks.Statue;
-import ivorius.yegamolchattels.blocks.TileEntityStatue;
-import ivorius.yegamolchattels.blocks.YGCBlocks;
-import ivorius.yegamolchattels.gui.YGCGuiHandler;
+import ivorius.yegamolchattels.items.ItemStatue;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by lukas on 27.07.14.
+ * Created by lukas on 28.09.14.
  */
-public class ItemStatueChisel extends Item
+public class StatueHelper
 {
-    @Override
-    public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int blockSide, float par8, float par9, float par10)
-    {
-        if (player.inventory.hasItem(YGCItems.clubHammer))
-        {
-            if (isValidStatueBlock(world, x, y, z))
-            {
-                if (!world.isRemote) // Some entities start with random sizes
-                {
-                    player.openGui(YeGamolChattels.instance, YGCGuiHandler.statueCarvingGuiID, world, x, y, z);
-                }
-
-                return true;
-            }
-        }
-        else
-        {
-            if (!world.isRemote)
-                player.addChatComponentMessage(new ChatComponentTranslation("item.ygcChisel.noHammer"));
-        }
-
-        return false;
-    }
-
     public static boolean canCarveStatue(Entity statueEntity, World world, int x, int y, int z)
     {
         if (isValidStatueBlock(world, x, y, z))

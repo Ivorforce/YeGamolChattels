@@ -10,10 +10,10 @@ import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.network.PacketGuiAction;
 import ivorius.ivtoolkit.tools.IvInventoryHelper;
 import ivorius.yegamolchattels.blocks.Statue;
+import ivorius.yegamolchattels.blocks.StatueHelper;
 import ivorius.yegamolchattels.blocks.TileEntityStatue;
 import ivorius.yegamolchattels.entities.EntityFakePlayer;
 import ivorius.yegamolchattels.items.ItemEntityVita;
-import ivorius.yegamolchattels.items.ItemStatueChisel;
 import ivorius.yegamolchattels.items.YGCItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -181,7 +181,7 @@ public class ContainerCarveStatue extends Container implements PacketGuiAction.A
                 {
                     Entity statueEntity = getEntity(statueStack, usingPlayer.getEntityWorld());
                     Statue statue = new Statue(statueEntity, null, yawHead, pitchHead, swing, stance);
-                    TileEntityStatue createdStatue = ItemStatueChisel.carveStatue(usingPlayer.inventory.getCurrentItem(), statue, statueEntity.worldObj, statueX, statueY, statueZ, usingPlayer);
+                    TileEntityStatue createdStatue = StatueHelper.carveStatue(usingPlayer.inventory.getCurrentItem(), statue, statueEntity.worldObj, statueX, statueY, statueZ, usingPlayer);
 
                     if (createdStatue != null)
                     {

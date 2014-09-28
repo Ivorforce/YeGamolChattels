@@ -12,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -25,7 +26,7 @@ import java.util.List;
 /**
  * Created by lukas on 11.07.14.
  */
-public class ItemBlockFragment extends Item
+public class ItemBlockFragment extends Item implements MicroblockSelector
 {
     public static void setFragment(ItemStack stack, ItemChisel.BlockData blockData)
     {
@@ -112,5 +113,17 @@ public class ItemBlockFragment extends Item
     public void registerIcons(IIconRegister par1IconRegister)
     {
 
+    }
+
+    @Override
+    public boolean showMicroblockSelection(EntityLivingBase renderEntity, ItemStack stack)
+    {
+        return true;
+    }
+
+    @Override
+    public float microblockSelectionSize(ItemStack stack)
+    {
+        return 0.52f;
     }
 }

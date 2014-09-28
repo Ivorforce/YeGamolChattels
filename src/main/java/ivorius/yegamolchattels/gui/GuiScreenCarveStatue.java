@@ -10,7 +10,7 @@ import ivorius.ivtoolkit.gui.GuiSlider;
 import ivorius.ivtoolkit.network.PacketGuiAction;
 import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.blocks.Statue;
-import ivorius.yegamolchattels.items.ItemStatueChisel;
+import ivorius.yegamolchattels.blocks.StatueHelper;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -90,7 +90,7 @@ public class GuiScreenCarveStatue extends GuiContainer implements GuiControlList
         if (lastCraftedEntity != newCraftedEntity)
         {
             lastCraftedEntity = newCraftedEntity;
-            confirmButton.enabled = newCraftedEntity != null && ItemStatueChisel.canCarveStatue(newCraftedEntity, mc.theWorld, x, y, z);
+            confirmButton.enabled = newCraftedEntity != null && StatueHelper.canCarveStatue(newCraftedEntity, mc.theWorld, x, y, z);
         }
     }
 

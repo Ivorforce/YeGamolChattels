@@ -30,6 +30,5 @@ public class YGCItems
     public static Item detailChiselIron;
     public static Item carvingChiselIron;
 
-    public static Item pointChiselIron;
     public static Item entityVita;
 }

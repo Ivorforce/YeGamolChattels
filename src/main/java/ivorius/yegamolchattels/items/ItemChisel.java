@@ -9,11 +9,15 @@ import ivorius.ivtoolkit.blocks.BlockArea;
 import ivorius.ivtoolkit.blocks.BlockCoord;
 import ivorius.ivtoolkit.blocks.IvBlockCollection;
 import ivorius.ivtoolkit.tools.IvInventoryHelper;
+import ivorius.yegamolchattels.YeGamolChattels;
+import ivorius.yegamolchattels.blocks.StatueHelper;
 import ivorius.yegamolchattels.blocks.TileEntityMicroBlock;
 import ivorius.yegamolchattels.blocks.YGCBlocks;
+import ivorius.yegamolchattels.gui.YGCGuiHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -32,16 +36,19 @@ import java.util.Set;
 /**
  * Created by lukas on 11.07.14.
  */
-public class ItemChisel extends ItemTool
+public class ItemChisel extends ItemTool implements MicroblockSelector
 {
     private int carvingDistance;
     private float fragmentPickupChance;
 
-    public ItemChisel(int carvingDistance, float fragmentPickupChance, float damage, ToolMaterial material, Set damageVSBlocks)
+    public boolean canCarveStatues;
+
+    public ItemChisel(int carvingDistance, float fragmentPickupChance, float damage, ToolMaterial material, Set damageVSBlocks, boolean canCarveStatues)
     {
         super(damage, material, damageVSBlocks);
         this.carvingDistance = carvingDistance;
         this.fragmentPickupChance = fragmentPickupChance;
+        this.canCarveStatues = canCarveStatues;
     }
 
     public int getCarvingDistance()
@@ -59,16 +66,31 @@ public class ItemChisel extends ItemTool
     {
         if (player.inventory.hasItem(YGCItems.clubHammer))
         {
-            int clubHammerSlot = IvInventoryHelper.getInventorySlotContainItem(player.inventory, YGCItems.clubHammer);
-            return chiselAway(x, y, z, player, itemStack, player.inventory.getStackInSlot(clubHammerSlot), carvingDistance, fragmentPickupChance);
+            if (showMicroblockSelection(player, itemStack))
+            {
+                int clubHammerSlot = IvInventoryHelper.getInventorySlotContainItem(player.inventory, YGCItems.clubHammer);
+                return chiselAway(x, y, z, player, itemStack, player.inventory.getStackInSlot(clubHammerSlot), carvingDistance, fragmentPickupChance);
+            }
+            else
+            {
+                if (StatueHelper.isValidStatueBlock(world, x, y, z))
+                {
+                    if (!world.isRemote) // Some entities start with random sizes
+                    {
+                        player.openGui(YeGamolChattels.instance, YGCGuiHandler.statueCarvingGuiID, world, x, y, z);
+                    }
+
+                    return true;
+                }
+            }
         }
         else
         {
             if (!world.isRemote)
                 player.addChatComponentMessage(new ChatComponentTranslation("item.ygcChisel.noHammer"));
-
-            return false;
         }
+
+        return false;
     }
 
     public static boolean chiselAway(int x, int y, int z, EntityPlayer player, ItemStack usedStack, ItemStack clubHammer, int range, float fragmentPickupChance)
@@ -216,6 +238,18 @@ public class ItemChisel extends ItemTool
     public static Vec3 getPositionInBlockCollection(IvBlockCollection blockCollection, BlockCoord referenceCoord, Vec3 pos)
     {
         return Vec3.createVectorHelper((pos.xCoord - referenceCoord.x) * blockCollection.width, (pos.yCoord - referenceCoord.y) * blockCollection.height, (pos.zCoord - referenceCoord.z) * blockCollection.length);
+    }
+
+    @Override
+    public boolean showMicroblockSelection(EntityLivingBase renderEntity, ItemStack stack)
+    {
+        return !(canCarveStatues && renderEntity.isSneaking());
+    }
+
+    @Override
+    public float microblockSelectionSize(ItemStack stack)
+    {
+        return 0.52f + carvingDistance;
     }
 
     public static class MicroBlockFragment

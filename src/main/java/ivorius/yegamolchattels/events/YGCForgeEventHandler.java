@@ -20,7 +20,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
@@ -28,7 +27,6 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -52,15 +50,16 @@ public class YGCForgeEventHandler
     {
         EntityLivingBase renderEntity = Minecraft.getMinecraft().renderViewEntity;
         ItemStack heldItem = renderEntity.getHeldItem();
-        if (heldItem != null && (heldItem.getItem() instanceof ItemChisel || heldItem.getItem() instanceof ItemBlockFragment))
+        if (heldItem != null && (heldItem.getItem() instanceof MicroblockSelector))
         {
-            int size = heldItem.getItem() instanceof ItemChisel ? ((ItemChisel) heldItem.getItem()).getCarvingDistance() : 0;
-            renderSelectedMicroblock(event.partialTicks, size);
+            MicroblockSelector selector = (MicroblockSelector) heldItem.getItem();
+            if (selector.showMicroblockSelection(renderEntity, heldItem))
+                renderSelectedMicroblock(event.partialTicks, selector.microblockSelectionSize(heldItem));
         }
     }
 
     @SideOnly(Side.CLIENT)
-    public static void renderSelectedMicroblock(float partialTicks, int size)
+    public static void renderSelectedMicroblock(float partialTicks, float size)
     {
         EntityLivingBase renderEntity = Minecraft.getMinecraft().renderViewEntity;
         MovingObjectPosition hoveredObject = Minecraft.getMinecraft().objectMouseOver;
@@ -71,7 +70,6 @@ public class YGCForgeEventHandler
             double viewerPosX = renderEntity.lastTickPosX + (renderEntity.posX - renderEntity.lastTickPosX) * (double) partialTicks;
             double viewerPosY = renderEntity.lastTickPosY + (renderEntity.posY - renderEntity.lastTickPosY) * (double) partialTicks;
             double viewerPosZ = renderEntity.lastTickPosZ + (renderEntity.posZ - renderEntity.lastTickPosZ) * (double) partialTicks;
-            float boxSize = 0.52f + size;
 
             GL11.glPushMatrix();
             GL11.glTranslated(hoveredFragment.getCoord().x - viewerPosX, hoveredFragment.getCoord().y - viewerPosY, hoveredFragment.getCoord().z - viewerPosZ);
@@ -79,7 +77,7 @@ public class YGCForgeEventHandler
             GL11.glTranslated((hoveredFragment.getInternalCoord().x + 0.5f) / TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_X, (hoveredFragment.getInternalCoord().y + 0.5f) / TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Y, (hoveredFragment.getInternalCoord().z + 0.5f) / TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Z);
             GL11.glColor3f(0.0f, 0.0f, 0.0f);
             GL11.glLineWidth(1.0f);
-            IvRenderHelper.drawCuboid(Tessellator.instance, boxSize / TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_X, boxSize / TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Y, boxSize / TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Z, 1.0f, true);
+            IvRenderHelper.drawCuboid(Tessellator.instance, size / TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_X, size / TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Y, size / TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Z, 1.0f, true);
 
             GL11.glPopMatrix();
         }

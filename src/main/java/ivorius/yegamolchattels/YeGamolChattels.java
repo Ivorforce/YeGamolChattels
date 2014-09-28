@@ -147,10 +147,6 @@ public class YeGamolChattels
 
         GameRegistry.registerTileEntity(TileEntityStatue.class, "ygcStatue");
 
-        YGCItems.pointChiselIron = new ItemStatueChisel().setUnlocalizedName("ygcChiselIron_point").setTextureName(textureBase + "chisel_iron_point").setCreativeTab(tabMain);
-        YGCItems.pointChiselIron.setMaxDamage(8).setMaxStackSize(1).setNoRepair();
-        GameRegistry.registerItem(YGCItems.pointChiselIron, "iron_chisel_point", MODID);
-
         YGCItems.entityVita = new ItemEntityVita().setUnlocalizedName("ygcEntityVita").setTextureName(textureBase + "entity_vita").setCreativeTab(tabVitas);
         GameRegistry.registerItem(YGCItems.entityVita, "entity_vita", MODID);
 
@@ -273,11 +269,11 @@ public class YeGamolChattels
         GameRegistry.registerBlock(YGCBlocks.microBlock, ItemMicroBlock.class, "micro_block");
         GameRegistry.registerTileEntity(TileEntityMicroBlock.class, "ygcMicroBlock");
 
-        YGCItems.detailChiselIron = new ItemChisel(0, 1.0f, 0.0f, Item.ToolMaterial.IRON, Collections.emptySet()).setUnlocalizedName("ygcChiselIron_detail").setTextureName(textureBase + "chisel_iron_detail").setCreativeTab(tabMain);
+        YGCItems.detailChiselIron = new ItemChisel(0, 1.0f, 0.0f, Item.ToolMaterial.IRON, Collections.emptySet(), true).setUnlocalizedName("ygcChiselIron_point").setTextureName(textureBase + "chisel_iron_point").setCreativeTab(tabMain);
         YGCItems.detailChiselIron.setMaxDamage(256).setMaxStackSize(1).setNoRepair();
-        GameRegistry.registerItem(YGCItems.detailChiselIron, "iron_chisel_detail", MODID);
+        GameRegistry.registerItem(YGCItems.detailChiselIron, "iron_chisel_point", MODID);
 
-        YGCItems.carvingChiselIron = new ItemChisel(1, 0.4f, 0.0f, Item.ToolMaterial.IRON, Collections.emptySet()).setUnlocalizedName("ygcChiselIron").setTextureName(textureBase + "chisel_iron").setCreativeTab(tabMain);
+        YGCItems.carvingChiselIron = new ItemChisel(1, 0.4f, 0.0f, Item.ToolMaterial.IRON, Collections.emptySet(), false).setUnlocalizedName("ygcChiselIron").setTextureName(textureBase + "chisel_iron").setCreativeTab(tabMain);
         YGCItems.carvingChiselIron.setMaxDamage(256).setMaxStackSize(1).setNoRepair();
         GameRegistry.registerItem(YGCItems.carvingChiselIron, "iron_chisel", MODID);
 

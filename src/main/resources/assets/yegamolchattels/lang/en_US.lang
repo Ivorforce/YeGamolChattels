@@ -53,13 +53,12 @@ item.ygcFlaxSeeds.name=Flax Seeds
 item.ygcFlaxFiber.name=Flax Fiber
 tile.ygcFlaxPlant.name=Flax Plant
 tile.ygcMicroBlock.name=Sculpture
-item.ygcChiselIron_detail.name=Detail Chisel
+item.ygcChiselIron_point.name=Point Chisel
 item.ygcChiselIron.name=Carving Chisel
 item.ygcChisel.noHammer=You need a club hammer to use a chisel!
 item.ygcClubHammer.name=Club Hammer
 item.ygcBlockFragment.name=Block Fragment
 tile.ygcLootChest.name=Loot Chest
-item.ygcChiselIron_point.name=Point Chisel
 
 item.bannerSmall.dye0.name=Small Black Banner
 item.bannerSmall.dye1.name=Small Red Banner
