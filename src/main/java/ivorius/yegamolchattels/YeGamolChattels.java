@@ -224,13 +224,13 @@ public class YeGamolChattels
 
         // --------------------------------Carpentry--------------------------------
 
-        YGCItems.plank = new ItemPlank().setUnlocalizedName("plank").setTextureName(textureBase + "plank").setHasSubtypes(true).setMaxDamage(0).setCreativeTab(tabMain);
+        YGCItems.plank = new ItemPlank().setUnlocalizedName("plank").setTextureName(textureBase + "plank_").setHasSubtypes(true).setMaxDamage(0).setCreativeTab(tabMain);
         GameRegistry.registerItem(YGCItems.plank, "plank", MODID);
 
-        YGCItems.smoothPlank = new ItemPlank().setUnlocalizedName("smoothPlank").setHasSubtypes(true).setMaxDamage(0).setTextureName(textureBase + "smooth_plank").setCreativeTab(tabMain);
+        YGCItems.smoothPlank = new ItemPlank().setUnlocalizedName("smoothPlank").setHasSubtypes(true).setMaxDamage(0).setTextureName(textureBase + "plank_smooth_").setCreativeTab(tabMain);
         GameRegistry.registerItem(YGCItems.smoothPlank, "smooth_plank", MODID);
 
-        YGCItems.refinedPlank = new ItemPlank().setUnlocalizedName("refinedPlank").setHasSubtypes(true).setMaxDamage(0).setTextureName(textureBase + "refined_plank").setCreativeTab(tabMain);
+        YGCItems.refinedPlank = new ItemPlank().setUnlocalizedName("refinedPlank").setHasSubtypes(true).setMaxDamage(0).setTextureName(textureBase + "plank_refined_").setCreativeTab(tabMain);
         GameRegistry.registerItem(YGCItems.refinedPlank, "refined_plank", MODID);
 
         YGCBlocks.plankSaw = new BlockPlankSaw().setBlockName("ygcSawBench").setCreativeTab(tabMain);
