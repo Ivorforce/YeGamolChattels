@@ -26,8 +26,8 @@ public class TileEntityRendererPlanksRefinement extends TileEntitySpecialRendere
 
     public TileEntityRendererPlanksRefinement()
     {
-        model = new ModelGrindstoneBase();
-        texture = new ResourceLocation(YeGamolChattels.MODID, YeGamolChattels.filePathTextures + "grindstoneBase.png");
+        model = new ModelTablePress();
+        texture = new ResourceLocation(YeGamolChattels.MODID, YeGamolChattels.filePathTextures + "tablePress.png");
     }
 
     @Override
@@ -44,12 +44,13 @@ public class TileEntityRendererPlanksRefinement extends TileEntitySpecialRendere
             IvMultiBlockRenderHelper.transformFor(tileEntity, d, d1, d2);
             GL11.glPushMatrix();
             GL11.glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
+            GL11.glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
 
             Entity emptyEntity = new EntityArrow(tileEntity.getWorldObj());
 
             bindTexture(texture);
-            GL11.glTranslated(0.0f, -1.0f, 0.0f);
-            GL11.glScalef(2.0f, 1.0f, 1.0f);
+            GL11.glTranslated(0.0f, -0.268f, 0.0f);
+            GL11.glScalef(0.5f, 0.5f, 0.5f);
             model.render(emptyEntity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
 
             GL11.glPopMatrix();
@@ -57,9 +58,9 @@ public class TileEntityRendererPlanksRefinement extends TileEntitySpecialRendere
             if (tileEntity.containedItem != null)
             {
                 GL11.glPushMatrix();
-                GL11.glTranslatef(-0.1f, 0.2f, -0.4f);
+                GL11.glTranslatef(0.0f, 0.47f, -0.8f);
                 GL11.glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
-                GL11.glScaled(1.5, 1.5, 1.5);
+                GL11.glScalef(3.8f, 3.8f, 2.0f);
 
                 EntityItem var3 = new EntityItem(tileEntity.getWorldObj(), 0.0D, 0.0D, 0.0D, tileEntity.containedItem);
                 var3.hoverStart = 0.0F;

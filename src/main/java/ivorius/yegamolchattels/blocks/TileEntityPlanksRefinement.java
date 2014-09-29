@@ -28,7 +28,7 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
     private static ArrayList<IPlanksRefinementEntry> planksRefinementEntries = new ArrayList<IPlanksRefinementEntry>();
 
     public static final int REFINEMENT_SLOTS_X = 16;
-    public static final int REFINEMENT_SLOTS_Y = 12;
+    public static final int REFINEMENT_SLOTS_Y = 7;
 
     public static int MIN_LOW_REFINEMENT_PER_SLOT = 3;
     public static int MIN_HIGH_REFINEMENT_PER_SLOT = 6;

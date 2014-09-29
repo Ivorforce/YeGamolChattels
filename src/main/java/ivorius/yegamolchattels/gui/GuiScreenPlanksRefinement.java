@@ -37,6 +37,9 @@ public class GuiScreenPlanksRefinement extends GuiScreen
     public static final int PLANK_WIDTH = 16 * 8;
     public static final int PLANK_HEIGHT = 16 * 8;
 
+    public static final int PLANK_SHIFT_X = 0;
+    public static final int PLANK_SHIFT_Y = -1;
+
     public GuiScreenPlanksRefinement(World world, int x, int y, int z)
     {
         TileEntity tileEntity = world.getTileEntity(x, y, z);
@@ -108,7 +111,7 @@ public class GuiScreenPlanksRefinement extends GuiScreen
                 GL11.glPushMatrix();
                 GL11.glTranslatef(width / 2, height / 2, 0);
                 GL11.glScalef(PLANK_WIDTH / 16.0f, PLANK_HEIGHT / 16.0f, 1.0f);
-                GL11.glTranslated(-8, -8, 0);
+                GL11.glTranslatef(-8, -8, 0);
                 renderItem.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.getTextureManager(), stack, 0, 0);
 
                 RenderHelper.disableStandardItemLighting();
@@ -123,8 +126,8 @@ public class GuiScreenPlanksRefinement extends GuiScreen
                 float colorG = stack.getItem() == YGCItems.plank ? 1.0f : 0.0f;
                 float colorB = stack.getItem() == YGCItems.plank ? 1.0f : 0.0f;
 
-                float transY = (16 - TileEntityPlanksRefinement.REFINEMENT_SLOTS_Y) * 0.5f;
-                float transX = (16 - TileEntityPlanksRefinement.REFINEMENT_SLOTS_X) * 0.5f;
+                float transX = (16 - TileEntityPlanksRefinement.REFINEMENT_SLOTS_X + PLANK_SHIFT_X) * 0.5f;
+                float transY = (16 - TileEntityPlanksRefinement.REFINEMENT_SLOTS_Y + PLANK_SHIFT_Y) * 0.5f;
                 for (int slotX = 0; slotX < TileEntityPlanksRefinement.REFINEMENT_SLOTS_X; slotX++)
                     for (int slotY = 0; slotY < TileEntityPlanksRefinement.REFINEMENT_SLOTS_Y; slotY++)
                     {
