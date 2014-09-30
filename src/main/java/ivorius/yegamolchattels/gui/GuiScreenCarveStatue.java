@@ -99,7 +99,8 @@ public class GuiScreenCarveStatue extends GuiContainer implements GuiControlList
     {
         if (button.id == 0)
         {
-            YeGamolChattels.network.sendToServer(PacketGuiAction.packetGuiAction("carveStatue", sliderYawHead.getValue(), sliderPitchHead.getValue(), sliderSwing.getValue(), sliderStance.getValue()));
+            int chiselItem = mc.thePlayer.inventory.currentItem;
+            YeGamolChattels.network.sendToServer(PacketGuiAction.packetGuiAction("carveStatue", chiselItem, sliderYawHead.getValue(), sliderPitchHead.getValue(), sliderSwing.getValue(), sliderStance.getValue()));
         }
     }
 

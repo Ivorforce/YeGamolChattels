@@ -169,13 +169,15 @@ public class ContainerCarveStatue extends Container implements PacketGuiAction.A
     {
         if ("carveStatue".equals(context))
         {
+            int chiselItem = buffer.readInt();
             float yawHead = buffer.readFloat();
             float pitchHead = buffer.readFloat();
             float swing = buffer.readFloat();
             float stance = buffer.readFloat();
 
             ItemStack statueStack = statueEntityCarvingInventory.getStackInSlot(0);
-            if (statueStack != null)
+            ItemStack chiselStack = usingPlayer.inventory.getStackInSlot(chiselItem);
+            if (statueStack != null && chiselStack != null)
             {
                 if (usingPlayer.inventory.hasItem(YGCItems.clubHammer))
                 {
@@ -187,6 +189,8 @@ public class ContainerCarveStatue extends Container implements PacketGuiAction.A
                     {
                         int clubHammerSlot = IvInventoryHelper.getInventorySlotContainItem(usingPlayer.inventory, YGCItems.clubHammer);
                         usingPlayer.inventory.getStackInSlot(clubHammerSlot).damageItem(1, usingPlayer);
+                        chiselStack.damageItem(10, usingPlayer);
+                        usingPlayer.inventory.markDirty();
                         statueEntityCarvingInventory.decrStackSize(0, 1);
                     }
                 }
