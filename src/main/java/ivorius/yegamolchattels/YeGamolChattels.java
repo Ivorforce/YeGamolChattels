@@ -44,7 +44,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Collections;
 
-@Mod(modid = YeGamolChattels.MODID, version = YeGamolChattels.VERSION, name = YeGamolChattels.NAME, guiFactory = "ivorius.yegamolchattels.gui.YGCConfigGuiFactory")
+@Mod(modid = YeGamolChattels.MODID, version = YeGamolChattels.VERSION, name = YeGamolChattels.NAME, guiFactory = "ivorius.yegamolchattels.gui.YGCConfigGuiFactory",
+        dependencies = "required-after:ivtoolkit")
 public class YeGamolChattels
 {
     public static final String MODID = "yegamolchattels";

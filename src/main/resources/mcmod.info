@@ -11,6 +11,6 @@
   "credits": "Ivorius: Development, TripleHeadedSheep: Visuals, BubbaWoop: Loot Chest",
   "logoFile": "gfx/yegamolchattels/logo.png",
   "screenshots": [],
-  "dependencies": ["ivtoolkit"]
+  "dependencies": []
 }
 ]
