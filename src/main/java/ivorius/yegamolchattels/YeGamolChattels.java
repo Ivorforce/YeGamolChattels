@@ -237,9 +237,9 @@ public class YeGamolChattels
         GameRegistry.registerBlock(YGCBlocks.plankSaw, ItemPlankSaw.class, "plank_saw");
         GameRegistry.registerTileEntity(TileEntityPlankSaw.class, "ygcPlankSaw");
 
-        YGCBlocks.planksRefinement = new BlockPlanksRefinement().setBlockName("planksRefinement").setCreativeTab(tabMain);
-        GameRegistry.registerBlock(YGCBlocks.planksRefinement, ItemPlanksRefinement.class, "planks_refinement_frame");
-        GameRegistry.registerTileEntity(TileEntityPlanksRefinement.class, "ygcPlanksRefinement");
+        YGCBlocks.planksRefinement = new BlockPlanksRefinement().setBlockName("tablePress").setCreativeTab(tabMain);
+        GameRegistry.registerBlock(YGCBlocks.planksRefinement, ItemPlanksRefinement.class, "table_press");
+        GameRegistry.registerTileEntity(TileEntityPlanksRefinement.class, "ygcTablePress");
 
         YGCItems.sandpaper = new Item().setUnlocalizedName("sandpaper").setTextureName(textureBase + "sandpaper").setCreativeTab(tabMain);
         YGCItems.sandpaper.setMaxDamage(2048).setMaxStackSize(1).setNoRepair();
