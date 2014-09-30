@@ -141,11 +141,11 @@ public class GuiScreenPlankSaw extends GuiScreen
 
     private void drawSaw()
     {
-        int sawX = MathHelper.floor_float(tileEntityPlankSaw.sawPositionX * 100.0f);
+        int sawX = MathHelper.floor_float(tileEntityPlankSaw.sawPositionX * 60.0f);
         int sawY = MathHelper.floor_float(tileEntityPlankSaw.sawPositionY * 100.0f);
 
         this.mc.getTextureManager().bindTexture(sawGui);
-        drawTexturedModalRect(width / 2 - 101 + sawX, 80 - 33 + sawY, 0, 0, 202, 36);
+        drawTexturedModalRect(width / 2 - 50 + sawX, 80 - 20 + sawY, 0, 0, 101, 22);
     }
 
     private void drawBlock(int layer, int maxLayers, float woodCutY, Block block, int meta)
