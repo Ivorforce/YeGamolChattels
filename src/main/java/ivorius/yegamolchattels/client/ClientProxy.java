@@ -63,6 +63,8 @@ public class ClientProxy implements YGCProxy
 
         MinecraftForgeClient.registerItemRenderer(YGCItems.blockFragment, new RenderBlockFragment());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(YGCBlocks.lootChest), new IvItemRendererModel(new ModelLootChest(), new ResourceLocation(YeGamolChattels.MODID, YeGamolChattels.filePathTextures + "lootChest.png"), 1.0f, new float[]{0.0f, -0.1f, 0.0f}, new float[]{0.0f, 180.0f, 0.0f}));
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(YGCBlocks.planksRefinement), new IvItemRendererModel(new ModelTablePress(), new ResourceLocation(YeGamolChattels.MODID, YeGamolChattels.filePathTextures + "tablePress.png"), 3.0f, new float[]{0.0f, -1.15f, 0.0f}, new float[]{0.0f, 180.0f, 0.0f}));
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(YGCBlocks.plankSaw), new IvItemRendererModel(new ModelSawBench(), new ResourceLocation(YeGamolChattels.MODID, YeGamolChattels.filePathTextures + "sawBench.png"), 2.0f, new float[]{0.0f, -0.6f, 0.0f}, new float[]{0.0f, 180.0f, 0.0f}));
     }
 
     @Override

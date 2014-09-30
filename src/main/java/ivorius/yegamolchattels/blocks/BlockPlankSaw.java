@@ -10,8 +10,10 @@ import ivorius.yegamolchattels.items.ItemSaw;
 import ivorius.yegamolchattels.items.YGCItems;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -90,5 +92,11 @@ public class BlockPlankSaw extends IvBlockMultiblock
     public void setBlockBounds(AxisAlignedBB bb)
     {
         setBlockBounds((float) bb.minX, (float) bb.minY, (float) bb.minZ, (float) bb.maxX, (float) bb.maxY, (float) bb.maxZ);
+    }
+
+    @Override
+    public IIcon getIcon(int side, int meta)
+    {
+        return Blocks.planks.getIcon(side, meta);
     }
 }

@@ -4,7 +4,9 @@ import ivorius.ivtoolkit.blocks.IvBlockMultiblock;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 /**
@@ -61,5 +63,11 @@ public class BlockPlanksRefinement extends IvBlockMultiblock
     public TileEntity createNewTileEntity(World var1, int var2)
     {
         return new TileEntityPlanksRefinement();
+    }
+
+    @Override
+    public IIcon getIcon(int side, int meta)
+    {
+        return Blocks.planks.getIcon(side, meta);
     }
 }
