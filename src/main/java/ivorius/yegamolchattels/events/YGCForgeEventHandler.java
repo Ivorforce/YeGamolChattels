@@ -144,7 +144,7 @@ public class YGCForgeEventHandler
     @SubscribeEvent
     public void onLivingDrops(LivingDropsEvent event)
     {
-        if (event.entityLiving.getRNG().nextFloat() < 0.04f)
+        if (event.entityLiving.getRNG().nextFloat() < 0.04f && !(event.entityLiving instanceof EntityPlayer))
         {
             ItemStack vitaStack = ItemEntityVita.createVitaItemStackAsNewbornEntity(YGCItems.entityVita, event.entityLiving);
             event.drops.add(new EntityItem(event.entity.worldObj, event.entity.posX, event.entity.posY, event.entity.posZ, vitaStack));
