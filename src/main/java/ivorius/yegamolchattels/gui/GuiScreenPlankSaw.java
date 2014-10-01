@@ -2,6 +2,7 @@ package ivorius.yegamolchattels.gui;
 
 import ivorius.ivtoolkit.rendering.IvParticleHelper;
 import ivorius.yegamolchattels.YeGamolChattels;
+import ivorius.yegamolchattels.blocks.BlockPlankSaw;
 import ivorius.yegamolchattels.blocks.TileEntityPlankSaw;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
@@ -68,7 +69,7 @@ public class GuiScreenPlankSaw extends GuiScreen
     {
         super.updateScreen();
 
-        if (tileEntityPlankSaw == null || tileEntityPlankSaw.isInvalid())
+        if (tileEntityPlankSaw == null || tileEntityPlankSaw.isInvalid() || !BlockPlankSaw.canUseItemToSaw(mc.thePlayer.getHeldItem()))
             mc.thePlayer.closeScreen();
 
         Iterator<EntityFX> iterator = particles.iterator();

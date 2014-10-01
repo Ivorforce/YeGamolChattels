@@ -66,7 +66,7 @@ public class BlockPlankSaw extends IvBlockMultiblock
                 return true;
             else if (player.isSneaking() && plankSaw.tryEquippingItemOnPlayer(player))
                 return true;
-            else if (player.getHeldItem() != null && player.getHeldItem().getItem() instanceof ItemSaw)
+            else if (canUseItemToSaw(player.getHeldItem()))
             {
                 if (!world.isRemote)
                 {
@@ -78,6 +78,11 @@ public class BlockPlankSaw extends IvBlockMultiblock
         }
 
         return false;
+    }
+
+    public static boolean canUseItemToSaw(ItemStack stack)
+    {
+        return stack != null && stack.getItem() instanceof ItemSaw;
     }
 
     @Override

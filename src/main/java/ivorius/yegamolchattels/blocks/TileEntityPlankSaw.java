@@ -105,16 +105,21 @@ public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements Partia
 //        moveSawInConstraints(0.0f, yPlus);
     }
 
-    public void chopOffWood(float score, EntityPlayer player, ItemStack usedItem)
+    public void chopOffWood(float score, EntityPlayer player, int usedItemIndex)
     {
         cutsLeft--;
         woodCutScore = 0.0f;
         woodCutY = 0.0f;
         calculateIsInWood();
-        usedItem.damageItem(1, player);
 
         if (!worldObj.isRemote)
         {
+            ItemStack usedItem = player.inventory.getStackInSlot(usedItemIndex);
+            usedItem.damageItem(1, player);
+            if (usedItem.stackSize <= 0)
+                player.inventory.setInventorySlotContents(usedItemIndex, null);
+            player.inventory.markDirty();
+
             float finalScore = score * score * 0.7f + score * 0.3f;
             int planks = MathHelper.floor_float(finalScore * 4.0f + 0.5f);
 
@@ -179,7 +184,7 @@ public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements Partia
 
             if (woodCutY >= 1.0f)
             {
-                chopOffWood(woodCutScore, player, player.inventory.getStackInSlot(usedItemIndex));
+                chopOffWood(woodCutScore, player, usedItemIndex);
 
                 if (worldObj.isRemote)
                     IvNetworkHelperClient.sendTileEntityUpdatePacket(this, "woodChop", YeGamolChattels.network, usedItemIndex);
@@ -306,8 +311,7 @@ public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements Partia
 
             if (woodCutY >= 1.0f && isInWood && containedItem != null)
             {
-                ItemStack usedStack = player.inventory.getStackInSlot(itemIndex);
-                chopOffWood(woodCutScore, player, usedStack);
+                chopOffWood(woodCutScore, player, itemIndex);
             }
         }
     }
