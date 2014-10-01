@@ -76,15 +76,9 @@ public class TileEntityLootChest extends IvTileEntityRotatable implements Partia
     {
         if (this.closed)
         {
-            //Rotate lock
-            if (this.lockFrame > 0F + FINISH_MARGIN)
-            {
-                this.lockFrame -= (0F + this.lockFrame) * 0.1F;
-            }
             //Open chest
-            else if (this.chestFrame > 0F + FINISH_MARGIN)
+            if (this.chestFrame > 0F + FINISH_MARGIN)
             {
-                this.lockFrame = 0F;
                 if (this.lockFall > LOCK_MIN)
                     this.lockFall -= this.lockFall * 0.2F;
                 this.chestFrame -= this.chestFrame * 0.1F;
@@ -93,19 +87,24 @@ public class TileEntityLootChest extends IvTileEntityRotatable implements Partia
             {
                 this.chestFrame = 0F;
                 this.lockFall = LOCK_MIN;
+
+                //Rotate lock
+                if (this.lockFrame > 0F + FINISH_MARGIN)
+                    this.lockFrame -= (0F + this.lockFrame) * 0.1F;
+                else
+                    this.lockFrame = 0F;
             }
         }
         else if (this.opened)
         {
             //Rotate lock
             if (this.lockFrame < LOCK_MAX - FINISH_MARGIN)
-            {
                 this.lockFrame += (LOCK_MAX - this.lockFrame) * 0.1;
-            }
             //Open chest
             else if (this.chestFrame < CHEST_MAX - FINISH_MARGIN)
             {
                 this.lockFrame = LOCK_MAX;
+
                 if (this.lockAccel < 2F)
                     this.lockAccel += 0.05F;
                 if (this.lockFall < LOCK_FALL_MAX)
