@@ -82,7 +82,7 @@ public class GuiScreenPlanksRefinement extends GuiScreen
                 float usedY = (mouseLastKnownY - (height / 2 - leftY * 0.5f)) / PLANK_HEIGHT;
                 float mouseSpeed = MathHelper.sqrt_float(mouseLastKnownSpeedX * mouseLastKnownSpeedX + mouseLastKnownSpeedY * mouseLastKnownSpeedY);
 
-                tileEntity.refineWithItem(tool, mc.thePlayer, usedX * 16.0f, usedY * 16.0f, mouseSpeed);
+                tileEntity.refineWithItem(mc.thePlayer, usedX * 16.0f, usedY * 16.0f, mouseSpeed);
             }
 
             ticksMouseDown++;

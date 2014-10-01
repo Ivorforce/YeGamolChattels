@@ -129,11 +129,10 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
         return false;
     }
 
-    public void refineWithItem(ItemStack usedTool, EntityPlayer entityPlayer, float x, float y, float speed)
+    public void refineWithItem(EntityPlayer entityPlayer, float x, float y, float speed)
     {
         speed = speed * 0.3f;
         int speedInfl = MathHelper.floor_float(speed) + ((worldObj.rand.nextFloat() < speed % 1.0f) ? 1 : 0);
-        usedTool.damageItem(1 + speedInfl, entityPlayer);
 
         int startSlotX = MathHelper.floor_float(x - 1.5f + 0.5f);
         int endSlotX = MathHelper.floor_float(x + 1.5f + 0.5f);
@@ -293,19 +292,24 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
         if ("plankRefinement".equals(context))
         {
             int usedItem = buffer.readInt();
+            ItemStack usedStack = player.inventory.getStackInSlot(usedItem);
             int speedInfl = buffer.readInt();
 
-            for (int i = 0; i < ticksRefinedPerSlot.length; i++)
+            if (isCorrectTool(usedStack))
             {
-                ticksRefinedPerSlot[i] = buffer.readInt();
-            }
+                for (int i = 0; i < ticksRefinedPerSlot.length; i++)
+                {
+                    ticksRefinedPerSlot[i] = buffer.readInt();
+                }
 
-            ItemStack usedStack = player.inventory.getStackInSlot(usedItem);
-            usedStack.damageItem(1 + speedInfl, player);
+                usedStack.damageItem(1 + speedInfl, player);
+                if (usedStack.stackSize <= 0)
+                    player.inventory.setInventorySlotContents(usedItem, null);
 
-            if (isRefinementComplete())
-            {
-                completeRefinement();
+                if (isRefinementComplete())
+                {
+                    completeRefinement();
+                }
             }
         }
     }
