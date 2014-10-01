@@ -180,7 +180,7 @@ public class TileEntitySnowGlobe extends TileEntity implements PartialUpdateHand
     // Client
 
     @SideOnly(Side.CLIENT)
-    private int glCallListIndex = -1;
+    private int glCallListIndex;
 
     @SideOnly(Side.CLIENT)
     public int getGlCallListIndex()
@@ -197,10 +197,10 @@ public class TileEntitySnowGlobe extends TileEntity implements PartialUpdateHand
     @SideOnly(Side.CLIENT)
     public void addCallListForDestruction()
     {
-        if (glCallListIndex >= 0)
+        if (glCallListIndex > 0)
         {
             SnowGlobeCallListHandler.addCallListToDestroy(glCallListIndex);
-            glCallListIndex = -1;
+            glCallListIndex = 0;
         }
     }
 }

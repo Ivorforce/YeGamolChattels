@@ -26,7 +26,7 @@ import net.minecraftforge.common.util.Constants;
 /**
  * Created by lukas on 28.07.14.
  */
-public class EntityFakePlayer extends EntityMob implements SkinManager.SkinAvailableCallback
+public class EntityFakePlayer extends EntityMob
 {
     private GameProfile playerProfile;
 
@@ -34,6 +34,8 @@ public class EntityFakePlayer extends EntityMob implements SkinManager.SkinAvail
     private ResourceLocation locationSkin;
     @SideOnly(Side.CLIENT)
     private ResourceLocation locationCape;
+    @SideOnly(Side.CLIENT)
+    private CallbackHandler callbackHandler;
 
     public EntityFakePlayer(World world)
     {
@@ -107,7 +109,7 @@ public class EntityFakePlayer extends EntityMob implements SkinManager.SkinAvail
         if (s != null && !s.isEmpty())
         {
             SkinManager skinmanager = Minecraft.getMinecraft().func_152342_ad();
-            skinmanager.func_152790_a(playerProfile, this, true);
+            skinmanager.func_152790_a(playerProfile, callbackHandler, true);
         }
     }
 
@@ -143,15 +145,25 @@ public class EntityFakePlayer extends EntityMob implements SkinManager.SkinAvail
     }
 
     @SideOnly(Side.CLIENT)
-    @Override
-    public void func_152121_a(MinecraftProfileTexture.Type type, ResourceLocation resourceLocation)
+    public static class CallbackHandler implements SkinManager.SkinAvailableCallback
     {
-        switch (type)
+        private EntityFakePlayer player;
+
+        public CallbackHandler(EntityFakePlayer player)
         {
-            case CAPE:
-                this.locationCape = resourceLocation;
-            case SKIN:
-                this.locationSkin = resourceLocation;
+            this.player = player;
+        }
+
+        @Override
+        public void func_152121_a(MinecraftProfileTexture.Type type, ResourceLocation resourceLocation)
+        {
+            switch (type)
+            {
+                case CAPE:
+                    this.player.locationCape = resourceLocation;
+                case SKIN:
+                    this.player.locationSkin = resourceLocation;
+            }
         }
     }
 }
