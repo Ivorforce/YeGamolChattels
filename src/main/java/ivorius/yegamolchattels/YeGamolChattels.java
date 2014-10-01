@@ -374,9 +374,9 @@ public class YeGamolChattels
         GameRegistry.addRecipe(new ItemStack(YGCBlocks.pedestal, 1, EnumPedestalEntry.goldPedestal.getIntIdentifier()), " # ", "I#I", "BSB", '#', Blocks.gold_block, 'I', Items.gold_ingot, 'B', Items.book, 'S', Blocks.stone);
         GameRegistry.addRecipe(new ItemStack(YGCBlocks.pedestal, 1, EnumPedestalEntry.diamondPedestal.getIntIdentifier()), "I#I", "III", "BSB", '#', Blocks.diamond_block, 'I', Items.diamond, 'B', Items.book, 'S', Blocks.stone);
 
-        GameRegistry.addRecipe(new ItemStack(YGCBlocks.itemShelf, 1, 0), "###", "# #", '#', wildcard(YGCItems.refinedPlank));
-        GameRegistry.addRecipe(new ItemStack(YGCBlocks.itemShelf, 1, 1), "##", '#', wildcard(YGCItems.refinedPlank));
-        GameRegistry.addRecipe(new ItemStack(YGCBlocks.itemShelf, 1, 2), "###", "# #", "#I#", '#', wildcard(YGCItems.refinedPlank), 'I', Items.iron_ingot);
+        GameRegistry.addRecipe(new ItemStack(YGCBlocks.itemShelf, 1, TileEntityItemShelfModel0.shelfJamien), "###", "# #", '#', wildcard(YGCItems.refinedPlank));
+        GameRegistry.addRecipe(new ItemStack(YGCBlocks.itemShelf, 1, TileEntityItemShelfModel0.shelfWall), "##", '#', wildcard(YGCItems.refinedPlank));
+        GameRegistry.addRecipe(new ItemStack(YGCBlocks.itemShelf, 1, TileEntityItemShelfModel0.shelfWardrobe), "###", "# #", "#I#", '#', wildcard(YGCItems.refinedPlank), 'I', Items.iron_ingot);
 
         GameRegistry.addRecipe(new ItemStack(YGCBlocks.snowGlobe), " # ", "#W#", "SIS", '#', Blocks.glass, 'W', Blocks.planks, 'S', Blocks.stone, 'I', Items.iron_ingot);
 
