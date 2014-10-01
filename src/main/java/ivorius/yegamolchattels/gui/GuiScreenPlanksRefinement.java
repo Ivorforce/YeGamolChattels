@@ -70,7 +70,8 @@ public class GuiScreenPlanksRefinement extends GuiScreen
         if (tileEntity == null || tileEntity.isInvalid())
             mc.thePlayer.closeScreen();
 
-        ItemStack tool = mc.thePlayer.getHeldItem();
+        int usedItem = mc.thePlayer.inventory.currentItem;
+        ItemStack tool = mc.thePlayer.inventory.getStackInSlot(usedItem);
         if (mouseButtonDown == 0)
         {
             if (tileEntity.isCorrectTool(tool))
@@ -82,7 +83,7 @@ public class GuiScreenPlanksRefinement extends GuiScreen
                 float usedY = (mouseLastKnownY - (height / 2 - leftY * 0.5f)) / PLANK_HEIGHT;
                 float mouseSpeed = MathHelper.sqrt_float(mouseLastKnownSpeedX * mouseLastKnownSpeedX + mouseLastKnownSpeedY * mouseLastKnownSpeedY);
 
-                tileEntity.refineWithItem(mc.thePlayer, usedX * 16.0f, usedY * 16.0f, mouseSpeed);
+                tileEntity.refineWithItem(mc.thePlayer, usedItem, usedX * 16.0f, usedY * 16.0f, mouseSpeed);
             }
 
             ticksMouseDown++;

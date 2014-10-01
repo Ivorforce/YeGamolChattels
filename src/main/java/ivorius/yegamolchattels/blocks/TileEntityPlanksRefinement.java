@@ -10,7 +10,6 @@ import ivorius.yegamolchattels.achievements.YGCAchievementList;
 import ivorius.yegamolchattels.gui.YGCGuiHandler;
 import ivorius.yegamolchattels.items.YGCItems;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -18,15 +17,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 
-import java.util.ArrayList;
-
 /**
  * Created by lukas on 04.05.14.
  */
 public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implements PartialUpdateHandler, ClientEventHandler
 {
-    private static ArrayList<IPlanksRefinementEntry> planksRefinementEntries = new ArrayList<IPlanksRefinementEntry>();
-
     public static final int REFINEMENT_SLOTS_X = 16;
     public static final int REFINEMENT_SLOTS_Y = 7;
 
@@ -38,11 +33,6 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
     public ItemStack containedItem;
 
     public int[] ticksRefinedPerSlot = new int[REFINEMENT_SLOTS_X * REFINEMENT_SLOTS_Y];
-
-    public static void addRefinement(IPlanksRefinementEntry entry)
-    {
-        planksRefinementEntries.add(entry);
-    }
 
     public boolean tryStoringItem(ItemStack stack, Entity entity)
     {
@@ -118,18 +108,10 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
 
     public boolean isCorrectTool(ItemStack tool)
     {
-        for (IPlanksRefinementEntry entry : planksRefinementEntries)
-        {
-            if (entry.matchesSource(containedItem) && entry.matchesTool(tool))
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return getCurrentResult(tool) != null;
     }
 
-    public void refineWithItem(EntityPlayer entityPlayer, float x, float y, float speed)
+    public void refineWithItem(EntityPlayer entityPlayer, int usedItem, float x, float y, float speed)
     {
         speed = speed * 0.3f;
         int speedInfl = MathHelper.floor_float(speed) + ((worldObj.rand.nextFloat() < speed % 1.0f) ? 1 : 0);
@@ -158,9 +140,7 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
             IvNetworkHelperClient.sendTileEntityUpdatePacket(this, "plankRefinement", YeGamolChattels.network, entityPlayer.inventory.currentItem, speedInfl);
 
         if (isRefinementComplete())
-        {
-            completeRefinement();
-        }
+            completeRefinement(entityPlayer.inventory.getStackInSlot(usedItem));
     }
 
     public boolean isRefinementComplete()
@@ -183,7 +163,7 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
         return true;
     }
 
-    public void completeRefinement()
+    public void completeRefinement(ItemStack tool)
     {
         for (int i = 0; i < ticksRefinedPerSlot.length; i++)
         {
@@ -192,18 +172,20 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
 
         if (!worldObj.isRemote)
         {
-            for (IPlanksRefinementEntry entry : planksRefinementEntries)
-            {
-                if (entry.matchesSource(containedItem))
-                {
-                    containedItem = entry.getResult(containedItem);
-                    break;
-                }
-            }
+            PlanksRefinementRegistry.Entry entry = getCurrentResult(tool);
+            if (entry != null)
+                containedItem = entry.getResult(containedItem, tool);
+            else
+                YeGamolChattels.logger.error("Unknown refinement result for '" + containedItem + "'");
 
             markDirty();
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         }
+    }
+
+    public PlanksRefinementRegistry.Entry getCurrentResult(ItemStack tool)
+    {
+        return PlanksRefinementRegistry.entry(containedItem, tool);
     }
 
     public float getRefinement(int slotX, int slotY)
@@ -304,12 +286,14 @@ public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implement
 
                 usedStack.damageItem(1 + speedInfl, player);
                 if (usedStack.stackSize <= 0)
+                {
                     player.inventory.setInventorySlotContents(usedItem, null);
+                    PlanksRefinementRegistry.Entry entry = getCurrentResult(usedStack);
+                    entry.onToolBreak(usedStack, player);
+                }
 
                 if (isRefinementComplete())
-                {
-                    completeRefinement();
-                }
+                    completeRefinement(usedStack);
             }
         }
     }

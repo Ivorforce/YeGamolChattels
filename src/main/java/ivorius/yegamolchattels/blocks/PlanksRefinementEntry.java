@@ -1,12 +1,13 @@
 package ivorius.yegamolchattels.blocks;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 /**
  * Created by lukas on 11.05.14.
  */
-public class PlanksRefinementEntry implements IPlanksRefinementEntry
+public class PlanksRefinementEntry implements PlanksRefinementRegistry.Entry
 {
     public Item source;
     public Item tool;
@@ -40,7 +41,7 @@ public class PlanksRefinementEntry implements IPlanksRefinementEntry
     }
 
     @Override
-    public ItemStack getResult(ItemStack source)
+    public ItemStack getResult(ItemStack source, ItemStack tool)
     {
         if (destination != null)
         {
@@ -51,5 +52,11 @@ public class PlanksRefinementEntry implements IPlanksRefinementEntry
         }
         else
             return null;
+    }
+
+    @Override
+    public void onToolBreak(ItemStack tool, EntityPlayer player)
+    {
+
     }
 }
