@@ -384,7 +384,7 @@ public class YeGamolChattels
             GameRegistry.addRecipe(new ItemStack(Blocks.planks, 2, i), "#", "#", "#", '#', new ItemStack(YGCItems.plank, 1, i));
 
         PlanksRefinementRegistry.addRefinement(new PlanksRefinementEntry(YGCItems.plank, YGCItems.sandpaper, new ItemStack(YGCItems.smoothPlank), true));
-        PlanksRefinementRegistry.addRefinement(new PlanksRefinementEntry(YGCItems.smoothPlank, YGCItems.linseedOil, new ItemStack(YGCItems.refinedPlank), true));
+        PlanksRefinementRegistry.addRefinement(new PlanksRefinementEntryBottle(YGCItems.smoothPlank, YGCItems.linseedOil, new ItemStack(YGCItems.refinedPlank), true));
 
         GameRegistry.addShapelessRecipe(new ItemStack(YGCItems.sandpaper), Blocks.glass, Items.slime_ball, Items.paper);
 
