@@ -20,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.MathHelper;
+import org.lwjgl.util.vector.Vector2f;
 
 /**
  * Created by lukas on 04.05.14.
@@ -147,37 +148,35 @@ public class TileEntitySawBench extends IvTileEntityMultiBlock implements Partia
 
     public float moveSaw(EntityPlayer player, float x, float y, int usedItemIndex)
     {
-        if (containedItem != null)
+        if (containedItem != null && isInWood && y != 0.0f)
         {
+            float safeY = Math.min(y, woodCutY - sawPositionY);
+            float safeX = x / y * safeY;
+            moveSawInConstraints(safeX, safeY);
+
+            float leftX = x - safeX;
+            float leftY = y - safeY;
+
+            Vector2f movInWood = possibleMovement(leftX, leftY);
+
             float plusScore = 0.0f;
-            float yPlus = isInWood ? Math.min(y, woodCutY - sawPositionY) : y;
-
-            moveSawInConstraints(isInWood ? x * 0.5f : x, yPlus);
-
-            float yPlusLeft = y - yPlus;
-            if (yPlusLeft > 0.0f && isInWood)
+            if (movInWood.y > 0.0f)
             {
-                float vecLength = MathHelper.sqrt_float(x * x + y * y);
+                float vecLength = MathHelper.sqrt_float(movInWood.x * movInWood.x + movInWood.y * movInWood.y);
 
-                if (vecLength > 0.0f)
-                {
-                    float nX = x / vecLength;
-                    float sideMov = Math.abs(nX);
-                    float sideMovInf = sideMov * sideMov;
-                    sideMovInf = sideMovInf * sideMovInf * sideMovInf;
+                float nX = movInWood.x / vecLength;
+                float sideMov = Math.abs(nX);
+                float sideMovInf = sideMov * sideMov;
+                sideMovInf = sideMovInf * sideMovInf * sideMovInf;
 
-                    moveSawInConstraints(0.0f, yPlusLeft * sideMovInf);
+                moveSawInConstraints(movInWood.x * 0.5f, movInWood.y * sideMovInf);
 
-                    plusScore = yPlusLeft * sideMovInf * sideMovInf * sideMovInf;
-                    woodCutScore += plusScore;
-                }
+                plusScore = movInWood.y * sideMovInf * sideMovInf * sideMovInf;
+                woodCutScore += plusScore;
 
                 if (sawPositionY > woodCutY && isInWood)
                     woodCutY = sawPositionY;
             }
-
-            if (!isInWood)
-                calculateIsInWood();
 
             if (worldObj.isRemote)
                 IvNetworkHelperClient.sendTileEntityUpdatePacket(this, "sawMove", YeGamolChattels.network);
@@ -196,6 +195,9 @@ public class TileEntitySawBench extends IvTileEntityMultiBlock implements Partia
         {
             moveSawInConstraints(x, y);
 
+            if (containedItem !=  null && !isInWood)
+                calculateIsInWood();
+
             if (worldObj.isRemote)
                 IvNetworkHelperClient.sendTileEntityUpdatePacket(this, "sawMove", YeGamolChattels.network);
         }
@@ -203,10 +205,21 @@ public class TileEntitySawBench extends IvTileEntityMultiBlock implements Partia
         return 0.0f;
     }
 
-    public void moveSawInConstraints(float x, float y)
+    public Vector2f possibleMovement(float x, float y)
     {
-        sawPositionX = MathHelper.clamp_float(sawPositionX + x, -0.3f, 0.3f);
-        sawPositionY = MathHelper.clamp_float(sawPositionY + y, -0.2f, 1.2f);
+        x = MathHelper.clamp_float(sawPositionX + x, -0.3f, 0.3f);
+        y = MathHelper.clamp_float(sawPositionY + y, -0.2f, 1.2f);
+        return new Vector2f(x - sawPositionX, y - sawPositionY);
+    }
+
+    public Vector2f moveSawInConstraints(float x, float y)
+    {
+        Vector2f possibleMovement = possibleMovement(x, y);
+
+        sawPositionX = sawPositionX + possibleMovement.x;
+        sawPositionY = sawPositionY + possibleMovement.y;
+
+        return possibleMovement;
     }
 
     public void calculateIsInWood()
