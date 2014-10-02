@@ -121,19 +121,25 @@ public class ItemEntityVita extends Item
         setEntity(stack, entity);
 
         Entity savedEntity = createEntity(stack, entity.worldObj);
-        savedEntity.isDead = false;
 
-        if (savedEntity instanceof EntityLivingBase)
+        if (savedEntity != null)
         {
-            EntityLivingBase entityLiving = (EntityLivingBase) savedEntity;
-            entityLiving.deathTime = 0;
-            entityLiving.attackTime = 0;
-            entityLiving.hurtTime = 0;
-            entityLiving.setHealth(entityLiving.getMaxHealth());
+            savedEntity.isDead = false;
+
+            if (savedEntity instanceof EntityLivingBase)
+            {
+                EntityLivingBase entityLiving = (EntityLivingBase) savedEntity;
+                entityLiving.deathTime = 0;
+                entityLiving.attackTime = 0;
+                entityLiving.hurtTime = 0;
+                entityLiving.setHealth(entityLiving.getMaxHealth());
+            }
+
+            setEntity(stack, savedEntity);
+
+            return stack;
         }
 
-        setEntity(stack, savedEntity);
-
-        return stack;
+        return null;
     }
 }

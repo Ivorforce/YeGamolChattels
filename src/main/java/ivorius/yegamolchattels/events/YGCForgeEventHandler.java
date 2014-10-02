@@ -9,6 +9,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ivorius.ivtoolkit.rendering.IvRenderHelper;
+import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.achievements.YGCAchievementList;
 import ivorius.yegamolchattels.blocks.TileEntityMicroBlock;
 import ivorius.yegamolchattels.blocks.TileEntitySnowGlobe;
@@ -108,7 +109,11 @@ public class YGCForgeEventHandler
         if (event.entityLiving.getRNG().nextFloat() < 0.04f && !(event.entityLiving instanceof EntityPlayer))
         {
             ItemStack vitaStack = ItemEntityVita.createVitaItemStackAsNewbornEntity(YGCItems.entityVita, event.entityLiving);
-            event.drops.add(new EntityItem(event.entity.worldObj, event.entity.posX, event.entity.posY, event.entity.posZ, vitaStack));
+
+            if (vitaStack != null)
+                event.drops.add(new EntityItem(event.entity.worldObj, event.entity.posX, event.entity.posY, event.entity.posZ, vitaStack));
+            else
+                YeGamolChattels.logger.warn("Could not create vita item stack for " + event.entityLiving);
        }
     }
 
