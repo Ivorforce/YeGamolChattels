@@ -46,8 +46,8 @@ public class ClientProxy implements YGCProxy
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPedestal.class, new TileEntityRendererPedestal());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemShelf.class, new TileEntityRendererItemShelf());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySnowGlobe.class, new TileEntityRendererSnowGlobe());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPlankSaw.class, new TileEntityRendererPlankSaw());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPlanksRefinement.class, new TileEntityRendererPlanksRefinement());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySawBench.class, new TileEntityRendererSawBench());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTablePress.class, new TileEntityRendererTablePress());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLootChest.class, new TileEntityRendererLootChest());
 
         RenderingRegistry.registerBlockHandler(new RenderTreasurePile(YGCBlocks.blockTreasurePileRenderType));
@@ -62,8 +62,8 @@ public class ClientProxy implements YGCProxy
 
         MinecraftForgeClient.registerItemRenderer(YGCItems.blockFragment, new RenderBlockFragment());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(YGCBlocks.lootChest), new YGCItemRendererModel(new ModelLootChest(), new ResourceLocation(YeGamolChattels.MODID, YeGamolChattels.filePathTextures + "lootChest.png"), 1.0f, new float[]{0.0f, -0.1f, 0.0f}, new float[]{0.0f, 180.0f, 0.0f}));
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(YGCBlocks.planksRefinement), new YGCItemRendererModel(new ModelTablePress(), new ResourceLocation(YeGamolChattels.MODID, YeGamolChattels.filePathTextures + "tablePress.png"), 3.0f, new float[]{0.0f, -1.15f, 0.0f}, new float[]{0.0f, 180.0f, 0.0f}));
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(YGCBlocks.plankSaw), new YGCItemRendererModel(new ModelSawBench(), new ResourceLocation(YeGamolChattels.MODID, YeGamolChattels.filePathTextures + "sawBench.png"), 2.0f, new float[]{0.0f, -0.7f, 0.0f}, new float[]{0.0f, 180.0f, 0.0f}));
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(YGCBlocks.tablePress), new YGCItemRendererModel(new ModelTablePress(), new ResourceLocation(YeGamolChattels.MODID, YeGamolChattels.filePathTextures + "tablePress.png"), 3.0f, new float[]{0.0f, -1.15f, 0.0f}, new float[]{0.0f, 180.0f, 0.0f}));
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(YGCBlocks.sawBench), new YGCItemRendererModel(new ModelSawBench(), new ResourceLocation(YeGamolChattels.MODID, YeGamolChattels.filePathTextures + "sawBench.png"), 2.0f, new float[]{0.0f, -0.7f, 0.0f}, new float[]{0.0f, 180.0f, 0.0f}));
     }
 
     @Override

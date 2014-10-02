@@ -31,9 +31,9 @@ public class YGCGuiHandler implements IGuiHandler
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
     {
         if (ID == plankSawGuiID)
-            return new GuiScreenPlankSaw(world, x, y, z);
+            return new GuiScreenSawBench(world, x, y, z);
         else if (ID == plankRefinementGuiID)
-            return new GuiScreenPlanksRefinement(world, x, y, z);
+            return new GuiScreenTablePress(world, x, y, z);
         else if (ID == statueCarvingGuiID)
             return new GuiScreenCarveStatue(player, x, y, z);
 

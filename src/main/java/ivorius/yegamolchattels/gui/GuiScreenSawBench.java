@@ -2,8 +2,8 @@ package ivorius.yegamolchattels.gui;
 
 import ivorius.ivtoolkit.rendering.IvParticleHelper;
 import ivorius.yegamolchattels.YeGamolChattels;
-import ivorius.yegamolchattels.blocks.BlockPlankSaw;
-import ivorius.yegamolchattels.blocks.TileEntityPlankSaw;
+import ivorius.yegamolchattels.blocks.BlockSawBench;
+import ivorius.yegamolchattels.blocks.TileEntitySawBench;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.particle.EntityDiggingFX;
@@ -30,11 +30,11 @@ import java.util.List;
 /**
  * Created by lukas on 04.05.14.
  */
-public class GuiScreenPlankSaw extends GuiScreen
+public class GuiScreenSawBench extends GuiScreen
 {
     public static ResourceLocation sawGui = new ResourceLocation(YeGamolChattels.MODID, YeGamolChattels.filePathTextures + "sawGui.png");
 
-    public TileEntityPlankSaw tileEntityPlankSaw;
+    public TileEntitySawBench tileEntitySawBench;
     RenderItem renderItem;
 
     public int mouseLastKnownX;
@@ -42,12 +42,12 @@ public class GuiScreenPlankSaw extends GuiScreen
 
     private List<EntityFX> particles = new ArrayList<>();
 
-    public GuiScreenPlankSaw(World world, int x, int y, int z)
+    public GuiScreenSawBench(World world, int x, int y, int z)
     {
         TileEntity tileEntity = world.getTileEntity(x, y, z);
 
-        if (tileEntity instanceof TileEntityPlankSaw)
-            tileEntityPlankSaw = (TileEntityPlankSaw) tileEntity;
+        if (tileEntity instanceof TileEntitySawBench)
+            tileEntitySawBench = (TileEntitySawBench) tileEntity;
 
         renderItem = new RenderItem();
     }
@@ -69,7 +69,7 @@ public class GuiScreenPlankSaw extends GuiScreen
     {
         super.updateScreen();
 
-        if (tileEntityPlankSaw == null || tileEntityPlankSaw.isInvalid() || !BlockPlankSaw.canUseItemToSaw(mc.thePlayer.getHeldItem()))
+        if (tileEntitySawBench == null || tileEntitySawBench.isInvalid() || !BlockSawBench.canUseItemToSaw(mc.thePlayer.getHeldItem()))
             mc.thePlayer.closeScreen();
 
         Iterator<EntityFX> iterator = particles.iterator();
@@ -88,24 +88,24 @@ public class GuiScreenPlankSaw extends GuiScreen
         drawDefaultBackground();
         this.drawCenteredString(this.fontRendererObj, StatCollector.translateToLocal("guiPlankSaw.title"), this.width / 2, 40, 16777215);
 
-        if (tileEntityPlankSaw != null)
+        if (tileEntitySawBench != null)
         {
-            ItemStack stack = tileEntityPlankSaw.containedItem;
+            ItemStack stack = tileEntitySawBench.containedItem;
 
             if (stack != null && stack.getItem() instanceof ItemBlock)
             {
                 GL11.glDisable(GL11.GL_DEPTH_TEST);
                 ItemBlock itemBlock = (ItemBlock) stack.getItem();
 
-                drawBlock(tileEntityPlankSaw.cutsLeft - 1, TileEntityPlankSaw.cutsPerLog, 0.0f, itemBlock.field_150939_a, stack.getItemDamage()); // The last layer is bark
+                drawBlock(tileEntitySawBench.cutsLeft - 1, TileEntitySawBench.cutsPerLog, 0.0f, itemBlock.field_150939_a, stack.getItemDamage()); // The last layer is bark
                 drawParticles(partialTicks);
 
-                if (tileEntityPlankSaw.isInWood)
+                if (tileEntitySawBench.isInWood)
                     drawSaw();
 
-                drawBlock(tileEntityPlankSaw.cutsLeft, TileEntityPlankSaw.cutsPerLog, tileEntityPlankSaw.woodCutY, itemBlock.field_150939_a, stack.getItemDamage());
+                drawBlock(tileEntitySawBench.cutsLeft, TileEntitySawBench.cutsPerLog, tileEntitySawBench.woodCutY, itemBlock.field_150939_a, stack.getItemDamage());
 
-                if (!tileEntityPlankSaw.isInWood)
+                if (!tileEntitySawBench.isInWood)
                     drawSaw();
             }
             else
@@ -124,9 +124,9 @@ public class GuiScreenPlankSaw extends GuiScreen
         double prevInterX = EntityFX.interpPosX;
         double prevInterY = EntityFX.interpPosY;
         double prevInterZ = EntityFX.interpPosZ;
-        EntityFX.interpPosX = tileEntityPlankSaw.xCoord + 0.5;
-        EntityFX.interpPosY = tileEntityPlankSaw.yCoord + 0.5;
-        EntityFX.interpPosZ = tileEntityPlankSaw.zCoord + 0.5;
+        EntityFX.interpPosX = tileEntitySawBench.xCoord + 0.5;
+        EntityFX.interpPosY = tileEntitySawBench.yCoord + 0.5;
+        EntityFX.interpPosZ = tileEntitySawBench.zCoord + 0.5;
 
         this.mc.getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
         Tessellator.instance.startDrawingQuads();
@@ -142,8 +142,8 @@ public class GuiScreenPlankSaw extends GuiScreen
 
     private void drawSaw()
     {
-        int sawX = MathHelper.floor_float(tileEntityPlankSaw.sawPositionX * 60.0f);
-        int sawY = MathHelper.floor_float(tileEntityPlankSaw.sawPositionY * 100.0f);
+        int sawX = MathHelper.floor_float(tileEntitySawBench.sawPositionX * 60.0f);
+        int sawY = MathHelper.floor_float(tileEntitySawBench.sawPositionY * 100.0f);
 
         this.mc.getTextureManager().bindTexture(sawGui);
         drawTexturedModalRect(width / 2 - 50 + sawX, 80 - 20 + sawY, 0, 0, 101, 22);
@@ -243,9 +243,9 @@ public class GuiScreenPlankSaw extends GuiScreen
 
             if (movX != 0 || movY != 0)
             {
-                ItemStack containedItem = tileEntityPlankSaw.containedItem;
+                ItemStack containedItem = tileEntitySawBench.containedItem;
 
-                float addScore = tileEntityPlankSaw.moveSaw(player, movX * 0.01f, movY * 0.01f, mc.thePlayer.inventory.currentItem);
+                float addScore = tileEntitySawBench.moveSaw(player, movX * 0.01f, movY * 0.01f, mc.thePlayer.inventory.currentItem);
 
                 if (containedItem != null && containedItem.getItem() instanceof ItemBlock)
                 {
@@ -255,10 +255,10 @@ public class GuiScreenPlankSaw extends GuiScreen
                     int particles = MathHelper.ceiling_float_int(addScore * 200.0f);
                     for (int i = 0; i < particles; i++)
                     {
-                        double fxX = tileEntityPlankSaw.xCoord + tileEntityPlankSaw.getWorldObj().rand.nextFloat();
-                        double fxY = tileEntityPlankSaw.yCoord + (1.05f - tileEntityPlankSaw.sawPositionY);
-                        double fxZ = tileEntityPlankSaw.zCoord + 0.5;
-                        EntityFX particle = new EntityDiggingFX(tileEntityPlankSaw.getWorldObj(), fxX, fxY, fxZ, movX * 0.02f, -0.1, 0.0, containedBlock, containedMetadata, 2);
+                        double fxX = tileEntitySawBench.xCoord + tileEntitySawBench.getWorldObj().rand.nextFloat();
+                        double fxY = tileEntitySawBench.yCoord + (1.05f - tileEntitySawBench.sawPositionY);
+                        double fxZ = tileEntitySawBench.zCoord + 0.5;
+                        EntityFX particle = new EntityDiggingFX(tileEntitySawBench.getWorldObj(), fxX, fxY, fxZ, movX * 0.02f, -0.1, 0.0, containedBlock, containedMetadata, 2);
                         particle.multipleParticleScaleBy(0.5f);
                         IvParticleHelper.spawnParticle(particle);
                         this.particles.add(particle);

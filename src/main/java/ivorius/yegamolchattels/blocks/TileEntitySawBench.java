@@ -24,7 +24,7 @@ import net.minecraft.util.MathHelper;
 /**
  * Created by lukas on 04.05.14.
  */
-public class TileEntityPlankSaw extends IvTileEntityMultiBlock implements PartialUpdateHandler, ClientEventHandler
+public class TileEntitySawBench extends IvTileEntityMultiBlock implements PartialUpdateHandler, ClientEventHandler
 {
     public ItemStack containedItem;
     public static final int cutsPerLog = 4;

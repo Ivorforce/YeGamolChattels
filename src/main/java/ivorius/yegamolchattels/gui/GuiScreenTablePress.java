@@ -1,7 +1,7 @@
 package ivorius.yegamolchattels.gui;
 
 import ivorius.yegamolchattels.YeGamolChattels;
-import ivorius.yegamolchattels.blocks.TileEntityPlanksRefinement;
+import ivorius.yegamolchattels.blocks.TileEntityTablePress;
 import ivorius.yegamolchattels.items.YGCItems;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -19,11 +19,9 @@ import org.lwjgl.opengl.GL11;
 /**
  * Created by lukas on 04.05.14.
  */
-public class GuiScreenPlanksRefinement extends GuiScreen
+public class GuiScreenTablePress extends GuiScreen
 {
-    public static ResourceLocation planksRefinementGui = new ResourceLocation(YeGamolChattels.MODID, YeGamolChattels.filePathTextures + "planksRefinementGui.png");
-
-    public TileEntityPlanksRefinement tileEntity;
+    public TileEntityTablePress tileEntity;
     RenderItem renderItem;
 
     public int mouseButtonDown = -1;
@@ -40,12 +38,12 @@ public class GuiScreenPlanksRefinement extends GuiScreen
     public static final int PLANK_SHIFT_X = 0;
     public static final int PLANK_SHIFT_Y = -1;
 
-    public GuiScreenPlanksRefinement(World world, int x, int y, int z)
+    public GuiScreenTablePress(World world, int x, int y, int z)
     {
         TileEntity tileEntity = world.getTileEntity(x, y, z);
 
-        if (tileEntity instanceof TileEntityPlanksRefinement)
-            this.tileEntity = (TileEntityPlanksRefinement) tileEntity;
+        if (tileEntity instanceof TileEntityTablePress)
+            this.tileEntity = (TileEntityTablePress) tileEntity;
 
         renderItem = new RenderItem();
     }
@@ -76,8 +74,8 @@ public class GuiScreenPlanksRefinement extends GuiScreen
         {
             if (tileEntity.isCorrectTool(tool))
             {
-                float leftX = TileEntityPlanksRefinement.REFINEMENT_SLOTS_X * PLANK_WIDTH / 16.0f;
-                float leftY = TileEntityPlanksRefinement.REFINEMENT_SLOTS_Y * PLANK_HEIGHT / 16.0f;
+                float leftX = TileEntityTablePress.REFINEMENT_SLOTS_X * PLANK_WIDTH / 16.0f;
+                float leftY = TileEntityTablePress.REFINEMENT_SLOTS_Y * PLANK_HEIGHT / 16.0f;
 
                 float usedX = (mouseLastKnownX - (width / 2 - leftX * 0.5f)) / PLANK_WIDTH;
                 float usedY = (mouseLastKnownY - (height / 2 - leftY * 0.5f)) / PLANK_HEIGHT;
@@ -127,10 +125,10 @@ public class GuiScreenPlanksRefinement extends GuiScreen
                 float colorG = stack.getItem() == YGCItems.plank ? 1.0f : 0.0f;
                 float colorB = stack.getItem() == YGCItems.plank ? 1.0f : 0.0f;
 
-                float transX = (16 - TileEntityPlanksRefinement.REFINEMENT_SLOTS_X + PLANK_SHIFT_X) * 0.5f;
-                float transY = (16 - TileEntityPlanksRefinement.REFINEMENT_SLOTS_Y + PLANK_SHIFT_Y) * 0.5f;
-                for (int slotX = 0; slotX < TileEntityPlanksRefinement.REFINEMENT_SLOTS_X; slotX++)
-                    for (int slotY = 0; slotY < TileEntityPlanksRefinement.REFINEMENT_SLOTS_Y; slotY++)
+                float transX = (16 - TileEntityTablePress.REFINEMENT_SLOTS_X + PLANK_SHIFT_X) * 0.5f;
+                float transY = (16 - TileEntityTablePress.REFINEMENT_SLOTS_Y + PLANK_SHIFT_Y) * 0.5f;
+                for (int slotX = 0; slotX < TileEntityTablePress.REFINEMENT_SLOTS_X; slotX++)
+                    for (int slotY = 0; slotY < TileEntityTablePress.REFINEMENT_SLOTS_Y; slotY++)
                     {
                         float sX = slotX + transX;
                         float sY = slotY + transY;
@@ -194,8 +192,8 @@ public class GuiScreenPlanksRefinement extends GuiScreen
 
     private float getRefinementSafe(int x, int y)
     {
-        x = MathHelper.clamp_int(x, 0, TileEntityPlanksRefinement.REFINEMENT_SLOTS_X - 1);
-        y = MathHelper.clamp_int(y, 0, TileEntityPlanksRefinement.REFINEMENT_SLOTS_Y - 1);
+        x = MathHelper.clamp_int(x, 0, TileEntityTablePress.REFINEMENT_SLOTS_X - 1);
+        y = MathHelper.clamp_int(y, 0, TileEntityTablePress.REFINEMENT_SLOTS_Y - 1);
 
         return Math.min(tileEntity.getRefinement(x, y), 1.4f) * 0.15f;
     }

@@ -20,7 +20,7 @@ import net.minecraft.util.MathHelper;
 /**
  * Created by lukas on 04.05.14.
  */
-public class TileEntityPlanksRefinement extends IvTileEntityMultiBlock implements PartialUpdateHandler, ClientEventHandler
+public class TileEntityTablePress extends IvTileEntityMultiBlock implements PartialUpdateHandler, ClientEventHandler
 {
     public static final int REFINEMENT_SLOTS_X = 16;
     public static final int REFINEMENT_SLOTS_Y = 7;

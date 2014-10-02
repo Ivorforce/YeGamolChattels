@@ -235,13 +235,13 @@ public class YeGamolChattels
         YGCItems.refinedPlank = new ItemPlank().setUnlocalizedName("refinedPlank").setHasSubtypes(true).setMaxDamage(0).setTextureName(textureBase + "plank_refined_").setCreativeTab(tabMain);
         GameRegistry.registerItem(YGCItems.refinedPlank, "refined_plank", MODID);
 
-        YGCBlocks.plankSaw = new BlockPlankSaw().setBlockName("ygcSawBench").setHardness(1.5f).setCreativeTab(tabMain);
-        GameRegistry.registerBlock(YGCBlocks.plankSaw, ItemPlankSaw.class, "plank_saw");
-        GameRegistry.registerTileEntity(TileEntityPlankSaw.class, "ygcPlankSaw");
+        YGCBlocks.sawBench = new BlockSawBench().setBlockName("ygcSawBench").setHardness(1.5f).setCreativeTab(tabMain);
+        GameRegistry.registerBlock(YGCBlocks.sawBench, ItemSawBench.class, "plank_saw");
+        GameRegistry.registerTileEntity(TileEntitySawBench.class, "ygcPlankSaw");
 
-        YGCBlocks.planksRefinement = new BlockPlanksRefinement().setBlockName("tablePress").setHardness(1.5f).setCreativeTab(tabMain);
-        GameRegistry.registerBlock(YGCBlocks.planksRefinement, ItemPlanksRefinement.class, "table_press");
-        GameRegistry.registerTileEntity(TileEntityPlanksRefinement.class, "ygcTablePress");
+        YGCBlocks.tablePress = new BlockTablePress().setBlockName("tablePress").setHardness(1.5f).setCreativeTab(tabMain);
+        GameRegistry.registerBlock(YGCBlocks.tablePress, ItemTablePress.class, "table_press");
+        GameRegistry.registerTileEntity(TileEntityTablePress.class, "ygcTablePress");
 
         YGCItems.sandpaper = new Item().setUnlocalizedName("sandpaper").setTextureName(textureBase + "sandpaper").setCreativeTab(tabMain);
         YGCItems.sandpaper.setMaxDamage(2048).setMaxStackSize(1).setNoRepair();
@@ -398,8 +398,8 @@ public class YeGamolChattels
         GameRegistry.addRecipe(new ItemStack(YGCItems.carvingChiselIron), "###", " I ", " W ", '#', Items.iron_ingot, 'I', Items.stick, 'L', Items.leather, 'W', Blocks.planks);
 
         GameRegistry.addRecipe(new ItemStack(YGCItems.ironSaw), "I  ", "###", '#', Items.iron_ingot, 'I', Items.stick);
-        GameRegistry.addRecipe(new ItemStack(YGCBlocks.plankSaw), "#IS", "#  ", '#', Blocks.planks, 'I', Items.iron_ingot, 'S', Items.stick);
-        GameRegistry.addRecipe(new ItemStack(YGCBlocks.planksRefinement), "#I#", "# #", '#', Blocks.planks, 'I', Items.iron_ingot);
+        GameRegistry.addRecipe(new ItemStack(YGCBlocks.sawBench), "#IS", "#  ", '#', Blocks.planks, 'I', Items.iron_ingot, 'S', Items.stick);
+        GameRegistry.addRecipe(new ItemStack(YGCBlocks.tablePress), "#I#", "# #", '#', Blocks.planks, 'I', Items.iron_ingot);
 
         GameRegistry.addRecipe(new ItemStack(YGCBlocks.lootChest), "#I#", "#R#", '#', wildcard(YGCItems.refinedPlank), 'I', Items.iron_ingot, 'R', Items.redstone);
     }

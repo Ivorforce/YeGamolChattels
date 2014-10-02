@@ -14,9 +14,9 @@ import net.minecraft.world.World;
 /**
  * Created by lukas on 04.05.14.
  */
-public class BlockPlanksRefinement extends IvBlockMultiblock
+public class BlockTablePress extends IvBlockMultiblock
 {
-    public BlockPlanksRefinement()
+    public BlockTablePress()
     {
         super(Material.wood);
     }
@@ -50,9 +50,9 @@ public class BlockPlanksRefinement extends IvBlockMultiblock
     {
         IvTileEntityMultiBlock tileEntity = getValidatedTotalParent(this, world, x, y, z);
 
-        if (tileEntity instanceof TileEntityPlanksRefinement)
+        if (tileEntity instanceof TileEntityTablePress)
         {
-            TileEntityPlanksRefinement planksRefinement = (TileEntityPlanksRefinement) tileEntity;
+            TileEntityTablePress planksRefinement = (TileEntityTablePress) tileEntity;
 
             if (planksRefinement.tryStoringItem(player.getHeldItem(), player))
                 return true;
@@ -70,7 +70,7 @@ public class BlockPlanksRefinement extends IvBlockMultiblock
     @Override
     public TileEntity createNewTileEntity(World var1, int var2)
     {
-        return new TileEntityPlanksRefinement();
+        return new TileEntityTablePress();
     }
 
     @Override

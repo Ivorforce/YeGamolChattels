@@ -1,13 +1,11 @@
 package ivorius.yegamolchattels.blocks;
 
 import ivorius.ivtoolkit.blocks.IvBlockMultiblock;
-import ivorius.ivtoolkit.blocks.IvMultiBlockHelper;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
 import ivorius.ivtoolkit.network.IvNetworkHelperServer;
 import ivorius.yegamolchattels.YGCMultiBlockHelper;
 import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.items.ItemSaw;
-import ivorius.yegamolchattels.items.YGCItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,9 +20,9 @@ import net.minecraft.world.World;
 /**
  * Created by lukas on 04.05.14.
  */
-public class BlockPlankSaw extends IvBlockMultiblock
+public class BlockSawBench extends IvBlockMultiblock
 {
-    public BlockPlankSaw()
+    public BlockSawBench()
     {
         super(Material.wood);
     }
@@ -58,9 +56,9 @@ public class BlockPlankSaw extends IvBlockMultiblock
     {
         IvTileEntityMultiBlock tileEntity = getValidatedTotalParent(this, world, x, y, z);
 
-        if (tileEntity instanceof TileEntityPlankSaw)
+        if (tileEntity instanceof TileEntitySawBench)
         {
-            TileEntityPlankSaw plankSaw = (TileEntityPlankSaw) tileEntity;
+            TileEntitySawBench plankSaw = (TileEntitySawBench) tileEntity;
 
             if (plankSaw.tryStoringItem(player.getHeldItem(), player))
                 return true;
@@ -88,7 +86,7 @@ public class BlockPlankSaw extends IvBlockMultiblock
     @Override
     public TileEntity createNewTileEntity(World var1, int var2)
     {
-        return new TileEntityPlankSaw();
+        return new TileEntitySawBench();
     }
 
     @Override
@@ -96,7 +94,7 @@ public class BlockPlankSaw extends IvBlockMultiblock
     {
         IvTileEntityMultiBlock tileEntity = getValidatedTotalParent(this, blockAccess, x, y, z);
 
-        if (tileEntity instanceof TileEntityPlankSaw)
+        if (tileEntity instanceof TileEntitySawBench)
             setBlockBounds(YGCMultiBlockHelper.boundsIntersection(tileEntity.getRotatedBB(-1, -1, -0.45, 2, 1.8, 1.45), x, y, z));
         else
             setBlockBounds(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);

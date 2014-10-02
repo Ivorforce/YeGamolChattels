@@ -27,8 +27,8 @@ public class YGCBlocks
 
     public static Block snowGlobe;
 
-    public static Block plankSaw;
-    public static Block planksRefinement;
+    public static Block sawBench;
+    public static Block tablePress;
 
     public static Block flaxPlant;
 
