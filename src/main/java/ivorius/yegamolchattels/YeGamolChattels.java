@@ -333,17 +333,6 @@ public class YeGamolChattels
                 GameRegistry.addShapelessRecipe(new ItemStack(YGCItems.bannerLarge, 1, i), new ItemStack(YGCItems.bannerLarge, 1, 15), new ItemStack(Items.dye, 1, i));
         }
 
-//        BlockStatue.initStatueCrafting();
-//        for (int r = 0; r < BlockStatue.statueCrafting.length / 2; r++)
-//        {
-//            String entityName = (String) BlockStatue.statueCrafting[r * 2 + 1];
-//            Object craftObject = BlockStatue.statueCrafting[r * 2];
-//
-//            ItemStack result = ItemStatue.createStatueItemStack(Item.getItemFromBlock(YGCBlocks.statue), entityName, new TileEntityStatue.BlockFragment(Blocks.stone, 0));
-//
-//            GameRegistry.addRecipe(result, "###", "#O#", "###", '#', Blocks.stone, 'O', craftObject);
-//        }
-
         GameRegistry.addRecipe(new ItemStack(YGCBlocks.treasurePile, 1), " # ", "###", "###", '#', Items.gold_ingot);
 
         GameRegistry.addRecipe(new ItemStack(YGCItems.flagSmall, 2, 15), "I#", "IS", '#', Blocks.wool, 'S', Items.string, 'I', Items.stick);
