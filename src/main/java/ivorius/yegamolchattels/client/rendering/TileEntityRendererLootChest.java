@@ -45,6 +45,8 @@ public class TileEntityRendererLootChest extends TileEntitySpecialRenderer
             this.chestModel.lock.rotateAngleX = (-lootChest.chestFrame * (float) Math.PI);
         }
 
+        GL11.glEnable(GL11.GL_CULL_FACE);
+
         bindTexture(chestTexture);
         this.chestModel.render(lootChest);
         GL11.glPopMatrix();
