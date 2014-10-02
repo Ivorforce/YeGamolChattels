@@ -38,6 +38,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.Logger;
@@ -388,6 +389,7 @@ public class YeGamolChattels
 
         GameRegistry.addShapelessRecipe(new ItemStack(YGCItems.sandpaper), Blocks.glass, Items.slime_ball, Items.paper);
 
+        MinecraftForge.addGrassSeed(new ItemStack(YGCItems.flaxSeeds), 2);
         GameRegistry.addShapelessRecipe(new ItemStack(YGCItems.linseedOil), Items.glass_bottle, YGCItems.flaxSeeds, YGCItems.flaxSeeds, YGCItems.flaxSeeds, YGCItems.flaxSeeds, YGCItems.flaxSeeds, YGCItems.flaxSeeds, YGCItems.flaxSeeds, YGCItems.flaxSeeds);
         GameRegistry.addRecipe(new ItemStack(Blocks.wool, 1), "##", "##", '#', YGCItems.flaxFiber);
 
