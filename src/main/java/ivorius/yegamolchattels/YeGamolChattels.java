@@ -383,8 +383,8 @@ public class YeGamolChattels
         GameRegistry.addRecipe(new ItemStack(Blocks.wool, 1), "##", "##", '#', YGCItems.flaxFiber);
 
         GameRegistry.addRecipe(new ItemStack(YGCItems.clubHammer), "#I#", " I ", " I ", '#', Items.iron_ingot, 'I', Items.stick);
-        GameRegistry.addRecipe(new ItemStack(YGCItems.detailChiselIron), "#", "I", "W", '#', Items.iron_ingot, 'I', Items.stick, 'L', Items.leather, 'W', Blocks.planks);
-        GameRegistry.addRecipe(new ItemStack(YGCItems.carvingChiselIron), "###", " I ", " W ", '#', Items.iron_ingot, 'I', Items.stick, 'L', Items.leather, 'W', Blocks.planks);
+        GameRegistry.addRecipe(new ItemStack(YGCItems.detailChiselIron), "  #", " I ", "W  ", '#', Items.iron_ingot, 'I', Items.stick, 'W', Blocks.planks);
+        GameRegistry.addRecipe(new ItemStack(YGCItems.carvingChiselIron), " ##", " I#", "W  ", '#', Items.iron_ingot, 'I', Items.stick, 'W', Blocks.planks);
 
         GameRegistry.addRecipe(new ItemStack(YGCItems.ironSaw), "I  ", "###", '#', Items.iron_ingot, 'I', Items.stick);
         GameRegistry.addRecipe(new ItemStack(YGCBlocks.sawBench), "#IS", "#  ", '#', Blocks.planks, 'I', Items.iron_ingot, 'S', Items.stick);
