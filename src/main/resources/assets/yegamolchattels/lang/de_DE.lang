@@ -153,6 +153,8 @@ yegamolchattels.configgui.general=Allgemein
 yegamolchattels.configgui.ctgy.general.tooltip=Allgemeine Einstellungen
 yegamolchattels.configgui.visual=Grafik
 yegamolchattels.configgui.ctgy.visual.tooltip=Visuelle Einstellungen
+yegamolchattels.configgui.ctgy.balancing=Spielbalance
+yegamolchattels.configgui.ctgy.balancing.tooltip=Einstellungen, welche die Spielbalance beeinflussen
 
 achievement.refinedPlank=Ich liebe dieses Brett
 achievement.refinedPlank.desc=Veredele ein Holzbrett

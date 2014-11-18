@@ -9,6 +9,7 @@ import cpw.mods.fml.client.IModGuiFactory;
 import cpw.mods.fml.client.config.GuiConfig;
 import cpw.mods.fml.client.config.GuiConfigEntries;
 import cpw.mods.fml.client.config.IConfigElement;
+import ivorius.yegamolchattels.YGCConfig;
 import ivorius.yegamolchattels.YeGamolChattels;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -61,7 +62,8 @@ public class YGCConfigGuiFactory implements IModGuiFactory
         private static List<IConfigElement> getConfigElements()
         {
             List<IConfigElement> list = new ArrayList<>();
-            list.add(new DummyCategoryElement("yegamolchattels.configgui.general", "yegamolchattels.configgui.ctgy.general", GeneralEntry.class));
+//            list.add(new DummyCategoryElement("yegamolchattels.configgui.general", "yegamolchattels.configgui.ctgy.general", GeneralEntry.class));
+            list.add(new DummyCategoryElement("yegamolchattels.configgui.balancing", "yegamolchattels.configgui.ctgy.balancing", BalancingEntry.class));
             list.add(new DummyCategoryElement("yegamolchattels.configgui.visual", "yegamolchattels.configgui.ctgy.visual", VisualEntry.class));
             return list;
         }
@@ -84,6 +86,24 @@ public class YGCConfigGuiFactory implements IModGuiFactory
             }
         }
 
+        public static class BalancingEntry extends GuiConfigEntries.CategoryEntry
+        {
+            public BalancingEntry(GuiConfig owningScreen, GuiConfigEntries owningEntryList, IConfigElement prop)
+            {
+                super(owningScreen, owningEntryList, prop);
+            }
+
+            @Override
+            protected GuiScreen buildChildScreen()
+            {
+                return new GuiConfig(this.owningScreen,
+                        (new ConfigElement(YeGamolChattels.config.getCategory(YGCConfig.CATEGORY_BALANCING))).getChildElements(),
+                        this.owningScreen.modID, YGCConfig.CATEGORY_BALANCING, this.configElement.requiresWorldRestart() || this.owningScreen.allRequireWorldRestart,
+                        this.configElement.requiresMcRestart() || this.owningScreen.allRequireMcRestart,
+                        GuiConfig.getAbridgedConfigPath(YeGamolChattels.config.toString()));
+            }
+        }
+
         public static class VisualEntry extends GuiConfigEntries.CategoryEntry
         {
             public VisualEntry(GuiConfig owningScreen, GuiConfigEntries owningEntryList, IConfigElement prop)
@@ -95,8 +115,8 @@ public class YGCConfigGuiFactory implements IModGuiFactory
             protected GuiScreen buildChildScreen()
             {
                 return new GuiConfig(this.owningScreen,
-                        (new ConfigElement(YeGamolChattels.config.getCategory("visual"))).getChildElements(),
-                        this.owningScreen.modID, "visual", this.configElement.requiresWorldRestart() || this.owningScreen.allRequireWorldRestart,
+                        (new ConfigElement(YeGamolChattels.config.getCategory(YGCConfig.CATEGORY_VISUAL))).getChildElements(),
+                        this.owningScreen.modID, YGCConfig.CATEGORY_VISUAL, this.configElement.requiresWorldRestart() || this.owningScreen.allRequireWorldRestart,
                         this.configElement.requiresMcRestart() || this.owningScreen.allRequireMcRestart,
                         GuiConfig.getAbridgedConfigPath(YeGamolChattels.config.toString()));
             }

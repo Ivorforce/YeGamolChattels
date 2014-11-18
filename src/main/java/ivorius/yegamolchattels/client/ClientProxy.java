@@ -23,15 +23,17 @@ import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.MinecraftForgeClient;
 
+import static ivorius.yegamolchattels.YGCConfig.CATEGORY_VISUAL;
+
 public class ClientProxy implements YGCProxy
 {
     @Override
     public void loadConfig(String categoryID)
     {
-        if (categoryID == null || "visual".equals(categoryID))
+        if (categoryID == null || CATEGORY_VISUAL.equals(categoryID))
         {
-            YGCConfig.fetchDynamicStatueTextures = YeGamolChattels.config.get("visual", "fetchDynamicStatueTextures", true).getBoolean();
-            YGCConfig.doStatueTextureMerge = YeGamolChattels.config.get("visual", "doStatueTextureMerge", true).getBoolean();
+            YGCConfig.fetchDynamicStatueTextures = YeGamolChattels.config.get(CATEGORY_VISUAL, "fetchDynamicStatueTextures", true).getBoolean();
+            YGCConfig.doStatueTextureMerge = YeGamolChattels.config.get(CATEGORY_VISUAL, "doStatueTextureMerge", true).getBoolean();
         }
     }
 

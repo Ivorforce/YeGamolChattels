@@ -308,7 +308,8 @@ public class YeGamolChattels
         addCrafting();
         YGCAchievementList.init();
 
-        GameRegistry.registerWorldGenerator(new WorldGenFlax(), 100);
+        if (YGCConfig.genFlax)
+            GameRegistry.registerWorldGenerator(new WorldGenFlax(), 100);
     }
 
     @EventHandler

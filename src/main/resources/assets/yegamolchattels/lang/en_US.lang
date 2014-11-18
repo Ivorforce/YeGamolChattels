@@ -155,6 +155,8 @@ yegamolchattels.configgui.ctgy.general=General
 yegamolchattels.configgui.ctgy.general.tooltip=General Settings
 yegamolchattels.configgui.ctgy.visual=Visual
 yegamolchattels.configgui.ctgy.visual.tooltip=Visual Settings
+yegamolchattels.configgui.ctgy.balancing=Balancing
+yegamolchattels.configgui.ctgy.balancing.tooltip=Settings affecting the balancing of the mod
 
 achievement.refinedPlank=I love this plank
 achievement.refinedPlank.desc=Refine a plank
