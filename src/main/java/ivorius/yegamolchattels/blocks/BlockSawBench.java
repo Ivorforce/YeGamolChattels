@@ -118,10 +118,4 @@ public class BlockSawBench extends IvBlockMultiblock
         setBlockBoundsBasedOnState(world, x, y, z);
         return super.getSelectedBoundingBoxFromPool(world, x, y, z);
     }
-
-    @Override
-    public IIcon getIcon(int side, int meta)
-    {
-        return Blocks.planks.getIcon(side, meta);
-    }
 }

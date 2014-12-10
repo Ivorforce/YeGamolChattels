@@ -4,6 +4,7 @@ import ivorius.ivtoolkit.blocks.IvBlockMultiblock;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -71,11 +72,5 @@ public class BlockTablePress extends IvBlockMultiblock
     public TileEntity createNewTileEntity(World var1, int var2)
     {
         return new TileEntityTablePress();
-    }
-
-    @Override
-    public IIcon getIcon(int side, int meta)
-    {
-        return Blocks.planks.getIcon(side, meta);
     }
 }
