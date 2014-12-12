@@ -110,11 +110,9 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
 
         if (playerDistSQ < 4 * 4 && pass == 0)
         {
-            if (realityGlobe.getGlCallListIndex() < 0)
-                constructCallList(realityGlobe, this.blockRenderer);
-            else if (realityGlobe.needsVisualUpdate)
+            if (realityGlobe.getGlCallListIndex() < 0 || realityGlobe.needsVisualUpdate)
             {
-                updateCallList(realityGlobe, blockRenderer);
+                constructCallList(realityGlobe, this.blockRenderer);
                 realityGlobe.needsVisualUpdate = false;
             }
 
@@ -135,13 +133,9 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
                 GL11.glDisable(GL11.GL_CULL_FACE);
 
                 if (Minecraft.isAmbientOcclusionEnabled())
-                {
                     GL11.glShadeModel(GL11.GL_SMOOTH);
-                }
                 else
-                {
                     GL11.glShadeModel(GL11.GL_FLAT);
-                }
 
                 if (realityGlobe.getGlCallListIndex() >= 0)
                 {
@@ -248,11 +242,6 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
         GL11.glScaled(sizePX, sizePY, sizePZ);
     }
 
-    public static void updateCallList(TileEntitySnowGlobe tileEntity, RenderBlocks blockRenderer)
-    {
-        drawInCallList(tileEntity, blockRenderer);
-    }
-
     public static void constructCallList(TileEntitySnowGlobe tileEntity, RenderBlocks blockRenderer)
     {
         tileEntity.setGlCallListIndex(GLAllocation.generateDisplayLists(1));
@@ -270,7 +259,7 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
 
         if (!tileEntity.displaysDefaultHouse())
         {
-            var10.setTranslation((double) (-(float) tileEntity.xCoord - 0.5), (double) (-(float) tileEntity.yCoord - 0.5), (double) (-(float) tileEntity.zCoord - 0.5));
+            var10.setTranslation(-(float) tileEntity.xCoord - 0.5, -(float) tileEntity.yCoord - 0.5, -(float) tileEntity.zCoord - 0.5);
             var10.setColorOpaque_F(1.0f, 1.0f, 1.0f);
 
             for (int i = 0; i < 2; i++)
@@ -309,7 +298,7 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
                 BlockCoord lowerCoord = new BlockCoord(-SIZE_X, -SIZE_Y, -SIZE_Z);
                 BlockArea area = new BlockArea(lowerCoord, new BlockCoord(SIZE_X, SIZE_Y, SIZE_Z));
 
-                var10.setTranslation((double) (-(float) tileEntity.xCoord - 0.5), (double) (-(float) tileEntity.yCoord - 0.5), (double) (-(float) tileEntity.zCoord - 0.5));
+                var10.setTranslation(-(float) tileEntity.xCoord - 0.5, -(float) tileEntity.yCoord - 0.5, -(float) tileEntity.zCoord - 0.5);
                 var10.setColorOpaque_F(1.0f, 1.0f, 1.0f);
 
                 blockRenderer.brightnessBottomLeft = 255;
@@ -353,18 +342,11 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
                                 blockRenderer.setRenderBoundsFromBlock(block);
 
                                 var10.setColorOpaque_F(red, green, blue);
-                                if (defaultGlobe.shouldRenderSide(collectionCoord, ForgeDirection.DOWN))
-                                    blockRenderer.renderFaceYNeg(block, worldCoord.x, worldCoord.y, worldCoord.z, blockRenderer.getBlockIconFromSideAndMetadata(block, 0, meta));
-                                if (defaultGlobe.shouldRenderSide(collectionCoord, ForgeDirection.UP))
-                                    blockRenderer.renderFaceYPos(block, worldCoord.x, worldCoord.y, worldCoord.z, blockRenderer.getBlockIconFromSideAndMetadata(block, 1, meta));
-                                if (defaultGlobe.shouldRenderSide(collectionCoord, ForgeDirection.NORTH))
-                                    blockRenderer.renderFaceZNeg(block, worldCoord.x, worldCoord.y, worldCoord.z, blockRenderer.getBlockIconFromSideAndMetadata(block, 2, meta));
-                                if (defaultGlobe.shouldRenderSide(collectionCoord, ForgeDirection.SOUTH))
-                                    blockRenderer.renderFaceZPos(block, worldCoord.x, worldCoord.y, worldCoord.z, blockRenderer.getBlockIconFromSideAndMetadata(block, 3, meta));
-                                if (defaultGlobe.shouldRenderSide(collectionCoord, ForgeDirection.WEST))
-                                    blockRenderer.renderFaceXNeg(block, worldCoord.x, worldCoord.y, worldCoord.z, blockRenderer.getBlockIconFromSideAndMetadata(block, 4, meta));
-                                if (defaultGlobe.shouldRenderSide(collectionCoord, ForgeDirection.EAST))
-                                    blockRenderer.renderFaceXPos(block, worldCoord.x, worldCoord.y, worldCoord.z, blockRenderer.getBlockIconFromSideAndMetadata(block, 5, meta));
+                                for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+                                {
+                                    if (defaultGlobe.shouldRenderSide(collectionCoord, dir))
+                                        blockRenderer.renderFaceYNeg(block, worldCoord.x, worldCoord.y, worldCoord.z, blockRenderer.getBlockIconFromSideAndMetadata(block, dir.ordinal(), meta));
+                                }
                             }
                         }
 

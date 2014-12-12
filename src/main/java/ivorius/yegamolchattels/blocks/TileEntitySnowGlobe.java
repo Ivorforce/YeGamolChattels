@@ -191,6 +191,7 @@ public class TileEntitySnowGlobe extends TileEntity implements PartialUpdateHand
     @SideOnly(Side.CLIENT)
     public void setGlCallListIndex(int glCallListIndex)
     {
+        addCallListForDestruction();
         this.glCallListIndex = glCallListIndex;
     }
 
