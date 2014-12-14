@@ -24,9 +24,7 @@ public class BlockFlaxPlant extends BlockCrops
     public IIcon getIcon(int side, int metadata)
     {
         if (metadata < 0 || metadata > 7)
-        {
             metadata = 7;
-        }
 
         return icons[metadata];
     }

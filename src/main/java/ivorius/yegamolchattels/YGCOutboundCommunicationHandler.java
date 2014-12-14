@@ -9,6 +9,7 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import ivorius.yegamolchattels.blocks.YGCBlocks;
 import ivorius.yegamolchattels.items.YGCItems;
+import ivorius.yegamolchattels.mods.MineFactoryReloaded;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,29 +21,13 @@ public class YGCOutboundCommunicationHandler
 {
     public static void init()
     {
-        if (Loader.isModLoaded("MineFactoryReloaded"))
+        if (Loader.isModLoaded(MineFactoryReloaded.MOD_ID))
         {
-            registerMineFactoryCrop(YGCBlocks.flaxPlant, YGCItems.flaxSeeds, null);
+            MineFactoryReloaded.registerPlantableCrop(YGCBlocks.flaxPlant, YGCItems.flaxSeeds, null);
+
+            MineFactoryReloaded.registerHarvestableCrop(YGCBlocks.flaxPlant, 7);
+
+            MineFactoryReloaded.registerFertilizableCrop(YGCBlocks.flaxPlant, 7, null);
         }
-    }
-
-    private static void registerMineFactoryCrop(Block crop, Item seed, Integer seedDamage)
-    {
-        NBTTagCompound tag = new NBTTagCompound();
-        tag.setString("crop", id(crop));
-        tag.setString("seed", id(seed));
-        if (seedDamage != null) // accepted metadata of the 'seed' item (optional); defaults to OreDictionary.WILDCARD_VALUE
-            tag.setInteger("meta", seedDamage);
-        FMLInterModComms.sendMessage("MineFactoryReloaded", "registerPlantable_Crop", tag);
-    }
-
-    private static String id(Block block)
-    {
-        return Block.blockRegistry.getNameForObject(block);
-    }
-
-    private static String id(Item item)
-    {
-        return Item.itemRegistry.getNameForObject(item);
     }
 }
