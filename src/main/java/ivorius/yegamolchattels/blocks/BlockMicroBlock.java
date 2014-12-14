@@ -7,10 +7,7 @@ package ivorius.yegamolchattels.blocks;
 
 import ivorius.ivtoolkit.blocks.BlockCoord;
 import ivorius.ivtoolkit.blocks.IvBlockCollection;
-import ivorius.yegamolchattels.items.ItemBlockFragment;
-import ivorius.yegamolchattels.items.ItemChisel;
-import ivorius.yegamolchattels.items.ItemMicroBlock;
-import ivorius.yegamolchattels.items.YGCItems;
+import ivorius.yegamolchattels.items.*;
 import ivorius.yegamolchattels.materials.YGCMaterials;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -101,7 +98,7 @@ public class BlockMicroBlock extends BlockContainer
         {
             TileEntity tileEntity = world.getTileEntity(x, y, z);
             if (tileEntity instanceof TileEntityMicroBlock)
-                dropAllMicroblockFragments((TileEntityMicroBlock) tileEntity, 0.7f);
+                dropAllMicroblockFragments((TileEntityMicroBlock) tileEntity, ItemClubHammer.FRAGMENT_DROP_CHANCE);
         }
     }
 

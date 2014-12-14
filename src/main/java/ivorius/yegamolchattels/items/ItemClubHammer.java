@@ -5,6 +5,7 @@
 
 package ivorius.yegamolchattels.items;
 
+import ivorius.yegamolchattels.blocks.TileEntityMicroBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.item.ItemStack;
@@ -12,6 +13,7 @@ import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
 
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -19,6 +21,8 @@ import java.util.Set;
  */
 public class ItemClubHammer extends ItemTool
 {
+    public static final float FRAGMENT_DROP_CHANCE = 0.9f;
+
     public ItemClubHammer(float damage, ToolMaterial material, Set damageVSBlocks)
     {
         super(damage, material, damageVSBlocks);
@@ -42,7 +46,15 @@ public class ItemClubHammer extends ItemTool
         {
             drops.clear();
 
-            int droppedFragments = world.rand.nextInt(8 * 8 * 8);
+            Random rand = world.rand;
+            int maxMicroblocks = TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_X * TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Y * TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Z;
+            int droppedFragments = 0;
+            for (int i = 0; i < maxMicroblocks; i++)
+            {
+                if (rand.nextFloat() < FRAGMENT_DROP_CHANCE)
+                    droppedFragments ++;
+            }
+
             while (droppedFragments > 0)
             {
                 int stackDrop = Math.min(droppedFragments, 64);

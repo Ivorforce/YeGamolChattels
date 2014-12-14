@@ -195,7 +195,7 @@ public class YGCRegistryHandler
         detailChiselIron.setMaxDamage(256).setMaxStackSize(1).setNoRepair();
         GameRegistry.registerItem(detailChiselIron, "iron_chisel_point", YeGamolChattels.MODID);
 
-        carvingChiselIron = new ItemChisel(1, 0.4f, 0.0f, Item.ToolMaterial.IRON, Collections.emptySet(), false).setUnlocalizedName("ygcChiselIron").setTextureName(YeGamolChattels.textureBase + "chisel_iron").setCreativeTab(YeGamolChattels.tabMain);
+        carvingChiselIron = new ItemChisel(1, 0.9f, 0.0f, Item.ToolMaterial.IRON, Collections.emptySet(), false).setUnlocalizedName("ygcChiselIron").setTextureName(YeGamolChattels.textureBase + "chisel_iron").setCreativeTab(YeGamolChattels.tabMain);
         carvingChiselIron.setMaxDamage(256).setMaxStackSize(1).setNoRepair();
         GameRegistry.registerItem(carvingChiselIron, "iron_chisel", YeGamolChattels.MODID);
 
