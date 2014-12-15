@@ -33,26 +33,19 @@ public class YGCCrafting
         addRecipe(new ItemStack(bannerSmall, 2, 15), "#S#", " # ", '#', wool, 'S', DC_STICK_WOOD);
         addRecipe(new ItemStack(bannerLarge, 1, 15), "#S#", "###", " # ", '#', wool, 'S', DC_STICK_WOOD);
 
-        for (int i = 0; i < 16; i++)
-        {
-            if (i < 15)
-                addShapelessRecipe(new ItemStack(bannerSmall, 1, i), new ItemStack(bannerSmall, 1, 15), new ItemStack(dye, 1, i));
-            if (i < 15)
-                addShapelessRecipe(new ItemStack(bannerLarge, 1, i), new ItemStack(bannerLarge, 1, 15), new ItemStack(dye, 1, i));
-        }
-
-        addRecipe(new ItemStack(treasurePile, 1), " # ", "###", "###", '#', DC_GOLD_INGOT);
-
         addRecipe(new ItemStack(flagSmall, 2, 15), "I#", "IS", '#', wool, 'S', string, 'I', DC_STICK_WOOD);
         addRecipe(new ItemStack(flagLarge, 1, 15), "IS#", "I##", "I  ", '#', wool, 'S', string, 'I', DC_STICK_WOOD);
 
-        for (int i = 0; i < 16; i++)
+        for (int i = 0; i < 15; i++) // Don't permit white -> white
         {
-            if (i < 15)
-                addShapelessRecipe(new ItemStack(flagSmall, 1, i), new ItemStack(flagSmall, 1, 15), new ItemStack(dye, 1, i));
-            if (i < 15)
-                addShapelessRecipe(new ItemStack(flagLarge, 1, i), new ItemStack(flagLarge, 1, 15), new ItemStack(dye, 1, i));
+            addShapelessRecipe(new ItemStack(bannerSmall, 1, i), new ItemStack(bannerSmall, 1, 15), new ItemStack(dye, 1, i));
+            addShapelessRecipe(new ItemStack(bannerLarge, 1, i), new ItemStack(bannerLarge, 1, 15), new ItemStack(dye, 1, i));
+
+            addShapelessRecipe(new ItemStack(flagSmall, 1, i), new ItemStack(flagSmall, 1, 15), new ItemStack(dye, 1, i));
+            addShapelessRecipe(new ItemStack(flagLarge, 1, i), new ItemStack(flagLarge, 1, 15), new ItemStack(dye, 1, i));
         }
+
+        addRecipe(new ItemStack(treasurePile, 1), " # ", "###", "###", '#', DC_GOLD_INGOT);
 
         addRecipe(new ItemStack(Item.getItemFromBlock(grandfatherClock)), "IOI", "#R#", "SGS", '#', wildcard(refinedPlank), 'O', clock, 'S', DC_COBBLESTONE, 'I', DC_STICK_WOOD, 'R', DC_REDSTONE_DUST, 'G', DC_GOLD_INGOT);
 

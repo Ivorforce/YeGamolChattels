@@ -3,17 +3,15 @@ package ivorius.yegamolchattels.blocks;
 import ivorius.ivtoolkit.blocks.IvBlockMultiblock;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
 import ivorius.ivtoolkit.network.IvNetworkHelperServer;
-import ivorius.yegamolchattels.YGCMultiBlockHelper;
+import ivorius.ivtoolkit.tools.IvAABBs;
 import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.items.ItemSaw;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -95,7 +93,7 @@ public class BlockSawBench extends IvBlockMultiblock
         IvTileEntityMultiBlock tileEntity = getValidatedTotalParent(this, blockAccess, x, y, z);
 
         if (tileEntity instanceof TileEntitySawBench)
-            setBlockBounds(YGCMultiBlockHelper.boundsIntersection(tileEntity.getRotatedBB(-1, -1, -0.45, 2, 1.8, 1.45), x, y, z));
+            setBlockBounds(IvAABBs.boundsIntersection(tileEntity.getRotatedBB(-1, -1, -0.45, 2, 1.8, 1.45), x, y, z));
         else
             setBlockBounds(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
     }
