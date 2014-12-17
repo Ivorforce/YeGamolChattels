@@ -79,9 +79,12 @@ public class TileEntityLootChest extends IvTileEntityRotatable implements Partia
             //Open chest
             if (this.chestFrame > 0F + FINISH_MARGIN)
             {
+                if (chestFrame >= CHEST_MAX - FINISH_MARGIN)
+                    this.worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5D, zCoord + 0.5, "random.chestclosed", 0.5F, this.worldObj.rand.nextFloat() * 0.05F);
+
                 if (this.lockFall > LOCK_MIN)
                     this.lockFall -= this.lockFall * 0.2F;
-                this.chestFrame -= this.chestFrame * 0.1F;
+                this.chestFrame -= this.chestFrame * 0.2F;
             }
             else if (this.chestFrame <= 0F + FINISH_MARGIN)
             {
@@ -103,6 +106,9 @@ public class TileEntityLootChest extends IvTileEntityRotatable implements Partia
             //Open chest
             else if (this.chestFrame < CHEST_MAX - FINISH_MARGIN)
             {
+                if (chestFrame == 0.0f)
+                    this.worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5D, zCoord + 0.5, "random.chestopen", 0.5F, this.worldObj.rand.nextFloat() * 0.05F);
+
                 this.lockFrame = LOCK_MAX;
 
                 if (this.lockAccel < 2F)
