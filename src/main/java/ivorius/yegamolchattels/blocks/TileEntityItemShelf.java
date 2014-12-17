@@ -73,7 +73,7 @@ public abstract class TileEntityItemShelf extends IvTileEntityMultiBlock
 
         for (int i = 0; i < items.tagCount(); ++i)
         {
-            NBTTagCompound var4 = (NBTTagCompound) items.getCompoundTagAt(i);
+            NBTTagCompound var4 = items.getCompoundTagAt(i);
             int var5 = var4.getByte("Slot") & 255;
 
             if (var5 >= 0 && var5 < this.storedItems.length)

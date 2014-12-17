@@ -137,7 +137,7 @@ public class TileEntityTablePress extends IvTileEntityMultiBlock implements Part
         }
 
         if (worldObj.isRemote)
-            IvNetworkHelperClient.sendTileEntityUpdatePacket(this, "plankRefinement", YeGamolChattels.network, entityPlayer.inventory.currentItem, speedInfl);
+            IvNetworkHelperClient.sendTileEntityEventPacket(this, "plankRefinement", YeGamolChattels.network, entityPlayer.inventory.currentItem, speedInfl);
 
         if (isRefinementComplete())
             completeRefinement(entityPlayer.inventory.getStackInSlot(usedItem));

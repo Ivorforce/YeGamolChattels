@@ -17,9 +17,9 @@ import java.util.Random;
 
 public class BlockGrandfatherClock extends BlockContainer
 {
-    public BlockGrandfatherClock(Material par2Material)
+    public BlockGrandfatherClock(Material material)
     {
-        super(par2Material);
+        super(material);
     }
 
     @Override

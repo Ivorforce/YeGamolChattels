@@ -134,11 +134,11 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
 
             if (patternImage != null)
             {
+                TextureManager texManager = Minecraft.getMinecraft().getTextureManager();
+
                 if (entityResourceLocation != null)
                 {
-                    TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
-
-                    ITextureObject entityResourceTexture = textureManager.getTexture(entityResourceLocation);
+                    ITextureObject entityResourceTexture = texManager.getTexture(entityResourceLocation);
                     if (!isTextureFinal(entityResourceTexture))
                     {
                         return null; // Wait
@@ -147,11 +147,11 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
                     {
                         ResourceLocation textureColorized = new ResourceLocation(YeGamolChattels.MODID, "colorized/" + entityResourceLocation + "_" + Block.blockRegistry.getNameForObject(fragment.getBlock()) + "_" + fragment.getMetadata());
 
-                        if (textureManager.getTexture(textureColorized) == null)
+                        if (texManager.getTexture(textureColorized) == null)
                         {
                             ModifiedTexture modifiedTexture = new ModifiedTexture(entityResourceLocation, new IvTexturePatternColorizer(patternImage, YeGamolChattels.logger), YeGamolChattels.logger);
 
-                            if (Minecraft.getMinecraft().getTextureManager().loadTexture(textureColorized, modifiedTexture))
+                            if (texManager.loadTexture(textureColorized, modifiedTexture))
                                 return textureColorized;
                             else
                                 return null; // Merging failed
@@ -164,8 +164,8 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
                 {
                     ResourceLocation patternResource = new ResourceLocation(YeGamolChattels.MODID, "blockextract/" + Block.blockRegistry.getNameForObject(fragment.getBlock()) + "_" + fragment.getMetadata());
 
-                    if (Minecraft.getMinecraft().getTextureManager().getTexture(patternResource) == null)
-                        Minecraft.getMinecraft().getTextureManager().loadTexture(patternResource, new PreBufferedTexture(patternImage));
+                    if (texManager.getTexture(patternResource) == null)
+                        texManager.loadTexture(patternResource, new PreBufferedTexture(patternImage));
 
                     return patternResource;
                 }

@@ -21,9 +21,9 @@ public class BlockGong extends IvBlockMultiblock
 {
     public IIcon[] icons = new IIcon[3];
 
-    public BlockGong(Material par2Material)
+    public BlockGong(Material material)
     {
-        super(par2Material);
+        super(material);
 
         setCreativeTab(YeGamolChattels.tabMain);
     }

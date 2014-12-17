@@ -1,6 +1,5 @@
 package ivorius.yegamolchattels.gui;
 
-import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.blocks.TileEntityTablePress;
 import ivorius.yegamolchattels.items.YGCItems;
 import net.minecraft.client.gui.GuiScreen;
@@ -11,7 +10,6 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
@@ -52,12 +50,6 @@ public class GuiScreenTablePress extends GuiScreen
     public boolean doesGuiPauseGame()
     {
         return false;
-    }
-
-    @Override
-    public void initGui()
-    {
-        super.initGui();
     }
 
     @Override

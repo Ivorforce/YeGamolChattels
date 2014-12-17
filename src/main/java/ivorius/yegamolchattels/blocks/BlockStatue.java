@@ -12,7 +12,6 @@ import ivorius.yegamolchattels.achievements.YGCAchievementList;
 import ivorius.yegamolchattels.items.ItemStatue;
 import ivorius.yegamolchattels.materials.YGCMaterials;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityDiggingFX;
 import net.minecraft.client.particle.EntityFX;

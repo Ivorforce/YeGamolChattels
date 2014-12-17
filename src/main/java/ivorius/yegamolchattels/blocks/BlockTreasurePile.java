@@ -18,6 +18,7 @@ import java.util.Random;
 
 public class BlockTreasurePile extends Block
 {
+    public static final int FALL_CHECK_DELAY = 3;
 
     public BlockTreasurePile()
     {
@@ -27,13 +28,13 @@ public class BlockTreasurePile extends Block
     @Override
     public void onBlockAdded(World world, int i, int j, int k)
     {
-        world.scheduleBlockUpdate(i, j, k, this, tickRate());
+        world.scheduleBlockUpdate(i, j, k, this, FALL_CHECK_DELAY);
     }
 
     @Override
     public void onNeighborBlockChange(World world, int i, int j, int k, Block l)
     {
-        world.scheduleBlockUpdate(i, j, k, this, tickRate());
+        world.scheduleBlockUpdate(i, j, k, this, FALL_CHECK_DELAY);
     }
 
     @Override
@@ -67,11 +68,6 @@ public class BlockTreasurePile extends Block
                 world.spawnEntityInWorld(entityfallingsand);
             }
         }
-    }
-
-    public int tickRate()
-    {
-        return 3;
     }
 
     public static boolean canFallBelow(World world, int x, int y, int z)

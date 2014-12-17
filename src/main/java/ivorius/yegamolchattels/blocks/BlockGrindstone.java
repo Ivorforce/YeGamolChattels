@@ -13,9 +13,9 @@ import net.minecraft.world.World;
 
 public class BlockGrindstone extends BlockContainer
 {
-    public BlockGrindstone(Material par2Material)
+    public BlockGrindstone(Material material)
     {
-        super(par2Material);
+        super(material);
     }
 
     @Override
@@ -47,19 +47,11 @@ public class BlockGrindstone extends BlockContainer
 
             if (par5EntityPlayer.getHeldItem() != null)
             {
-                if (tileEntityGrindstone.tryApplyingItem(par5EntityPlayer.getHeldItem(), par5EntityPlayer))
-                {
-
-                }
-                else
-                {
+                if (!tileEntityGrindstone.tryApplyingItem(par5EntityPlayer.getHeldItem(), par5EntityPlayer))
                     tileEntityGrindstone.tryRepairingItem(par5EntityPlayer.getHeldItem(), par5EntityPlayer);
-                }
             }
             else
-            {
                 tileEntityGrindstone.increaseGrindstoneRotation();
-            }
 
             return true;
         }

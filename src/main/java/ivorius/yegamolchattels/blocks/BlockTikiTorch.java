@@ -124,11 +124,7 @@ public class BlockTikiTorch extends Block
 
         int i1 = world.getBlockMetadata(x, y, z);
 
-        if (dropTorchIfCantStay(world, x, y, z) && i1 == 0)
-        {
-
-        }
-        else
+        if (!(dropTorchIfCantStay(world, x, y, z) && i1 == 0))
         {
             if (world.getBlock(x, y + 1, z) != this)
             {

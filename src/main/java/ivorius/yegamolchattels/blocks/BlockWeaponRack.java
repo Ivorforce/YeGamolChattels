@@ -19,9 +19,9 @@ import net.minecraft.world.World;
 
 public class BlockWeaponRack extends BlockContainer
 {
-    public BlockWeaponRack(Material par2Material)
+    public BlockWeaponRack(Material material)
     {
-        super(par2Material);
+        super(material);
     }
 
     @Override
@@ -43,9 +43,9 @@ public class BlockWeaponRack extends BlockContainer
     }
 
     @Override
-    public void registerBlockIcons(IIconRegister par1IconRegister)
+    public void registerBlockIcons(IIconRegister iconRegister)
     {
-        blockIcon = par1IconRegister.registerIcon(YeGamolChattels.textureBase + getTextureName());
+        blockIcon = iconRegister.registerIcon(YeGamolChattels.textureBase + getTextureName());
     }
 
     @Override

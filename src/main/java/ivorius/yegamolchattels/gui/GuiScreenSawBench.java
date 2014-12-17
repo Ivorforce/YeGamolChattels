@@ -59,12 +59,6 @@ public class GuiScreenSawBench extends GuiScreen
     }
 
     @Override
-    public void initGui()
-    {
-        super.initGui();
-    }
-
-    @Override
     public void updateScreen()
     {
         super.updateScreen();

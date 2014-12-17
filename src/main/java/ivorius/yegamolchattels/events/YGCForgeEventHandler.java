@@ -134,8 +134,9 @@ public class YGCForgeEventHandler
     @SideOnly(Side.CLIENT)
     public static void renderSelectedMicroblock(float partialTicks, float size)
     {
-        EntityLivingBase renderEntity = Minecraft.getMinecraft().renderViewEntity;
-        MovingObjectPosition hoveredObject = Minecraft.getMinecraft().objectMouseOver;
+        Minecraft mc = Minecraft.getMinecraft();
+        EntityLivingBase renderEntity = mc.renderViewEntity;
+        MovingObjectPosition hoveredObject = mc.objectMouseOver;
         ItemChisel.MicroBlockFragment hoveredFragment = ItemChisel.getHoveredFragment(renderEntity, hoveredObject.blockX, hoveredObject.blockY, hoveredObject.blockZ);
 
         if (hoveredFragment != null)

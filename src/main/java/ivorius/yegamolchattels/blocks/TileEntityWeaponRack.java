@@ -193,7 +193,7 @@ public class TileEntityWeaponRack extends IvTileEntityRotatable implements Parti
 
     public List<IvRaytraceableObject> getRaytraceableObjects()
     {
-        ArrayList<IvRaytraceableObject> raytraceables = new ArrayList<IvRaytraceableObject>();
+        List<IvRaytraceableObject> raytraceables = new ArrayList<>();
 
         if (getWeaponRackType() == weaponRackTypeFloor)
         {

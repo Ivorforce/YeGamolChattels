@@ -118,7 +118,7 @@ public class RenderFlag extends Render
         setLight(MathHelper.floor_double(entity.posX), MathHelper.floor_double(entity.posY + sizeY), MathHelper.floor_double(entity.posZ));
         for (int xSeg = 0; xSeg < d; xSeg++)
         {
-            double ratio = (double) (xSeg + 0.001) / (double) d;
+            double ratio = ((double) xSeg + 0.001) / (double) d;
             double ratio1 = ((double) xSeg + 0.999) / (double) d;
 
             double x = sizeY * ratio;

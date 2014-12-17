@@ -131,8 +131,10 @@ public class EntityBlockTextureMerger
         try
         {
             String filename = "Rendered_" + Math.random();
-            ImageIO.write(bufferedImage, "png", new File(Minecraft.getMinecraft().mcDataDir, filename + ".png"));
-            FileUtils.writeStringToFile(new File(Minecraft.getMinecraft().mcDataDir, filename + ".txt"), name);
+            File dataDir = Minecraft.getMinecraft().mcDataDir;
+
+            ImageIO.write(bufferedImage, "png", new File(dataDir, filename + ".png"));
+            FileUtils.writeStringToFile(new File(dataDir, filename + ".txt"), name);
         }
         catch (IOException e)
         {

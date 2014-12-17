@@ -6,13 +6,9 @@
 package ivorius.yegamolchattels;
 
 import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.event.FMLInterModComms;
 import ivorius.yegamolchattels.blocks.YGCBlocks;
 import ivorius.yegamolchattels.items.YGCItems;
 import ivorius.yegamolchattels.mods.MineFactoryReloaded;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * Created by lukas on 24.09.14.

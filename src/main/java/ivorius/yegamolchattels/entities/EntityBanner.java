@@ -148,7 +148,7 @@ public class EntityBanner extends EntityHanging
     public int getHeightPixels()
     {
         if (getSize() == 0)
-            return 1 * 16;
+            return 16;
         else if (getSize() == 2)
             return 4 * 16;
 

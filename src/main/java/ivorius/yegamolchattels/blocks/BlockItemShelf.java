@@ -25,9 +25,9 @@ public class BlockItemShelf extends IvBlockMultiblock
 
     public IIcon[] icons;
 
-    public BlockItemShelf(Material par2Material)
+    public BlockItemShelf(Material material)
     {
-        super(par2Material);
+        super(material);
 
         setCreativeTab(YeGamolChattels.tabMain);
     }

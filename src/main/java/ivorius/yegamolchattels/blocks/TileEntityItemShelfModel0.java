@@ -7,13 +7,9 @@ package ivorius.yegamolchattels.blocks;
 
 import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.math.IvMathHelper;
-import ivorius.ivtoolkit.network.IvNetworkHelperServer;
 import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.ivtoolkit.raytracing.IvRaytraceableObject;
 import ivorius.ivtoolkit.raytracing.IvRaytracedIntersection;
-import ivorius.yegamolchattels.YGCConfig;
-import ivorius.yegamolchattels.YeGamolChattels;
-import ivorius.yegamolchattels.achievements.YGCAchievementList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemArmor;
@@ -22,7 +18,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import org.lwjgl.util.vector.Vector3f;
@@ -107,7 +102,7 @@ public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements Pa
     @Override
     public List<IvRaytraceableObject> getRaytraceableObjects(float t)
     {
-        ArrayList<IvRaytraceableObject> raytraceables = new ArrayList<IvRaytraceableObject>();
+        List<IvRaytraceableObject> raytraceables = new ArrayList<>();
         raytraceables.addAll(getItemSlotBoxes(t));
 
         int shelfType = this.getShelfType();
@@ -154,7 +149,7 @@ public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements Pa
     @Override
     public List<IvRaytraceableObject> getItemSlotBoxes(float t)
     {
-        ArrayList<IvRaytraceableObject> raytraceables = new ArrayList<IvRaytraceableObject>();
+        List<IvRaytraceableObject> raytraceables = new ArrayList<>();
 
         int shelfType = this.getShelfType();
         if (shelfType == shelfJamien)
@@ -256,7 +251,7 @@ public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements Pa
 
     public static List<int[]> getPositionsForType(int shelfType)
     {
-        ArrayList<int[]> positions = new ArrayList<int[]>();
+        List<int[]> positions = new ArrayList<>();
 
         if (shelfType == shelfJamien)
         {

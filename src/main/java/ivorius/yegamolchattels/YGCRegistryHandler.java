@@ -4,7 +4,6 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import ivorius.yegamolchattels.blocks.*;
-import ivorius.yegamolchattels.crafting.OreDictionaryConstants;
 import ivorius.yegamolchattels.entities.*;
 import ivorius.yegamolchattels.items.*;
 import net.minecraft.block.Block;

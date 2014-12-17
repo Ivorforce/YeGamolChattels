@@ -199,7 +199,7 @@ public class TileEntityGong extends IvTileEntityMultiBlock implements PartialUpd
 
     public List<IvRaytraceableObject> getGongDistanceRaytraceables()
     {
-        ArrayList<IvRaytraceableObject> raytraceables = new ArrayList<IvRaytraceableObject>();
+        ArrayList<IvRaytraceableObject> raytraceables = new ArrayList<>();
 
         double gSize = getBlockMetadata() + 1;
         int steps = MathHelper.ceiling_double_int(20 * gSize);

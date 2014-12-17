@@ -5,7 +5,6 @@ import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
 import ivorius.ivtoolkit.entities.IvEntityHelper;
 import ivorius.ivtoolkit.network.ClientEventHandler;
 import ivorius.ivtoolkit.network.IvNetworkHelperClient;
-import ivorius.ivtoolkit.network.PacketTileEntityClientEvent;
 import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.ivtoolkit.tools.IvSideClient;
 import ivorius.yegamolchattels.YeGamolChattels;
@@ -96,15 +95,15 @@ public class TileEntitySawBench extends IvTileEntityMultiBlock implements Partia
         return false;
     }
 
-    @Override
-    public void updateEntityParent()
-    {
-        super.updateEntityParent();
-
+//    @Override
+//    public void updateEntityParent()
+//    {
+//        super.updateEntityParent();
+//
 //        float gravity = 0.02f;
 //        float yPlus = isInWood ? Math.min(gravity, woodCutY - sawPositionY) : gravity;
 //        moveSawInConstraints(0.0f, yPlus);
-    }
+//    }
 
     public void chopOffWood(float score, EntityPlayer player, int usedItemIndex)
     {
@@ -179,14 +178,14 @@ public class TileEntitySawBench extends IvTileEntityMultiBlock implements Partia
             }
 
             if (worldObj.isRemote)
-                IvNetworkHelperClient.sendTileEntityUpdatePacket(this, "sawMove", YeGamolChattels.network);
+                IvNetworkHelperClient.sendTileEntityEventPacket(this, "sawMove", YeGamolChattels.network);
 
             if (woodCutY >= 1.0f)
             {
                 chopOffWood(woodCutScore, player, usedItemIndex);
 
                 if (worldObj.isRemote)
-                    IvNetworkHelperClient.sendTileEntityUpdatePacket(this, "woodChop", YeGamolChattels.network, usedItemIndex);
+                    IvNetworkHelperClient.sendTileEntityEventPacket(this, "woodChop", YeGamolChattels.network, usedItemIndex);
             }
 
             return plusScore;
@@ -199,7 +198,7 @@ public class TileEntitySawBench extends IvTileEntityMultiBlock implements Partia
                 calculateIsInWood();
 
             if (worldObj.isRemote)
-                IvNetworkHelperClient.sendTileEntityUpdatePacket(this, "sawMove", YeGamolChattels.network);
+                IvNetworkHelperClient.sendTileEntityEventPacket(this, "sawMove", YeGamolChattels.network);
         }
 
         return 0.0f;
