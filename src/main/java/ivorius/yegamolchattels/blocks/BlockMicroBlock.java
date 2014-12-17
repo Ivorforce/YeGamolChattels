@@ -89,6 +89,16 @@ public class BlockMicroBlock extends BlockContainer
     }
 
     @Override
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
+    {
+        TileEntityMicroBlock microBlock = (TileEntityMicroBlock) world.getTileEntity(x, y, z);
+
+        ItemStack stack = new ItemStack(Item.getItemFromBlock(this));
+        ItemMicroBlock.setMicroBlock(stack, microBlock.getBlockCollection());
+        return stack;
+    }
+
+    @Override
     public void onBlockHarvested(World world, int x, int y, int z, int side, EntityPlayer player)
     {
         super.onBlockHarvested(world, x, y, z, side, player);
