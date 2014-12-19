@@ -22,6 +22,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -31,7 +32,7 @@ import net.minecraftforge.common.util.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TileEntityWeaponRack extends IvTileEntityRotatable implements PartialUpdateHandler
+public class TileEntityWeaponRack extends IvTileEntityRotatable implements IInventory, PartialUpdateHandler
 {
     public static final int weaponRackTypeFloor = 0;
     public static final int weaponRackTypeWall = 1;
@@ -69,16 +70,19 @@ public class TileEntityWeaponRack extends IvTileEntityRotatable implements Parti
     {
         if (stack != null)
         {
-            Item item = stack.getItem();
+            int slot = getHoveredSlot(entity);
 
-            boolean canPlace = item instanceof ItemTool || item instanceof ItemSword || (getWeaponRackType() == weaponRackTypeFloor && item instanceof ItemBow) || item == YGCItems.mallet;
-            if (canPlace)
+            if (slot >= 0 && isItemValidForSlot(slot, stack) && getStackInSlot(slot) == null)
             {
-                int slot = getHoveredSlot(entity);
+                if (!worldObj.isRemote)
+                {
+                    setInventorySlotContents(slot, stack.copy());
+                    storedWeaponsSwinging[slot] = 0.0f;
 
-                return slot >= 0 && tryAddingWeapon(stack, slot);
+                    stack.stackSize--;
+                }
 
-                //    			return tryAddingWeapon(stack);
+                return true;
             }
         }
 
@@ -89,7 +93,7 @@ public class TileEntityWeaponRack extends IvTileEntityRotatable implements Parti
     {
         if (stack != null)
         {
-            int slot = getEffectToBeApplied(stack, entity);
+            int slot = getEffectToBeApplied(stack);
 
             if (slot >= 0 && !effectsApplied[slot])
             {
@@ -109,7 +113,7 @@ public class TileEntityWeaponRack extends IvTileEntityRotatable implements Parti
         return false;
     }
 
-    public int getEffectToBeApplied(ItemStack stack, Entity entity)
+    public int getEffectToBeApplied(ItemStack stack)
     {
         Item item = stack.getItem();
 
@@ -139,39 +143,6 @@ public class TileEntityWeaponRack extends IvTileEntityRotatable implements Parti
         return -1;
     }
 
-    public boolean tryAddingWeapon(ItemStack stack, int slot)
-    {
-        if (storedWeapons[slot] == null && slot < getStoredWeaponSlots())
-        {
-            if (!worldObj.isRemote)
-            {
-                storedWeapons[slot] = stack.copy();
-                storedWeapons[slot].stackSize = 1;
-                stack.stackSize--;
-
-                storedWeaponsSwinging[slot] = 0.0f;
-
-                IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "weaponRackData", YeGamolChattels.network);
-                markDirty();
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    public boolean tryAddingWeapon(ItemStack stack)
-    {
-        for (int i = 0; i < getStoredWeaponSlots(); i++)
-        {
-            if (tryAddingWeapon(stack, i))
-                return true;
-        }
-
-        return false;
-    }
-
     public int getHoveredSlot(Entity entity)
     {
         List<IvRaytraceableObject> raytraceables = getRaytraceableObjects();
@@ -181,11 +152,7 @@ public class TileEntityWeaponRack extends IvTileEntityRotatable implements Parti
         {
             String info = (String) intersection.getUserInfo();
             if (info.startsWith("Slot"))
-            {
-                Integer number = Integer.valueOf(info.substring(4));
-
-                return number;
-            }
+                return Integer.valueOf(info.substring(4));
         }
 
         return -1;
@@ -217,11 +184,11 @@ public class TileEntityWeaponRack extends IvTileEntityRotatable implements Parti
         {
             if (!worldObj.isRemote)
             {
-                float var7 = 0.7F;
-                double var8 = worldObj.rand.nextFloat() * var7 + (1.0F - var7) * 0.5D;
-                double var10 = worldObj.rand.nextFloat() * 0.2D + 1.1D;
-                double var12 = worldObj.rand.nextFloat() * var7 + (1.0F - var7) * 0.5D;
-                EntityItem var14 = new EntityItem(worldObj, xCoord + var8, yCoord + var10, zCoord + var12, storedWeapons[slot]);
+                float shiftDist = 0.7F;
+                double xShift = worldObj.rand.nextFloat() * shiftDist + (1.0F - shiftDist) * 0.5D;
+                double yShift = worldObj.rand.nextFloat() * 0.2D + 1.1D;
+                double zShift = worldObj.rand.nextFloat() * shiftDist + (1.0F - shiftDist) * 0.5D;
+                EntityItem var14 = new EntityItem(worldObj, xCoord + xShift, yCoord + yShift, zCoord + zShift, storedWeapons[slot]);
                 var14.delayBeforeCanPickup = 10;
                 worldObj.spawnEntityInWorld(var14);
 
@@ -237,40 +204,32 @@ public class TileEntityWeaponRack extends IvTileEntityRotatable implements Parti
         return false;
     }
 
-    public boolean tryEquippingItemOnPlayer(int slot, EntityPlayer entityLiving)
+    public boolean pickUpItem(EntityPlayer player)
     {
-        if (storedWeapons[slot] != null)
+        int slot = getHoveredSlot(player);
+
+        if (slot >= 0)
         {
-            if (!worldObj.isRemote)
+            ItemStack stack = getStackInSlot(slot);
+            if (stack != null)
             {
-                if (IvEntityHelper.addAsCurrentItem(entityLiving, storedWeapons[slot]))
+                if (!worldObj.isRemote && player.inventory.addItemStackToInventory(stack))
                 {
-                    storedWeapons[slot] = null;
-
-                    IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "weaponRackData", YeGamolChattels.network);
-                    markDirty();
+                    setInventorySlotContents(slot, null);
+                    player.openContainer.detectAndSendChanges();
                 }
-            }
 
-            return true;
+                return true;
+            }
         }
 
         return false;
     }
 
-    public boolean interactWithPlayer(EntityPlayer entity)
-    {
-        int slot = getHoveredSlot(entity);
-
-        return slot >= 0 && this.tryEquippingItemOnPlayer(slot, entity);
-    }
-
     public void dropAllWeapons()
     {
         for (int i = 0; i < storedWeapons.length; i++)
-        {
             tryDroppingWeapon(i);
-        }
     }
 
     @Override
@@ -372,5 +331,120 @@ public class TileEntityWeaponRack extends IvTileEntityRotatable implements Parti
         {
             readWeaponRackDataFromNBT(ByteBufUtils.readTag(buffer));
         }
+    }
+
+    @Override
+    public int getSizeInventory()
+    {
+        return storedWeapons.length;
+    }
+
+    @Override
+    public ItemStack getStackInSlot(int slot)
+    {
+        return storedWeapons[slot];
+    }
+
+    @Override
+    public ItemStack decrStackSize(int slot, int amount)
+    {
+        if (this.storedWeapons[slot] != null)
+        {
+            ItemStack itemstack;
+
+            if (this.storedWeapons[slot].stackSize <= amount)
+            {
+                itemstack = this.storedWeapons[slot];
+                this.storedWeapons[slot] = null;
+                this.markDirty();
+                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                return itemstack;
+            }
+            else
+            {
+                itemstack = this.storedWeapons[slot].splitStack(amount);
+
+                if (this.storedWeapons[slot].stackSize == 0)
+                {
+                    this.storedWeapons[slot] = null;
+                }
+
+                this.markDirty();
+                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                return itemstack;
+            }
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    @Override
+    public ItemStack getStackInSlotOnClosing(int slot)
+    {
+        if (this.storedWeapons[slot] != null)
+        {
+            ItemStack itemstack = this.storedWeapons[slot];
+            this.storedWeapons[slot] = null;
+            return itemstack;
+        }
+        else
+            return null;
+    }
+
+    @Override
+    public void setInventorySlotContents(int slot, ItemStack stack)
+    {
+        this.storedWeapons[slot] = stack;
+
+        if (stack != null && stack.stackSize > this.getInventoryStackLimit())
+            stack.stackSize = this.getInventoryStackLimit();
+
+        this.markDirty();
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+    }
+
+    @Override
+    public String getInventoryName()
+    {
+        return "container.weaponRack";
+    }
+
+    @Override
+    public boolean hasCustomInventoryName()
+    {
+        return false;
+    }
+
+    @Override
+    public int getInventoryStackLimit()
+    {
+        return 1;
+    }
+
+    @Override
+    public boolean isUseableByPlayer(EntityPlayer player)
+    {
+        return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) == this && player.getDistanceSq((double) this.xCoord + 0.5D, (double) this.yCoord + 0.5D, (double) this.zCoord + 0.5D) <= 64.0D;
+    }
+
+    @Override
+    public void openInventory()
+    {
+
+    }
+
+    @Override
+    public void closeInventory()
+    {
+
+    }
+
+    @Override
+    public boolean isItemValidForSlot(int slot, ItemStack stack)
+    {
+        Item item = stack.getItem();
+        return item instanceof ItemTool || item instanceof ItemSword || (getWeaponRackType() == weaponRackTypeFloor && item instanceof ItemBow) || item == YGCItems.mallet;
     }
 }

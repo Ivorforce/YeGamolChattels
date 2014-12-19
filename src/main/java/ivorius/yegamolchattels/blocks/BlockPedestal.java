@@ -54,12 +54,12 @@ public class BlockPedestal extends IvBlockMultiblock
     }
 
     @Override
-    public void registerBlockIcons(IIconRegister par1IconRegister)
+    public void registerBlockIcons(IIconRegister iconRegister)
     {
         this.icons = new IIcon[EnumPedestalEntry.getNumberOfEntries()];
 
         for (int i = 0; i < this.icons.length; i++)
-            this.icons[i] = par1IconRegister.registerIcon(YeGamolChattels.textureBase + "pedestal" + i);
+            this.icons[i] = iconRegister.registerIcon(YeGamolChattels.textureBase + "pedestal" + i);
     }
 
     @Override

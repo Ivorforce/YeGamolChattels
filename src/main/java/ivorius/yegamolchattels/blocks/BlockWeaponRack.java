@@ -49,26 +49,26 @@ public class BlockWeaponRack extends BlockContainer
     }
 
     @Override
-    public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
+    public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
     {
-        TileEntity tileEntity = par1World.getTileEntity(par2, par3, par4);
+        TileEntity tileEntity = par1World.getTileEntity(x, y, z);
 
         if (tileEntity instanceof TileEntityWeaponRack)
         {
             TileEntityWeaponRack tileEntityWeaponRack = (TileEntityWeaponRack) tileEntity;
 
-            ItemStack heldItem = par5EntityPlayer.getHeldItem();
-            if (tileEntityWeaponRack.tryApplyingEffect(heldItem, par5EntityPlayer))
+            ItemStack heldItem = player.getHeldItem();
+            if (tileEntityWeaponRack.tryApplyingEffect(heldItem, player))
             {
                 return true;
             }
-            else if (heldItem != null && tileEntityWeaponRack.tryStoringItem(heldItem, par5EntityPlayer))
+            else if (heldItem != null && tileEntityWeaponRack.tryStoringItem(heldItem, player))
             {
                 return true;
             }
             else
             {
-                return tileEntityWeaponRack.interactWithPlayer(par5EntityPlayer);
+                return tileEntityWeaponRack.pickUpItem(player);
             }
         }
 
@@ -76,17 +76,17 @@ public class BlockWeaponRack extends BlockContainer
     }
 
     @Override
-    public void breakBlock(World par1World, int par2, int par3, int par4, Block par5, int par6)
+    public void breakBlock(World world, int x, int y, int z, Block block, int meta)
     {
-        if (!par1World.isRemote)
+        if (!world.isRemote)
         {
-            TileEntity tileEntity = par1World.getTileEntity(par2, par3, par4);
+            TileEntity tileEntity = world.getTileEntity(x, y, z);
 
             if (tileEntity instanceof TileEntityWeaponRack)
                 ((TileEntityWeaponRack) tileEntity).dropAllWeapons();
         }
 
-        super.breakBlock(par1World, par2, par3, par4, par5, par6);
+        super.breakBlock(world, x, y, z, block, meta);
     }
 
     @Override
@@ -97,9 +97,9 @@ public class BlockWeaponRack extends BlockContainer
     }
 
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess par1iBlockAccess, int par2, int par3, int par4)
+    public void setBlockBoundsBasedOnState(IBlockAccess par1iBlockAccess, int x, int y, int z)
     {
-        TileEntity tileEntity = par1iBlockAccess.getTileEntity(par2, par3, par4);
+        TileEntity tileEntity = par1iBlockAccess.getTileEntity(x, y, z);
 
         if (tileEntity instanceof TileEntityWeaponRack)
         {
@@ -107,7 +107,7 @@ public class BlockWeaponRack extends BlockContainer
             updateRackBounds(tileEntityRack.getDirection(), tileEntityRack.getWeaponRackType());
         }
         else
-            super.setBlockBoundsBasedOnState(par1iBlockAccess, par2, par3, par4);
+            super.setBlockBoundsBasedOnState(par1iBlockAccess, x, y, z);
     }
 
     public void updateRackBounds(int direction, int type)

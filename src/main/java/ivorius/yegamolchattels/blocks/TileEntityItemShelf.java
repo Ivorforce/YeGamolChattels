@@ -13,6 +13,7 @@ import ivorius.ivtoolkit.raytracing.IvRaytracerMC;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -22,7 +23,7 @@ import net.minecraftforge.common.util.Constants;
 
 import java.util.List;
 
-public abstract class TileEntityItemShelf extends IvTileEntityMultiBlock
+public abstract class TileEntityItemShelf extends IvTileEntityMultiBlock implements IInventory
 {
     public ItemStack[] storedItems = new ItemStack[50];
     public int ticksAlive = 0;
@@ -222,14 +223,14 @@ public abstract class TileEntityItemShelf extends IvTileEntityMultiBlock
 
     public abstract List<IvRaytraceableObject> getItemSlotBoxes(float t);
 
-    public boolean tryEquippingItemOnPlayer(int slot, EntityPlayer entityLiving)
+    public boolean tryEquippingItemOnPlayer(int slot, EntityPlayer player)
     {
         if (storedItems[slot] != null)
         {
-            if (IvEntityHelper.addAsCurrentItem(entityLiving, storedItems[slot]))
+            if (!worldObj.isRemote && player.inventory.addItemStackToInventory(storedItems[slot]))
             {
-                storedItems[slot] = null;
-                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                setInventorySlotContents(slot, null);
+                player.openContainer.detectAndSendChanges();
 
                 return true;
             }
@@ -239,17 +240,6 @@ public abstract class TileEntityItemShelf extends IvTileEntityMultiBlock
     }
 
     public abstract boolean tryStoringItemInSlot(int slot, ItemStack stack);
-
-    public void storeItemInSlot(ItemStack stack, int slot)
-    {
-        storedItems[slot] = stack.copy();
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-    }
-
-    public ItemStack getStoredItemInSlot(int slot)
-    {
-        return this.storedItems[slot];
-    }
 
     public int getSlotNumber(IvRaytraceableObject object)
     {
@@ -273,13 +263,13 @@ public abstract class TileEntityItemShelf extends IvTileEntityMultiBlock
     {
         if (storedItems[slot] != null)
         {
-            float var7 = 0.7F;
-            double var8 = worldObj.rand.nextFloat() * var7 + (1.0F - var7) * 0.5D;
-            double var10 = worldObj.rand.nextFloat() * 0.2D + 1.1D;
-            double var12 = worldObj.rand.nextFloat() * var7 + (1.0F - var7) * 0.5D;
-            EntityItem var14 = new EntityItem(worldObj, xCoord + var8, yCoord + var10, zCoord + var12, storedItems[slot]);
-            var14.delayBeforeCanPickup = 10;
-            worldObj.spawnEntityInWorld(var14);
+            float dropRange = 0.7F;
+            double shiftX = worldObj.rand.nextFloat() * dropRange + (1.0F - dropRange) * 0.5D;
+            double shiftY = worldObj.rand.nextFloat() * 0.2D + 1.1D;
+            double shiftZ = worldObj.rand.nextFloat() * dropRange + (1.0F - dropRange) * 0.5D;
+            EntityItem entityItem = new EntityItem(worldObj, xCoord + shiftX, yCoord + shiftY, zCoord + shiftZ, storedItems[slot]);
+            entityItem.delayBeforeCanPickup = 10;
+            worldObj.spawnEntityInWorld(entityItem);
 
             storedItems[slot] = null;
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -308,4 +298,118 @@ public abstract class TileEntityItemShelf extends IvTileEntityMultiBlock
     public abstract AxisAlignedBB getSpecialCollisionBB();
 
     public abstract AxisAlignedBB getSpecialBlockBB();
+
+    @Override
+    public int getSizeInventory()
+    {
+        return storedItems.length;
+    }
+
+    @Override
+    public ItemStack getStackInSlot(int slot)
+    {
+        return storedItems[slot];
+    }
+
+    @Override
+    public ItemStack decrStackSize(int slot, int amount)
+    {
+        if (this.storedItems[slot] != null)
+        {
+            ItemStack itemstack;
+
+            if (this.storedItems[slot].stackSize <= amount)
+            {
+                itemstack = this.storedItems[slot];
+                this.storedItems[slot] = null;
+                this.markDirty();
+                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                return itemstack;
+            }
+            else
+            {
+                itemstack = this.storedItems[slot].splitStack(amount);
+
+                if (this.storedItems[slot].stackSize == 0)
+                {
+                    this.storedItems[slot] = null;
+                }
+
+                this.markDirty();
+                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                return itemstack;
+            }
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    @Override
+    public ItemStack getStackInSlotOnClosing(int slot)
+    {
+        if (this.storedItems[slot] != null)
+        {
+            ItemStack itemstack = this.storedItems[slot];
+            this.storedItems[slot] = null;
+            return itemstack;
+        }
+        else
+            return null;
+    }
+
+    @Override
+    public void setInventorySlotContents(int slot, ItemStack stack)
+    {
+        this.storedItems[slot] = stack;
+
+        if (stack != null && stack.stackSize > this.getInventoryStackLimit())
+            stack.stackSize = this.getInventoryStackLimit();
+
+        this.markDirty();
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+    }
+
+    @Override
+    public String getInventoryName()
+    {
+        return "container.ygcItemShelf";
+    }
+
+    @Override
+    public boolean hasCustomInventoryName()
+    {
+        return false;
+    }
+
+    @Override
+    public int getInventoryStackLimit()
+    {
+        return 1;
+    }
+
+    @Override
+    public boolean isUseableByPlayer(EntityPlayer player)
+    {
+        return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) == this && player.getDistanceSq((double) this.xCoord + 0.5D, (double) this.yCoord + 0.5D, (double) this.zCoord + 0.5D) <= 64.0D;
+    }
+
+    @Override
+    public void openInventory()
+    {
+
+    }
+
+    @Override
+    public void closeInventory()
+    {
+
+    }
+
+    @Override
+    public boolean isItemValidForSlot(int slot, ItemStack stack)
+    {
+        return true;
+    }
 }

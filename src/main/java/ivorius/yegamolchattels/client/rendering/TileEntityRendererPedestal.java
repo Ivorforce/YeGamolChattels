@@ -109,7 +109,7 @@ public class TileEntityRendererPedestal extends TileEntitySpecialRenderer
 
             if (pedestalEntry == EnumPedestalEntry.stonePedestal)
             {
-                if (!itemRenderedAsBlock(tileEntity.storedItem))
+                if (!itemRenderedAsBlock(tileEntity.storedItems[0]))
                     model = modelStoneItem;
             }
 
@@ -165,9 +165,9 @@ public class TileEntityRendererPedestal extends TileEntitySpecialRenderer
 
             EntityItem var3 = null;
 
-            if (tileEntity.storedItem != null)
+            if (tileEntity.storedItems[0] != null)
             {
-                var3 = new EntityItem(tileEntity.getWorldObj(), 0.0D, 0.0D, 0.0D, tileEntity.storedItem);
+                var3 = new EntityItem(tileEntity.getWorldObj(), 0.0D, 0.0D, 0.0D, tileEntity.storedItems[0]);
                 var3.getEntityItem().stackSize = 1;
                 var3.hoverStart = 0.0F;
             }

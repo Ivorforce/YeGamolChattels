@@ -39,29 +39,29 @@ public class BlockLootChest extends BlockContainer
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
     {
-        TileEntityLootChest entity = (TileEntityLootChest) world.getTileEntity(x, y, z);
+        TileEntityLootChest lootChest = (TileEntityLootChest) world.getTileEntity(x, y, z);
 
         if (!world.isRemote)
         {
-            if (!entity.opened)
+            if (!lootChest.opened)
             {
-                entity.open();
+                lootChest.open();
             }
-            else if (entity.itemAccessible())
+            else if (lootChest.itemAccessible())
             {
-                if (entity.loot.isEmpty())
+                if (lootChest.firstItem() == null)
                 {
                     ItemStack currentItem = player.getCurrentEquippedItem();
                     if (currentItem != null)
                     {
-                        entity.addLoot(currentItem.copy());
+                        lootChest.addLoot(currentItem.copy());
                         currentItem.stackSize = 0;
                     }
-                    entity.close();
+                    lootChest.close();
                 }
                 else
                 {
-                    player.inventory.addItemStackToInventory(entity.pickUpLoot());
+                    lootChest.pickUpItem(player);
                 }
             }
         }

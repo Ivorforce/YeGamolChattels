@@ -197,19 +197,11 @@ public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements Pa
     {
         if (stack != null && storedItems[slot] == null && slot < this.getItemSlots())
         {
-            boolean canStore = true;
-
-            if (this.getShelfType() == shelfWardrobe && (slot == 8 || slot == 9 || slot == 10 || slot == 11))
-            {
-                if (!(stack.getItem() instanceof ItemArmor && ((ItemArmor) stack.getItem()).armorType == 1))
-                    canStore = false;
-            }
-
-            if (canStore)
+            if (isItemValidForSlot(slot, stack))
             {
                 if (!worldObj.isRemote)
                 {
-                    storeItemInSlot(stack, slot);
+                    setInventorySlotContents(slot, stack);
 
                     double[] center = getActiveCenterCoords();
                     worldObj.playSoundEffect(center[0], center[1], center[2], "dig.wood", 0.5f, 1.0f + worldObj.rand.nextFloat());
@@ -373,6 +365,20 @@ public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements Pa
 //        }
 
         return false;
+    }
+
+    @Override
+    public boolean isItemValidForSlot(int slot, ItemStack stack)
+    {
+        boolean canStore = true;
+
+        if (this.getShelfType() == shelfWardrobe && (slot == 8 || slot == 9 || slot == 10 || slot == 11))
+        {
+            if (!(stack.getItem() instanceof ItemArmor && ((ItemArmor) stack.getItem()).armorType == 1))
+                canStore = false;
+        }
+
+        return canStore;
     }
 
     @Override

@@ -137,7 +137,7 @@ public class TileEntityRendererItemShelf extends TileEntitySpecialRenderer
 
                 if (slotNumber >= 0)
                 {
-                    ItemStack item = tileEntity.getStoredItemInSlot(slotNumber);
+                    ItemStack item = tileEntity.getStackInSlot(slotNumber);
 
                     if (item != null)
                     {

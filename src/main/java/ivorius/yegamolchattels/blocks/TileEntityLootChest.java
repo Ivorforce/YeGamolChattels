@@ -11,14 +11,17 @@ import ivorius.ivtoolkit.network.IvNetworkHelperServer;
 import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.yegamolchattels.YeGamolChattels;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class TileEntityLootChest extends IvTileEntityRotatable implements PartialUpdateHandler
+public class TileEntityLootChest extends IvTileEntityRotatable implements IInventory, PartialUpdateHandler
 {
     public static final float LOCK_MAX = 0.5F;
     public static final float LOCK_MIN = 0.0005f;
@@ -26,7 +29,7 @@ public class TileEntityLootChest extends IvTileEntityRotatable implements Partia
     public static final float FINISH_MARGIN = 0.005F; //The margin within what the animations can finish on, so they don't continue forever
     public static final float CHEST_MAX = 0.5F;
 
-    public ArrayList<ItemStack> loot = new ArrayList<>();
+    public final ItemStack[] loot = new ItemStack[10];
 
     public boolean opened = false;
     public boolean closed = true;
@@ -35,19 +38,57 @@ public class TileEntityLootChest extends IvTileEntityRotatable implements Partia
     public float lockFall = LOCK_MIN;
     public float lockAccel = 1F;
 
-    public void addLoot(ItemStack item)
+    public int firstSlot(boolean empty)
     {
-        this.loot.add(item);
+        for (int i = 0; i < loot.length; i++)
+        {
+            if (loot[i] == null == empty)
+                return i;
+        }
 
-        markDirty();
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        return -1;
     }
 
-    public ItemStack pickUpLoot()
+    public ItemStack firstItem()
     {
-        ItemStack stack = loot.remove(0);
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-        return stack;
+        int slot = firstSlot(false);
+        if (slot >= 0)
+            return getStackInSlot(slot);
+        return null;
+    }
+
+    public boolean addLoot(ItemStack item)
+    {
+        int slot = firstSlot(true);
+        if (slot >= 0)
+        {
+            setInventorySlotContents(slot, item.copy());
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean pickUpItem(EntityPlayer player)
+    {
+        int slot = firstSlot(false);
+
+        if (slot >= 0)
+        {
+            ItemStack stack = getStackInSlot(slot);
+            if (stack != null)
+            {
+                if (!worldObj.isRemote && player.inventory.addItemStackToInventory(stack))
+                {
+                    setInventorySlotContents(slot, null);
+                    player.openContainer.detectAndSendChanges();
+                }
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void open()
@@ -144,9 +185,12 @@ public class TileEntityLootChest extends IvTileEntityRotatable implements Partia
         NBTTagList tagList = new NBTTagList();
         for (ItemStack loot : this.loot)
         {
-            NBTTagCompound tagCompound = new NBTTagCompound();
-            loot.writeToNBT(tagCompound);
-            tagList.appendTag(tagCompound);
+            if (loot != null)
+            {
+                NBTTagCompound tagCompound = new NBTTagCompound();
+                loot.writeToNBT(tagCompound);
+                tagList.appendTag(tagCompound);
+            }
         }
         nbt.setTag("items", tagList);
 
@@ -163,14 +207,14 @@ public class TileEntityLootChest extends IvTileEntityRotatable implements Partia
     @Override
     public void readFromNBT(NBTTagCompound nbt)
     {
-        this.loot.clear();
+        Arrays.fill(loot, null);
         NBTTagList tagList = nbt.getTagList("items", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < tagList.tagCount(); i++)
         {
             NBTTagCompound tag = tagList.getCompoundTagAt(i);
             ItemStack item = ItemStack.loadItemStackFromNBT(tag);
             if (item != null)
-                this.loot.add(item);
+                addLoot(item);
         }
 
         this.lockFrame = nbt.getFloat("lockFrame");
@@ -205,9 +249,125 @@ public class TileEntityLootChest extends IvTileEntityRotatable implements Partia
 
     public void dropAllItems()
     {
-        while (!loot.isEmpty())
+        for (int i = 0; i < getSizeInventory(); i++)
         {
-            worldObj.spawnEntityInWorld(new EntityItem(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, loot.remove(0)));
+            ItemStack stack = getStackInSlotOnClosing(i);
+            if (stack != null)
+                worldObj.spawnEntityInWorld(new EntityItem(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, stack));
         }
+    }
+
+    @Override
+    public int getSizeInventory()
+    {
+        return loot.length;
+    }
+
+    @Override
+    public ItemStack getStackInSlot(int slot)
+    {
+        return loot[slot];
+    }
+
+    @Override
+    public ItemStack decrStackSize(int slot, int amount)
+    {
+        if (this.loot[slot] != null)
+        {
+            ItemStack itemstack;
+
+            if (this.loot[slot].stackSize <= amount)
+            {
+                itemstack = this.loot[slot];
+                this.loot[slot] = null;
+                this.markDirty();
+                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                return itemstack;
+            }
+            else
+            {
+                itemstack = this.loot[slot].splitStack(amount);
+
+                if (this.loot[slot].stackSize == 0)
+                {
+                    this.loot[slot] = null;
+                }
+
+                this.markDirty();
+                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                return itemstack;
+            }
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    @Override
+    public ItemStack getStackInSlotOnClosing(int slot)
+    {
+        if (this.loot[slot] != null)
+        {
+            ItemStack itemstack = this.loot[slot];
+            this.loot[slot] = null;
+            return itemstack;
+        }
+        else
+            return null;
+    }
+
+    @Override
+    public void setInventorySlotContents(int slot, ItemStack stack)
+    {
+        this.loot[slot] = stack;
+
+        if (stack != null && stack.stackSize > this.getInventoryStackLimit())
+            stack.stackSize = this.getInventoryStackLimit();
+
+        this.markDirty();
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+    }
+
+    @Override
+    public String getInventoryName()
+    {
+        return "container.lootChest";
+    }
+
+    @Override
+    public boolean hasCustomInventoryName()
+    {
+        return false;
+    }
+
+    @Override
+    public int getInventoryStackLimit()
+    {
+        return 64;
+    }
+
+    @Override
+    public boolean isUseableByPlayer(EntityPlayer player)
+    {
+        return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) == this && player.getDistanceSq((double) this.xCoord + 0.5D, (double) this.yCoord + 0.5D, (double) this.zCoord + 0.5D) <= 64.0D;
+    }
+
+    @Override
+    public void openInventory()
+    {
+
+    }
+
+    @Override
+    public void closeInventory()
+    {
+
+    }
+
+    @Override
+    public boolean isItemValidForSlot(int slot, ItemStack stack)
+    {
+        return true;
     }
 }

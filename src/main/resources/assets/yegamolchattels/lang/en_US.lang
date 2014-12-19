@@ -150,6 +150,11 @@ gui.carve.head.pitch=Pitch
 itemGroup.yegamolchattels=Ye Gamol Chattels
 itemGroup.ygc_entityvita=Entity Vitas
 
+container.weaponRack=Weapon Rack
+container.lootChest=Loot Chest
+container.ygcPedestal=Pedestal
+container.ygcItemShelf=Item Shelf
+
 yegamolchattels.configgui.title=Ye Gamol Chattels
 yegamolchattels.configgui.ctgy.general=General
 yegamolchattels.configgui.ctgy.general.tooltip=General Settings

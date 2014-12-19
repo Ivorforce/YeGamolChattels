@@ -14,17 +14,18 @@ import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.yegamolchattels.YeGamolChattels;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 
-public class TileEntityPedestal extends IvTileEntityMultiBlock implements PartialUpdateHandler
+public class TileEntityPedestal extends IvTileEntityMultiBlock implements IInventory, PartialUpdateHandler
 {
     public int pedestalIdentifier;
 
     public int ticksAlive;
 
-    public ItemStack storedItem;
+    public final ItemStack[] storedItems = new ItemStack[1];
 
     public int timeItemUp;
     public boolean itemShouldBeUp = false;
@@ -40,7 +41,7 @@ public class TileEntityPedestal extends IvTileEntityMultiBlock implements Partia
                 timeItemUp++;
             else if (!itemShouldBeUp && timeItemUp > 0)
                 timeItemUp--;
-            else if (!itemShouldBeUp && storedItem != null)
+            else if (!itemShouldBeUp && storedItems[0] != null)
             {
                 dropItem();
             }
@@ -81,13 +82,13 @@ public class TileEntityPedestal extends IvTileEntityMultiBlock implements Partia
             return parent.tryStoringItem(stack);
         else if (isParent())
         {
-            if (storedItem != null || stack == null)
+            if (storedItems[0] != null || stack == null)
                 return false;
 
             if (!worldObj.isRemote)
             {
-                storedItem = stack.copy();
-                storedItem.stackSize = 1;
+                storedItems[0] = stack.copy();
+                storedItems[0].stackSize = 1;
                 itemShouldBeUp = true;
 
                 IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "pedestalData", YeGamolChattels.network);
@@ -108,7 +109,7 @@ public class TileEntityPedestal extends IvTileEntityMultiBlock implements Partia
             return parent.startDroppingItem(player);
         else if (isParent())
         {
-            if (storedItem == null)
+            if (storedItems[0] == null)
                 return false;
 
             if (!worldObj.isRemote)
@@ -117,8 +118,8 @@ public class TileEntityPedestal extends IvTileEntityMultiBlock implements Partia
 
                 if (player != null && getIntegrationTime() == 0)
                 {
-                    IvEntityHelper.addAsCurrentItem(player, storedItem);
-                    storedItem = null;
+                    IvEntityHelper.addAsCurrentItem(player, storedItems[0]);
+                    storedItems[0] = null;
                 }
 
                 IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "pedestalData", YeGamolChattels.network);
@@ -139,14 +140,14 @@ public class TileEntityPedestal extends IvTileEntityMultiBlock implements Partia
             parent.dropItem();
         else if (isParent())
         {
-            if (storedItem != null)
+            if (storedItems[0] != null)
             {
                 if (!worldObj.isRemote)
                 {
-                    EntityItem itemEntity = new EntityItem(worldObj, xCoord, yCoord, zCoord, storedItem);
+                    EntityItem itemEntity = new EntityItem(worldObj, xCoord, yCoord, zCoord, storedItems[0]);
                     worldObj.spawnEntityInWorld(itemEntity);
 
-                    storedItem = null;
+                    storedItems[0] = null;
 
                     IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "pedestalData", YeGamolChattels.network);
                     markDirty();
@@ -200,10 +201,10 @@ public class TileEntityPedestal extends IvTileEntityMultiBlock implements Partia
         tagCompound.setInteger("timeItemUp", timeItemUp);
         tagCompound.setBoolean("itemShouldBeUp", itemShouldBeUp);
 
-        if (storedItem != null)
+        if (storedItems[0] != null)
         {
             NBTTagCompound var4 = new NBTTagCompound();
-            storedItem.writeToNBT(var4);
+            storedItems[0].writeToNBT(var4);
             tagCompound.setTag("storedItem", var4);
         }
     }
@@ -218,11 +219,11 @@ public class TileEntityPedestal extends IvTileEntityMultiBlock implements Partia
         if (tagCompound.hasKey("storedItem"))
         {
             NBTTagCompound var4 = tagCompound.getCompoundTag("storedItem");
-            storedItem = ItemStack.loadItemStackFromNBT(var4);
+            storedItems[0] = ItemStack.loadItemStackFromNBT(var4);
         }
         else
         {
-            storedItem = null;
+            storedItems[0] = null;
         }
     }
 
@@ -257,5 +258,119 @@ public class TileEntityPedestal extends IvTileEntityMultiBlock implements Partia
         {
             readPedestalDataFromNBT(ByteBufUtils.readTag(buffer));
         }
+    }
+
+    @Override
+    public int getSizeInventory()
+    {
+        return storedItems.length;
+    }
+
+    @Override
+    public ItemStack getStackInSlot(int slot)
+    {
+        return storedItems[slot];
+    }
+
+    @Override
+    public ItemStack decrStackSize(int slot, int amount)
+    {
+        if (this.storedItems[slot] != null)
+        {
+            ItemStack itemstack;
+
+            if (this.storedItems[slot].stackSize <= amount)
+            {
+                itemstack = this.storedItems[slot];
+                this.storedItems[slot] = null;
+                this.markDirty();
+                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                return itemstack;
+            }
+            else
+            {
+                itemstack = this.storedItems[slot].splitStack(amount);
+
+                if (this.storedItems[slot].stackSize == 0)
+                {
+                    this.storedItems[slot] = null;
+                }
+
+                this.markDirty();
+                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                return itemstack;
+            }
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    @Override
+    public ItemStack getStackInSlotOnClosing(int slot)
+    {
+        if (this.storedItems[slot] != null)
+        {
+            ItemStack itemstack = this.storedItems[slot];
+            this.storedItems[slot] = null;
+            return itemstack;
+        }
+        else
+            return null;
+    }
+
+    @Override
+    public void setInventorySlotContents(int slot, ItemStack stack)
+    {
+        this.storedItems[slot] = stack;
+
+        if (stack != null && stack.stackSize > this.getInventoryStackLimit())
+            stack.stackSize = this.getInventoryStackLimit();
+
+        this.markDirty();
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+    }
+
+    @Override
+    public String getInventoryName()
+    {
+        return "container.ygcPedestal";
+    }
+
+    @Override
+    public boolean hasCustomInventoryName()
+    {
+        return false;
+    }
+
+    @Override
+    public int getInventoryStackLimit()
+    {
+        return 1;
+    }
+
+    @Override
+    public boolean isUseableByPlayer(EntityPlayer player)
+    {
+        return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) == this && player.getDistanceSq((double) this.xCoord + 0.5D, (double) this.yCoord + 0.5D, (double) this.zCoord + 0.5D) <= 64.0D;
+    }
+
+    @Override
+    public void openInventory()
+    {
+
+    }
+
+    @Override
+    public void closeInventory()
+    {
+
+    }
+
+    @Override
+    public boolean isItemValidForSlot(int slot, ItemStack stack)
+    {
+        return true;
     }
 }

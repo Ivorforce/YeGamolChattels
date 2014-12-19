@@ -39,11 +39,8 @@ public class TileEntityRendererLootChest extends TileEntitySpecialRenderer
         GL11.glTranslatef(0.0f, 1.0f, 0.0f);
         GL11.glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
 
-        if (lootChest != null)
-        {
-            this.chestModel.top.rotateAngleX = (-lootChest.chestFrame * (float) Math.PI);
-            this.chestModel.lock.rotateAngleX = (-lootChest.chestFrame * (float) Math.PI);
-        }
+        this.chestModel.top.rotateAngleX = (-lootChest.chestFrame * (float) Math.PI);
+        this.chestModel.lock.rotateAngleX = (-lootChest.chestFrame * (float) Math.PI);
 
         GL11.glEnable(GL11.GL_CULL_FACE);
 
@@ -51,10 +48,7 @@ public class TileEntityRendererLootChest extends TileEntitySpecialRenderer
         this.chestModel.render(lootChest);
         GL11.glPopMatrix();
 
-        ItemStack item = null;
-        if (lootChest != null && !lootChest.loot.isEmpty())
-            item = lootChest.loot.get(0);
-
+        ItemStack item = lootChest.firstItem();
         if (item != null && lootChest.chestFrame > 0)
         {
             GL11.glTranslatef(0.0f, lootChest.chestFrame * 0.8f - 0.3f, 0.0f);
