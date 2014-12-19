@@ -84,8 +84,12 @@ public class YGCCrafting
         addRecipe(new ItemStack(wool, 1), "##", "##", '#', DC_FLAX_FIBER);
 
         addRecipe(new ItemStack(clubHammer), "#I#", " I ", " I ", '#', DC_IRON_INGOT, 'I', DC_STICK_WOOD);
-        addRecipe(new ItemStack(detailChiselIron), "  #", " I ", "W  ", '#', DC_IRON_INGOT, 'I', DC_STICK_WOOD, 'W', DC_PLANK_WOOD);
-        addRecipe(new ItemStack(carvingChiselIron), " ##", " I#", "W  ", '#', DC_IRON_INGOT, 'I', DC_STICK_WOOD, 'W', DC_PLANK_WOOD);
+        addRecipe(new ItemStack(detailChiselIron), "#C", "I ", '#', DC_IRON_INGOT, 'I', DC_STICK_WOOD, 'C', flint);
+        addRecipe(new ItemStack(detailChiselIron), "C#", " I", '#', DC_IRON_INGOT, 'I', DC_STICK_WOOD, 'C', flint);
+        addRecipe(new ItemStack(carvingChiselIron), "#C", "# ", "I ", '#', DC_IRON_INGOT, 'I', DC_STICK_WOOD, 'C', flint);
+        addRecipe(new ItemStack(carvingChiselIron), "C#", " #", " I", '#', DC_IRON_INGOT, 'I', DC_STICK_WOOD, 'C', flint);
+        addRecipe(new ItemStack(carvingChiselIron), "# ", "#C", "I ", '#', DC_IRON_INGOT, 'I', DC_STICK_WOOD, 'C', flint);
+        addRecipe(new ItemStack(carvingChiselIron), " #", "C#", " I", '#', DC_IRON_INGOT, 'I', DC_STICK_WOOD, 'C', flint);
 
         addRecipe(new ItemStack(ironSaw), "I  ", "###", '#', DC_IRON_INGOT, 'I', DC_STICK_WOOD);
         addRecipe(new ItemStack(sawBench), "#IS", "#  ", '#', DC_PLANK_WOOD, 'I', DC_IRON_INGOT, 'S', DC_STICK_WOOD);
