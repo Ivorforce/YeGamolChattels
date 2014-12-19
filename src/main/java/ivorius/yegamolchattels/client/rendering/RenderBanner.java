@@ -39,12 +39,12 @@ public class RenderBanner extends Render
         GL11.glScalef(f2, f2, f2);
         int bannerWidth = entitybannersmall.getWidthPixels();
         int bannerHeight = entitybannersmall.getHeightPixels();
-        func_159_a(entitybannersmall, bannerWidth, bannerHeight, (entitybannersmall.getColor() % 4) * bannerWidth, (entitybannersmall.getColor() >> 2) * bannerHeight, f1);
+        renderBanner(entitybannersmall, bannerWidth, bannerHeight, (entitybannersmall.getColor() % 4) * bannerWidth, (entitybannersmall.getColor() >> 2) * bannerHeight, f1);
         GL11.glDisable(32826 /*GL_RESCALE_NORMAL_EXT*/);
         GL11.glPopMatrix();
     }
 
-    private void func_159_a(EntityBanner entity, int bannerWidth, int bannerHeight, int texShiftX, int texShiftY, float t)
+    private void renderBanner(EntityBanner entity, int bannerWidth, int bannerHeight, int texShiftX, int texShiftY, float t)
     {
         Tessellator tessellator = Tessellator.instance;
 
@@ -58,30 +58,30 @@ public class RenderBanner extends Render
         double segHeight = 1.0;
 
         tessellator.startDrawingQuads();
-        for (int i1 = 0; i1 < bannerWidth; i1++)
+        for (int voxX = 0; voxX < bannerWidth; voxX++)
         {
-            for (int j1 = 0; j1 < bannerHeight; j1++)
+            for (int voxY = 0; voxY < bannerHeight; voxY++)
             {
                 double thickness = renderManager.options.fancyGraphics ? 0.7f : 0.0f;
-                if ((bannerHeight - j1) < 2 + bannerHeight / 16)
+                if ((bannerHeight - voxY) < 2 + bannerHeight / 16)
                     thickness *= 2.0f;
                 double zShift = -thickness * 0.5f + 0.5f;
 
-                double i2 = i1 + 0.999;
-                double j2 = j1 + 0.999;
+                double voxX1 = voxX + 0.999;
+                double voxY1 = voxY + 0.999;
 
-                double minX = xShift + i1 * 1.0;
-                double minY = yShift + j1 * 1.0;
-                double texMinX = ((texShiftX + bannerWidth) - i2 * 1) / (bannerWidth * 4.0);
-                double texMaxX = ((texShiftX + bannerWidth) - (i1 + 0.001) * 1) / (bannerWidth * 4.0);
-                double texMinY = ((texShiftY + bannerHeight) - j2 * 1) / (bannerHeight * 4.0);
-                double texMaxY = ((texShiftY + bannerHeight) - (j1 + 0.001) * 1) / (bannerHeight * 4.0);
+                double minX = xShift + voxX * 1.0;
+                double minY = yShift + voxY * 1.0;
+                double texMinX = ((texShiftX + bannerWidth) - (voxX + 0.001) * 1) / (bannerWidth * 4.0);
+                double texMaxX = ((texShiftX + bannerWidth) - voxX1 * 1) / (bannerWidth * 4.0);
+                double texMinY = ((texShiftY + bannerHeight) - (voxY + 0.001) * 1) / (bannerHeight * 4.0);
+                double texMaxY = ((texShiftY + bannerHeight) - voxY1 * 1) / (bannerHeight * 4.0);
 
-                double waveEffect = (bannerHeight - j1 - 4) * 0.015f * wind;
-                double waveEffect1 = (bannerHeight - j2 - 4) * 0.015f * wind;
+                double waveEffect = (bannerHeight - voxY - 4) * 0.015f * wind;
+                double waveEffect1 = (bannerHeight - voxY1 - 4) * 0.015f * wind;
 
-                double z = waveEffect > 0.0 ? (MathHelper.sin((j1 * 0.04f + ticks * 0.06f) * (float) Math.PI) * waveEffect) : 0.0;
-                double z1 = waveEffect1 > 0.0 ? (MathHelper.sin(((float) j2 * 0.04f + ticks * 0.06f) * (float) Math.PI) * waveEffect1) : 0.0;
+                double z = waveEffect > 0.0 ? (MathHelper.sin((voxY * 0.04f + ticks * 0.06f) * (float) Math.PI) * waveEffect) : 0.0;
+                double z1 = waveEffect1 > 0.0 ? (MathHelper.sin(((float) voxY1 * 0.04f + ticks * 0.06f) * (float) Math.PI) * waveEffect1) : 0.0;
 
                 if (!renderManager.options.fancyGraphics)
                 {
@@ -106,24 +106,20 @@ public class RenderBanner extends Render
         int j = MathHelper.floor_double(entity.posY + (double) (par3 / 16.0F));
         int k = MathHelper.floor_double(entity.posZ);
 
-        if (entity.hangingDirection == 2)
+        switch (entity.hangingDirection)
         {
-            i = MathHelper.floor_double(entity.posX + (double) (par2 / 16.0F));
-        }
-
-        if (entity.hangingDirection == 1)
-        {
-            k = MathHelper.floor_double(entity.posZ - (double) (par2 / 16.0F));
-        }
-
-        if (entity.hangingDirection == 0)
-        {
-            i = MathHelper.floor_double(entity.posX - (double) (par2 / 16.0F));
-        }
-
-        if (entity.hangingDirection == 3)
-        {
-            k = MathHelper.floor_double(entity.posZ + (double) (par2 / 16.0F));
+            case 2:
+                i = MathHelper.floor_double(entity.posX + (double) (par2 / 16.0F));
+                break;
+            case 1:
+                k = MathHelper.floor_double(entity.posZ - (double) (par2 / 16.0F));
+                break;
+            case 0:
+                i = MathHelper.floor_double(entity.posX - (double) (par2 / 16.0F));
+                break;
+            case 3:
+                k = MathHelper.floor_double(entity.posZ + (double) (par2 / 16.0F));
+                break;
         }
 
         int l = this.renderManager.worldObj.getLightBrightnessForSkyBlocks(i, j, k, 0);
