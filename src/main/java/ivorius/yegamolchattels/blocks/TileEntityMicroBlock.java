@@ -6,6 +6,8 @@
 package ivorius.yegamolchattels.blocks;
 
 import cpw.mods.fml.common.network.ByteBufUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.blocks.BlockArea;
 import ivorius.ivtoolkit.blocks.BlockCoord;
@@ -14,6 +16,7 @@ import ivorius.ivtoolkit.network.IvNetworkHelperServer;
 import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.ivtoolkit.tools.MCRegistryDefault;
 import ivorius.yegamolchattels.YeGamolChattels;
+import ivorius.yegamolchattels.client.rendering.IIconQuadCache;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -37,6 +40,9 @@ public class TileEntityMicroBlock extends TileEntity implements PartialUpdateHan
     private boolean[] isSideOpaque = new boolean[6];
 
     private boolean shouldDropAsItem = true;
+
+    @SideOnly(Side.CLIENT)
+    private IIconQuadCache quadCache;
 
     public TileEntityMicroBlock()
     {
@@ -97,6 +103,8 @@ public class TileEntityMicroBlock extends TileEntity implements PartialUpdateHan
 
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         }
+
+        quadCache = null;
 
         markDirty();
     }
@@ -207,5 +215,14 @@ public class TileEntityMicroBlock extends TileEntity implements PartialUpdateHan
             blockCollection = new IvBlockCollection(ByteBufUtils.readTag(buffer), MCRegistryDefault.INSTANCE);
             markCacheInvalid(true);
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public IIconQuadCache getQuadCache()
+    {
+        if (quadCache == null)
+            quadCache = IIconQuadCache.createIconQuadCache(blockCollection);
+
+        return quadCache;
     }
 }

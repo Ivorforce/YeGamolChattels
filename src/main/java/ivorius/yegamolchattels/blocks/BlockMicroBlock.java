@@ -5,6 +5,8 @@
 
 package ivorius.yegamolchattels.blocks;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import ivorius.ivtoolkit.blocks.BlockCoord;
 import ivorius.ivtoolkit.blocks.IvBlockCollection;
 import ivorius.yegamolchattels.items.*;
@@ -37,9 +39,10 @@ import java.util.Random;
  */
 public class BlockMicroBlock extends BlockContainer
 {
-    public boolean[] renderSideCache = new boolean[6];
-    public Block renderBlockCache;
-    public int renderBlockMetaCache;
+    @SideOnly(Side.CLIENT)
+    public ForgeDirection renderSide;
+    @SideOnly(Side.CLIENT)
+    public IIcon renderIcon;
 
     public BlockMicroBlock()
     {
@@ -202,17 +205,17 @@ public class BlockMicroBlock extends BlockContainer
     @Override
     public IIcon getIcon(int side, int meta)
     {
-        return renderBlockCache != null ? renderBlockCache.getIcon(side, renderBlockMetaCache) : Blocks.planks.getIcon(0, 0);
+        return renderIcon;
     }
 
     @Override
     public boolean shouldSideBeRendered(IBlockAccess blockAccess, int x, int y, int z, int side)
     {
-        return renderSideCache[side];
+        return side == renderSide.ordinal();
     }
 
     @Override
-    public void registerBlockIcons(IIconRegister p_149651_1_)
+    public void registerBlockIcons(IIconRegister iconRegister)
     {
 
     }
