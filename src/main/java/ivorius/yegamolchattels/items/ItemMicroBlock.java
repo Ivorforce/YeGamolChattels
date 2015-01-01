@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,6 +34,7 @@ public class ItemMicroBlock extends ItemBlock
         stack.setTagInfo("microBlock", collection.createTagCompound());
     }
 
+    @Nullable
     public static IvBlockCollection containedMicroBlock(ItemStack stack)
     {
         if (!stack.hasTagCompound() || !stack.getTagCompound().hasKey("microBlock"))

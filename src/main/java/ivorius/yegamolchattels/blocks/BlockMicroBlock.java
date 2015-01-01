@@ -150,10 +150,9 @@ public class BlockMicroBlock extends BlockContainer
         if (!world.isRemote)
         {
             IvBlockCollection collection = ItemMicroBlock.containedMicroBlock(stack);
+
             if (collection != null)
-            {
                 ((TileEntityMicroBlock) world.getTileEntity(x, y, z)).setBlockCollection(collection);
-            }
         }
     }
 

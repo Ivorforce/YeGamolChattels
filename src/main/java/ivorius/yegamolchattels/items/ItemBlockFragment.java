@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagByte;
@@ -21,6 +22,7 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -37,7 +39,7 @@ public class ItemBlockFragment extends Item implements MicroblockSelector
     public static ItemChisel.BlockData getFragment(ItemStack stack)
     {
         if (!stack.hasTagCompound() || !stack.getTagCompound().hasKey("blockFragment"))
-            return null;
+            return new ItemChisel.BlockData(Blocks.air, (byte)0); // Default
 
         return new ItemChisel.BlockData((Block) Block.blockRegistry.getObject(stack.getTagCompound().getString("blockFragment")), stack.getTagCompound().getByte("blockFragmentMeta"));
     }
@@ -100,13 +102,13 @@ public class ItemBlockFragment extends Item implements MicroblockSelector
     }
 
     @Override
-    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
+    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4)
     {
-        super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);
+        super.addInformation(stack, player, list, par4);
 
-        ItemChisel.BlockData data = getFragment(par1ItemStack);
+        ItemChisel.BlockData data = getFragment(stack);
         if (data != null)
-            par3List.add(ItemMicroBlock.getLocalizedName(data));
+            list.add(ItemMicroBlock.getLocalizedName(data));
     }
 
     @Override
