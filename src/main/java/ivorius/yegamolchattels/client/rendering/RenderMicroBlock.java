@@ -8,14 +8,22 @@ package ivorius.yegamolchattels.client.rendering;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import ivorius.ivtoolkit.blocks.BlockCoord;
 import ivorius.ivtoolkit.blocks.IvBlockCollection;
+import ivorius.ivtoolkit.rendering.IvRenderHelper;
 import ivorius.yegamolchattels.blocks.BlockMicroBlock;
 import ivorius.yegamolchattels.blocks.TileEntityMicroBlock;
+import ivorius.yegamolchattels.items.ItemBlockFragment;
+import ivorius.yegamolchattels.items.ItemChisel;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.init.Blocks;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.common.util.ForgeDirection;
+import org.lwjgl.opengl.GL11;
 
 import java.nio.FloatBuffer;
 import java.util.Arrays;
@@ -35,7 +43,21 @@ public class RenderMicroBlock implements ISimpleBlockRenderingHandler
     @Override
     public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer)
     {
-
+        GL11.glPushMatrix();
+        GL11.glScalef(0.4f, 0.4f, 0.4f);
+        GL11.glTranslatef(-1f, 0f, 0f);
+        IvRenderHelper.renderCubeInvBlock(renderer, Blocks.stone, (byte) 0);
+        GL11.glTranslatef(2f, 0f, 0f);
+        IvRenderHelper.renderCubeInvBlock(renderer, Blocks.stone, (byte) 0);
+        GL11.glTranslatef(-1f, 1f, 0f);
+        IvRenderHelper.renderCubeInvBlock(renderer, Blocks.stone, (byte) 0);
+        GL11.glTranslatef(0f, -1f, 0f);
+        IvRenderHelper.renderCubeInvBlock(renderer, Blocks.stone, (byte) 0);
+        GL11.glTranslatef(0f, 0f, 1f);
+        IvRenderHelper.renderCubeInvBlock(renderer, Blocks.planks, (byte) 0);
+        GL11.glTranslatef(0f, 0f, -2f);
+        IvRenderHelper.renderCubeInvBlock(renderer, Blocks.planks, (byte) 0);
+        GL11.glPopMatrix();
     }
 
     @Override
@@ -93,7 +115,7 @@ public class RenderMicroBlock implements ISimpleBlockRenderingHandler
     @Override
     public boolean shouldRender3DInInventory(int modelId)
     {
-        return false;
+        return true;
     }
 
     @Override
