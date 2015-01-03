@@ -9,6 +9,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ivorius.ivtoolkit.rendering.IvRenderHelper;
+import ivorius.yegamolchattels.YGCConfig;
 import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.achievements.YGCAchievementList;
 import ivorius.yegamolchattels.blocks.TileEntityMicroBlock;
@@ -106,7 +107,7 @@ public class YGCForgeEventHandler
     @SubscribeEvent
     public void onLivingDrops(LivingDropsEvent event)
     {
-        if (event.entityLiving.getRNG().nextFloat() < 0.04f && !(event.entityLiving instanceof EntityPlayer))
+        if (event.entityLiving.getRNG().nextDouble() < YGCConfig.entityVitaDropChance && !(event.entityLiving instanceof EntityPlayer))
         {
             ItemStack vitaStack = ItemEntityVita.createVitaItemStackAsNewbornEntity(YGCItems.entityVita, event.entityLiving);
 

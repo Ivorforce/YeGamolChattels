@@ -26,6 +26,8 @@ public class YGCConfig
 
     public static boolean genFlax;
 
+    public static double entityVitaDropChance;
+
     public static void loadConfig(String configID)
     {
         if (configID == null || configID.equals(Configuration.CATEGORY_GENERAL))
@@ -39,6 +41,8 @@ public class YGCConfig
             easterEggsAllowed = config.get(CATEGORY_BALANCING, "easterEggsAllowed", true).getBoolean();
 
             genFlax = config.get(CATEGORY_BALANCING, "generateFlax", true).getBoolean();
+
+            entityVitaDropChance = config.get(CATEGORY_BALANCING, "entityVitaDropChance", 0.01, "Drop chance of entity vitas when killing a mob. <Temporary config option: Will be removed when the new system is added>").getDouble();
         }
 
         proxy.loadConfig(configID);
