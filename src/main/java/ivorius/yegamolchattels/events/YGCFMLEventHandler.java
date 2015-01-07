@@ -65,7 +65,7 @@ public class YGCFMLEventHandler
     @SubscribeEvent
     public void onItemCrafted(PlayerEvent.ItemCraftedEvent event)
     {
-        if (event.crafting.isItemEqual(new ItemStack(YGCBlocks.itemShelf, 1, TileEntityItemShelfModel0.shelfWardrobe)))
+        if (event.crafting.isItemEqual(new ItemStack(YGCBlocks.itemShelf, 1, TileEntityItemShelfModel0.SHELF_WARDROBE)))
         {
             event.player.triggerAchievement(YGCAchievementList.wardrobeCrafted);
         }

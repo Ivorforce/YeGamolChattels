@@ -28,12 +28,14 @@ public class YGCConfig
 
     public static double entityVitaDropChance;
 
+    public static String[] itemShelfBlacklist;
+
     public static void loadConfig(String configID)
     {
-        if (configID == null || configID.equals(Configuration.CATEGORY_GENERAL))
-        {
-        }
-
+//        if (configID == null || configID.equals(Configuration.CATEGORY_GENERAL))
+//        {
+//        }
+//
         if (configID == null || configID.equals(CATEGORY_BALANCING))
         {
             areDangerousStatuesAllowed = config.get(CATEGORY_BALANCING, "areDangerousStatuesAllowed", false, "Are dangerous statues allowed to come to life? (e.g. Ender Dragon)").getBoolean();
@@ -43,6 +45,8 @@ public class YGCConfig
             genFlax = config.get(CATEGORY_BALANCING, "generateFlax", true).getBoolean();
 
             entityVitaDropChance = config.get(CATEGORY_BALANCING, "entityVitaDropChance", 0.01, "Drop chance of entity vitas when killing a mob. <Temporary config option: Will be removed when the new system is added>").getDouble();
+
+            itemShelfBlacklist = config.get(CATEGORY_BALANCING, "itemShelfBlacklist", new String[0], "List of item IDs that are not allowed to be placed in item shelves.").getStringList();
         }
 
         proxy.loadConfig(configID);

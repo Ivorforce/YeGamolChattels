@@ -10,6 +10,7 @@ import ivorius.ivtoolkit.math.IvMathHelper;
 import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.ivtoolkit.raytracing.IvRaytraceableObject;
 import ivorius.ivtoolkit.raytracing.IvRaytracedIntersection;
+import ivorius.yegamolchattels.YGCConfig;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemArmor;
@@ -27,9 +28,9 @@ import java.util.List;
 
 public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements PartialUpdateHandler
 {
-    public static final int shelfJamien = 0;
-    public static final int shelfWall = 1;
-    public static final int shelfWardrobe = 2;
+    public static final int SHELF_JAMIEN = 0;
+    public static final int SHELF_WALL = 1;
+    public static final int SHELF_WARDROBE = 2;
 
 //    public static final String[] jamiensBook = new String[]{"Untitled", "Jamien", "Test Content.", "Moar pages", "Dis gon be good"};
 
@@ -51,7 +52,7 @@ public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements Pa
     {
         super.updateEntityParent();
 
-//        if (YeGamolChattels.easterEggsAllowed && getShelfType() == shelfJamien && ticksAlive % 80 == 0)
+//        if (YeGamolChattels.easterEggsAllowed && getShelfType() == SHELF_JAMIEN && ticksAlive % 80 == 0)
 //        {
 //            for (int i = 0; i < this.getItemSlots(); i++)
 //            {
@@ -89,11 +90,11 @@ public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements Pa
     {
         int shelfType = this.getShelfType();
 
-        if (shelfType == shelfJamien)
+        if (shelfType == SHELF_JAMIEN)
             return 5 * 2;
-        if (shelfType == shelfWall)
+        if (shelfType == SHELF_WALL)
             return 4;
-        if (shelfType == shelfWardrobe)
+        if (shelfType == SHELF_WARDROBE)
             return 12;
 
         return 0;
@@ -106,7 +107,7 @@ public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements Pa
         raytraceables.addAll(getItemSlotBoxes(t));
 
         int shelfType = this.getShelfType();
-        if (shelfType == shelfJamien)
+        if (shelfType == SHELF_JAMIEN)
         {
             raytraceables.add(getRotatedBox("WallBack", -1.0, -0.5, 0.4, 2.0, 1.0, 0.1));
             raytraceables.add(getRotatedBox("WallLeft", -0.85, -0.5, -0.3, 0.1, 1.0, 0.6));
@@ -114,11 +115,11 @@ public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements Pa
             raytraceables.add(getRotatedBox("WallTop", -1.0, 0.4, -0.3, 2.0, 0.1, 0.6));
             raytraceables.add(getRotatedBox("WallBottom", -1.0, -0.25, -0.3, 2.0, 0.1, 0.6));
         }
-        else if (shelfType == shelfWall)
+        else if (shelfType == SHELF_WALL)
         {
             raytraceables.add(getRotatedBox("WallBottom", -0.5, -0.35, -0.1, 1.0, 0.1, 0.6));
         }
-        else if (shelfType == shelfWardrobe)
+        else if (shelfType == SHELF_WARDROBE)
         {
             raytraceables.add(getRotatedBox("WallBack", -0.5, -1.0, 0.4, 1.0, 2.0, 0.1));
             raytraceables.add(getRotatedBox("WallPortal", -0.5, -1.0, 0.39, 1.0, 2.0, 0.01));
@@ -152,7 +153,7 @@ public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements Pa
         List<IvRaytraceableObject> raytraceables = new ArrayList<>();
 
         int shelfType = this.getShelfType();
-        if (shelfType == shelfJamien)
+        if (shelfType == SHELF_JAMIEN)
         {
             int itemsPL = 5;
             float width = 1.4f;
@@ -162,7 +163,7 @@ public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements Pa
                 for (int i = 0; i < itemsPL; i++)
                     raytraceables.add(getRotatedBox("Slot" + (i + l * itemsPL), -width / 2 + width / itemsPL * i + paddingSides, l == 0 ? -0.13f : 0.17f, -0.23f, width / itemsPL - paddingSides * 2, 0.18f, 0.25f));
         }
-        else if (shelfType == shelfWall)
+        else if (shelfType == SHELF_WALL)
         {
             int itemsPL = 4;
             float width = 0.9f;
@@ -171,7 +172,7 @@ public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements Pa
             for (int i = 0; i < itemsPL; i++)
                 raytraceables.add(getRotatedBox("Slot" + i, -width / 2 + width / itemsPL * i + paddingSides, -0.25f, 0.0f, width / itemsPL - paddingSides * 2, 0.2f, 0.2f));
         }
-        else if (shelfType == shelfWardrobe)
+        else if (shelfType == SHELF_WARDROBE)
         {
             for (int h = 0; h < 2; h++)
             {
@@ -217,7 +218,7 @@ public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements Pa
     @Override
     public AxisAlignedBB getSpecialSelectedBB()
     {
-        if (getShelfType() == shelfWall)
+        if (getShelfType() == SHELF_WALL)
             return getRotatedBB(-0.5, -0.375, -0.125, 1.0, 0.4, 0.625);
 
         return null;
@@ -226,7 +227,7 @@ public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements Pa
     @Override
     public AxisAlignedBB getSpecialCollisionBB()
     {
-        if (getShelfType() == shelfWall)
+        if (getShelfType() == SHELF_WALL)
             return getRotatedBB(-0.5, -0.375, -0.125, 1.0, 0.125, 0.625);
 
         return null;
@@ -235,7 +236,7 @@ public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements Pa
     @Override
     public AxisAlignedBB getSpecialBlockBB()
     {
-        if (getShelfType() == shelfWall)
+        if (getShelfType() == SHELF_WALL)
             return getRotatedBB(-0.5, -0.375, -0.125, 1.0, 0.4, 0.625);
 
         return null;
@@ -245,16 +246,16 @@ public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements Pa
     {
         List<int[]> positions = new ArrayList<>();
 
-        if (shelfType == shelfJamien)
+        if (shelfType == SHELF_JAMIEN)
         {
             positions.add(new int[]{0, 0, 0});
             positions.add(new int[]{1, 0, 0});
         }
-        else if (shelfType == shelfWall)
+        else if (shelfType == SHELF_WALL)
         {
             positions.add(new int[]{0, 0, 0});
         }
-        else if (shelfType == shelfWardrobe)
+        else if (shelfType == SHELF_WARDROBE)
         {
             positions.add(new int[]{0, 0, 0});
             positions.add(new int[]{0, 1, 0});
@@ -334,7 +335,7 @@ public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements Pa
     @Override
     public boolean handleRightClickOnIntersection(EntityPlayer player, ItemStack stack, int side, IvRaytracedIntersection intersection)
     {
-//        if (getShelfType() == shelfWardrobe)
+//        if (getShelfType() == SHELF_WARDROBE)
 //        {
 //            if (YGCConfig.easterEggsAllowed && "WallPortal".equals(intersection.getUserInfo()))
 //            {
@@ -370,15 +371,20 @@ public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements Pa
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack)
     {
-        boolean canStore = true;
-
-        if (this.getShelfType() == shelfWardrobe && (slot == 8 || slot == 9 || slot == 10 || slot == 11))
+        String itemID = ItemArmor.itemRegistry.getNameForObject(stack.getItem());
+        for (String b : YGCConfig.itemShelfBlacklist)
         {
-            if (!(stack.getItem() instanceof ItemArmor && ((ItemArmor) stack.getItem()).armorType == 1))
-                canStore = false;
+            if (itemID.equals(b) || itemID.equals("minecraft:" + b))
+                return false;
         }
 
-        return canStore;
+        if (this.getShelfType() == SHELF_WARDROBE && (slot == 8 || slot == 9 || slot == 10 || slot == 11))
+        {
+            if (!(stack.getItem() instanceof ItemArmor && ((ItemArmor) stack.getItem()).armorType == 1))
+                return false;
+        }
+
+        return true;
     }
 
     @Override

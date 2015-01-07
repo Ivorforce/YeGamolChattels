@@ -65,9 +65,9 @@ public class YGCCrafting
         addRecipe(new ItemStack(pedestal, 1, goldPedestal.getIntIdentifier()), " # ", "I#I", "BSB", '#', DC_GOLD_BLOCK, 'I', DC_GOLD_INGOT, 'B', book, 'S', DC_STONE);
         addRecipe(new ItemStack(pedestal, 1, diamondPedestal.getIntIdentifier()), "I#I", "III", "BSB", '#', DC_DIAMOND_BLOCK, 'I', DC_DIAMOND_GEM, 'B', book, 'S', DC_STONE);
 
-        addRecipe(new ItemStack(itemShelf, 1, shelfJamien), "###", "# #", '#', wildcard(refinedPlank));
-        addRecipe(new ItemStack(itemShelf, 1, shelfWall), "##", '#', wildcard(refinedPlank));
-        addRecipe(new ItemStack(itemShelf, 1, shelfWardrobe), "###", "# #", "#I#", '#', wildcard(refinedPlank), 'I', DC_IRON_INGOT);
+        addRecipe(new ItemStack(itemShelf, 1, SHELF_JAMIEN), "###", "# #", '#', wildcard(refinedPlank));
+        addRecipe(new ItemStack(itemShelf, 1, SHELF_WALL), "##", '#', wildcard(refinedPlank));
+        addRecipe(new ItemStack(itemShelf, 1, SHELF_WARDROBE), "###", "# #", "#I#", '#', wildcard(refinedPlank), 'I', DC_IRON_INGOT);
 
         addRecipe(new ItemStack(snowGlobe), " # ", "#W#", "SIS", '#', DC_CLEAR_GLASS, 'W', DC_PLANK_WOOD, 'S', DC_STONE, 'I', DC_IRON_INGOT);
 

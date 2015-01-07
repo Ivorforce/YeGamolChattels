@@ -141,17 +141,17 @@ public class TileEntityRendererItemShelf extends TileEntitySpecialRenderer
 
                     if (item != null)
                     {
-                        if (tileEntity.getShelfType() == TileEntityItemShelfModel0.shelfWardrobe && slotNumber > 7)
+                        if (tileEntity.getShelfType() == TileEntityItemShelfModel0.SHELF_WARDROBE && slotNumber > 7)
                         {
                             if (triggerValues[0] > 0.0f)
                                 drawItemInBox((IvRaytraceableAxisAlignedBox) object, item, tileEntity, d, d1, d2, 3.7f, 90.0f);
                         }
-                        else if (tileEntity.getShelfType() == TileEntityItemShelfModel0.shelfWardrobe && slotNumber < 4)
+                        else if (tileEntity.getShelfType() == TileEntityItemShelfModel0.SHELF_WARDROBE && slotNumber < 4)
                         {
                             if (triggerValues[1] > 0.0f)
                                 drawItemInBox((IvRaytraceableAxisAlignedBox) object, item, tileEntity, d, d1, d2);
                         }
-                        else if (tileEntity.getShelfType() == TileEntityItemShelfModel0.shelfWardrobe && slotNumber > 3 && slotNumber < 8)
+                        else if (tileEntity.getShelfType() == TileEntityItemShelfModel0.SHELF_WARDROBE && slotNumber > 3 && slotNumber < 8)
                         {
                             if (triggerValues[2] > 0.0f)
                                 drawItemInBox((IvRaytraceableAxisAlignedBox) object, item, tileEntity, d, d1, d2);
