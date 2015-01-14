@@ -5,7 +5,15 @@
 
 package ivorius.yegamolchattels;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static ivorius.yegamolchattels.YeGamolChattels.*;
 
@@ -17,8 +25,9 @@ public class YGCConfig
     public static final String CATEGORY_BALANCING = "balancing";
     public static final String CATEGORY_VISUAL = "visual";
 
-    public static boolean areDangerousStatuesAllowed;
+    private static final Set<String> lifeStatuesBlacklist = new HashSet<>();
     public static boolean areLifeStatuesAllowed;
+    private static final Set<String> equippableStatues = new HashSet<>();
     public static boolean easterEggsAllowed;
 
     public static boolean fetchDynamicStatueTextures;
@@ -38,7 +47,9 @@ public class YGCConfig
 //
         if (configID == null || configID.equals(CATEGORY_BALANCING))
         {
-            areDangerousStatuesAllowed = config.get(CATEGORY_BALANCING, "areDangerousStatuesAllowed", false, "Are dangerous statues allowed to come to life? (e.g. Ender Dragon)").getBoolean();
+            getStringSet(lifeStatuesBlacklist, config.get(CATEGORY_BALANCING, "lifeStatuesBlacklist", new String[]{"EnderDragon", "Giant", "WitherBoss"}, "Entity IDs that are not allowed to come alive from statues."));
+            getStringSet(equippableStatues, config.get(CATEGORY_BALANCING, "equippableStatues", new String[]{"Zombie", "Skeleton", "PigZombie"}, "Entity IDs that will be treated as equippable mobs as statues"));
+
             areLifeStatuesAllowed = config.get(CATEGORY_BALANCING, "areLifeStatuesAllowed", true, "Are statues allowed to come to life with redstone input?").getBoolean();
             easterEggsAllowed = config.get(CATEGORY_BALANCING, "easterEggsAllowed", true).getBoolean();
 
@@ -50,5 +61,21 @@ public class YGCConfig
         }
 
         proxy.loadConfig(configID);
+    }
+
+    private static void getStringSet(Set<String> set, Property property)
+    {
+        set.clear();
+        Collections.addAll(set, property.getStringList());
+    }
+
+    public static boolean isEntityEquippable(Entity entity)
+    {
+        return equippableStatues.contains(EntityList.getEntityString(entity));
+    }
+
+    public static boolean mayEntityStatueComeAlive(Entity entity)
+    {
+        return !lifeStatuesBlacklist.contains(EntityList.getEntityString(entity));
     }
 }

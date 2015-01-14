@@ -43,9 +43,6 @@ import net.minecraft.world.World;
 
 public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialUpdateHandler
 {
-    public static Class[] equippableMobs = {EntityZombie.class, EntitySkeleton.class, EntityFakePlayer.class};
-    public static Class[] dangerousMobs = {EntityGiantZombie.class, EntityDragon.class, EntityWither.class};
-
     private NBTTagCompound storedStatueTag;
     private Statue statue;
 
@@ -121,11 +118,7 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
         Entity statueEntity = statue.getEntity();
         if (statueEntity != null && YGCConfig.areLifeStatuesAllowed && !(statueEntity instanceof EntityFakePlayer))
         {
-            boolean dangerous = false;
-            for (Class c : dangerousMobs)
-                if (statueEntity.getClass() == c)
-                    dangerous = true;
-            if (YGCConfig.areDangerousStatuesAllowed || !dangerous)
+            if (YGCConfig.mayEntityStatueComeAlive(statueEntity))
             {
                 if (!worldObj.isRemote)
                 {
@@ -225,19 +218,7 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
 
     public boolean isEntityEquippable()
     {
-        if (statue != null)
-        {
-            boolean isEqquipable = false;
-
-            Entity statueEntity = statue.getEntity();
-            for (Class eq : equippableMobs)
-                if (eq.isAssignableFrom(statueEntity.getClass()))
-                    isEqquipable = true;
-
-            return isEqquipable;
-        }
-
-        return false;
+        return statue != null && YGCConfig.isEntityEquippable(statue.getEntity());
     }
 
     public boolean tryEquipping(ItemStack item)
