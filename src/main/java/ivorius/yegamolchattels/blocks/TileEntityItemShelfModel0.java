@@ -371,12 +371,8 @@ public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements Pa
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack)
     {
-        String itemID = ItemArmor.itemRegistry.getNameForObject(stack.getItem());
-        for (String b : YGCConfig.itemShelfBlacklist)
-        {
-            if (itemID.equals(b) || itemID.equals("minecraft:" + b))
-                return false;
-        }
+        if (!YGCConfig.mayItemBeStoredInShelf(stack))
+            return false;
 
         if (this.getShelfType() == SHELF_WARDROBE && (slot == 8 || slot == 9 || slot == 10 || slot == 11))
         {

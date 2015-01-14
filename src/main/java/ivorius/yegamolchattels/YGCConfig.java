@@ -7,6 +7,8 @@ package ivorius.yegamolchattels;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
@@ -37,7 +39,7 @@ public class YGCConfig
 
     public static double entityVitaDropChance;
 
-    public static String[] itemShelfBlacklist;
+    private static final Set<String> itemShelfBlacklist = new HashSet<>();
 
     public static void loadConfig(String configID)
     {
@@ -57,7 +59,9 @@ public class YGCConfig
 
             entityVitaDropChance = config.get(CATEGORY_BALANCING, "entityVitaDropChance", 0.01, "Drop chance of entity vitas when killing a mob. <Temporary config option: Will be removed when the new system is added>").getDouble();
 
-            itemShelfBlacklist = config.get(CATEGORY_BALANCING, "itemShelfBlacklist", new String[0], "List of item IDs that are not allowed to be placed in item shelves.").getStringList();
+            itemShelfBlacklist.clear();
+            for (String s : config.get(CATEGORY_BALANCING, "itemShelfBlacklist", new String[0], "List of item IDs that are not allowed to be placed in item shelves.").getStringList())
+                itemShelfBlacklist.add(s.contains(":") ? s : "minecraft:" + s);
         }
 
         proxy.loadConfig(configID);
@@ -77,5 +81,10 @@ public class YGCConfig
     public static boolean mayEntityStatueComeAlive(Entity entity)
     {
         return !lifeStatuesBlacklist.contains(EntityList.getEntityString(entity));
+    }
+
+    public static boolean mayItemBeStoredInShelf(ItemStack stack)
+    {
+        return !itemShelfBlacklist.contains(Item.itemRegistry.getNameForObject(stack.getItem()));
     }
 }
