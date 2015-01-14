@@ -88,7 +88,6 @@ public class TileEntityPedestal extends IvTileEntityMultiBlock implements IInven
             if (!worldObj.isRemote)
             {
                 storedItems[0] = stack.copy();
-                storedItems[0].stackSize = 1;
                 itemShouldBeUp = true;
 
                 IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "pedestalData", YeGamolChattels.network);
@@ -347,7 +346,7 @@ public class TileEntityPedestal extends IvTileEntityMultiBlock implements IInven
     @Override
     public int getInventoryStackLimit()
     {
-        return 1;
+        return 64;
     }
 
     @Override

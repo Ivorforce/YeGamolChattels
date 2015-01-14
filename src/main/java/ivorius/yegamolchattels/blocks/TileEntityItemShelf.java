@@ -331,9 +331,7 @@ public abstract class TileEntityItemShelf extends IvTileEntityMultiBlock impleme
                 itemstack = this.storedItems[slot].splitStack(amount);
 
                 if (this.storedItems[slot].stackSize == 0)
-                {
                     this.storedItems[slot] = null;
-                }
 
                 this.markDirty();
                 worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -386,7 +384,7 @@ public abstract class TileEntityItemShelf extends IvTileEntityMultiBlock impleme
     @Override
     public int getInventoryStackLimit()
     {
-        return 1;
+        return 64;
     }
 
     @Override

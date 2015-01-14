@@ -69,19 +69,19 @@ public class BlockPedestal extends IvBlockMultiblock
     }
 
     @Override
-    public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
+    public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer player, int par6, float par7, float par8, float par9)
     {
         TileEntity tileEntity = par1World.getTileEntity(par2, par3, par4);
 
         if (tileEntity instanceof TileEntityPedestal)
         {
-            if (((TileEntityPedestal) tileEntity).tryStoringItem(par5EntityPlayer.getHeldItem()))
+            if (((TileEntityPedestal) tileEntity).tryStoringItem(player.getHeldItem()))
             {
-                par5EntityPlayer.getHeldItem().stackSize--;
+                player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
             }
             else
             {
-                ((TileEntityPedestal) tileEntity).startDroppingItem(par5EntityPlayer);
+                ((TileEntityPedestal) tileEntity).startDroppingItem(player);
             }
         }
 
