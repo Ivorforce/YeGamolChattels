@@ -14,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -64,9 +65,11 @@ public class ItemEntityVita extends Item
         String base = super.getUnlocalizedName(par1ItemStack) + ".base";
 
         String entityName = getEntityID(par1ItemStack);
-        String localizedEntityName = entityName != null && entityName.length() > 0 ? I18n.format("entity." + entityName + ".name") : I18n.format("tile.ygcStatue.unknown");
+        String localizedEntityName = entityName != null && entityName.length() > 0
+                ? StatCollector.translateToLocalFormatted("entity." + entityName + ".name")
+                : StatCollector.translateToLocalFormatted("tile.ygcStatue.unknown");
 
-        return I18n.format(base, localizedEntityName);
+        return StatCollector.translateToLocalFormatted(base, localizedEntityName);
     }
 
     @Override
