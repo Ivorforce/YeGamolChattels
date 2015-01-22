@@ -97,16 +97,20 @@ public class TileEntityMicroBlock extends TileEntity implements PartialUpdateHan
         if (worldObj != null)
         {
             if (!worldObj.isRemote)
-            {
                 IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "microBlocks", YeGamolChattels.network);
-            }
+            else
+                markCacheInvalidClient(fromNBT);
 
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         }
 
-        quadCache = null;
-
         markDirty();
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void markCacheInvalidClient(boolean fromNBT)
+    {
+        quadCache = null;
     }
 
     public boolean validateBeingMicroblock()
