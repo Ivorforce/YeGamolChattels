@@ -5,13 +5,13 @@
 
 package ivorius.yegamolchattels.blocks;
 
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class BlockGrindstone extends BlockContainer
+public class BlockGrindstone extends Block
 {
     public BlockGrindstone(Material material)
     {
@@ -60,7 +60,13 @@ public class BlockGrindstone extends BlockContainer
     }
 
     @Override
-    public TileEntity createNewTileEntity(World var1, int i)
+    public boolean hasTileEntity(int metadata)
+    {
+        return true;
+    }
+
+    @Override
+    public TileEntity createTileEntity(World var1, int i)
     {
         return new TileEntityGrindstone();
     }

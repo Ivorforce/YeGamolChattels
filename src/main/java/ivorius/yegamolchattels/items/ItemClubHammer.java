@@ -7,7 +7,6 @@ package ivorius.yegamolchattels.items;
 
 import ivorius.yegamolchattels.blocks.TileEntityMicroBlock;
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
@@ -52,7 +51,7 @@ public class ItemClubHammer extends ItemTool
             for (int i = 0; i < maxMicroblocks; i++)
             {
                 if (rand.nextFloat() < FRAGMENT_DROP_CHANCE)
-                    droppedFragments ++;
+                    droppedFragments++;
             }
 
             while (droppedFragments > 0)
@@ -69,6 +68,6 @@ public class ItemClubHammer extends ItemTool
     public static boolean isMicroblockable(World world, int x, int y, int z)
     {
         Block block = world.getBlock(x, y, z);
-        return block.isOpaqueCube() && !(block instanceof ITileEntityProvider) && block.getBlockHardness(world, x, y, z) >= 0.0f;
+        return block.isOpaqueCube() && world.getTileEntity(x, y, z) == null && block.getBlockHardness(world, x, y, z) >= 0.0f;
     }
 }

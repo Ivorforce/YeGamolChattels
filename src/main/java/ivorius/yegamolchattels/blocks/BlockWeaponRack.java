@@ -7,7 +7,6 @@ package ivorius.yegamolchattels.blocks;
 
 import ivorius.yegamolchattels.YeGamolChattels;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,7 +16,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockWeaponRack extends BlockContainer
+public class BlockWeaponRack extends Block
 {
     public BlockWeaponRack(Material material)
     {
@@ -140,7 +139,13 @@ public class BlockWeaponRack extends BlockContainer
     }
 
     @Override
-    public TileEntity createNewTileEntity(World var1, int i)
+    public boolean hasTileEntity(int metadata)
+    {
+        return true;
+    }
+
+    @Override
+    public TileEntity createTileEntity(World var1, int i)
     {
         return new TileEntityWeaponRack();
     }

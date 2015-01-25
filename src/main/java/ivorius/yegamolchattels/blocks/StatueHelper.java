@@ -4,7 +4,6 @@ import ivorius.ivtoolkit.blocks.IvMultiBlockHelper;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
 import ivorius.yegamolchattels.items.ItemStatue;
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
@@ -84,7 +83,7 @@ public class StatueHelper
     private static boolean isValidStatueBlock(Statue.BlockFragment fragment)
     {
         Block block = fragment.getBlock();
-        return !(block instanceof ITileEntityProvider) && (block.isOpaqueCube() || block == Blocks.glass || block == Blocks.stained_glass);
+        return !(block.hasTileEntity(fragment.getMetadata())) && (block.isOpaqueCube() || block == Blocks.glass || block == Blocks.stained_glass);
     }
 
     public static List<int[]> getValidPositions(List<int[]> positions, World world, Statue.BlockFragment blockFragment, int x, int y, int z)

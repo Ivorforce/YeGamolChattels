@@ -6,7 +6,6 @@
 package ivorius.yegamolchattels.blocks;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -15,7 +14,7 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class BlockGrandfatherClock extends BlockContainer
+public class BlockGrandfatherClock extends Block
 {
     public BlockGrandfatherClock(Material material)
     {
@@ -46,7 +45,13 @@ public class BlockGrandfatherClock extends BlockContainer
     }
 
     @Override
-    public TileEntity createNewTileEntity(World var1, int i)
+    public boolean hasTileEntity(int metadata)
+    {
+        return true;
+    }
+
+    @Override
+    public TileEntity createTileEntity(World var1, int i)
     {
         return new TileEntityGrandfatherClock();
     }

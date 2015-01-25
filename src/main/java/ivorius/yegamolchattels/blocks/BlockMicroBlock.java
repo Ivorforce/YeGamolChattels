@@ -12,14 +12,12 @@ import ivorius.ivtoolkit.blocks.IvBlockCollection;
 import ivorius.yegamolchattels.items.*;
 import ivorius.yegamolchattels.materials.YGCMaterials;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -37,7 +35,7 @@ import java.util.Random;
 /**
  * Created by lukas on 11.07.14.
  */
-public class BlockMicroBlock extends BlockContainer
+public class BlockMicroBlock extends Block
 {
     @SideOnly(Side.CLIENT)
     public ForgeDirection renderSide;
@@ -220,7 +218,13 @@ public class BlockMicroBlock extends BlockContainer
     }
 
     @Override
-    public TileEntity createNewTileEntity(World var1, int var2)
+    public boolean hasTileEntity(int metadata)
+    {
+        return true;
+    }
+
+    @Override
+    public TileEntity createTileEntity(World var1, int var2)
     {
         return new TileEntityMicroBlock();
     }

@@ -7,7 +7,6 @@ package ivorius.yegamolchattels.blocks;
 
 import ivorius.ivtoolkit.blocks.IvMultiBlockHelper;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
@@ -18,7 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-public class BlockLootChest extends BlockContainer
+public class BlockLootChest extends Block
 {
     public BlockLootChest()
     {
@@ -79,7 +78,13 @@ public class BlockLootChest extends BlockContainer
     }
 
     @Override
-    public TileEntity createNewTileEntity(World var1, int var2)
+    public boolean hasTileEntity(int metadata)
+    {
+        return true;
+    }
+
+    @Override
+    public TileEntity createTileEntity(World var1, int var2)
     {
         return new TileEntityLootChest();
     }
