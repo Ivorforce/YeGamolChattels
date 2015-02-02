@@ -135,6 +135,7 @@ public class ItemEntityVita extends Item
                 entityLiving.deathTime = 0;
                 entityLiving.attackTime = 0;
                 entityLiving.hurtTime = 0;
+                entityLiving.extinguish();
                 entityLiving.setHealth(entityLiving.getMaxHealth());
             }
 
