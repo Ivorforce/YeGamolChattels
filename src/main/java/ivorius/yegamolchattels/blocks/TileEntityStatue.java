@@ -85,32 +85,9 @@ public class TileEntityStatue extends IvTileEntityMultiBlock implements PartialU
     }
 
     @Override
-    public void updateEntityParent()
+    public boolean canUpdate()
     {
-        if (statue != null)
-        {
-            Entity statueEntity = statue.getEntity();
-            if (YGCConfig.easterEggsAllowed && worldObj.isRemote && statueEntity instanceof EntityLiving && IvDateHelper.isHalloween())
-            {
-                EntityLiving livingStatue = (EntityLiving) statueEntity;
-
-                double[] center = getActiveCenterCoords();
-                EntityLivingBase player = YeGamolChattels.proxy.getClientPlayer();
-                statueEntity.setPosition(center[0], center[1], center[2]);
-
-                if (livingStatue instanceof EntityVillager)
-                    livingStatue.rotationYawHead = livingStatue.rotationYawHead + 180.0f; // Don't ask
-
-                livingStatue.getLookHelper().setLookPositionWithEntity(player, 2.0f, 2.0f);
-                livingStatue.getLookHelper().onUpdateLook();
-
-                if (livingStatue instanceof EntityVillager)
-                    livingStatue.rotationYawHead = livingStatue.rotationYawHead + 180.0f; // Don't ask
-
-                livingStatue.prevRotationYawHead = livingStatue.rotationYawHead;
-                livingStatue.prevRotationPitch = livingStatue.rotationPitch;
-            }
-        }
+        return false;
     }
 
     public boolean letStatueComeAlive()
