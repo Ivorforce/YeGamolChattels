@@ -94,10 +94,12 @@ public class BlockStatue extends IvBlockMultiblock
         if (parent instanceof TileEntityStatue)
         {
             TileEntityStatue tileEntityStatue = (TileEntityStatue) parent;
-            if (tileEntityStatue.tryEquipping(player.getHeldItem()))
+            if (tileEntityStatue.getStatue() != null && tileEntityStatue.tryEquipping(player.getHeldItem()))
             {
-                ItemStack[] statueEquip = tileEntityStatue.getStatue().getEntity().getLastActiveItems();
-                if (tileEntityStatue.getStatue().getMaterial().getBlock() == Blocks.gold_block
+                Statue statue = tileEntityStatue.getStatue();
+
+                ItemStack[] statueEquip = statue.getEntity().getLastActiveItems();
+                if (statue.getMaterial().getBlock() == Blocks.gold_block
                         && isDiamond(statueEquip[1]) && isDiamond(statueEquip[2]) && isDiamond(statueEquip[3]) && isDiamond(statueEquip[4]))
                 {
                     player.triggerAchievement(YGCAchievementList.superExpensiveStatue);
@@ -127,7 +129,7 @@ public class BlockStatue extends IvBlockMultiblock
     {
         IvTileEntityMultiBlock parent = getValidatedTotalParent(this, blockAccess, x, y, z);
 
-        if (parent instanceof TileEntityStatue)
+        if (parent instanceof TileEntityStatue && ((TileEntityStatue) parent).getStatue() != null)
         {
             TileEntityStatue tileEntityStatue = (TileEntityStatue) parent;
             Statue.BlockFragment fragment = tileEntityStatue.getStatue().getMaterial();
@@ -142,7 +144,7 @@ public class BlockStatue extends IvBlockMultiblock
     {
         IvTileEntityMultiBlock parent = getValidatedTotalParent(this, worldObj, target.blockX, target.blockY, target.blockZ);
 
-        if (parent instanceof TileEntityStatue)
+        if (parent instanceof TileEntityStatue && ((TileEntityStatue) parent).getStatue() != null)
         {
             TileEntityStatue tileEntityStatue = (TileEntityStatue) parent;
             Statue.BlockFragment fragment = tileEntityStatue.getStatue().getMaterial();
