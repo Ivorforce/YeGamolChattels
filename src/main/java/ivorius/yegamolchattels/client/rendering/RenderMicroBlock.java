@@ -11,22 +11,15 @@ import ivorius.ivtoolkit.blocks.IvBlockCollection;
 import ivorius.ivtoolkit.rendering.IvRenderHelper;
 import ivorius.yegamolchattels.blocks.BlockMicroBlock;
 import ivorius.yegamolchattels.blocks.TileEntityMicroBlock;
-import ivorius.yegamolchattels.items.ItemBlockFragment;
-import ivorius.yegamolchattels.items.ItemChisel;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.client.IItemRenderer;
-import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import java.nio.FloatBuffer;
-import java.util.Arrays;
 
 /**
  * Created by lukas on 11.07.14.
@@ -71,7 +64,7 @@ public class RenderMicroBlock implements ISimpleBlockRenderingHandler
         return true;
     }
 
-    public static void renderMicroblocks(IBlockAccess world, BlockCoord pos, IIconQuadCache quadCache, BlockMicroBlock origBlock, RenderBlocks renderer, int innerBrightness)
+    public static void renderMicroblocks(IBlockAccess world, BlockCoord pos, GridQuadCache<IIcon> quadCache, BlockMicroBlock origBlock, RenderBlocks renderer, int innerBrightness)
     {
         Tessellator tessellator = Tessellator.instance;
         int x = pos.x;
@@ -83,10 +76,10 @@ public class RenderMicroBlock implements ISimpleBlockRenderingHandler
 
         renderer.field_152631_f = true; // Fixes random block texture rotations for small textures... Used in renderBlockFence
 
-        for (IIconQuadCache.CachedQuadLevel cachedQuadLevel : quadCache)
+        for (GridQuadCache.CachedQuadLevel<IIcon> cachedQuadLevel : quadCache)
         {
             origBlock.renderSide = cachedQuadLevel.direction;
-            origBlock.renderIcon = cachedQuadLevel.icon;
+            origBlock.renderIcon = cachedQuadLevel.t;
 
             FloatBuffer quads = cachedQuadLevel.quads;
             while (quads.position() < quads.limit() - 3)
@@ -95,8 +88,8 @@ public class RenderMicroBlock implements ISimpleBlockRenderingHandler
                         minY = quads.get(),
                         maxX = quads.get(),
                         maxY = quads.get();
-                float[] minAxes = IIconQuadCache.getNormalAxes(cachedQuadLevel.direction, cachedQuadLevel.zLevel, minX, minY);
-                float[] maxAxes = IIconQuadCache.getNormalAxes(cachedQuadLevel.direction, cachedQuadLevel.zLevel, maxX, maxY);
+                float[] minAxes = GridQuadCache.getNormalAxes(cachedQuadLevel.direction, cachedQuadLevel.zLevel, minX, minY);
+                float[] maxAxes = GridQuadCache.getNormalAxes(cachedQuadLevel.direction, cachedQuadLevel.zLevel, maxX, maxY);
 
                 origBlock.setBlockBounds(minAxes[0], minAxes[1], minAxes[2], maxAxes[0], maxAxes[1], maxAxes[2]);
                 renderer.setRenderBoundsFromBlock(origBlock);

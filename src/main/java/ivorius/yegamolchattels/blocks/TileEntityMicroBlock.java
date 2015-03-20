@@ -16,6 +16,7 @@ import ivorius.ivtoolkit.network.IvNetworkHelperServer;
 import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.ivtoolkit.tools.MCRegistryDefault;
 import ivorius.yegamolchattels.YeGamolChattels;
+import ivorius.yegamolchattels.client.rendering.GridQuadCache;
 import ivorius.yegamolchattels.client.rendering.IIconQuadCache;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,6 +24,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 
 /**
@@ -42,7 +44,7 @@ public class TileEntityMicroBlock extends TileEntity implements PartialUpdateHan
     private boolean shouldDropAsItem = true;
 
     @SideOnly(Side.CLIENT)
-    private IIconQuadCache quadCache;
+    private GridQuadCache<IIcon> quadCache;
 
     public TileEntityMicroBlock()
     {
@@ -222,7 +224,7 @@ public class TileEntityMicroBlock extends TileEntity implements PartialUpdateHan
     }
 
     @SideOnly(Side.CLIENT)
-    public IIconQuadCache getQuadCache()
+    public GridQuadCache<IIcon> getQuadCache()
     {
         if (quadCache == null)
             quadCache = IIconQuadCache.createIconQuadCache(blockCollection);
