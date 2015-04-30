@@ -6,10 +6,13 @@
 package ivorius.yegamolchattels.items;
 
 import ivorius.yegamolchattels.blocks.TileEntityMicroBlock;
+import ivorius.yegamolchattels.blocks.YGCBlocks;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.List;
 import java.util.Random;
@@ -37,6 +40,17 @@ public class ItemClubHammer extends ItemTool
     public float func_150893_a(ItemStack stack, Block block)
     {
         return 1.5f;
+    }
+
+    @Override
+    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
+    {
+        Block block = world.getBlock(x, y, z);
+
+        if (block == YGCBlocks.microBlock)
+            block.rotateBlock(world, x, y, z, ForgeDirection.UP);
+
+        return super.onItemUse(stack, player, world, x, y, z, side, hitX, hitY, hitZ);
     }
 
     public void modifyDrops(World world, Block block, ItemStack stack, int x, int y, int z, List<ItemStack> drops)

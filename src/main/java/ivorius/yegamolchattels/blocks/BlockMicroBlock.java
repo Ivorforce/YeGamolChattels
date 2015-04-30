@@ -9,8 +9,10 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ivorius.ivtoolkit.blocks.BlockCoord;
 import ivorius.ivtoolkit.blocks.IvBlockCollection;
+import ivorius.ivtoolkit.math.AxisAlignedTransform2D;
 import ivorius.yegamolchattels.items.*;
 import ivorius.yegamolchattels.materials.YGCMaterials;
+import ivorius.yegamolchattels.utils.IvBlockCollections;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -215,6 +217,17 @@ public class BlockMicroBlock extends Block
     public void registerBlockIcons(IIconRegister iconRegister)
     {
 
+    }
+
+    @Override
+    public boolean rotateBlock(World worldObj, int x, int y, int z, ForgeDirection axis)
+    {
+        TileEntityMicroBlock microBlock = (TileEntityMicroBlock) worldObj.getTileEntity(x, y, z);
+
+        microBlock.setBlockCollection(IvBlockCollections.transform(microBlock.getBlockCollection(), AxisAlignedTransform2D.transform(1, false)));
+        microBlock.markCacheInvalid();
+
+        return super.rotateBlock(worldObj, x, y, z, axis);
     }
 
     @Override
