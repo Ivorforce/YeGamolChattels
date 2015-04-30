@@ -104,6 +104,9 @@ public class TileEntityWeaponRack extends IvTileEntityRotatable implements IInve
 
                     if (entity instanceof EntityPlayer)
                         ((EntityPlayer) entity).triggerAchievement(YGCAchievementList.weaponRackVariant);
+
+                    IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "weaponRackData", YeGamolChattels.network);
+                    markDirty();
                 }
 
                 return true;
