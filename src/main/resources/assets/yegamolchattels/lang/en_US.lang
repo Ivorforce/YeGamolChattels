@@ -135,6 +135,8 @@ tile.ygcStatue.nomaterial=Unknown Material
 item.ygcEntityVita.base=%s Vita
 item.ygcEntityVita.unknown=Unidentified
 
+entity.ygcBanner.name=Banner
+entity.ygcFlag.name=Flag
 entity.ygcGhost.name=Ghost
 entity.yegamolchattels.fakePlayer.name=Player
 

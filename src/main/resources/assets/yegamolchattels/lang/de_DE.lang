@@ -22,8 +22,9 @@ tile.ygcItemShelf.type0.name=Jamien's Regal
 tile.ygcItemShelf.type1.name=Wandregal
 tile.ygcItemShelf.type2.name=Kleiderschrank
 tile.ygcSnowGlobe.name=Schneekugel
-tile.plankSaw.name=Brettsäge
-tile.planksRefinement.name=Bretthalterung
+tile.ygcSawBench.name=Brettsäge
+tile.ygcSawBench.morewood=You need at least two wood to make planks
+tile.tablePress.name=Bretthalterung
 item.plank.name=Holzbrett
 item.plank.oak.name=Eichenholzbrett
 item.plank.spruce.name=Fichtenholzbrett
@@ -45,13 +46,13 @@ item.refinedPlank.birch.name=Veredeltes Birkenholzbrett
 item.refinedPlank.jungle.name=Veredeltes Tropenholzbrett
 item.refinedPlank.acacia.name=Veredeltes Akazienholzbrett
 item.refinedPlank.big_oak.name=Veredeltes Schwarzeichenholzbrett
+item.ygcSaw.name=Iron Saw
 item.sandpaper.name=Sandpapier
 item.ygcLinseedOil.name=Leinöl
 item.ygcFlaxSeeds.name=Leinsamen
 item.ygcFlaxFiber.name=Leinenfasern
 tile.ygcFlaxPlant.name=Flachs
 tile.ygcMicroBlock.name=Skulptur
-item.ygcChiselIron_detail.name=Detailmeißel
 item.ygcChiselIron.name=Schnitzmeißel
 item.ygcChisel.noHammer=Um einen Meißel zu verwenden, benötigst du einen Fäustel!
 item.ygcClubHammer.name=Fäustel
@@ -131,9 +132,11 @@ tile.ygcStatue.base=%s-Statue (%s)
 tile.ygcStatue.unknown=Unbekannt
 tile.ygcStatue.nomaterial=Unbekanntes Material
 
-tile.ygcEntityVita.base=%s Vita
-tile.ygcEntityVita.unknown=Unbekanntes
+item.ygcEntityVita.base=%s Vita
+item.ygcEntityVita.unknown=Unbekanntes
 
+entity.ygcBanner.name=Banner
+entity.ygcFlag.name=Flagge
 entity.ygcGhost.name=Geist
 entity.yegamolchattels.fakePlayer.name=Spieler
 
@@ -147,11 +150,17 @@ gui.carve.head.yaw=Drehung
 gui.carve.head.pitch=Neigung
 
 itemGroup.yegamolchattels=Ye Gamol Chattels
+itemGroup.ygc_entityvita=Entity Vitas
+
+container.lootChest=Loot Chest
+container.ygcPedestal=Pedestal
+container.weaponRack=Weapon Rack
+container.ygcItemShelf=Item Shelf
 
 yegamolchattels.configgui.title=Ye Gamol Chattels
-yegamolchattels.configgui.general=Allgemein
+yegamolchattels.configgui.ctgy.general=Allgemein
 yegamolchattels.configgui.ctgy.general.tooltip=Allgemeine Einstellungen
-yegamolchattels.configgui.visual=Grafik
+yegamolchattels.configgui.ctgy.visual=Grafik
 yegamolchattels.configgui.ctgy.visual.tooltip=Visuelle Einstellungen
 yegamolchattels.configgui.ctgy.balancing=Spielbalance
 yegamolchattels.configgui.ctgy.balancing.tooltip=Einstellungen, welche die Spielbalance beeinflussen
