@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
@@ -117,5 +118,22 @@ public class BlockLootChest extends Block
     public void registerBlockIcons(IIconRegister iconRegister)
     {
 
+    }
+
+    @Override
+    public boolean hasComparatorInputOverride()
+    {
+        return true;
+    }
+
+    @Override
+    public int getComparatorInputOverride(World world, int x, int y, int z, int p_149736_5_)
+    {
+        TileEntity tileEntity = world.getTileEntity(x, y, z);
+
+        if (tileEntity instanceof TileEntityLootChest)
+            return Container.calcRedstoneFromInventory((TileEntityLootChest) tileEntity);
+
+        return super.getComparatorInputOverride(world, x, y, z, p_149736_5_);
     }
 }

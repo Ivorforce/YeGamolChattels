@@ -12,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -145,9 +146,9 @@ public class BlockItemShelf extends IvBlockMultiblock
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4)
+    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z)
     {
-        TileEntity tileEntity = par1World.getTileEntity(par2, par3, par4);
+        TileEntity tileEntity = world.getTileEntity(x, y, z);
 
         if (tileEntity instanceof TileEntityItemShelf)
         {
@@ -158,6 +159,23 @@ public class BlockItemShelf extends IvBlockMultiblock
             }
         }
 
-        return super.getCollisionBoundingBoxFromPool(par1World, par2, par3, par4);
+        return super.getCollisionBoundingBoxFromPool(world, x, y, z);
+    }
+
+    @Override
+    public boolean hasComparatorInputOverride()
+    {
+        return true;
+    }
+
+    @Override
+    public int getComparatorInputOverride(World world, int x, int y, int z, int p_149736_5_)
+    {
+        TileEntity tileEntity = world.getTileEntity(x, y, z);
+
+        if (tileEntity instanceof TileEntityItemShelf)
+            return Container.calcRedstoneFromInventory((TileEntityItemShelf) tileEntity);
+
+        return super.getComparatorInputOverride(world, x, y, z, p_149736_5_);
     }
 }

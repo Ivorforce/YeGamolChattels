@@ -10,6 +10,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -148,5 +149,22 @@ public class BlockWeaponRack extends Block
     public TileEntity createTileEntity(World var1, int i)
     {
         return new TileEntityWeaponRack();
+    }
+
+    @Override
+    public boolean hasComparatorInputOverride()
+    {
+        return true;
+    }
+
+    @Override
+    public int getComparatorInputOverride(World world, int x, int y, int z, int p_149736_5_)
+    {
+        TileEntity tileEntity = world.getTileEntity(x, y, z);
+
+        if (tileEntity instanceof TileEntityWeaponRack)
+            return Container.calcRedstoneFromInventory((TileEntityWeaponRack) tileEntity);
+
+        return super.getComparatorInputOverride(world, x, y, z, p_149736_5_);
     }
 }
