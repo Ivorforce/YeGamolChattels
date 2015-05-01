@@ -62,24 +62,6 @@ public class YeGamolChattels
     public static YGCFMLEventHandler fmlEventHandler;
     public static YGCForgeEventHandler forgeEventHandler;
 
-    public static CreativeTabs tabMain = new CreativeTabs("yegamolchattels")
-    {
-        @Override
-        public Item getTabIconItem()
-        {
-            return Item.getItemFromBlock(YGCBlocks.snowGlobe);
-        }
-    };
-
-    public static CreativeTabs tabVitas = new CreativeTabs("ygc_entityvita")
-    {
-        @Override
-        public Item getTabIconItem()
-        {
-            return YGCItems.entityVita;
-        }
-    };
-
     public static int entityGhostGlobalID;
 
     @EventHandler

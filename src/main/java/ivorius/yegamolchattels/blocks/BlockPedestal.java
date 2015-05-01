@@ -11,6 +11,7 @@ import ivorius.ivtoolkit.blocks.IvBlockMultiblock;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
 import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.materials.YGCMaterials;
+import ivorius.yegamolchattels.tabs.YGCCreativeTabs;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,7 +30,7 @@ public class BlockPedestal extends IvBlockMultiblock
     {
         super(YGCMaterials.mixed);
 
-        setCreativeTab(YeGamolChattels.tabMain);
+        setCreativeTab(YGCCreativeTabs.tabMain);
     }
 
     @Override

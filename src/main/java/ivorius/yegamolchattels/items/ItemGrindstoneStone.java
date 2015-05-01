@@ -5,7 +5,7 @@
 
 package ivorius.yegamolchattels.items;
 
-import ivorius.yegamolchattels.YeGamolChattels;
+import ivorius.yegamolchattels.tabs.YGCCreativeTabs;
 import net.minecraft.item.Item;
 
 public class ItemGrindstoneStone extends Item
@@ -13,7 +13,7 @@ public class ItemGrindstoneStone extends Item
     public ItemGrindstoneStone()
     {
         super();
-        this.setCreativeTab(YeGamolChattels.tabMain);
+        this.setCreativeTab(YGCCreativeTabs.tabMain);
 
         setMaxStackSize(1);
     }
