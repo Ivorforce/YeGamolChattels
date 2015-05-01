@@ -123,17 +123,21 @@ public class YGCForgeEventHandler
     public void renderWorldLast(RenderWorldLastEvent event)
     {
         EntityLivingBase renderEntity = Minecraft.getMinecraft().renderViewEntity;
-        ItemStack heldItem = renderEntity.getHeldItem();
-        if (heldItem != null && (heldItem.getItem() instanceof MicroblockSelector))
+
+        if (renderEntity != null)
         {
-            MicroblockSelector selector = (MicroblockSelector) heldItem.getItem();
-            if (selector.showMicroblockSelection(renderEntity, heldItem))
-                renderSelectedMicroblock(event.partialTicks, selector.microblockSelectionSize(heldItem));
+            ItemStack heldItem = renderEntity.getHeldItem();
+            if (heldItem != null && (heldItem.getItem() instanceof MicroblockSelector))
+            {
+                MicroblockSelector selector = (MicroblockSelector) heldItem.getItem();
+                if (selector.showMicroblockSelection(renderEntity, heldItem))
+                    renderSelectedMicroblock(renderEntity, event.partialTicks, selector.microblockSelectionSize(heldItem));
+            }
         }
     }
 
     @SideOnly(Side.CLIENT)
-    public static void renderSelectedMicroblock(float partialTicks, float size)
+    public static void renderSelectedMicroblock(Entity entity, float partialTicks, float size)
     {
         Minecraft mc = Minecraft.getMinecraft();
         EntityLivingBase renderEntity = mc.renderViewEntity;
@@ -141,7 +145,7 @@ public class YGCForgeEventHandler
 
         if (hoveredObject != null)
         {
-            ItemChisel.MicroBlockFragment hoveredFragment = ItemChisel.getHoveredFragment(renderEntity, hoveredObject.blockX, hoveredObject.blockY, hoveredObject.blockZ);
+            ItemChisel.MicroBlockFragment hoveredFragment = ItemChisel.getHoveredFragment(entity, hoveredObject.blockX, hoveredObject.blockY, hoveredObject.blockZ);
 
             if (hoveredFragment != null)
             {
