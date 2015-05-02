@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class PlanksRefinementRegistry
 {
-    private static ArrayList<Entry> planksRefinementEntries = new ArrayList<>();
+    private static List<Entry> planksRefinementEntries = new ArrayList<>();
 
     public static void addRefinement(Entry entry)
     {
@@ -37,14 +37,14 @@ public class PlanksRefinementRegistry
         return null;
     }
 
-    public static interface Entry
+    public interface Entry
     {
-        public boolean matchesSource(ItemStack source);
+        boolean matchesSource(ItemStack source);
 
-        public boolean matchesTool(ItemStack tool);
+        boolean matchesTool(ItemStack tool);
 
-        public ItemStack getResult(ItemStack source, ItemStack tool);
+        ItemStack getResult(ItemStack source, ItemStack tool);
 
-        public void onToolBreak(ItemStack tool, EntityPlayer player);
+        void onToolBreak(ItemStack tool, EntityPlayer player);
     }
 }

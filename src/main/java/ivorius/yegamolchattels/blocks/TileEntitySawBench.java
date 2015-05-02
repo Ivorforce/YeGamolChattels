@@ -9,12 +9,9 @@ import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.ivtoolkit.tools.IvSideClient;
 import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.gui.YGCGuiHandler;
-import ivorius.yegamolchattels.items.YGCItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentTranslation;
@@ -40,9 +37,7 @@ public class TileEntitySawBench extends IvTileEntityMultiBlock implements Partia
     {
         if (stack != null && containedItem == null)
         {
-            Item item = stack.getItem();
-
-            if (item == Item.getItemFromBlock(Blocks.log) || item == Item.getItemFromBlock(Blocks.log2))
+            if (PlankSawRegistry.canSawItem(stack))
             {
                 if (!worldObj.isRemote)
                 {
@@ -125,20 +120,12 @@ public class TileEntitySawBench extends IvTileEntityMultiBlock implements Partia
 
             if (planks > 0)
             {
-                int damage = 0;
-                if (containedItem.getItem() == Item.getItemFromBlock(Blocks.log))
-                    damage = containedItem.getItemDamage();
-                else if (containedItem.getItem() == Item.getItemFromBlock(Blocks.log2))
-                    damage = containedItem.getItemDamage() + 4;
-
-                ItemStack planksStack = new ItemStack(YGCItems.plank, planks, damage);
+                ItemStack planksStack = PlankSawRegistry.getSawResult(planks, containedItem);
                 player.inventory.addItemStackToInventory(planksStack);
             }
 
             if (cutsLeft <= 0)
-            {
                 containedItem = null;
-            }
 
             markDirty();
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);

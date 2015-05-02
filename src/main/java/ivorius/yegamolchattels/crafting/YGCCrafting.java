@@ -1,9 +1,8 @@
 package ivorius.yegamolchattels.crafting;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import ivorius.yegamolchattels.blocks.PlanksRefinementEntry;
-import ivorius.yegamolchattels.blocks.PlanksRefinementEntryBottle;
-import ivorius.yegamolchattels.blocks.PlanksRefinementRegistry;
+import ivorius.yegamolchattels.blocks.*;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
@@ -73,6 +72,13 @@ public class YGCCrafting
 
         for (int i = 0; i < 6; i++)
             addRecipe(new ItemStack(planks, 2, i), "#", "#", "#", '#', new ItemStack(plank, 1, i));
+
+        PlankSawRegistry.addSawing(new PlankSawEntry(new ItemStack(Blocks.log, 1, 0), new ItemStack(plank, 1, 0)));
+        PlankSawRegistry.addSawing(new PlankSawEntry(new ItemStack(Blocks.log, 1, 1), new ItemStack(plank, 1, 1)));
+        PlankSawRegistry.addSawing(new PlankSawEntry(new ItemStack(Blocks.log, 1, 2), new ItemStack(plank, 1, 2)));
+        PlankSawRegistry.addSawing(new PlankSawEntry(new ItemStack(Blocks.log, 1, 3), new ItemStack(plank, 1, 3)));
+        PlankSawRegistry.addSawing(new PlankSawEntry(new ItemStack(Blocks.log2, 1, 0), new ItemStack(plank, 1, 4)));
+        PlankSawRegistry.addSawing(new PlankSawEntry(new ItemStack(Blocks.log2, 1, 1), new ItemStack(plank, 1, 5)));
 
         PlanksRefinementRegistry.addRefinement(new PlanksRefinementEntry(plank, sandpaper, new ItemStack(smoothPlank), true));
         PlanksRefinementRegistry.addRefinement(new PlanksRefinementEntryBottle(smoothPlank, linseedOil, new ItemStack(refinedPlank), true));
