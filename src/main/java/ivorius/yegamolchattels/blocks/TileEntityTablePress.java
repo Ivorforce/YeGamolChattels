@@ -17,6 +17,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 
+import java.util.Arrays;
+
 /**
  * Created by lukas on 04.05.14.
  */
@@ -49,6 +51,8 @@ public class TileEntityTablePress extends IvTileEntityMultiBlock implements Part
 
                     stack.stackSize--;
 
+                    clearRefinement();
+
                     markDirty();
                     worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
                 }
@@ -69,11 +73,10 @@ public class TileEntityTablePress extends IvTileEntityMultiBlock implements Part
                 if (IvEntityHelper.addAsCurrentItem(player, containedItem))
                 {
                     if (containedItem.getItem() == YGCItems.refinedPlank)
-                    {
                         player.triggerAchievement(YGCAchievementList.refinedPlank);
-                    }
 
                     containedItem = null;
+                    clearRefinement();
 
                     markDirty();
                     worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -89,16 +92,12 @@ public class TileEntityTablePress extends IvTileEntityMultiBlock implements Part
     public boolean tryUsingItem(ItemStack usedTool, EntityPlayer player)
     {
         if (containedItem == null)
-        {
             return false;
-        }
 
         if (isCorrectTool(usedTool))
         {
             if (!worldObj.isRemote)
-            {
                 IvNetworkHelperServer.sendTileEntityUpdatePacket(this, "refinementGui", YeGamolChattels.network, player);
-            }
 
             return true;
         }
@@ -165,10 +164,7 @@ public class TileEntityTablePress extends IvTileEntityMultiBlock implements Part
 
     public void completeRefinement(ItemStack tool)
     {
-        for (int i = 0; i < ticksRefinedPerSlot.length; i++)
-        {
-            ticksRefinedPerSlot[i] = 0;
-        }
+        clearRefinement();
 
         if (!worldObj.isRemote)
         {
@@ -181,6 +177,11 @@ public class TileEntityTablePress extends IvTileEntityMultiBlock implements Part
             markDirty();
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
         }
+    }
+
+    public void clearRefinement()
+    {
+        Arrays.fill(ticksRefinedPerSlot, 0);
     }
 
     public PlanksRefinementRegistry.Entry getCurrentResult(ItemStack tool)
