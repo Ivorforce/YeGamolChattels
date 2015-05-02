@@ -5,16 +5,22 @@
 
 package ivorius.yegamolchattels;
 
+import ivorius.yegamolchattels.blocks.PlankSawEntry;
+import ivorius.yegamolchattels.blocks.PlankSawRegistry;
+import ivorius.yegamolchattels.blocks.PlanksRefinementEntry;
+import ivorius.yegamolchattels.blocks.PlanksRefinementRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.config.Configuration;
+import net.minecraft.nbt.JsonToNBT;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTException;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.config.Property;
 
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static ivorius.yegamolchattels.YeGamolChattels.*;
@@ -41,6 +47,9 @@ public class YGCConfig
 
     private static final Set<String> itemShelfBlacklist = new HashSet<>();
 
+    public static final Set<PlankSawRegistry.Entry> customPlankSawing = new HashSet<>();
+    public static final Set<PlanksRefinementRegistry.Entry> customPlankRefinement = new HashSet<>();
+
     public static void loadConfig(String configID)
     {
 //        if (configID == null || configID.equals(Configuration.CATEGORY_GENERAL))
@@ -62,9 +71,61 @@ public class YGCConfig
             itemShelfBlacklist.clear();
             for (String s : config.get(CATEGORY_BALANCING, "itemShelfBlacklist", new String[0], "List of item IDs that are not allowed to be placed in item shelves.").getStringList())
                 itemShelfBlacklist.add(s.contains(":") ? s : "minecraft:" + s);
+
+            customPlankSawing.clear();
+            for (String s : config.get(CATEGORY_BALANCING, "customPlankSawing", new String[0], "List of additional plank saw recipes. Form: SourceJson->DestJson. Example: {id:wood,Damage:2}->{id:yegamolchattels:plank,Damage:2}").getStringList())
+            {
+                String[] params = s.split("->");
+                if (params.length == 2)
+                {
+                    ItemStack source = tryParseItemStack(params[0]);
+                    ItemStack dest = tryParseItemStack(params[1]);
+
+                    if (source != null && dest != null)
+                        customPlankSawing.add(new PlankSawEntry(source, dest));
+                }
+            }
+
+            customPlankRefinement.clear();
+            for (String s : config.get(CATEGORY_BALANCING, "itemShelfBlacklist", new String[0], "List of additional plank refinement recipes. Form: SourceJson->ToolJson->DestJson->ToolReturnJson (optional). Example: {id:yegamolchattels:plank,Damage:2}->{id:yegamolchattels:linseed_oil}->{id:yegamolchattels:smoothed_plank,Damage:2}->{id:glass_bottle}").getStringList())
+            {
+                String[] params = s.split("->");
+                if (params.length >= 3)
+                {
+                    ItemStack source = tryParseItemStack(params[0]);
+                    ItemStack tool = tryParseItemStack(params[1]);
+                    ItemStack dest = tryParseItemStack(params[2]);
+                    ItemStack returnTool = params.length >= 4 ? tryParseItemStack(params[3]) : null;
+
+                    if (source != null && tool != null && dest != null)
+                        customPlankRefinement.add(new PlanksRefinementEntry(source, dest, tool.getItem(), returnTool));
+                }
+            }
         }
 
         proxy.loadConfig(configID);
+    }
+
+    private static ItemStack tryParseItemStack(String json)
+    {
+        NBTTagCompound compound = tryParseTagCompound(json);
+        return compound != null ? ItemStack.loadItemStackFromNBT(compound) : null;
+    }
+
+    private static NBTTagCompound tryParseTagCompound(String json)
+    {
+        NBTBase sourceNBT;
+
+        try
+        {
+            sourceNBT = JsonToNBT.func_150315_a(json);
+        }
+        catch (NBTException e)
+        {
+            return null;
+        }
+
+        return sourceNBT instanceof NBTTagCompound ? (NBTTagCompound) sourceNBT : null;
     }
 
     private static void getStringSet(Set<String> set, Property property)

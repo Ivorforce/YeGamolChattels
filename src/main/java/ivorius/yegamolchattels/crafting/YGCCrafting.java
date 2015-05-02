@@ -1,6 +1,7 @@
 package ivorius.yegamolchattels.crafting;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import ivorius.yegamolchattels.YGCConfig;
 import ivorius.yegamolchattels.blocks.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -73,6 +74,9 @@ public class YGCCrafting
         for (int i = 0; i < 6; i++)
             addRecipe(new ItemStack(planks, 2, i), "#", "#", "#", '#', new ItemStack(plank, 1, i));
 
+        for (PlankSawRegistry.Entry entry : YGCConfig.customPlankSawing)
+            PlankSawRegistry.addSawing(entry);
+
         PlankSawRegistry.addSawing(new PlankSawEntry(new ItemStack(Blocks.log, 1, 0), new ItemStack(plank, 1, 0)));
         PlankSawRegistry.addSawing(new PlankSawEntry(new ItemStack(Blocks.log, 1, 1), new ItemStack(plank, 1, 1)));
         PlankSawRegistry.addSawing(new PlankSawEntry(new ItemStack(Blocks.log, 1, 2), new ItemStack(plank, 1, 2)));
@@ -80,8 +84,22 @@ public class YGCCrafting
         PlankSawRegistry.addSawing(new PlankSawEntry(new ItemStack(Blocks.log2, 1, 0), new ItemStack(plank, 1, 4)));
         PlankSawRegistry.addSawing(new PlankSawEntry(new ItemStack(Blocks.log2, 1, 1), new ItemStack(plank, 1, 5)));
 
-        PlanksRefinementRegistry.addRefinement(new PlanksRefinementEntry(plank, sandpaper, new ItemStack(smoothPlank), true));
-        PlanksRefinementRegistry.addRefinement(new PlanksRefinementEntryBottle(smoothPlank, linseedOil, new ItemStack(refinedPlank), true));
+        for (PlanksRefinementRegistry.Entry entry : YGCConfig.customPlankRefinement)
+            PlanksRefinementRegistry.addRefinement(entry);
+
+        PlanksRefinementRegistry.addRefinement(new PlanksRefinementEntry(new ItemStack(plank, 1, 0), new ItemStack(smoothPlank, 1, 0), sandpaper, null));
+        PlanksRefinementRegistry.addRefinement(new PlanksRefinementEntry(new ItemStack(plank, 1, 1), new ItemStack(smoothPlank, 1, 1), sandpaper, null));
+        PlanksRefinementRegistry.addRefinement(new PlanksRefinementEntry(new ItemStack(plank, 1, 2), new ItemStack(smoothPlank, 1, 2), sandpaper, null));
+        PlanksRefinementRegistry.addRefinement(new PlanksRefinementEntry(new ItemStack(plank, 1, 3), new ItemStack(smoothPlank, 1, 3), sandpaper, null));
+        PlanksRefinementRegistry.addRefinement(new PlanksRefinementEntry(new ItemStack(plank, 1, 4), new ItemStack(smoothPlank, 1, 4), sandpaper, null));
+        PlanksRefinementRegistry.addRefinement(new PlanksRefinementEntry(new ItemStack(plank, 1, 5), new ItemStack(smoothPlank, 1, 5), sandpaper, null));
+
+        PlanksRefinementRegistry.addRefinement(new PlanksRefinementEntry(new ItemStack(smoothPlank, 1, 0), new ItemStack(refinedPlank, 1, 0), linseedOil, new ItemStack(glass_bottle)));
+        PlanksRefinementRegistry.addRefinement(new PlanksRefinementEntry(new ItemStack(smoothPlank, 1, 1), new ItemStack(refinedPlank, 1, 1), linseedOil, new ItemStack(glass_bottle)));
+        PlanksRefinementRegistry.addRefinement(new PlanksRefinementEntry(new ItemStack(smoothPlank, 1, 2), new ItemStack(refinedPlank, 1, 2), linseedOil, new ItemStack(glass_bottle)));
+        PlanksRefinementRegistry.addRefinement(new PlanksRefinementEntry(new ItemStack(smoothPlank, 1, 3), new ItemStack(refinedPlank, 1, 3), linseedOil, new ItemStack(glass_bottle)));
+        PlanksRefinementRegistry.addRefinement(new PlanksRefinementEntry(new ItemStack(smoothPlank, 1, 4), new ItemStack(refinedPlank, 1, 4), linseedOil, new ItemStack(glass_bottle)));
+        PlanksRefinementRegistry.addRefinement(new PlanksRefinementEntry(new ItemStack(smoothPlank, 1, 5), new ItemStack(refinedPlank, 1, 5), linseedOil, new ItemStack(glass_bottle)));
 
         addShapelessRecipe(new ItemStack(sandpaper), DC_CLEAR_GLASS, slime_ball, paper);
 

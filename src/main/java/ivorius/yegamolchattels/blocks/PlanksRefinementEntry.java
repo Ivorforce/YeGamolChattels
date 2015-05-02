@@ -1,37 +1,36 @@
 package ivorius.yegamolchattels.blocks;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * Created by lukas on 11.05.14.
  */
 public class PlanksRefinementEntry implements PlanksRefinementRegistry.Entry
 {
-    public Item source;
-    public Item tool;
+    public ItemStack source;
     public ItemStack destination;
 
-    public boolean copyMetadata;
+    public Item tool;
+    public ItemStack returnItem;
 
-    public PlanksRefinementEntry(Item source, Item tool, ItemStack destination)
-    {
-        this(source, tool, destination, false);
-    }
-
-    public PlanksRefinementEntry(Item source, Item tool, ItemStack destination, boolean copyMetadata)
+    public PlanksRefinementEntry(ItemStack source, ItemStack destination, Item tool, ItemStack returnItem)
     {
         this.source = source;
-        this.tool = tool;
         this.destination = destination;
-        this.copyMetadata = copyMetadata;
+        this.tool = tool;
+        this.returnItem = returnItem;
     }
 
     @Override
     public boolean matchesSource(ItemStack source)
     {
-        return source != null && source.getItem() == this.source;
+        return source.getItem() == this.source.getItem()
+                && ItemStack.areItemStackTagsEqual(source, this.source)
+                && (this.source.getItemDamage() == OreDictionary.WILDCARD_VALUE || source.getItemDamage() == this.source.getItemDamage());
     }
 
     @Override
@@ -44,12 +43,7 @@ public class PlanksRefinementEntry implements PlanksRefinementRegistry.Entry
     public ItemStack getResult(ItemStack source, ItemStack tool)
     {
         if (destination != null)
-        {
-            ItemStack stack = destination.copy();
-            if (copyMetadata)
-                stack.setItemDamage(source.getItemDamage());
-            return stack;
-        }
+            return destination.copy();
         else
             return null;
     }
@@ -57,6 +51,7 @@ public class PlanksRefinementEntry implements PlanksRefinementRegistry.Entry
     @Override
     public void onToolBreak(ItemStack tool, EntityPlayer player)
     {
-
+        if (returnItem != null)
+            player.inventory.addItemStackToInventory(returnItem.copy());
     }
 }
