@@ -107,7 +107,7 @@ public class YGCForgeEventHandler
     @SubscribeEvent
     public void onLivingDrops(LivingDropsEvent event)
     {
-        if (event.entityLiving.getRNG().nextDouble() < YGCConfig.entityVitaDropChance && !(event.entityLiving instanceof EntityPlayer))
+        if (ItemEntityVita.canClassBeValidVita(event.entityLiving.getClass()) && event.entityLiving.getRNG().nextDouble() < YGCConfig.entityVitaDropChance)
         {
             ItemStack vitaStack = ItemEntityVita.createVitaItemStackAsNewbornEntity(YGCItems.entityVita, event.entityLiving);
 
