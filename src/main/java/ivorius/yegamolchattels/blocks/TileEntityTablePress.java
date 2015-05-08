@@ -40,9 +40,7 @@ public class TileEntityTablePress extends IvTileEntityMultiBlock implements Part
     {
         if (stack != null && containedItem == null)
         {
-            Item item = stack.getItem();
-
-            if (item == YGCItems.plank || item == YGCItems.smoothPlank || item == YGCItems.refinedPlank)
+            if (PlanksRefinementRegistry.canRefine(stack))
             {
                 if (!worldObj.isRemote)
                 {

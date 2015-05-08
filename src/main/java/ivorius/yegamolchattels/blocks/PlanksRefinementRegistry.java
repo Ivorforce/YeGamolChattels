@@ -24,14 +24,23 @@ public class PlanksRefinementRegistry
         return Collections.unmodifiableList(planksRefinementEntries);
     }
 
+    public static boolean canRefine(ItemStack source)
+    {
+        for (PlanksRefinementRegistry.Entry entry : PlanksRefinementRegistry.planksRefinementEntries)
+        {
+            if (entry.matchesSource(source))
+                return true;
+        }
+
+        return false;
+    }
+
     public static Entry entry(ItemStack source, ItemStack tool)
     {
         for (PlanksRefinementRegistry.Entry entry : PlanksRefinementRegistry.planksRefinementEntries)
         {
             if (entry.matchesSource(source) && entry.matchesTool(tool))
-            {
                 return entry;
-            }
         }
 
         return null;
