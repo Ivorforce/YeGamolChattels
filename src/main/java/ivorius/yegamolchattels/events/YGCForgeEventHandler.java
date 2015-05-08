@@ -86,7 +86,7 @@ public class YGCForgeEventHandler
             ItemStack equipped = event.harvester.getCurrentEquippedItem();
             if (equipped != null && equipped.getItem() instanceof ItemClubHammer)
             {
-                ((ItemClubHammer) equipped.getItem()).modifyDrops(event.world, event.block, equipped, event.x, event.y, event.z, event.drops);
+                ((ItemClubHammer) equipped.getItem()).modifyDrops(event.world, event.block, event.blockMetadata, equipped, event.x, event.y, event.z, event.drops);
             }
         }
     }

@@ -53,9 +53,9 @@ public class ItemClubHammer extends ItemTool
         return super.onItemUse(stack, player, world, x, y, z, side, hitX, hitY, hitZ);
     }
 
-    public void modifyDrops(World world, Block block, ItemStack stack, int x, int y, int z, List<ItemStack> drops)
+    public void modifyDrops(World world, Block block, int metadata, ItemStack stack, int x, int y, int z, List<ItemStack> drops)
     {
-        if (isMicroblockable(world, x, y, z))
+        if (isMicroblockable(block, metadata))
         {
             drops.clear();
 
@@ -83,5 +83,10 @@ public class ItemClubHammer extends ItemTool
     {
         Block block = world.getBlock(x, y, z);
         return block.isOpaqueCube() && world.getTileEntity(x, y, z) == null && block.getBlockHardness(world, x, y, z) >= 0.0f;
+    }
+
+    public static boolean isMicroblockable(Block block, int metadata)
+    {
+        return block.isOpaqueCube() && !block.hasTileEntity(metadata);
     }
 }
