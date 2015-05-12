@@ -87,7 +87,7 @@ public class YGCConfig
             }
 
             customPlankRefinement.clear();
-            for (String s : config.get(CATEGORY_BALANCING, "itemShelfBlacklist", new String[0], "List of additional plank refinement recipes. Form: SourceJson->ToolJson->DestJson->ToolReturnJson (optional). Example: {id:yegamolchattels:plank,Damage:2}->{id:yegamolchattels:linseed_oil}->{id:yegamolchattels:smoothed_plank,Damage:2}->{id:glass_bottle}").getStringList())
+            for (String s : config.get(CATEGORY_BALANCING, "customPlankRefinement", new String[0], "List of additional plank refinement recipes. Form: SourceJson->ToolJson->DestJson->ToolReturnJson (optional). Example: {id:yegamolchattels:plank,Damage:2}->{id:yegamolchattels:linseed_oil}->{id:yegamolchattels:smoothed_plank,Damage:2}->{id:glass_bottle}").getStringList())
             {
                 String[] params = s.split("->");
                 if (params.length >= 3)
