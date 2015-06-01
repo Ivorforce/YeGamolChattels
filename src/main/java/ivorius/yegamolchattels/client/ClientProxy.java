@@ -45,7 +45,15 @@ public class ClientProxy implements YGCProxy
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeaponRack.class, new TileEntityRendererWeaponRack());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGrindstone.class, new TileEntityRendererGrindstone());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGong.class, new TileEntityRendererGong());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPedestal.class, new TileEntityRendererPedestal());
+
+        TileEntityRendererPedestal pedestalRenderer = new TileEntityRendererPedestal();
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPedestal.class, pedestalRenderer);
+        pedestalRenderer.registerModel(EnumPedestalEntry.woodPedestal, new ModelPedestalWood());
+        pedestalRenderer.registerModel(EnumPedestalEntry.stonePedestal, new ModelPedestalStoneBlock());
+        pedestalRenderer.registerModel(EnumPedestalEntry.ironPedestal, new ModelPedestalIron());
+        pedestalRenderer.registerModel(EnumPedestalEntry.goldPedestal, new ModelPedestalGold());
+        pedestalRenderer.registerModel(EnumPedestalEntry.diamondPedestal, new ModelPedestalDiamond());
+
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemShelf.class, new TileEntityRendererItemShelf());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySnowGlobe.class, new TileEntityRendererSnowGlobe());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySawBench.class, new TileEntityRendererSawBench());

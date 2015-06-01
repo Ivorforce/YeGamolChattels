@@ -31,6 +31,10 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 public class TileEntityRendererPedestal extends TileEntitySpecialRenderer
 {
     public ResourceLocation[] textures;
@@ -45,6 +49,8 @@ public class TileEntityRendererPedestal extends TileEntitySpecialRenderer
     public IvBezierPath3D chainsNetherBezierPath;
 
     public IvBezierPath3DRendererText bezierPath3DRendererText;
+
+    private Map<EnumPedestalEntry, ModelBase> models = new HashMap<>();
 
     public TileEntityRendererPedestal()
     {
@@ -66,6 +72,26 @@ public class TileEntityRendererPedestal extends TileEntitySpecialRenderer
 
         bezierPath3DRendererText = new IvBezierPath3DRendererText();
         bezierPath3DRendererText.setFontRenderer(Minecraft.getMinecraft().standardGalacticFontRenderer);
+    }
+
+    public ModelBase registerModel(EnumPedestalEntry key, ModelBase value)
+    {
+        return models.put(key, value);
+    }
+
+    public ModelBase getModel(Object key)
+    {
+        return models.get(key);
+    }
+
+    public ModelBase removeModel(Object key)
+    {
+        return models.remove(key);
+    }
+
+    public Set<EnumPedestalEntry> allModels()
+    {
+        return models.keySet();
     }
 
     @Override
@@ -96,7 +122,7 @@ public class TileEntityRendererPedestal extends TileEntitySpecialRenderer
             emptyEntity.dimension = tileEntity.timeItemUp;
             emptyEntity.rotationYaw = tileEntity.ticksAlive + f;
 
-            ModelBase model = pedestalEntry.model;
+            ModelBase model = getModel(pedestalEntry);
             ResourceLocation texture = null;
             ResourceLocation glowTexture = null;
 
