@@ -1,6 +1,6 @@
 package ivorius.yegamolchattels.crafting;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import ivorius.yegamolchattels.YGCConfig;
 import ivorius.yegamolchattels.blocks.*;
 import net.minecraft.init.Blocks;

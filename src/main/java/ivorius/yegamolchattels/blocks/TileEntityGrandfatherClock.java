@@ -105,7 +105,7 @@ public class TileEntityGrandfatherClock extends TileEntity
     @Override
     public AxisAlignedBB getRenderBoundingBox()
     {
-        return AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 2, zCoord + 1);
+        return AxisAlignedBB.fromBounds(getPos(), getPos().add(1, 1, 1));
     }
 
     @Override

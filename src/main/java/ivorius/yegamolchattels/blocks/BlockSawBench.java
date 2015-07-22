@@ -12,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -38,21 +39,21 @@ public class BlockSawBench extends IvBlockMultiblock
     }
 
     @Override
-    public boolean renderAsNormalBlock()
+    public boolean isFullCube()
     {
         return false;
     }
 
     @Override
-    public void parentBlockHarvestItem(World world, IvTileEntityMultiBlock tileEntity, int x, int y, int z, Block block, int metadata)
+    public void parentBlockHarvestItem(World world, IvTileEntityMultiBlock tileEntity, BlockPos pos, IBlockState state)
     {
-        dropBlockAsItem(world, x, y, z, new ItemStack(this));
+        spawnAsEntity(world, pos, new ItemStack(this));
     }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ)
+    public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-        IvTileEntityMultiBlock tileEntity = getValidatedTotalParent(this, world, x, y, z);
+        IvTileEntityMultiBlock tileEntity = getValidatedTotalParent(this, world, pos);
 
         if (tileEntity instanceof TileEntitySawBench)
         {
@@ -88,12 +89,12 @@ public class BlockSawBench extends IvBlockMultiblock
     }
 
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess blockAccess, int x, int y, int z)
+    public void setBlockBoundsBasedOnState(IBlockAccess blockAccess, BlockPos pos)
     {
-        IvTileEntityMultiBlock tileEntity = getValidatedTotalParent(this, blockAccess, x, y, z);
+        IvTileEntityMultiBlock tileEntity = getValidatedTotalParent(this, blockAccess, pos);
 
         if (tileEntity instanceof TileEntitySawBench)
-            setBlockBounds(IvAABBs.boundsIntersection(tileEntity.getRotatedBB(-1, -1, -0.45, 2, 1.8, 1.45), x, y, z));
+            setBlockBounds(IvAABBs.boundsIntersection(tileEntity.getRotatedBB(-1, -1, -0.45, 2, 1.8, 1.45), pos));
         else
             setBlockBounds(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
     }
@@ -104,16 +105,16 @@ public class BlockSawBench extends IvBlockMultiblock
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z)
+    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, BlockPos pos)
     {
-        setBlockBoundsBasedOnState(world, x, y, z);
-        return super.getCollisionBoundingBoxFromPool(world, x, y, z);
+        setBlockBoundsBasedOnState(world, pos);
+        return super.getCollisionBoundingBoxFromPool(world, pos);
     }
 
     @Override
-    public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z)
+    public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, BlockPos pos)
     {
-        setBlockBoundsBasedOnState(world, x, y, z);
-        return super.getSelectedBoundingBoxFromPool(world, x, y, z);
+        setBlockBoundsBasedOnState(world, pos);
+        return super.getSelectedBoundingBoxFromPool(world, pos);
     }
 }

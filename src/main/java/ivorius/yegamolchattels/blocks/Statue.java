@@ -182,7 +182,7 @@ public class Statue
         private Block block;
         private int metadata;
 
-        public BlockFragment(Block block, int metadata)
+        public BlockFragment(IBlockState state)
         {
             this.block = block;
             this.metadata = metadata;

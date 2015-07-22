@@ -156,16 +156,16 @@ public class RenderBanner extends Render
 
         int zShift = -1;
         tessellator.setNormal(0, 0, zShift);
-        tessellator.addVertexWithUV(x + sizeX, y, z + zShift * sizeZ, texX1, texY);
-        tessellator.addVertexWithUV(x, y, z + zShift * sizeZ, texX, texY);
+        tessellator.addVertexWithUV(x + sizepos + zShift * sizeZ, texX1, texY);
+        tessellator.addVertexWithUV(pos + zShift * sizeZ, texX, texY);
         tessellator.addVertexWithUV(x, y + sizeY, z1 + zShift * sizeZ, texX, texY1);
         tessellator.addVertexWithUV(x + sizeX, y + sizeY, z1 + zShift * sizeZ, texX1, texY1);
 
         zShift = 1;
         tessellator.setNormal(0, 0, zShift);
         tessellator.addVertexWithUV(x, y + sizeY, z1 + zShift * sizeZ, texX, texY1);
-        tessellator.addVertexWithUV(x, y, z + zShift * sizeZ, texX, texY);
-        tessellator.addVertexWithUV(x + sizeX, y, z + zShift * sizeZ, texX1, texY);
+        tessellator.addVertexWithUV(pos + zShift * sizeZ, texX, texY);
+        tessellator.addVertexWithUV(x + sizepos + zShift * sizeZ, texX1, texY);
         tessellator.addVertexWithUV(x + sizeX, y + sizeY, z1 + zShift * sizeZ, texX1, texY1);
 
         if (sizeZ > 0.0f)
@@ -177,22 +177,22 @@ public class RenderBanner extends Render
             tessellator.addVertexWithUV(x + sizeX, y + sizeY, z1 + sizeZ, texX1, texY1);
 
             tessellator.setNormal(0, -1, 0);
-            tessellator.addVertexWithUV(x, y, z + sizeZ, texX, texY1);
-            tessellator.addVertexWithUV(x, y, z - sizeZ, texX, texY);
-            tessellator.addVertexWithUV(x + sizeX, y, z - sizeZ, texX1, texY);
-            tessellator.addVertexWithUV(x + sizeX, y, z + sizeZ, texX1, texY1);
+            tessellator.addVertexWithUV(pos + sizeZ, texX, texY1);
+            tessellator.addVertexWithUV(pos - sizeZ, texX, texY);
+            tessellator.addVertexWithUV(x + sizepos - sizeZ, texX1, texY);
+            tessellator.addVertexWithUV(x + sizepos + sizeZ, texX1, texY1);
 
             tessellator.setNormal(-1, 0, 0);
             tessellator.addVertexWithUV(x, y + sizeY, z1 + sizeZ, texX1, texY1);
             tessellator.addVertexWithUV(x, y + sizeY, z1 - sizeZ, texX, texY1);
-            tessellator.addVertexWithUV(x, y, z - sizeZ, texX, texY);
-            tessellator.addVertexWithUV(x, y, z + sizeZ, texX1, texY);
+            tessellator.addVertexWithUV(pos - sizeZ, texX, texY);
+            tessellator.addVertexWithUV(pos + sizeZ, texX1, texY);
 
             tessellator.setNormal(1, 0, 0);
-            tessellator.addVertexWithUV(x + sizeX, y, z - sizeZ, texX, texY);
+            tessellator.addVertexWithUV(x + sizepos - sizeZ, texX, texY);
             tessellator.addVertexWithUV(x + sizeX, y + sizeY, z1 - sizeZ, texX, texY1);
             tessellator.addVertexWithUV(x + sizeX, y + sizeY, z1 + sizeZ, texX1, texY1);
-            tessellator.addVertexWithUV(x + sizeX, y, z + sizeZ, texX1, texY);
+            tessellator.addVertexWithUV(x + sizepos + sizeZ, texX1, texY);
         }
     }
 }

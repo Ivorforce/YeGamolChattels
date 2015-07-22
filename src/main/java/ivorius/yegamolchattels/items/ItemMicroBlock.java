@@ -5,7 +5,7 @@
 
 package ivorius.yegamolchattels.items;
 
-import ivorius.ivtoolkit.blocks.BlockCoord;
+import net.minecraft.util.BlockPos;
 import ivorius.ivtoolkit.blocks.IvBlockCollection;
 import ivorius.ivtoolkit.tools.MCRegistryDefault;
 import net.minecraft.block.Block;
@@ -51,12 +51,12 @@ public class ItemMicroBlock extends ItemBlock
         IvBlockCollection collection = containedMicroBlock(par1ItemStack);
         if (collection != null)
         {
-            Set<ItemChisel.BlockData> blockSet = new HashSet<>();
-            for (BlockCoord coord : collection)
+            Set<IBlockState> blockSet = new HashSet<>();
+            for (BlockPos coord : collection)
             {
                 Block block = collection.getBlock(coord);
                 if (block.getMaterial() != Material.air)
-                    blockSet.add(new ItemChisel.BlockData(block, collection.getMetadata(coord)));
+                    blockSet.add(new IBlockState(block, collection.getMetadata(coord)));
             }
 
             if (blockSet.size() > 0)
@@ -64,7 +64,7 @@ public class ItemMicroBlock extends ItemBlock
                 StringBuilder blockNames = new StringBuilder();
                 int lineCount = 0;
                 int curCount = 0;
-                for (ItemChisel.BlockData block : blockSet)
+                for (IBlockState block : blockSet)
                 {
                     if (curCount > 0)
                         blockNames.append(", ");
@@ -93,7 +93,7 @@ public class ItemMicroBlock extends ItemBlock
         }
     }
 
-    public static String getLocalizedName(ItemChisel.BlockData blockData)
+    public static String getLocalizedName(IBlockState blockData)
     {
         ItemStack item = new ItemStack(blockData.block, blockData.meta);
         return item.getItem().getItemStackDisplayName(item);

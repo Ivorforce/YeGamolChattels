@@ -45,9 +45,9 @@ public class GuiScreenCarveStatue extends GuiContainer implements GuiControlList
     private int y;
     private int z;
 
-    public GuiScreenCarveStatue(EntityPlayer player, int x, int y, int z)
+    public GuiScreenCarveStatue(EntityPlayer player, BlockPos pos)
     {
-        super(new ContainerCarveStatue(player.inventory, player, x, y, z));
+        super(new ContainerCarveStatue(player.inventory, player, pos));
 
         this.x = x;
         this.y = y;
@@ -90,7 +90,7 @@ public class GuiScreenCarveStatue extends GuiContainer implements GuiControlList
         if (lastCraftedEntity != newCraftedEntity)
         {
             lastCraftedEntity = newCraftedEntity;
-            confirmButton.enabled = newCraftedEntity != null && StatueHelper.canCarveStatue(newCraftedEntity, mc.theWorld, x, y, z);
+            confirmButton.enabled = newCraftedEntity != null && StatueHelper.canCarveStatue(newCraftedEntity, mc.theWorld, pos);
         }
     }
 

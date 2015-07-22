@@ -6,11 +6,11 @@
 package ivorius.yegamolchattels.client.rendering;
 
 
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import net.minecraftforge.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.IIcon;
+import ivorius.ivtoolkit.rendering.grid.Icon;
 import net.minecraft.world.IBlockAccess;
 
 public class RenderTikiTorch implements ISimpleBlockRenderingHandler
@@ -31,7 +31,7 @@ public class RenderTikiTorch implements ISimpleBlockRenderingHandler
         tessellator.setBrightness(block.getMixedBrightnessForBlock(blockAccess, (int) i, (int) j, (int) k));
         tessellator.setColorOpaque_F(1.0F, 1.0F, 1.0F);
 
-        IIcon var11 = block.getIcon(0, meta);
+        Icon var11 = block.getIcon(0, meta);
 
         if (renderblocks.hasOverrideBlockTexture())
         {
@@ -93,15 +93,15 @@ public class RenderTikiTorch implements ISimpleBlockRenderingHandler
     }
 
     @Override
-    public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer)
+    public void renderInventoryBlock(IBlockState state, int modelId, RenderBlocks renderer)
     {
 
     }
 
     @Override
-    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer)
+    public boolean renderWorldBlock(IBlockAccess world, BlockPos pos, Block block, int modelId, RenderBlocks renderer)
     {
-        renderTikiTorch(renderer, world, block, x, y, z);
+        renderTikiTorch(renderer, world, block, pos);
         return true;
     }
 

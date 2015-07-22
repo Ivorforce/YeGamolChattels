@@ -8,20 +8,21 @@ package ivorius.yegamolchattels.blocks;
 import ivorius.yegamolchattels.items.YGCItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.util.IIcon;
+import ivorius.ivtoolkit.rendering.grid.Icon;
+import net.minecraft.util.EnumFacing;
 
 /**
  * Created by lukas on 10.07.14.
  */
 public class BlockFlaxPlant extends BlockCrops
 {
-    private IIcon[] icons;
+    private Icon[] icons;
 
     @Override
-    public IIcon getIcon(int side, int metadata)
+    public Icon getIcon(EnumFacing facing, int metadata)
     {
         if (metadata < 0 || metadata > 7)
             metadata = 7;
@@ -42,9 +43,9 @@ public class BlockFlaxPlant extends BlockCrops
     }
 
     @Override
-    public void registerBlockIcons(IIconRegister p_149651_1_)
+    public void registerBlockIcons(IconRegister p_149651_1_)
     {
-        this.icons = new IIcon[8];
+        this.icons = new Icon[8];
 
         for (int i = 0; i < this.icons.length; ++i)
         {

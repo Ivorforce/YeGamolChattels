@@ -35,7 +35,7 @@ public class RenderBlockFragment implements IItemRenderer
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data)
     {
-        ItemChisel.BlockData fragment = ItemBlockFragment.getFragment(item);
+        IBlockState fragment = ItemBlockFragment.getFragment(item);
         RenderBlocks renderBlocks = RenderBlocks.getInstance();
 
         GL11.glPushMatrix();

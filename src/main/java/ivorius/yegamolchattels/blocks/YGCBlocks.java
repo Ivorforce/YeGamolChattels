@@ -35,8 +35,4 @@ public class YGCBlocks
     public static Block microBlock;
 
     public static Block lootChest;
-
-    public static int blockTreasurePileRenderType;
-    public static int blockTikiTorchRenderType;
-    public static int blockMicroBlockRenderType;
 }

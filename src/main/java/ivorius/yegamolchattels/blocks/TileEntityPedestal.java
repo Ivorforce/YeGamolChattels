@@ -5,7 +5,7 @@
 
 package ivorius.yegamolchattels.blocks;
 
-import cpw.mods.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.blocks.IvTileEntityMultiBlock;
 import ivorius.ivtoolkit.entities.IvEntityHelper;
@@ -143,7 +143,7 @@ public class TileEntityPedestal extends IvTileEntityMultiBlock implements IInven
             {
                 if (!worldObj.isRemote)
                 {
-                    EntityItem itemEntity = new EntityItem(worldObj, xCoord, yCoord, zCoord, storedItems[0]);
+                    EntityItem itemEntity = new EntityItem(worldObj, getPos(), storedItems[0]);
                     worldObj.spawnEntityInWorld(itemEntity);
 
                     storedItems[0] = null;
@@ -233,7 +233,7 @@ public class TileEntityPedestal extends IvTileEntityMultiBlock implements IInven
         if (extent != null)
         {
             double[] center = getActiveCenterCoords();
-            return AxisAlignedBB.getBoundingBox(center[0] - extent[0], center[1] - extent[1], center[2] - extent[2], center[0] + extent[0], center[1] + extent[1], center[2] + extent[2]);
+            return AxisAlignedBB.fromBounds(center[0] - extent[0], center[1] - extent[1], center[2] - extent[2], center[0] + extent[0], center[1] + extent[1], center[2] + extent[2]);
         }
 
         return super.getRenderBoundingBox();
@@ -283,7 +283,7 @@ public class TileEntityPedestal extends IvTileEntityMultiBlock implements IInven
                 itemstack = this.storedItems[slot];
                 this.storedItems[slot] = null;
                 this.markDirty();
-                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                worldObj.markBlockForUpdate(getPos());
                 return itemstack;
             }
             else
@@ -296,7 +296,7 @@ public class TileEntityPedestal extends IvTileEntityMultiBlock implements IInven
                 }
 
                 this.markDirty();
-                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                worldObj.markBlockForUpdate(getPos());
                 return itemstack;
             }
         }
@@ -328,7 +328,7 @@ public class TileEntityPedestal extends IvTileEntityMultiBlock implements IInven
             stack.stackSize = this.getInventoryStackLimit();
 
         this.markDirty();
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        worldObj.markBlockForUpdate(getPos());
     }
 
     @Override

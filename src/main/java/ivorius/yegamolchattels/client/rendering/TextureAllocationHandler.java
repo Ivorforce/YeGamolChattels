@@ -5,7 +5,7 @@
 
 package ivorius.yegamolchattels.client.rendering;
 
-import cpw.mods.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import ivorius.ivtoolkit.logic.ReferenceCounter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureManager;

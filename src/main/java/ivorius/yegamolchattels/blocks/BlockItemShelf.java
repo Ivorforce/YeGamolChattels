@@ -11,13 +11,13 @@ import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.tabs.YGCCreativeTabs;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.IIcon;
+import ivorius.ivtoolkit.rendering.grid.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -25,7 +25,7 @@ public class BlockItemShelf extends IvBlockMultiblock
 {
     public static final int shelfTypes = 3;
 
-    public IIcon[] icons;
+    public Icon[] icons;
 
     public BlockItemShelf(Material material)
     {
@@ -47,7 +47,7 @@ public class BlockItemShelf extends IvBlockMultiblock
     }
 
     @Override
-    public boolean renderAsNormalBlock()
+    public boolean isFullCube()
     {
         return false;
     }
@@ -84,7 +84,7 @@ public class BlockItemShelf extends IvBlockMultiblock
     }
 
     @Override
-    public IIcon getIcon(int par1, int par2)
+    public Icon getIcon(int par1, int par2)
     {
         if (icons.length > par2)
         {
@@ -95,9 +95,9 @@ public class BlockItemShelf extends IvBlockMultiblock
     }
 
     @Override
-    public void registerBlockIcons(IIconRegister par1IconRegister)
+    public void registerBlockIcons(IconRegister par1IconRegister)
     {
-        this.icons = new IIcon[shelfTypes];
+        this.icons = new Icon[shelfTypes];
 
         for (int i = 0; i < this.icons.length; i++)
         {
@@ -147,9 +147,9 @@ public class BlockItemShelf extends IvBlockMultiblock
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z)
+    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, BlockPos pos)
     {
-        TileEntity tileEntity = world.getTileEntity(x, y, z);
+        TileEntity tileEntity = world.getTileEntity(pos);
 
         if (tileEntity instanceof TileEntityItemShelf)
         {
@@ -160,7 +160,7 @@ public class BlockItemShelf extends IvBlockMultiblock
             }
         }
 
-        return super.getCollisionBoundingBoxFromPool(world, x, y, z);
+        return super.getCollisionBoundingBoxFromPool(world, pos);
     }
 
     @Override
@@ -170,13 +170,13 @@ public class BlockItemShelf extends IvBlockMultiblock
     }
 
     @Override
-    public int getComparatorInputOverride(World world, int x, int y, int z, int p_149736_5_)
+    public int getComparatorInputOverride(World world, BlockPos pos, int p_149736_5_)
     {
-        TileEntity tileEntity = world.getTileEntity(x, y, z);
+        TileEntity tileEntity = world.getTileEntity(pos);
 
         if (tileEntity instanceof TileEntityItemShelf)
             return Container.calcRedstoneFromInventory((TileEntityItemShelf) tileEntity);
 
-        return super.getComparatorInputOverride(world, x, y, z, p_149736_5_);
+        return super.getComparatorInputOverride(world, pos, p_149736_5_);
     }
 }

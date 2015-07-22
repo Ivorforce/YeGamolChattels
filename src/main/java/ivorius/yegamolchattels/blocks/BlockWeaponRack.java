@@ -5,20 +5,24 @@
 
 package ivorius.yegamolchattels.blocks;
 
-import ivorius.yegamolchattels.YeGamolChattels;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockWeaponRack extends Block
 {
+    public static final PropertyBool ON_WALL = PropertyBool.create("on_wall");
+
     public BlockWeaponRack(Material material)
     {
         super(material);
@@ -37,38 +41,32 @@ public class BlockWeaponRack extends Block
     }
 
     @Override
-    public boolean renderAsNormalBlock()
+    public boolean isFullCube()
     {
         return false;
     }
 
     @Override
-    public void registerBlockIcons(IIconRegister iconRegister)
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-        blockIcon = iconRegister.registerIcon(YeGamolChattels.textureBase + getTextureName());
-    }
-
-    @Override
-    public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
-    {
-        TileEntity tileEntity = par1World.getTileEntity(x, y, z);
+        TileEntity tileEntity = worldIn.getTileEntity(pos);
 
         if (tileEntity instanceof TileEntityWeaponRack)
         {
             TileEntityWeaponRack tileEntityWeaponRack = (TileEntityWeaponRack) tileEntity;
 
-            ItemStack heldItem = player.getHeldItem();
-            if (tileEntityWeaponRack.tryApplyingEffect(heldItem, player))
+            ItemStack heldItem = playerIn.getHeldItem();
+            if (tileEntityWeaponRack.tryApplyingEffect(heldItem, playerIn))
             {
                 return true;
             }
-            else if (heldItem != null && tileEntityWeaponRack.tryStoringItem(heldItem, player))
+            else if (heldItem != null && tileEntityWeaponRack.tryStoringItem(heldItem, playerIn))
             {
                 return true;
             }
             else
             {
-                return tileEntityWeaponRack.pickUpItem(player);
+                return tileEntityWeaponRack.pickUpItem(playerIn);
             }
         }
 
@@ -76,63 +74,67 @@ public class BlockWeaponRack extends Block
     }
 
     @Override
-    public void breakBlock(World world, int x, int y, int z, Block block, int meta)
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
     {
-        if (!world.isRemote)
+        if (!worldIn.isRemote)
         {
-            TileEntity tileEntity = world.getTileEntity(x, y, z);
+            TileEntity tileEntity = worldIn.getTileEntity(pos);
 
             if (tileEntity instanceof TileEntityWeaponRack)
                 ((TileEntityWeaponRack) tileEntity).dropAllWeapons();
         }
 
-        super.breakBlock(world, x, y, z, block, meta);
+        super.breakBlock(worldIn, pos, state);
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z)
+    public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state)
     {
-        this.setBlockBoundsBasedOnState(world, x, y, z);
-        return super.getCollisionBoundingBoxFromPool(world, x, y, z);
+        this.setBlockBoundsBasedOnState(worldIn, pos);
+        return super.getCollisionBoundingBox(worldIn, pos, state);
     }
 
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess par1iBlockAccess, int x, int y, int z)
+    public void setBlockBoundsBasedOnState(IBlockAccess par1iBlockAccess, BlockPos pos)
     {
-        TileEntity tileEntity = par1iBlockAccess.getTileEntity(x, y, z);
+        TileEntity tileEntity = par1iBlockAccess.getTileEntity(pos);
 
         if (tileEntity instanceof TileEntityWeaponRack)
         {
             TileEntityWeaponRack tileEntityRack = (TileEntityWeaponRack) tileEntity;
-            updateRackBounds(tileEntityRack.getDirection(), tileEntityRack.getWeaponRackType());
+            updateRackBounds(tileEntityRack.getFacing(), tileEntityRack.getWeaponRackType());
         }
         else
-            super.setBlockBoundsBasedOnState(par1iBlockAccess, x, y, z);
+            super.setBlockBoundsBasedOnState(par1iBlockAccess, pos);
     }
 
-    public void updateRackBounds(int direction, int type)
+    public void updateRackBounds(EnumFacing facing, int type)
     {
         if (type == TileEntityWeaponRack.weaponRackTypeWall)
         {
             float width = 0.28F;
 
-            if (direction == 0)
-                this.setBlockBounds(0.0F, 0.0F, 1.0F - width, 1.0F, 1.0F, 1.0F);
-
-            if (direction == 1)
-                this.setBlockBounds(0.0F, 0.0F, 0.0F, width, 1.0F, 1.0F);
-
-            if (direction == 2)
-                this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, width);
-
-            if (direction == 3)
-                this.setBlockBounds(1.0F - width, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+            switch (facing)
+            {
+                case SOUTH:
+                    this.setBlockBounds(0.0F, 0.0F, 1.0F - width, 1.0F, 1.0F, 1.0F);
+                    break;
+                case WEST:
+                    this.setBlockBounds(0.0F, 0.0F, 0.0F, width, 1.0F, 1.0F);
+                    break;
+                case NORTH:
+                    this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, width);
+                    break;
+                case EAST:
+                    this.setBlockBounds(1.0F - width, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+                    break;
+            }
         }
         else
         {
             float width = 0.8F;
 
-            if (direction == 0 || direction == 2)
+            if (facing == EnumFacing.SOUTH || facing == EnumFacing.NORTH)
                 this.setBlockBounds(0.0F, 0.0F, (1.0f - width) * 0.5f, 1.0F, 1.0F, (1.0f + width) * 0.5f);
             else
                 this.setBlockBounds((1.0f - width) * 0.5f, 0.0F, 0.0f, (1.0f + width) * 0.5f, 1.0F, 1.0f);
@@ -140,13 +142,13 @@ public class BlockWeaponRack extends Block
     }
 
     @Override
-    public boolean hasTileEntity(int metadata)
+    public boolean hasTileEntity(IBlockState state)
     {
         return true;
     }
 
     @Override
-    public TileEntity createTileEntity(World var1, int i)
+    public TileEntity createTileEntity(World world, IBlockState state)
     {
         return new TileEntityWeaponRack();
     }
@@ -158,13 +160,13 @@ public class BlockWeaponRack extends Block
     }
 
     @Override
-    public int getComparatorInputOverride(World world, int x, int y, int z, int p_149736_5_)
+    public int getComparatorInputOverride(World worldIn, BlockPos pos)
     {
-        TileEntity tileEntity = world.getTileEntity(x, y, z);
+        TileEntity tileEntity = worldIn.getTileEntity(pos);
 
         if (tileEntity instanceof TileEntityWeaponRack)
             return Container.calcRedstoneFromInventory((TileEntityWeaponRack) tileEntity);
 
-        return super.getComparatorInputOverride(world, x, y, z, p_149736_5_);
+        return super.getComparatorInputOverride(worldIn, pos);
     }
 }

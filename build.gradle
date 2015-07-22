@@ -26,37 +26,13 @@ group = "ivorius.yegamolchattels" // http://maven.apache.org/guides/mini/guide-n
 archivesBaseName = "YeGamolChattels"
 
 minecraft {
-    version = "1.7.10-10.13.2.1230"
+    version = "1.8-11.14.3.1487"
     runDir = "eclipse"
+    mappings = "snapshot_20150207"
 }
-
-// Provided - Start
-// FML doesnt laod coremods and ATs from the classpath
-
-apply plugin: 'idea'
-
-configurations {
-    provided
-//    provided.extendsFrom(compile)
-}
-
-sourceSets {
-    main {
-        compileClasspath += [configurations.provided]
-        output.resourcesDir = output.classesDir
-    }
-}
-
-idea {
-    module {
-        scopes.PROVIDED.plus += [configurations.provided]
-    }
-}
-
-// Provided - Stop
 
 dependencies {
-    provided 'ivorius.ivtoolkit:IvToolkit:1.0.1:dev'
+    compile 'ivorius.ivtoolkit:IvToolkit:1.2.1:dev'
 }
 
 processResources
@@ -78,18 +54,6 @@ processResources
         exclude 'mcmod.info'
     }
 }
-
-// FML doesnt laod coremods and ATs from the classpath
-task copyMods(type: Copy, dependsOn: "extractUserDev") {
-    from { configurations.provided }
-    include "**/*.jar"
-    into file(minecraft.runDir + "/mods")
-    mustRunAfter "deobfBinJar"
-    mustRunAfter "repackMinecraft"
-}
-tasks.setupDevWorkspace.dependsOn copyMods
-tasks.setupDecompWorkspace.dependsOn copyMods
-
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7

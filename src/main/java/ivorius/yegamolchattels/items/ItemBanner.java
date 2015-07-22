@@ -6,7 +6,7 @@
 package ivorius.yegamolchattels.items;
 
 import ivorius.yegamolchattels.entities.EntityBanner;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityHanging;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,7 +15,7 @@ import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemHangingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
-import net.minecraft.util.IIcon;
+import ivorius.ivtoolkit.rendering.grid.Icon;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -24,9 +24,6 @@ public class ItemBanner extends ItemHangingEntity
 {
     public int bannerSize;
     public String namePrefix;
-
-    private IIcon poleIcon;
-    private IIcon clothIcon;
 
     public ItemBanner(int bannerSize, String namePrefix)
     {
@@ -86,34 +83,9 @@ public class ItemBanner extends ItemHangingEntity
     }
 
     @Override
-    public boolean requiresMultipleRenderPasses()
-    {
-        return true;
-    }
-
-    @Override
-    public int getRenderPasses(int metadata)
-    {
-        return 2;
-    }
-
-    @Override
-    public IIcon getIconFromDamageForRenderPass(int damage, int pass)
-    {
-        return pass == 0 ? poleIcon : clothIcon;
-    }
-
-    @Override
     public int getColorFromItemStack(ItemStack par1ItemStack, int pass)
     {
         return pass == 1 ? ItemDye.field_150922_c[par1ItemStack.getItemDamage() % ItemDye.field_150922_c.length] : 0xffffffff;
-    }
-
-    @Override
-    public void registerIcons(IIconRegister iconRegister)
-    {
-        poleIcon = iconRegister.registerIcon(getIconString() + "_" + "pole");
-        clothIcon = iconRegister.registerIcon(getIconString() + "_" + "cloth");
     }
 
     @Override

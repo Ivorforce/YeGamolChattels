@@ -5,7 +5,7 @@
 
 package ivorius.yegamolchattels.blocks;
 
-import cpw.mods.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.blocks.IvTileEntityRotatable;
 import ivorius.ivtoolkit.entities.IvEntityHelper;
@@ -313,7 +313,7 @@ public class TileEntityWeaponRack extends IvTileEntityRotatable implements IInve
     @Override
     public AxisAlignedBB getRenderBoundingBox()
     {
-        return AxisAlignedBB.getBoundingBox(xCoord - 0.5, yCoord - 0.5, zCoord - 0.5, xCoord + 1.5, yCoord + 2.0, zCoord + 1.5);
+        return AxisAlignedBB.fromBounds(xCoord - 0.5, yCoord - 0.5, zCoord - 0.5, xCoord + 1.5, yCoord + 2.0, zCoord + 1.5);
     }
 
     @Override
@@ -360,7 +360,7 @@ public class TileEntityWeaponRack extends IvTileEntityRotatable implements IInve
                 itemstack = this.storedWeapons[slot];
                 this.storedWeapons[slot] = null;
                 this.markDirty();
-                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                worldObj.markBlockForUpdate(getPos());
                 return itemstack;
             }
             else
@@ -373,7 +373,7 @@ public class TileEntityWeaponRack extends IvTileEntityRotatable implements IInve
                 }
 
                 this.markDirty();
-                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                worldObj.markBlockForUpdate(getPos());
                 return itemstack;
             }
         }
@@ -405,7 +405,7 @@ public class TileEntityWeaponRack extends IvTileEntityRotatable implements IInve
             stack.stackSize = this.getInventoryStackLimit();
 
         this.markDirty();
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        worldObj.markBlockForUpdate(getPos());
     }
 
     @Override

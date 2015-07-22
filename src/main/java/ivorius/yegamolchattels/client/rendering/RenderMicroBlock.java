@@ -5,8 +5,8 @@
 
 package ivorius.yegamolchattels.client.rendering;
 
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import ivorius.ivtoolkit.blocks.BlockCoord;
+import net.minecraftforge.fml.client.registry.ISimpleBlockRenderingHandler;
+import net.minecraft.util.BlockPos;
 import ivorius.ivtoolkit.blocks.IvBlockCollection;
 import ivorius.ivtoolkit.rendering.IvRenderHelper;
 import ivorius.yegamolchattels.blocks.BlockMicroBlock;
@@ -15,7 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.IIcon;
+import ivorius.ivtoolkit.rendering.grid.Icon;
 import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 
@@ -34,7 +34,7 @@ public class RenderMicroBlock implements ISimpleBlockRenderingHandler
     }
 
     @Override
-    public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer)
+    public void renderInventoryBlock(IBlockState state, int modelId, RenderBlocks renderer)
     {
         GL11.glPushMatrix();
         GL11.glScalef(0.4f, 0.4f, 0.4f);
@@ -54,17 +54,17 @@ public class RenderMicroBlock implements ISimpleBlockRenderingHandler
     }
 
     @Override
-    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer)
+    public boolean renderWorldBlock(IBlockAccess world, BlockPos pos, Block block, int modelId, RenderBlocks renderer)
     {
-        TileEntityMicroBlock tileEntityMicroBlock = (TileEntityMicroBlock) world.getTileEntity(x, y, z);
+        TileEntityMicroBlock tileEntityMicroBlock = (TileEntityMicroBlock) world.getTileEntity(pos);
         IvBlockCollection blockCollection = tileEntityMicroBlock.getBlockCollection();
-        int brightness = block.getMixedBrightnessForBlock(renderer.blockAccess, x, y, z);
-        renderMicroblocks(world, new BlockCoord(x, y, z), tileEntityMicroBlock.getQuadCache(), (BlockMicroBlock) block, renderer, brightness);
+        int brightness = block.getMixedBrightnessForBlock(renderer.blockAccess, pos);
+        renderMicroblocks(world, new BlockPos(pos), tileEntityMicroBlock.getQuadCache(), (BlockMicroBlock) block, renderer, brightness);
 
         return true;
     }
 
-    public static void renderMicroblocks(IBlockAccess world, BlockCoord pos, GridQuadCache<IIcon> quadCache, BlockMicroBlock origBlock, RenderBlocks renderer, int innerBrightness)
+    public static void renderMicroblocks(IBlockAccess world, BlockPos pos, GridQuadCache<Icon> quadCache, BlockMicroBlock origBlock, RenderBlocks renderer, int innerBrightness)
     {
         Tessellator tessellator = Tessellator.instance;
         int x = pos.x;
@@ -76,7 +76,7 @@ public class RenderMicroBlock implements ISimpleBlockRenderingHandler
 
         renderer.field_152631_f = true; // Fixes random block texture rotations for small textures... Used in renderBlockFence
 
-        for (GridQuadCache.CachedQuadLevel<IIcon> cachedQuadLevel : quadCache)
+        for (GridQuadCache.CachedQuadLevel<Icon> cachedQuadLevel : quadCache)
         {
             origBlock.renderSide = cachedQuadLevel.direction;
             origBlock.renderIcon = cachedQuadLevel.t;
@@ -93,14 +93,14 @@ public class RenderMicroBlock implements ISimpleBlockRenderingHandler
 
                 origBlock.setBlockBounds(minAxes[0], minAxes[1], minAxes[2], maxAxes[0], maxAxes[1], maxAxes[2]);
                 renderer.setRenderBoundsFromBlock(origBlock);
-                renderer.renderStandardBlock(origBlock, x, y, z);
+                renderer.renderStandardBlock(origBlock, pos);
             }
             quads.position(0);
         }
 
         renderer.field_152631_f = false;
 
-        origBlock.setBlockBoundsBasedOnState(world, x, y, z);
+        origBlock.setBlockBoundsBasedOnState(world, pos);
         origBlock.renderSide = null;
         origBlock.renderIcon = null;
     }

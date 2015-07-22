@@ -52,7 +52,7 @@ public class TileEntityTablePress extends IvTileEntityMultiBlock implements Part
                     clearRefinement();
 
                     markDirty();
-                    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                    worldObj.markBlockForUpdate(getPos());
                 }
 
                 return true;
@@ -77,7 +77,7 @@ public class TileEntityTablePress extends IvTileEntityMultiBlock implements Part
                     clearRefinement();
 
                     markDirty();
-                    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                    worldObj.markBlockForUpdate(getPos());
                 }
             }
 
@@ -173,7 +173,7 @@ public class TileEntityTablePress extends IvTileEntityMultiBlock implements Part
                 YeGamolChattels.logger.error("Unknown refinement result for '" + containedItem + "'");
 
             markDirty();
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            worldObj.markBlockForUpdate(getPos());
         }
     }
 
@@ -248,7 +248,7 @@ public class TileEntityTablePress extends IvTileEntityMultiBlock implements Part
                 ticksRefinedPerSlot[i] = buffer.readInt();
             }
 
-            IvSideClient.getClientPlayer().openGui(YeGamolChattels.instance, YGCGuiHandler.plankRefinementGuiID, worldObj, xCoord, yCoord, zCoord);
+            IvSideClient.getClientPlayer().openGui(YeGamolChattels.instance, YGCGuiHandler.plankRefinementGuiID, worldObj, getPos());
         }
     }
 

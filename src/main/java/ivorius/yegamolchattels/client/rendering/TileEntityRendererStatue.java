@@ -55,7 +55,7 @@ public class TileEntityRendererStatue extends TileEntitySpecialRenderer
 
             GL11.glPushMatrix();
             GL11.glTranslated(0.0, -tileEntityStatue.centerCoordsSize[1], 0.0);
-            IvMultiBlockRenderHelper.transformFor(tileEntityStatue, x, y, z);
+            IvMultiBlockRenderHelper.transformFor(tileEntityStatue, pos);
 
             Entity entity = tileEntityStatue.getStatue().getEntity();
             entity.setWorld(tileEntityStatue.getWorldObj());

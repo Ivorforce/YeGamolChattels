@@ -281,7 +281,7 @@ public class TileEntityLootChest extends IvTileEntityRotatable implements IInven
                 itemstack = this.loot[slot];
                 this.loot[slot] = null;
                 this.markDirty();
-                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                worldObj.markBlockForUpdate(getPos());
                 return itemstack;
             }
             else
@@ -294,7 +294,7 @@ public class TileEntityLootChest extends IvTileEntityRotatable implements IInven
                 }
 
                 this.markDirty();
-                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                worldObj.markBlockForUpdate(getPos());
                 return itemstack;
             }
         }
@@ -326,7 +326,7 @@ public class TileEntityLootChest extends IvTileEntityRotatable implements IInven
             stack.stackSize = this.getInventoryStackLimit();
 
         this.markDirty();
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        worldObj.markBlockForUpdate(getPos());
     }
 
     @Override

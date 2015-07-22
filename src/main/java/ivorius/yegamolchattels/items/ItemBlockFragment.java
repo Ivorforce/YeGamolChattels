@@ -5,12 +5,13 @@
 
 package ivorius.yegamolchattels.items;
 
-import ivorius.ivtoolkit.blocks.BlockCoord;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.BlockPos;
 import ivorius.ivtoolkit.blocks.IvBlockCollection;
 import ivorius.yegamolchattels.blocks.TileEntityMicroBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -30,29 +32,29 @@ import java.util.List;
  */
 public class ItemBlockFragment extends Item implements MicroblockSelector
 {
-    public static void setFragment(ItemStack stack, ItemChisel.BlockData blockData)
+    public static void setFragment(ItemStack stack, IBlockState blockData)
     {
-        stack.setTagInfo("blockFragment", new NBTTagString(Block.blockRegistry.getNameForObject(blockData.block)));
-        stack.setTagInfo("blockFragmentMeta", new NBTTagByte(blockData.meta));
+        stack.setTagInfo("blockFragment", new NBTTagString(Block.blockRegistry.getNameForObject(blockData.getBlock()).toString()));
+        stack.setTagInfo("blockFragmentMeta", new NBTTagByte((byte) blockData.getBlock().getMetaFromState(blockData)));
     }
 
-    public static ItemChisel.BlockData getFragment(ItemStack stack)
+    public static IBlockState getFragment(ItemStack stack)
     {
         if (!stack.hasTagCompound() || !stack.getTagCompound().hasKey("blockFragment"))
-            return new ItemChisel.BlockData(Blocks.air, (byte)0); // Default
+            return Blocks.air.getDefaultState();
 
-        return new ItemChisel.BlockData((Block) Block.blockRegistry.getObject(stack.getTagCompound().getString("blockFragment")), stack.getTagCompound().getByte("blockFragmentMeta"));
+        return ((Block) Block.blockRegistry.getObject(new ResourceLocation(stack.getTagCompound().getString("blockFragment")))).getStateFromMeta(stack.getTagCompound().getByte("blockFragmentMeta"));
     }
 
     @Override
-    public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
+    public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-        return addBlock(x, y, z, player, itemStack);
+        return addBlock(pos, player, itemStack);
     }
 
-    public static boolean addBlock(int x, int y, int z, EntityPlayer player, ItemStack usedStack)
+    public static boolean addBlock(BlockPos pos, EntityPlayer player, ItemStack usedStack)
     {
-        if (addBlock(player, x, y, z, getFragment(usedStack)))
+        if (addBlock(player, pos, getFragment(usedStack)))
         {
             usedStack.stackSize--;
             player.inventory.markDirty();
@@ -63,7 +65,7 @@ public class ItemBlockFragment extends Item implements MicroblockSelector
         return false;
     }
 
-    public static boolean addBlock(Entity entity, int hoverX, int hoverY, int hoverZ, ItemChisel.BlockData blockFragment)
+    public static boolean addBlock(Entity entity, int hoverX, int hoverY, int hoverZ, IBlockState blockFragment)
     {
         World world = entity.worldObj;
         ItemChisel.MicroBlockFragment hoveredFragment = ItemChisel.getHoveredFragment(entity, hoverX, hoverY, hoverZ);
@@ -71,7 +73,7 @@ public class ItemBlockFragment extends Item implements MicroblockSelector
         if (hoveredFragment != null)
         {
             hoveredFragment = hoveredFragment.getOpposite();
-            BlockCoord fragmentCoord = hoveredFragment.getCoord();
+            BlockPos fragmentCoord = hoveredFragment.getCoord();
 
             TileEntity tileEntity = world.getTileEntity(fragmentCoord.x, fragmentCoord.y, fragmentCoord.z);
 
@@ -106,13 +108,13 @@ public class ItemBlockFragment extends Item implements MicroblockSelector
     {
         super.addInformation(stack, player, list, par4);
 
-        ItemChisel.BlockData data = getFragment(stack);
+        IBlockState data = getFragment(stack);
         if (data != null)
             list.add(ItemMicroBlock.getLocalizedName(data));
     }
 
     @Override
-    public void registerIcons(IIconRegister par1IconRegister)
+    public void registerIcons(IconRegister par1IconRegister)
     {
 
     }

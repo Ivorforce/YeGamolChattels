@@ -36,9 +36,9 @@ public class GuiScreenTablePress extends GuiScreen
     public static final int PLANK_SHIFT_X = 0;
     public static final int PLANK_SHIFT_Y = -1;
 
-    public GuiScreenTablePress(World world, int x, int y, int z)
+    public GuiScreenTablePress(World world, BlockPos pos)
     {
-        TileEntity tileEntity = world.getTileEntity(x, y, z);
+        TileEntity tileEntity = world.getTileEntity(pos);
 
         if (tileEntity instanceof TileEntityTablePress)
             this.tileEntity = (TileEntityTablePress) tileEntity;

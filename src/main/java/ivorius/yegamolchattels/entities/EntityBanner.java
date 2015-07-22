@@ -35,9 +35,9 @@ public class EntityBanner extends EntityHanging
         this.setDirection(0);
     }
 
-    public EntityBanner(World world, int x, int y, int z)
+    public EntityBanner(World world, BlockPos pos)
     {
-        super(world, x, y, z, 0);
+        super(world, pos, 0);
 
         setSize(1);
         setColor(0);
@@ -45,9 +45,9 @@ public class EntityBanner extends EntityHanging
         this.setDirection(0);
     }
 
-    public EntityBanner(World world, int x, int y, int z, int direction, int bannerSize, int bannerColor)
+    public EntityBanner(World world, BlockPos pos, int direction, int bannerSize, int bannerColor)
     {
-        super(world, x, y, z, direction);
+        super(world, pos, direction);
 
         this.setSize(bannerSize);
         this.setColor(bannerColor);

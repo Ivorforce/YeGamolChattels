@@ -32,21 +32,21 @@ public class BlockTablePress extends IvBlockMultiblock
     }
 
     @Override
-    public boolean renderAsNormalBlock()
+    public boolean isFullCube()
     {
         return false;
     }
 
     @Override
-    public void parentBlockHarvestItem(World world, IvTileEntityMultiBlock tileEntity, int x, int y, int z, Block block, int metadata)
+    public void parentBlockHarvestItem(World world, IvTileEntityMultiBlock tileEntity, BlockPos pos, IBlockState state)
     {
-        dropBlockAsItem(world, x, y, z, new ItemStack(this));
+        dropBlockAsItem(world, pos, new ItemStack(this));
     }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ)
+    public boolean onBlockActivated(World world, BlockPos pos, EntityPlayer player, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-        IvTileEntityMultiBlock tileEntity = getValidatedTotalParent(this, world, x, y, z);
+        IvTileEntityMultiBlock tileEntity = getValidatedTotalParent(this, world, pos);
 
         if (tileEntity instanceof TileEntityTablePress)
         {

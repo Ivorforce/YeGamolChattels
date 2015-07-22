@@ -129,7 +129,7 @@ public abstract class TileEntityItemShelf extends IvTileEntityMultiBlock impleme
         par1nbtTagCompound.setInteger("randomSeed", randomSeed);
     }
 
-    public boolean onRightClick(EntityPlayer player, ItemStack stack, int side)
+    public boolean onRightClick(EntityPlayer player, ItemStack stack, EnumFacing facing)
     {
         if (!isParent())
         {
@@ -158,11 +158,11 @@ public abstract class TileEntityItemShelf extends IvTileEntityMultiBlock impleme
                         if (stack != null && tryStoringItemInSlot(slotNumber, stack))
                         {
                             player.inventory.mainInventory[player.inventory.currentItem] = null;
-                            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                            worldObj.markBlockForUpdate(getPos());
                         }
                         else if (tryEquippingItemOnPlayer(slotNumber, player))
                         {
-                            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                            worldObj.markBlockForUpdate(getPos());
                         }
 
                         return true;
@@ -188,14 +188,14 @@ public abstract class TileEntityItemShelf extends IvTileEntityMultiBlock impleme
 
     public abstract void activateTrigger(int trigger);
 
-    public abstract boolean handleRightClickOnIntersection(EntityPlayer player, ItemStack stack, int side, IvRaytracedIntersection intersection);
+    public abstract boolean handleRightClickOnIntersection(EntityPlayer player, ItemStack stack, EnumFacing facing, IvRaytracedIntersection intersection);
 
     public void dropAllItems()
     {
         for (int i = 0; i < getItemSlots(); i++)
             this.tryDroppingItem(i);
 
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        worldObj.markBlockForUpdate(getPos());
     }
 
     public abstract int getItemSlots();
@@ -272,7 +272,7 @@ public abstract class TileEntityItemShelf extends IvTileEntityMultiBlock impleme
             worldObj.spawnEntityInWorld(entityItem);
 
             storedItems[slot] = null;
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            worldObj.markBlockForUpdate(getPos());
         }
     }
 
@@ -323,7 +323,7 @@ public abstract class TileEntityItemShelf extends IvTileEntityMultiBlock impleme
                 itemstack = this.storedItems[slot];
                 this.storedItems[slot] = null;
                 this.markDirty();
-                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                worldObj.markBlockForUpdate(getPos());
                 return itemstack;
             }
             else
@@ -334,7 +334,7 @@ public abstract class TileEntityItemShelf extends IvTileEntityMultiBlock impleme
                     this.storedItems[slot] = null;
 
                 this.markDirty();
-                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                worldObj.markBlockForUpdate(getPos());
                 return itemstack;
             }
         }
@@ -366,7 +366,7 @@ public abstract class TileEntityItemShelf extends IvTileEntityMultiBlock impleme
             stack.stackSize = this.getInventoryStackLimit();
 
         this.markDirty();
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        worldObj.markBlockForUpdate(getPos());
     }
 
     @Override

@@ -153,9 +153,9 @@ public class RenderFlag extends Render
         GL11.glPopMatrix();
     }
 
-    private void setLight(int x, int y, int z)
+    private void setLight(BlockPos pos)
     {
-        int var7 = this.renderManager.worldObj.getLightBrightnessForSkyBlocks(x, y, z, 0);
+        int var7 = this.renderManager.worldObj.getLightBrightnessForSkyBlocks(pos, 0);
         int var8 = var7 % 65536;
         int var9 = var7 / 65536;
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, var8, var9);

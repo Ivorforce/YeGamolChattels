@@ -53,7 +53,7 @@ public class TileEntitySawBench extends IvTileEntityMultiBlock implements Partia
                         stack.stackSize -= 2;
 
                         markDirty();
-                        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                        worldObj.markBlockForUpdate(getPos());
                     }
                     else
                     {
@@ -80,7 +80,7 @@ public class TileEntitySawBench extends IvTileEntityMultiBlock implements Partia
                     containedItem = null;
 
                     markDirty();
-                    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                    worldObj.markBlockForUpdate(getPos());
                 }
             }
 
@@ -128,7 +128,7 @@ public class TileEntitySawBench extends IvTileEntityMultiBlock implements Partia
                 containedItem = null;
 
             markDirty();
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            worldObj.markBlockForUpdate(getPos());
         }
     }
 
@@ -272,7 +272,7 @@ public class TileEntitySawBench extends IvTileEntityMultiBlock implements Partia
             woodCutScore = buffer.readFloat();
             isInWood = buffer.readBoolean();
 
-            IvSideClient.getClientPlayer().openGui(YeGamolChattels.instance, YGCGuiHandler.plankSawGuiID, worldObj, xCoord, yCoord, zCoord);
+            IvSideClient.getClientPlayer().openGui(YeGamolChattels.instance, YGCGuiHandler.plankSawGuiID, worldObj, getPos());
         }
     }
 

@@ -8,6 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -18,14 +19,14 @@ import java.util.List;
  */
 public class StatueHelper
 {
-    public static boolean canCarveStatue(Entity statueEntity, World world, int x, int y, int z)
+    public static boolean canCarveStatue(Entity statueEntity, World world, BlockPos pos)
     {
-        if (isValidStatueBlock(world, x, y, z))
+        if (isValidStatueBlock(world, pos))
         {
-            Statue.BlockFragment blockFragment = new Statue.BlockFragment(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
+            Statue.BlockFragment blockFragment = new Statue.BlockFragment(world.getBlock(pos), world.getBlockMetadata(pos));
 
             List<int[]> positions = ItemStatue.getStatuePositions(statueEntity, 0);
-            List<int[]> validPositions = getValidPositions(positions, world, blockFragment, x, y, z);
+            List<int[]> validPositions = getValidPositions(positions, world, blockFragment, pos);
 
             if (validPositions != null)
                 return true;
@@ -34,15 +35,15 @@ public class StatueHelper
         return false;
     }
 
-    public static TileEntityStatue carveStatue(ItemStack stack, Statue statue, World world, int x, int y, int z, EntityLivingBase entityLivingBase)
+    public static TileEntityStatue carveStatue(ItemStack stack, Statue statue, World world, BlockPos pos, EntityLivingBase entityLivingBase)
     {
-        if (isValidStatueBlock(world, x, y, z))
+        if (isValidStatueBlock(world, pos))
         {
-            Statue.BlockFragment blockFragment = new Statue.BlockFragment(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
+            Statue.BlockFragment blockFragment = new Statue.BlockFragment(world.getBlock(pos), world.getBlockMetadata(pos));
             int rotation = 0;
 
             List<int[]> positions = ItemStatue.getStatuePositions(statue.getEntity(), rotation);
-            List<int[]> validPositions = getValidPositions(positions, world, blockFragment, x, y, z);
+            List<int[]> validPositions = getValidPositions(positions, world, blockFragment, pos);
 
             if (validPositions != null)
             {
@@ -74,10 +75,10 @@ public class StatueHelper
         return null;
     }
 
-    public static boolean isValidStatueBlock(World world, int x, int y, int z)
+    public static boolean isValidStatueBlock(World world, BlockPos pos)
     {
-        Statue.BlockFragment blockFragment = new Statue.BlockFragment(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
-        return blockFragment.getBlock().getBlockHardness(world, x, y, z) >= 0.0f && isValidStatueBlock(blockFragment);
+        Statue.BlockFragment blockFragment = new Statue.BlockFragment(world.getBlock(pos), world.getBlockMetadata(pos));
+        return blockFragment.getBlock().getBlockHardness(world, pos) >= 0.0f && isValidStatueBlock(blockFragment);
     }
 
     private static boolean isValidStatueBlock(Statue.BlockFragment fragment)
@@ -86,7 +87,7 @@ public class StatueHelper
         return !(block.hasTileEntity(fragment.getMetadata())) && (block.isOpaqueCube() || block == Blocks.glass || block == Blocks.stained_glass);
     }
 
-    public static List<int[]> getValidPositions(List<int[]> positions, World world, Statue.BlockFragment blockFragment, int x, int y, int z)
+    public static List<int[]> getValidPositions(List<int[]> positions, World world, Statue.BlockFragment blockFragment, BlockPos pos)
     {
         List<int[]> validLocations = new ArrayList<>();
 

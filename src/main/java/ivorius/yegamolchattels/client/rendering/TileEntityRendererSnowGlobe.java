@@ -6,7 +6,7 @@
 package ivorius.yegamolchattels.client.rendering;
 
 import ivorius.ivtoolkit.blocks.BlockArea;
-import ivorius.ivtoolkit.blocks.BlockCoord;
+import net.minecraft.util.BlockPos;
 import ivorius.ivtoolkit.blocks.IvBlockCollection;
 import ivorius.ivtoolkit.tools.MCRegistry;
 import ivorius.ivtoolkit.tools.MCRegistryDefault;
@@ -30,7 +30,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import org.lwjgl.opengl.GL11;
 
 import java.io.DataInputStream;
@@ -157,7 +157,7 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
             {
                 if (playerDistSQ < 4 * 4)
                 {
-                    AxisAlignedBB bb = AxisAlignedBB.getBoundingBox((double) tileEntity.xCoord - SIZE_X, (double) tileEntity.yCoord - SIZE_Y, (double) tileEntity.zCoord - SIZE_Z, (double) tileEntity.xCoord + 1 + SIZE_X, (double) tileEntity.yCoord + 1 + SIZE_Y, (double) tileEntity.zCoord + 1 + SIZE_Z);
+                    AxisAlignedBB bb = AxisAlignedBB.fromBounds((double) tileEntity.xCoord - SIZE_X, (double) tileEntity.yCoord - SIZE_Y, (double) tileEntity.zCoord - SIZE_Z, (double) tileEntity.xCoord + 1 + SIZE_X, (double) tileEntity.yCoord + 1 + SIZE_Y, (double) tileEntity.zCoord + 1 + SIZE_Z);
                     List entities = tileEntity.getWorldObj().getEntitiesWithinAABBExcludingEntity(null, bb);
 
                     if (entities.size() > 0)
@@ -295,8 +295,8 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
         {
             if (defaultGlobe != null)
             {
-                BlockCoord lowerCoord = new BlockCoord(-SIZE_X, -SIZE_Y, -SIZE_Z);
-                BlockArea area = new BlockArea(lowerCoord, new BlockCoord(SIZE_X, SIZE_Y, SIZE_Z));
+                BlockPos lowerCoord = new BlockPos(-SIZE_X, -SIZE_Y, -SIZE_Z);
+                BlockArea area = new BlockArea(lowerCoord, new BlockPos(SIZE_X, SIZE_Y, SIZE_Z));
 
                 var10.setTranslation(-(float) tileEntity.xCoord - 0.5, -(float) tileEntity.yCoord - 0.5, -(float) tileEntity.zCoord - 0.5);
                 var10.setColorOpaque_F(1.0f, 1.0f, 1.0f);
@@ -308,10 +308,10 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
 
                 for (int i = 0; i < 2; i++)
                 {
-                    for (BlockCoord internalCoord : area)
+                    for (BlockPos internalCoord : area)
                     {
-                        BlockCoord worldCoord = internalCoord.add(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
-                        BlockCoord collectionCoord = internalCoord.subtract(lowerCoord);
+                        BlockPos worldCoord = internalCoord.add(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
+                        BlockPos collectionCoord = internalCoord.subtract(lowerCoord);
 
                         Block block = defaultGlobe.getBlock(collectionCoord);
                         int meta = defaultGlobe.getMetadata(collectionCoord);
@@ -342,7 +342,7 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
                                 blockRenderer.setRenderBoundsFromBlock(block);
 
                                 var10.setColorOpaque_F(red, green, blue);
-                                for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+                                for (EnumFacing dir : EnumFacing.VALID_DIRECTIONS)
                                 {
                                     if (defaultGlobe.shouldRenderSide(collectionCoord, dir))
                                         blockRenderer.renderFaceYNeg(block, worldCoord.x, worldCoord.y, worldCoord.z, blockRenderer.getBlockIconFromSideAndMetadata(block, dir.ordinal(), meta));
@@ -362,19 +362,19 @@ public class TileEntityRendererSnowGlobe extends TileEntitySpecialRenderer
 
         GL11.glEndList();
 
-//        captureAndWriteToFile("defaultGlobe.nbt", new BlockCoord(tileEntity), tileEntity.getWorldObj());
+//        captureAndWriteToFile("defaultGlobe.nbt", new BlockPos(tileEntity), tileEntity.getWorldObj());
     }
 
-    public static void captureAndWriteToFile(String fileName, BlockCoord coord, World world)
+    public static void captureAndWriteToFile(String fileName, BlockPos coord, World world)
     {
-        BlockCoord lowerCoord = new BlockCoord(-SIZE_X, -SIZE_Y, -SIZE_Z);
-        BlockArea area = new BlockArea(lowerCoord, new BlockCoord(SIZE_X, SIZE_Y, SIZE_Z));
+        BlockPos lowerCoord = new BlockPos(-SIZE_X, -SIZE_Y, -SIZE_Z);
+        BlockArea area = new BlockArea(lowerCoord, new BlockPos(SIZE_X, SIZE_Y, SIZE_Z));
 
         IvBlockCollection blockCollection = new IvBlockCollection(SIZE_X * 2 + 1, SIZE_Y * 2 + 1, SIZE_Z * 2 + 1);
-        for (BlockCoord internalCoord : area)
+        for (BlockPos internalCoord : area)
         {
-            BlockCoord worldCoord = internalCoord.add(coord);
-            BlockCoord collectionCoord = internalCoord.subtract(lowerCoord);
+            BlockPos worldCoord = internalCoord.add(coord);
+            BlockPos collectionCoord = internalCoord.subtract(lowerCoord);
             Block block = internalCoord.x != 0 || internalCoord.y != 0 || internalCoord.z != 0 ? worldCoord.getBlock(world) : Blocks.air;
             blockCollection.setBlockAndMetadata(collectionCoord, block, (byte) worldCoord.getMetadata(world));
         }

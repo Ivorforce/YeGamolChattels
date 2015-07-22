@@ -1,12 +1,13 @@
 package ivorius.yegamolchattels.client.rendering;
 
 import com.google.common.base.Function;
-import ivorius.ivtoolkit.blocks.BlockCoord;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.BlockPos;
 import ivorius.ivtoolkit.blocks.IvBlockCollection;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.common.util.ForgeDirection;
+import ivorius.ivtoolkit.rendering.grid.Icon;
+import net.minecraft.util.EnumFacing;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
@@ -16,21 +17,24 @@ import javax.annotation.Nullable;
  */
 public class IIconQuadCache
 {
-    public static GridQuadCache<IIcon> createIconQuadCache(final IvBlockCollection blockCollection)
+    public static GridQuadCache<Icon> createIconQuadCache(final IvBlockCollection blockCollection)
     {
-        return GridQuadCache.createQuadCache(new int[]{blockCollection.width, blockCollection.height, blockCollection.length}, new Function<Pair<BlockCoord, ForgeDirection>, IIcon>()
+        return GridQuadCache.createQuadCache(new int[]{blockCollection.width, blockCollection.height, blockCollection.length}, new Function<Pair<BlockPos, EnumFacing>, Icon>()
         {
             @Nullable
             @Override
-            public IIcon apply(Pair<BlockCoord, ForgeDirection> input)
+            public Icon apply(Pair<BlockPos, EnumFacing> input)
             {
-                BlockCoord coord = input.getLeft();
-                ForgeDirection direction = input.getRight();
+                BlockPos coord = input.getLeft();
+                EnumFacing direction = input.getRight();
 
-                Block block = blockCollection.getBlock(coord);
-                return block.getMaterial() != Material.air && blockCollection.shouldRenderSide(coord, direction)
-                        ? block.getIcon(direction.ordinal(), blockCollection.getMetadata(coord))
-                        : null;
+                IBlockState state = blockCollection.getBlockState(coord);
+                Block block = state.getBlock();
+                // TODO
+//                return block.getMaterial() != Material.air && blockCollection.shouldRenderSide(coord, direction)
+//                        ? block.getIcon(direction.ordinal(), blockCollection.getMetadata(coord))
+//                        : null;
+                return null;
             }
         });
     }}

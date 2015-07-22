@@ -64,18 +64,18 @@ public class BlockGrandfatherClock extends Block
         dropClockIfCantStay(par1World, par2, par3, par4);
     }
 
-    public void dropClockIfCantStay(World world, int x, int y, int z)
+    public void dropClockIfCantStay(World world, BlockPos pos)
     {
-        int type = world.getBlockMetadata(x, y, z) & 1;
+        int type = world.getBlockMetadata(pos) & 1;
 
         if (type == 0 && world.getBlock(x, y + 1, z) != this)
         {
-            dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
-            world.setBlock(x, y, z, Blocks.air, 0, 3);
+            dropBlockAsItem(world, pos, world.getBlockMetadata(pos), 0);
+            world.setBlock(pos, Blocks.air, 0, 3);
         }
         if (type == 1 && world.getBlock(x, y - 1, z) != this)
         {
-            world.setBlock(x, y, z, Blocks.air, 0, 3);
+            world.setBlock(pos, Blocks.air, 0, 3);
         }
     }
 }

@@ -5,11 +5,11 @@
 
 package ivorius.yegamolchattels.client.rendering;
 
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import net.minecraftforge.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.IIcon;
+import ivorius.ivtoolkit.rendering.grid.Icon;
 import net.minecraft.world.IBlockAccess;
 
 public class RenderTreasurePile implements ISimpleBlockRenderingHandler
@@ -21,7 +21,7 @@ public class RenderTreasurePile implements ISimpleBlockRenderingHandler
         this.renderID = renderID;
     }
 
-    public void renderTreasurePile(IIcon icon, float x, float y, float z, boolean north, boolean east, boolean south, boolean west)
+    public void renderTreasurePile(Icon icon, float x, float y, float z, boolean north, boolean east, boolean south, boolean west)
     {
         float minU = icon.getMinU();
         float minV = icon.getMinV();
@@ -69,35 +69,35 @@ public class RenderTreasurePile implements ISimpleBlockRenderingHandler
     }
 
     @Override
-    public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer)
+    public void renderInventoryBlock(IBlockState state, int modelId, RenderBlocks renderer)
     {
 
     }
 
     @Override
-    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer)
+    public boolean renderWorldBlock(IBlockAccess world, BlockPos pos, Block block, int modelId, RenderBlocks renderer)
     {
         if (world.getBlock(x, y + 1, z) == block)
         {
-            renderer.renderStandardBlock(block, x, y, z);
+            renderer.renderStandardBlock(block, pos);
         }
         else
         {
-            int l = world.getBlockMetadata(x, y, z);
+            int l = world.getBlockMetadata(pos);
 
             Tessellator tessellator = Tessellator.instance;
 
-            tessellator.setBrightness(block.getMixedBrightnessForBlock(world, x, y, z));
+            tessellator.setBrightness(block.getMixedBrightnessForBlock(world, pos));
             tessellator.setColorOpaque_F(1.0F, 1.0F, 1.0F);
 
-            IIcon icon = block.getIcon(0, l);
+            Icon icon = block.getIcon(0, l);
 
             if (renderer.hasOverrideBlockTexture())
                 icon = renderer.overrideBlockTexture;
 
-            boolean north = world.getBlock(x, y, z + 1) == block;
+            boolean north = world.getBlock(pos + 1) == block;
             boolean east = world.getBlock(x + 1, y, z) == block;
-            boolean south = world.getBlock(x, y, z - 1) == block;
+            boolean south = world.getBlock(pos - 1) == block;
             boolean west = world.getBlock(x - 1, y, z) == block;
 
             renderTreasurePile(icon, x + 0.5f, y, z + 0.5f, north, east, south, west);

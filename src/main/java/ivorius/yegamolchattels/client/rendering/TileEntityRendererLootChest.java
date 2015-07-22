@@ -31,7 +31,7 @@ public class TileEntityRendererLootChest extends TileEntitySpecialRenderer
         TileEntityLootChest lootChest = (TileEntityLootChest) entity;
 
         GL11.glPushMatrix();
-        IvRotatableBlockRenderHelper.transformFor(lootChest, x, y, z);
+        IvRotatableBlockRenderHelper.transformFor(lootChest, pos);
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 

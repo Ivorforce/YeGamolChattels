@@ -5,30 +5,26 @@
 
 package ivorius.yegamolchattels;
 
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
 import ivorius.ivtoolkit.network.*;
 import ivorius.yegamolchattels.achievements.YGCAchievementList;
-import ivorius.yegamolchattels.blocks.*;
 import ivorius.yegamolchattels.crafting.YGCCrafting;
 import ivorius.yegamolchattels.events.YGCFMLEventHandler;
 import ivorius.yegamolchattels.events.YGCForgeEventHandler;
 import ivorius.yegamolchattels.gui.YGCGuiHandler;
-import ivorius.yegamolchattels.items.*;
 import ivorius.yegamolchattels.materials.YGCMaterials;
 import ivorius.yegamolchattels.worldgen.WorldGenFlax;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.Logger;
 
 @Mod(modid = YeGamolChattels.MODID, version = YeGamolChattels.VERSION, name = YeGamolChattels.NAME, guiFactory = "ivorius.yegamolchattels.gui.YGCConfigGuiFactory",

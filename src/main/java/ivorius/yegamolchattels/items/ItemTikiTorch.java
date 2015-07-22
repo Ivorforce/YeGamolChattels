@@ -7,12 +7,12 @@ package ivorius.yegamolchattels.items;
 
 import ivorius.yegamolchattels.blocks.YGCBlocks;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import ivorius.ivtoolkit.rendering.grid.Icon;
 import net.minecraft.world.World;
 
 public class ItemTikiTorch extends ItemBlock
@@ -24,16 +24,16 @@ public class ItemTikiTorch extends ItemBlock
     }
 
     @Override
-    public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int x, int y, int z, int blockSide, float par8, float par9, float par10)
+    public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, BlockPos pos, int blockSide, float par8, float par9, float par10)
     {
-        Block prevBlock = par3World.getBlock(x, y, z);
-        int prevMeta = par3World.getBlockMetadata(x, y, z);
+        Block prevBlock = par3World.getBlock(pos);
+        int prevMeta = par3World.getBlockMetadata(pos);
 
         if (prevBlock == Blocks.snow_layer && prevMeta < 1)
         {
             blockSide = 1;
         }
-        else if (prevBlock != Blocks.vine && prevBlock != Blocks.tallgrass && prevBlock != Blocks.deadbush && !prevBlock.isReplaceable(par3World, x, y, z))
+        else if (prevBlock != Blocks.vine && prevBlock != Blocks.tallgrass && prevBlock != Blocks.deadbush && !prevBlock.isReplaceable(par3World, pos))
         {
             if (blockSide == 0)
                 --y;
@@ -51,28 +51,28 @@ public class ItemTikiTorch extends ItemBlock
 
         Block block = YGCBlocks.tikiTorch;
 
-        if (!block.canPlaceBlockAt(par3World, x, y, z))
+        if (!block.canPlaceBlockAt(par3World, pos))
         {
             return false;
         }
 
-        par3World.setBlock(x, y, z, block, 1, 3);
+        par3World.setBlock(pos, block, 1, 3);
         par3World.setBlock(x, y + 1, z, block, 0, 3);
 
-        par3World.notifyBlocksOfNeighborChange(x, y, z, block);
+        par3World.notifyBlocksOfNeighborChange(pos, block);
         par3World.notifyBlocksOfNeighborChange(x, y + 1, z, block);
         par1ItemStack.stackSize--;
         return true;
     }
 
     @Override
-    public IIcon getIconFromDamage(int par1)
+    public Icon getIconFromDamage(int par1)
     {
         return itemIcon;
     }
 
     @Override
-    public void registerIcons(IIconRegister par1IconRegister)
+    public void registerIcons(IconRegister par1IconRegister)
     {
         itemIcon = par1IconRegister.registerIcon(field_150939_a.getItemIconName());
     }

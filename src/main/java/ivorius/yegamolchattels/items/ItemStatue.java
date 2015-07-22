@@ -35,7 +35,7 @@ public class ItemStatue extends ItemBlock
     }
 
     @Override
-    public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int x, int y, int z, int blockSide, float hitX, float hitY, float hitZ)
+    public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, BlockPos pos, int blockSide, float hitX, float hitY, float hitZ)
     {
         Statue statue = createStatue(par1ItemStack, par3World);
 
@@ -47,7 +47,7 @@ public class ItemStatue extends ItemBlock
                 List<int[]> positions = getStatuePositions(statue.getEntity(), rotation);
 
                 IvMultiBlockHelper multiBlockHelper = new IvMultiBlockHelper();
-                if (multiBlockHelper.beginPlacing(positions, par3World, x, y, z, blockSide, par1ItemStack, par2EntityPlayer, this.field_150939_a, 0, rotation))
+                if (multiBlockHelper.beginPlacing(positions, par3World, pos, blockSide, par1ItemStack, par2EntityPlayer, this.field_150939_a, 0, rotation))
                 {
                     for (int[] position : multiBlockHelper)
                     {

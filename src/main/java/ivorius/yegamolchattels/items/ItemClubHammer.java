@@ -8,11 +8,13 @@ package ivorius.yegamolchattels.items;
 import ivorius.yegamolchattels.blocks.TileEntityMicroBlock;
 import ivorius.yegamolchattels.blocks.YGCBlocks;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 import java.util.List;
 import java.util.Random;
@@ -43,19 +45,19 @@ public class ItemClubHammer extends ItemTool
     }
 
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
+    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-        Block block = world.getBlock(x, y, z);
+        Block block = world.getBlock(pos);
 
         if (block == YGCBlocks.microBlock)
-            block.rotateBlock(world, x, y, z, ForgeDirection.UP);
+            block.rotateBlock(world, pos, EnumFacing.UP);
 
-        return super.onItemUse(stack, player, world, x, y, z, side, hitX, hitY, hitZ);
+        return super.onItemUse(stack, player, world, pos, side, hitX, hitY, hitZ);
     }
 
-    public void modifyDrops(World world, Block block, int metadata, ItemStack stack, int x, int y, int z, List<ItemStack> drops)
+    public void modifyDrops(World world, IBlockState state, ItemStack stack, BlockPos pos, List<ItemStack> drops)
     {
-        if (isMicroblockable(block, metadata))
+        if (isMicroblockable(state))
         {
             drops.clear();
 
@@ -72,21 +74,21 @@ public class ItemClubHammer extends ItemTool
             {
                 int stackDrop = Math.min(droppedFragments, 64);
                 ItemStack drop = new ItemStack(YGCItems.blockFragment, stackDrop);
-                ItemBlockFragment.setFragment(drop, new ItemChisel.BlockData(block, (byte) world.getBlockMetadata(x, y, z)));
+                ItemBlockFragment.setFragment(drop, new IBlockState(block, (byte) world.getBlockMetadata(pos)));
                 droppedFragments -= stackDrop;
                 drops.add(drop);
             }
         }
     }
 
-    public static boolean isMicroblockable(World world, int x, int y, int z)
+    public static boolean isMicroblockable(World world, BlockPos pos)
     {
-        Block block = world.getBlock(x, y, z);
-        return block.isOpaqueCube() && world.getTileEntity(x, y, z) == null && block.getBlockHardness(world, x, y, z) >= 0.0f;
+        IBlockState state = world.getBlockState(pos);
+        return state.getBlock().isOpaqueCube() && world.getTileEntity(pos) == null && state.getBlock().getBlockHardness(world, pos) >= 0.0f;
     }
 
-    public static boolean isMicroblockable(Block block, int metadata)
+    public static boolean isMicroblockable(IBlockState state)
     {
-        return block.isOpaqueCube() && !block.hasTileEntity(metadata);
+        return state.getBlock().isOpaqueCube() && !state.getBlock().hasTileEntity(state);
     }
 }

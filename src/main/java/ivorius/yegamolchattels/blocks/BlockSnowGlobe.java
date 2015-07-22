@@ -5,12 +5,13 @@
 
 package ivorius.yegamolchattels.blocks;
 
-import ivorius.yegamolchattels.YeGamolChattels;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class BlockSnowGlobe extends Block
@@ -27,52 +28,40 @@ public class BlockSnowGlobe extends Block
     }
 
     @Override
-    public int getRenderBlockPass()
-    {
-        return 1;
-    }
-
-    @Override
     public boolean isOpaqueCube()
     {
         return false;
     }
 
     @Override
-    public boolean renderAsNormalBlock()
+    public boolean isFullCube()
     {
         return false;
     }
 
     @Override
-    public boolean hasTileEntity(int metadata)
+    public boolean hasTileEntity(IBlockState state)
     {
         return true;
     }
 
     @Override
-    public TileEntity createTileEntity(World var1, int i)
+    public TileEntity createTileEntity(World var1, IBlockState state)
     {
         return new TileEntitySnowGlobe();
     }
 
     @Override
-    public void registerBlockIcons(IIconRegister par1IconRegister)
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-        this.blockIcon = par1IconRegister.registerIcon(YeGamolChattels.textureBase + "realityGlobe");
-    }
-
-    @Override
-    public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5Player, int p_149727_6_, float p_149727_7_, float p_149727_8_, float p_149727_9_)
-    {
-        TileEntity tileEntity = par1World.getTileEntity(par2, par3, par4);
+        TileEntity tileEntity = worldIn.getTileEntity(pos);
 
         if (tileEntity instanceof TileEntitySnowGlobe)
         {
             TileEntitySnowGlobe tileEntitySnowGlobe = (TileEntitySnowGlobe) tileEntity;
-            return tileEntitySnowGlobe.useItem(par5Player.getHeldItem());
+            return tileEntitySnowGlobe.useItem(playerIn.getHeldItem());
         }
 
-        return super.onBlockActivated(par1World, par2, par3, par4, par5Player, p_149727_6_, p_149727_7_, p_149727_8_, p_149727_9_);
+        return super.onBlockActivated(worldIn, pos, state, playerIn, side, hitX, hitY, hitZ);
     }
 }

@@ -6,7 +6,6 @@
 package ivorius.yegamolchattels.items;
 
 import ivorius.ivtoolkit.blocks.BlockArea;
-import ivorius.ivtoolkit.blocks.BlockCoord;
 import ivorius.ivtoolkit.blocks.IvBlockCollection;
 import ivorius.ivtoolkit.tools.IvInventoryHelper;
 import ivorius.yegamolchattels.YeGamolChattels;
@@ -16,6 +15,7 @@ import ivorius.yegamolchattels.blocks.YGCBlocks;
 import ivorius.yegamolchattels.gui.YGCGuiHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,11 +23,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,10 +35,9 @@ import java.util.Set;
  */
 public class ItemChisel extends ItemTool implements MicroblockSelector
 {
+    public boolean canCarveStatues;
     private int carvingDistance;
     private float fragmentPickupChance;
-
-    public boolean canCarveStatues;
 
     public ItemChisel(int carvingDistance, float fragmentPickupChance, float damage, ToolMaterial material, Set damageVSBlocks, boolean canCarveStatues)
     {
@@ -51,55 +47,13 @@ public class ItemChisel extends ItemTool implements MicroblockSelector
         this.canCarveStatues = canCarveStatues;
     }
 
-    public int getCarvingDistance()
+    public static boolean chiselAway(BlockPos pos, EntityPlayer player, ItemStack usedStack, ItemStack clubHammer, int range, float fragmentPickupChance)
     {
-        return carvingDistance;
-    }
-
-    public float getFragmentPickupChance()
-    {
-        return fragmentPickupChance;
-    }
-
-    @Override
-    public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
-    {
-        if (player.inventory.hasItem(YGCItems.clubHammer))
-        {
-            if (showMicroblockSelection(player, itemStack))
-            {
-                int clubHammerSlot = IvInventoryHelper.getInventorySlotContainItem(player.inventory, YGCItems.clubHammer);
-                return chiselAway(x, y, z, player, itemStack, player.inventory.getStackInSlot(clubHammerSlot), carvingDistance, fragmentPickupChance);
-            }
-            else
-            {
-                if (StatueHelper.isValidStatueBlock(world, x, y, z))
-                {
-                    if (!world.isRemote) // Some entities start with random sizes
-                    {
-                        player.openGui(YeGamolChattels.instance, YGCGuiHandler.statueCarvingGuiID, world, x, y, z);
-                    }
-
-                    return true;
-                }
-            }
-        }
-        else
-        {
-            if (!world.isRemote)
-                player.addChatComponentMessage(new ChatComponentTranslation("item.ygcChisel.noHammer"));
-        }
-
-        return false;
-    }
-
-    public static boolean chiselAway(int x, int y, int z, EntityPlayer player, ItemStack usedStack, ItemStack clubHammer, int range, float fragmentPickupChance)
-    {
-        List<BlockData> hitFragmentDatas = chiselAway(player, x, y, z, range);
+        List<IBlockState> hitFragmentDatas = chiselAway(player, pos, range);
 
         if (hitFragmentDatas != null && hitFragmentDatas.size() > 0)
         {
-            for (BlockData data : hitFragmentDatas)
+            for (IBlockState data : hitFragmentDatas)
             {
                 if (itemRand.nextFloat() < fragmentPickupChance)
                 {
@@ -119,19 +73,19 @@ public class ItemChisel extends ItemTool implements MicroblockSelector
         return false;
     }
 
-    public static List<BlockData> chiselAway(Entity entity, int hoverX, int hoverY, int hoverZ, int range)
+    public static List<IBlockState> chiselAway(Entity entity, BlockPos hover, int range)
     {
         World world = entity.worldObj;
-        MicroBlockFragment hoveredFragment = getHoveredFragment(entity, hoverX, hoverY, hoverZ);
+        MicroBlockFragment hoveredFragment = getHoveredFragment(entity, hover);
 
         if (hoveredFragment != null)
         {
-            TileEntity tileEntity = world.getTileEntity(hoveredFragment.coord.x, hoveredFragment.coord.y, hoveredFragment.coord.z);
+            TileEntity tileEntity = world.getTileEntity(hoveredFragment.coord);
 
             if (!(tileEntity instanceof TileEntityMicroBlock))
             {
                 convertToMicroBlock(world, hoveredFragment.coord);
-                tileEntity = world.getTileEntity(hoveredFragment.coord.x, hoveredFragment.coord.y, hoveredFragment.coord.z);
+                tileEntity = world.getTileEntity(hoveredFragment.coord);
             }
 
             if (tileEntity instanceof TileEntityMicroBlock)
@@ -139,16 +93,14 @@ public class ItemChisel extends ItemTool implements MicroblockSelector
                 TileEntityMicroBlock tileEntityMicroBlock = (TileEntityMicroBlock) tileEntity;
                 IvBlockCollection collection = tileEntityMicroBlock.getBlockCollection();
 
-                List<BlockData> returnList = new ArrayList<>();
-                for (BlockCoord carveCoord : new BlockArea(hoveredFragment.getInternalCoord().subtract(range, range, range), hoveredFragment.getInternalCoord().add(range, range, range)))
+                List<IBlockState> returnList = new ArrayList<>();
+                for (BlockPos carveCoord : new BlockArea(hoveredFragment.getInternalCoord().subtract(new Vec3i(range, range, range)), hoveredFragment.getInternalCoord().add(range, range, range)))
                 {
-                    Block hitInternalBlock = collection.getBlock(carveCoord);
-                    if (hitInternalBlock.getMaterial() != Material.air)
+                    IBlockState hitInternalBlock = collection.getBlockState(carveCoord);
+                    if (hitInternalBlock.getBlock().getMaterial() != Material.air)
                     {
-                        byte hitInternalMeta = collection.getMetadata(carveCoord);
-
-                        collection.setBlockAndMetadata(carveCoord, Blocks.air, (byte) 0);
-                        returnList.add(new BlockData(hitInternalBlock, hitInternalMeta));
+                        collection.setBlockState(carveCoord, Blocks.air.getDefaultState());
+                        returnList.add(hitInternalBlock);
                     }
                 }
 
@@ -162,45 +114,43 @@ public class ItemChisel extends ItemTool implements MicroblockSelector
         return null;
     }
 
-    public static void convertToMicroBlock(World world, BlockCoord coord)
+    public static void convertToMicroBlock(World world, BlockPos coord)
     {
-        Block block = coord.getBlock(world);
-        if (ItemClubHammer.isMicroblockable(world, coord.x, coord.y, coord.z) || block.getMaterial() == Material.air)
+        IBlockState state = world.getBlockState(coord);
+        if (ItemClubHammer.isMicroblockable(world, coord) || state.getBlock().getMaterial() == Material.air)
         {
-            byte metadata = (byte) coord.getMetadata(world);
-
-            world.setBlock(coord.x, coord.y, coord.z, YGCBlocks.microBlock);
-            TileEntity tileEntity = world.getTileEntity(coord.x, coord.y, coord.z);
+            world.setBlockState(coord, YGCBlocks.microBlock.getDefaultState());
+            TileEntity tileEntity = world.getTileEntity(coord);
 
             TileEntityMicroBlock tileEntityMicroBlock = (TileEntityMicroBlock) tileEntity;
             IvBlockCollection blockCollection = tileEntityMicroBlock.getBlockCollection();
 
-            if (block != Blocks.air) // Default val
+            if (state.getBlock() != Blocks.air) // Default val
             {
-                for (BlockCoord internalCoord : blockCollection)
-                    blockCollection.setBlockAndMetadata(internalCoord, block, metadata);
+                for (BlockPos internalCoord : blockCollection.area())
+                    blockCollection.setBlockState(internalCoord, state);
             }
         }
     }
 
-    public static MicroBlockFragment getHoveredFragment(Entity entity, int hoverX, int hoverY, int hoverZ)
+    public static MicroBlockFragment getHoveredFragment(Entity entity, BlockPos hover)
     {
         float partialTicks = 1.0f;
         double entityX = entity.prevPosX + (entity.posX - entity.prevPosX) * (double) partialTicks;
-        double entityY = entity.prevPosY + (entity.posY - entity.prevPosY) * (double) partialTicks + 1.62D - (double) entity.yOffset;
+        double entityY = entity.prevPosY + (entity.posY - entity.prevPosY) * (double) partialTicks + entity.getEyeHeight();
         double entityZ = entity.prevPosZ + (entity.posZ - entity.prevPosZ) * (double) partialTicks;
 
         if (!entity.worldObj.isRemote && entity instanceof EntityPlayer && entity.isSneaking())
             entityY -= 0.1f; // TODO Find a way not to hardcode this
 
-        Vec3 entityPos = Vec3.createVectorHelper(entityX, entityY, entityZ);
-        return getHoveredFragment(entity.worldObj, hoverX, hoverY, hoverZ, entityPos, entity.getLookVec());
+        Vec3 entityPos = new Vec3(entityX, entityY, entityZ);
+        return getHoveredFragment(entity.worldObj, hover, entityPos, entity.getLookVec());
     }
 
-    public static MicroBlockFragment getHoveredFragment(World world, int hoverX, int hoverY, int hoverZ, Vec3 entityPos, Vec3 entityLook)
+    public static MicroBlockFragment getHoveredFragment(World world, BlockPos hover, Vec3 entityPos, Vec3 entityLook)
     {
-        TileEntity tileEntity = world.getTileEntity(hoverX, hoverY, hoverZ);
-        Block origBlock = world.getBlock(hoverX, hoverY, hoverZ);
+        TileEntity tileEntity = world.getTileEntity(hover);
+        IBlockState origBlock = world.getBlockState(hover);
 
         IvBlockCollection collection = null;
         if (tileEntity instanceof TileEntityMicroBlock)
@@ -208,36 +158,76 @@ public class ItemChisel extends ItemTool implements MicroblockSelector
             TileEntityMicroBlock tileEntityMicroBlock = (TileEntityMicroBlock) tileEntity;
             collection = tileEntityMicroBlock.getBlockCollection();
         }
-        else if (ItemClubHammer.isMicroblockable(world, hoverX, hoverY, hoverZ))
+        else if (ItemClubHammer.isMicroblockable(world, hover))
         {
             collection = new IvBlockCollection(TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_X, TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Y, TileEntityMicroBlock.MICROBLOCKS_PER_BLOCK_Z);
 
-            for (BlockCoord coord : collection)
-                collection.setBlockAndMetadata(coord, origBlock, (byte) world.getBlockMetadata(hoverX, hoverY, hoverZ));
+            for (BlockPos coord : collection.area())
+                collection.setBlockState(coord, origBlock);
         }
 
         if (collection != null)
         {
-            Vec3 rayStart = getPositionInBlockCollection(collection, new BlockCoord(hoverX, hoverY, hoverZ), entityPos);
+            Vec3 rayStart = getPositionInBlockCollection(collection, hover, entityPos);
             MovingObjectPosition hitPosition = collection.rayTrace(rayStart, entityLook);
             if (hitPosition != null)
             {
-                BlockCoord hitCoord = new BlockCoord(hitPosition.blockX, hitPosition.blockY, hitPosition.blockZ);
-                Block hitInternalBlock = collection.getBlock(hitCoord);
+                BlockPos hitCoord = hitPosition.getBlockPos();
+                IBlockState hitInternalBlock = collection.getBlockState(hitCoord);
 
-                if (hitInternalBlock.getMaterial() != Material.air)
-                {
-                    return new MicroBlockFragment(new BlockCoord(hoverX, hoverY, hoverZ), hitCoord, ForgeDirection.getOrientation(hitPosition.sideHit), hitPosition.hitVec);
-                }
+                if (hitInternalBlock.getBlock().getMaterial() != Material.air)
+                    return new MicroBlockFragment(hover, hitCoord, hitPosition.sideHit, hitPosition.hitVec);
             }
         }
 
         return null;
     }
 
-    public static Vec3 getPositionInBlockCollection(IvBlockCollection blockCollection, BlockCoord referenceCoord, Vec3 pos)
+    public static Vec3 getPositionInBlockCollection(IvBlockCollection blockCollection, BlockPos referenceCoord, Vec3 pos)
     {
-        return Vec3.createVectorHelper((pos.xCoord - referenceCoord.x) * blockCollection.width, (pos.yCoord - referenceCoord.y) * blockCollection.height, (pos.zCoord - referenceCoord.z) * blockCollection.length);
+        return new Vec3((pos.xCoord - referenceCoord.getX()) * blockCollection.width, (pos.yCoord - referenceCoord.getY()) * blockCollection.height, (pos.zCoord - referenceCoord.getZ()) * blockCollection.length);
+    }
+
+    public int getCarvingDistance()
+    {
+        return carvingDistance;
+    }
+
+    public float getFragmentPickupChance()
+    {
+        return fragmentPickupChance;
+    }
+
+    @Override
+    public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ)
+    {
+        if (player.inventory.hasItem(YGCItems.clubHammer))
+        {
+            if (showMicroblockSelection(player, itemStack))
+            {
+                int clubHammerSlot = IvInventoryHelper.getInventorySlotContainItem(player.inventory, YGCItems.clubHammer);
+                return chiselAway(pos, player, itemStack, player.inventory.getStackInSlot(clubHammerSlot), carvingDistance, fragmentPickupChance);
+            }
+            else
+            {
+                if (StatueHelper.isValidStatueBlock(world, pos))
+                {
+                    if (!world.isRemote) // Some entities start with random sizes
+                    {
+                        player.openGui(YeGamolChattels.instance, YGCGuiHandler.statueCarvingGuiID, world, pos.getX(), pos.getY(), pos.getZ());
+                    }
+
+                    return true;
+                }
+            }
+        }
+        else
+        {
+            if (!world.isRemote)
+                player.addChatComponentMessage(new ChatComponentTranslation("item.ygcChisel.noHammer"));
+        }
+
+        return false;
     }
 
     @Override
@@ -254,12 +244,12 @@ public class ItemChisel extends ItemTool implements MicroblockSelector
 
     public static class MicroBlockFragment
     {
-        private BlockCoord coord;
-        private BlockCoord internalCoord;
-        private ForgeDirection internalSide;
+        private BlockPos coord;
+        private BlockPos internalCoord;
+        private EnumFacing internalSide;
         private Vec3 hitPoint;
 
-        public MicroBlockFragment(BlockCoord coord, BlockCoord internalCoord, ForgeDirection internalSide, Vec3 hitPoint)
+        public MicroBlockFragment(BlockPos coord, BlockPos internalCoord, EnumFacing internalSide, Vec3 hitPoint)
         {
             this.coord = coord;
             this.internalCoord = internalCoord;
@@ -267,17 +257,17 @@ public class ItemChisel extends ItemTool implements MicroblockSelector
             this.hitPoint = hitPoint;
         }
 
-        public BlockCoord getCoord()
+        public BlockPos getCoord()
         {
             return coord;
         }
 
-        public BlockCoord getInternalCoord()
+        public BlockPos getInternalCoord()
         {
             return internalCoord;
         }
 
-        public ForgeDirection getInternalSide()
+        public EnumFacing getInternalSide()
         {
             return internalSide;
         }
@@ -289,12 +279,12 @@ public class ItemChisel extends ItemTool implements MicroblockSelector
 
         public MicroBlockFragment getOpposite()
         {
-            int blockX = coord.x;
-            int blockY = coord.y;
-            int blockZ = coord.z;
-            int internalX = internalCoord.x + internalSide.offsetX;
-            int internalY = internalCoord.y + internalSide.offsetY;
-            int internalZ = internalCoord.z + internalSide.offsetZ;
+            int blockX = coord.getX();
+            int blockY = coord.getY();
+            int blockZ = coord.getZ();
+            int internalX = internalCoord.getX() + internalSide.getFrontOffsetX();
+            int internalY = internalCoord.getY() + internalSide.getFrontOffsetY();
+            int internalZ = internalCoord.getZ() + internalSide.getFrontOffsetZ();
 
             if (internalX < 0)
             {
@@ -329,7 +319,7 @@ public class ItemChisel extends ItemTool implements MicroblockSelector
                 blockZ++;
             }
 
-            return new MicroBlockFragment(new BlockCoord(blockX, blockY, blockZ), new BlockCoord(internalX, internalY, internalZ), internalSide.getOpposite(), hitPoint);
+            return new MicroBlockFragment(new BlockPos(blockX, blockY, blockZ), new BlockPos(internalX, internalY, internalZ), internalSide.getOpposite(), hitPoint);
         }
 
         @Override
@@ -340,46 +330,6 @@ public class ItemChisel extends ItemTool implements MicroblockSelector
                     ", internalCoord=" + internalCoord +
                     ", internalSide=" + internalSide +
                     ", hitPoint=" + hitPoint +
-                    '}';
-        }
-    }
-
-    public static class BlockData
-    {
-        public Block block;
-        public byte meta;
-
-        public BlockData(Block block, byte meta)
-        {
-            this.block = block;
-            this.meta = meta;
-        }
-
-        @Override
-        public boolean equals(Object o)
-        {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            BlockData blockData = (BlockData) o;
-
-            return block == blockData.block && meta == blockData.meta;
-        }
-
-        @Override
-        public int hashCode()
-        {
-            int result = block.hashCode();
-            result = 31 * result + (int) meta;
-            return result;
-        }
-
-        @Override
-        public String toString()
-        {
-            return "BlockData{" +
-                    "block=" + block +
-                    ", meta=" + meta +
                     '}';
         }
     }

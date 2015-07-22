@@ -13,18 +13,18 @@ import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.materials.YGCMaterials;
 import ivorius.yegamolchattels.tabs.YGCCreativeTabs;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
+import ivorius.ivtoolkit.rendering.grid.Icon;
 import net.minecraft.world.World;
 
 public class BlockPedestal extends IvBlockMultiblock
 {
-    public IIcon[] icons;
+    public Icon[] icons;
 
     public BlockPedestal()
     {
@@ -46,21 +46,21 @@ public class BlockPedestal extends IvBlockMultiblock
     }
 
     @Override
-    public boolean renderAsNormalBlock()
+    public boolean isFullCube()
     {
         return false;
     }
 
     @Override
-    public IIcon getIcon(int par1, int par2)
+    public Icon getIcon(int par1, int par2)
     {
         return this.icons.length > par2 ? this.icons[par2] : Blocks.planks.getIcon(0, 0);
     }
 
     @Override
-    public void registerBlockIcons(IIconRegister iconRegister)
+    public void registerBlockIcons(IconRegister iconRegister)
     {
-        this.icons = new IIcon[EnumPedestalEntry.getNumberOfEntries()];
+        this.icons = new Icon[EnumPedestalEntry.getNumberOfEntries()];
 
         for (int i = 0; i < this.icons.length; i++)
             this.icons[i] = iconRegister.registerIcon(YeGamolChattels.textureBase + "pedestal" + i);
@@ -111,13 +111,13 @@ public class BlockPedestal extends IvBlockMultiblock
     }
 
     @Override
-    public int getComparatorInputOverride(World world, int x, int y, int z, int p_149736_5_)
+    public int getComparatorInputOverride(World world, BlockPos pos, int p_149736_5_)
     {
-        TileEntity tileEntity = world.getTileEntity(x, y, z);
+        TileEntity tileEntity = world.getTileEntity(pos);
 
         if (tileEntity instanceof TileEntityPedestal)
             return Container.calcRedstoneFromInventory((TileEntityPedestal) tileEntity);
 
-        return super.getComparatorInputOverride(world, x, y, z, p_149736_5_);
+        return super.getComparatorInputOverride(world, pos, p_149736_5_);
     }
 }

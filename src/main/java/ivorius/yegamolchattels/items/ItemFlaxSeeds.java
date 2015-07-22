@@ -21,7 +21,7 @@ public class ItemFlaxSeeds extends ItemSeeds
     }
 
     @Override
-    public EnumPlantType getPlantType(IBlockAccess world, int x, int y, int z)
+    public EnumPlantType getPlantType(IBlockAccess world, BlockPos pos)
     {
         return EnumPlantType.Plains;
     }

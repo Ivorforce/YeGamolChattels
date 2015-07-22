@@ -59,7 +59,7 @@ public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements Pa
 //                if (this.storedItems[i] != null && this.storedItems[i].getItem() == Items.writable_book)
 //                {
 //                    tryAutocompletingBook(this.storedItems[i], jamiensBook, false);
-//                    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+//                    worldObj.markBlockForUpdate(getPos());
 //                }
 //            }
 //        }
@@ -324,7 +324,7 @@ public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements Pa
     public void activateTrigger(int trigger)
     {
         this.shelfTriggers[trigger] = !this.shelfTriggers[trigger];
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        worldObj.markBlockForUpdate(getPos());
 
         if (this.shelfTriggers[trigger])
             worldObj.playSoundEffect(xCoord + 0.5f, yCoord + 0.5f, zCoord + 0.5f, "random.chestopen", 0.3f, 1.6f);
@@ -333,7 +333,7 @@ public class TileEntityItemShelfModel0 extends TileEntityItemShelf implements Pa
     }
 
     @Override
-    public boolean handleRightClickOnIntersection(EntityPlayer player, ItemStack stack, int side, IvRaytracedIntersection intersection)
+    public boolean handleRightClickOnIntersection(EntityPlayer player, ItemStack stack, EnumFacing facing, IvRaytracedIntersection intersection)
     {
 //        if (getShelfType() == SHELF_WARDROBE)
 //        {

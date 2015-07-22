@@ -1,6 +1,6 @@
 package ivorius.yegamolchattels.utils;
 
-import ivorius.ivtoolkit.blocks.BlockCoord;
+import net.minecraft.util.BlockPos;
 import ivorius.ivtoolkit.blocks.IvBlockCollection;
 import ivorius.ivtoolkit.math.AxisAlignedTransform2D;
 
@@ -16,9 +16,9 @@ public class IvBlockCollections
 
         IvBlockCollection copy = new IvBlockCollection(newSize[0], newSize[1], newSize[2]);
 
-        for (BlockCoord coord : copy)
+        for (BlockPos coord : copy)
         {
-            BlockCoord transformed = transform.apply(coord, size);
+            BlockPos transformed = transform.apply(coord, size);
             copy.setBlockAndMetadata(transformed, collection.getBlock(coord), collection.getMetadata(coord));
         }
 

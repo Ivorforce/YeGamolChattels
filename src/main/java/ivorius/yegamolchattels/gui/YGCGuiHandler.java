@@ -5,7 +5,7 @@
 
 package ivorius.yegamolchattels.gui;
 
-import cpw.mods.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
@@ -19,23 +19,23 @@ public class YGCGuiHandler implements IGuiHandler
     public static final int statueCarvingGuiID = 2;
 
     @Override
-    public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
+    public Object getServerGuiElement(int ID, EntityPlayer player, World world, BlockPos pos)
     {
         if (ID == statueCarvingGuiID)
-            return new ContainerCarveStatue(player.inventory, player, x, y, z);
+            return new ContainerCarveStatue(player.inventory, player, pos);
 
         return null;
     }
 
     @Override
-    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
+    public Object getClientGuiElement(int ID, EntityPlayer player, World world, BlockPos pos)
     {
         if (ID == plankSawGuiID)
-            return new GuiScreenSawBench(world, x, y, z);
+            return new GuiScreenSawBench(world, pos);
         else if (ID == plankRefinementGuiID)
-            return new GuiScreenTablePress(world, x, y, z);
+            return new GuiScreenTablePress(world, pos);
         else if (ID == statueCarvingGuiID)
-            return new GuiScreenCarveStatue(player, x, y, z);
+            return new GuiScreenCarveStatue(player, pos);
 
         return null;
     }

@@ -14,10 +14,10 @@ import net.minecraft.client.renderer.entity.YGCEntityRendererAccessor;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.IIcon;
+import ivorius.ivtoolkit.rendering.grid.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import org.apache.commons.io.FileUtils;
 
 import javax.imageio.ImageIO;
@@ -36,9 +36,9 @@ public class EntityBlockTextureMerger
 {
     private static int[] cachedBlockTextureMap;
 
-    public static BufferedImage getTexture(Block block, int metadata)
+    public static BufferedImage getTexture(IBlockState state)
     {
-        IIcon icon = block.getIcon(ForgeDirection.NORTH.ordinal(), metadata);
+        Icon icon = block.getIcon(EnumFacing.NORTH.ordinal(), metadata);
         if (icon instanceof TextureAtlasSprite)
         {
             TextureAtlasSprite sprite = (TextureAtlasSprite) icon;
@@ -60,7 +60,7 @@ public class EntityBlockTextureMerger
         return null;
     }
 
-    public static BufferedImage getStitchedTextureSubImage(IIcon icon)
+    public static BufferedImage getStitchedTextureSubImage(Icon icon)
     {
         int textureWidth = MathHelper.floor_float(1.0f / (icon.getMaxU() - icon.getMinU()) + 0.5f) * icon.getIconWidth();
         int textureHeight = MathHelper.floor_float(1.0f / (icon.getMaxV() - icon.getMinV()) + 0.5f) * icon.getIconHeight();

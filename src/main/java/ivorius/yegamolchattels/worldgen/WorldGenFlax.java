@@ -5,7 +5,7 @@
 
 package ivorius.yegamolchattels.worldgen;
 
-import cpw.mods.fml.common.IWorldGenerator;
+import net.minecraftforge.fml.common.IWorldGenerator;
 import ivorius.yegamolchattels.blocks.YGCBlocks;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -46,7 +46,7 @@ public class WorldGenFlax implements IWorldGenerator
                 int y = random.nextInt(world.getHeightValue(x, z) + 32);
 
                 plantGen.func_150550_a(YGCBlocks.flaxPlant, 7 - (random.nextFloat() < 0.1f ? 1 : 0));
-                plantGen.generate(world, random, x, y, z);
+                plantGen.generate(world, random, pos);
             }
         }
     }

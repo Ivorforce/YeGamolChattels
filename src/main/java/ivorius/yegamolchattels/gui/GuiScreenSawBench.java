@@ -16,7 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
+import ivorius.ivtoolkit.rendering.grid.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -42,9 +42,9 @@ public class GuiScreenSawBench extends GuiScreen
 
     private List<EntityFX> particles = new ArrayList<>();
 
-    public GuiScreenSawBench(World world, int x, int y, int z)
+    public GuiScreenSawBench(World world, BlockPos pos)
     {
-        TileEntity tileEntity = world.getTileEntity(x, y, z);
+        TileEntity tileEntity = world.getTileEntity(pos);
 
         if (tileEntity instanceof TileEntitySawBench)
             tileEntitySawBench = (TileEntitySawBench) tileEntity;
@@ -148,7 +148,7 @@ public class GuiScreenSawBench extends GuiScreen
         boolean isTop = layer == 0;
         boolean isBottom = layer == maxLayers;
 
-        IIcon blockTexture = block.getIcon((isTop || isBottom) ? 2 : 1, meta);
+        Icon blockTexture = block.getIcon((isTop || isBottom) ? 2 : 1, meta);
         this.mc.getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
         int shiftY = MathHelper.floor_float(woodCutY * 20.0f);
         int shiftX = shiftY / 3;
@@ -158,7 +158,7 @@ public class GuiScreenSawBench extends GuiScreen
 //        drawTexturedModelRectFromIcon(width / 2 - 50, 80, blockTexture, 100, 100);
     }
 
-    public void drawTexturedTrapezoidFromIcon(int xCenter, int y, IIcon par3Icon, int widthBottom, int widthTop, int height, float textureY1, float textureY2)
+    public void drawTexturedTrapezoidFromIcon(int xCenter, int y, Icon par3Icon, int widthBottom, int widthTop, int height, float textureY1, float textureY2)
     {
         int widthBottom2 = widthBottom / 2;
         int widthTop2 = widthTop / 2;

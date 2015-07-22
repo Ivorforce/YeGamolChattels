@@ -11,16 +11,16 @@ import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.tabs.YGCCreativeTabs;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
+import ivorius.ivtoolkit.rendering.grid.Icon;
 import net.minecraft.world.World;
 
 public class BlockGong extends IvBlockMultiblock
 {
-    public IIcon[] icons = new IIcon[3];
+    public Icon[] icons = new Icon[3];
 
     public BlockGong(Material material)
     {
@@ -42,7 +42,7 @@ public class BlockGong extends IvBlockMultiblock
     }
 
     @Override
-    public boolean renderAsNormalBlock()
+    public boolean isFullCube()
     {
         return false;
     }
@@ -84,7 +84,7 @@ public class BlockGong extends IvBlockMultiblock
     }
 
     @Override
-    public IIcon getIcon(int par1, int par2)
+    public Icon getIcon(int par1, int par2)
     {
         if (icons.length > par2)
             return icons[par2];
@@ -93,7 +93,7 @@ public class BlockGong extends IvBlockMultiblock
     }
 
     @Override
-    public void registerBlockIcons(IIconRegister par1IconRegister)
+    public void registerBlockIcons(IconRegister par1IconRegister)
     {
         icons[0] = par1IconRegister.registerIcon(YeGamolChattels.textureBase + "gongSmall");
         icons[1] = par1IconRegister.registerIcon(YeGamolChattels.textureBase + "gongMedium");

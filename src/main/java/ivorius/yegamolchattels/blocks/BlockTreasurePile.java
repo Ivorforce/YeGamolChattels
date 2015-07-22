@@ -70,11 +70,11 @@ public class BlockTreasurePile extends Block
         }
     }
 
-    public static boolean canFallBelow(World world, int x, int y, int z)
+    public static boolean canFallBelow(World world, BlockPos pos)
     {
-        Block block = world.getBlock(x, y, z);
+        Block block = world.getBlock(pos);
 
-        if (block.isAir(world, x, y, z))
+        if (block.isAir(world, pos))
         {
             return true;
         }
@@ -96,7 +96,7 @@ public class BlockTreasurePile extends Block
     }
 
     @Override
-    public boolean renderAsNormalBlock()
+    public boolean isFullCube()
     {
         return false;
     }

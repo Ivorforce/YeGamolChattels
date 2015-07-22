@@ -15,7 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import ivorius.ivtoolkit.rendering.grid.Icon;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -87,7 +87,7 @@ public class ItemPedestal extends ItemBlock
     }
 
     @Override
-    public IIcon getIconFromDamage(int par1)
+    public Icon getIconFromDamage(int par1)
     {
         return field_150939_a.getIcon(0, par1);
     }

@@ -8,14 +8,16 @@ package ivorius.yegamolchattels.blocks;
 import ivorius.ivtoolkit.blocks.IvMultiBlockHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
+import ivorius.ivtoolkit.rendering.grid.Icon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class BlockLootChest extends Block
@@ -28,18 +30,18 @@ public class BlockLootChest extends Block
     }
 
     @Override
-    public void breakBlock(World world, int x, int y, int z, Block block, int metadata)
+    public void breakBlock(World world, BlockPos pos, IBlockState state)
     {
-        TileEntityLootChest tileEntityLootChest = (TileEntityLootChest) world.getTileEntity(x, y, z);
+        TileEntityLootChest tileEntityLootChest = (TileEntityLootChest) world.getTileEntity(pos);
         tileEntityLootChest.dropAllItems();
 
-        super.breakBlock(world, x, y, z, block, metadata);
+        super.breakBlock(world, pos, state);
     }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing facing, float par7, float par8, float par9)
     {
-        TileEntityLootChest lootChest = (TileEntityLootChest) world.getTileEntity(x, y, z);
+        TileEntityLootChest lootChest = (TileEntityLootChest) world.getTileEntity(pos);
 
         if (!world.isRemote)
         {
@@ -70,22 +72,22 @@ public class BlockLootChest extends Block
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLivingBase, ItemStack itemStack)
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
     {
-        super.onBlockPlacedBy(world, x, y, z, entityLivingBase, itemStack);
+        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 
-        TileEntityLootChest entity = (TileEntityLootChest) world.getTileEntity(x, y, z);
-        entity.direction = IvMultiBlockHelper.getRotation(entityLivingBase);
+        TileEntityLootChest entity = (TileEntityLootChest) worldIn.getTileEntity(pos);
+        entity.direction = IvMultiBlockHelper.getRotation(placer);
     }
 
     @Override
-    public boolean hasTileEntity(int metadata)
+    public boolean hasTileEntity(IBlockState state)
     {
         return true;
     }
 
     @Override
-    public TileEntity createTileEntity(World var1, int var2)
+    public TileEntity createTileEntity(World var1, IBlockState state)
     {
         return new TileEntityLootChest();
     }
@@ -103,21 +105,9 @@ public class BlockLootChest extends Block
     }
 
     @Override
-    public boolean renderAsNormalBlock()
+    public boolean isFullCube()
     {
         return false;
-    }
-
-    @Override
-    public IIcon getIcon(int var1, int var2)
-    {
-        return Blocks.planks.getIcon(0, 1);
-    }
-
-    @Override
-    public void registerBlockIcons(IIconRegister iconRegister)
-    {
-
     }
 
     @Override
@@ -127,13 +117,13 @@ public class BlockLootChest extends Block
     }
 
     @Override
-    public int getComparatorInputOverride(World world, int x, int y, int z, int p_149736_5_)
+    public int getComparatorInputOverride(World worldIn, BlockPos pos)
     {
-        TileEntity tileEntity = world.getTileEntity(x, y, z);
+        TileEntity tileEntity = worldIn.getTileEntity(pos);
 
         if (tileEntity instanceof TileEntityLootChest)
             return Container.calcRedstoneFromInventory((TileEntityLootChest) tileEntity);
 
-        return super.getComparatorInputOverride(world, x, y, z, p_149736_5_);
+        return super.getComparatorInputOverride(worldIn, pos);
     }
 }

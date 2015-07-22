@@ -31,7 +31,7 @@ public class BlockGrindstone extends Block
     }
 
     @Override
-    public boolean renderAsNormalBlock()
+    public boolean isFullCube()
     {
         return false;
     }

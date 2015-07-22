@@ -5,27 +5,27 @@
 
 package ivorius.yegamolchattels.blocks;
 
-import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import ivorius.ivtoolkit.blocks.BlockArea;
-import ivorius.ivtoolkit.blocks.BlockCoord;
 import ivorius.ivtoolkit.blocks.IvBlockCollection;
 import ivorius.ivtoolkit.network.IvNetworkHelperServer;
 import ivorius.ivtoolkit.network.PartialUpdateHandler;
 import ivorius.ivtoolkit.tools.MCRegistryDefault;
 import ivorius.yegamolchattels.YeGamolChattels;
 import ivorius.yegamolchattels.client.rendering.GridQuadCache;
-import ivorius.yegamolchattels.client.rendering.IIconQuadCache;
+import ivorius.yegamolchattels.client.rendering.IconQuadCache;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import ivorius.ivtoolkit.rendering.grid.Icon;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Created by lukas on 11.07.14.
@@ -44,17 +44,11 @@ public class TileEntityMicroBlock extends TileEntity implements PartialUpdateHan
     private boolean shouldDropAsItem = true;
 
     @SideOnly(Side.CLIENT)
-    private GridQuadCache<IIcon> quadCache;
+    private GridQuadCache<Icon> quadCache;
 
     public TileEntityMicroBlock()
     {
         this.blockCollection = new IvBlockCollection(MICROBLOCKS_PER_BLOCK_X, MICROBLOCKS_PER_BLOCK_Y, MICROBLOCKS_PER_BLOCK_Z);
-    }
-
-    @Override
-    public boolean canUpdate()
-    {
-        return false;
     }
 
     public IvBlockCollection getBlockCollection()
@@ -67,7 +61,7 @@ public class TileEntityMicroBlock extends TileEntity implements PartialUpdateHan
         this.blockCollection = blockCollection;
     }
 
-    public boolean isSideOpaque(ForgeDirection direction)
+    public boolean isSideOpaque(EnumFacing direction)
     {
         return isSideOpaque[direction.ordinal()];
     }
@@ -87,14 +81,14 @@ public class TileEntityMicroBlock extends TileEntity implements PartialUpdateHan
         int[] sizeX = new int[]{1, blockCollection.height, blockCollection.length};
         int[] sizeY = new int[]{blockCollection.width, 1, blockCollection.length};
         int[] sizeZ = new int[]{blockCollection.width, blockCollection.height, 1};
-        BlockCoord zeroCoord = new BlockCoord(0, 0, 0);
+        BlockPos zeroCoord = new BlockPos(0, 0, 0);
 
-        isSideOpaque[ForgeDirection.DOWN.ordinal()] = areAllOpaque(BlockArea.areaFromSize(zeroCoord, sizeY));
-        isSideOpaque[ForgeDirection.UP.ordinal()] = areAllOpaque(BlockArea.areaFromSize(new BlockCoord(0, blockCollection.height - 1, 0), sizeY));
-        isSideOpaque[ForgeDirection.NORTH.ordinal()] = areAllOpaque(BlockArea.areaFromSize(zeroCoord, sizeZ));
-        isSideOpaque[ForgeDirection.EAST.ordinal()] = areAllOpaque(BlockArea.areaFromSize(new BlockCoord(blockCollection.width - 1, 0, 0), sizeX));
-        isSideOpaque[ForgeDirection.SOUTH.ordinal()] = areAllOpaque(BlockArea.areaFromSize(new BlockCoord(0, 0, blockCollection.length - 1), sizeZ));
-        isSideOpaque[ForgeDirection.WEST.ordinal()] = areAllOpaque(BlockArea.areaFromSize(zeroCoord, sizeX));
+        isSideOpaque[EnumFacing.DOWN.ordinal()] = areAllOpaque(BlockArea.areaFromSize(zeroCoord, sizeY));
+        isSideOpaque[EnumFacing.UP.ordinal()] = areAllOpaque(BlockArea.areaFromSize(new BlockPos(0, blockCollection.height - 1, 0), sizeY));
+        isSideOpaque[EnumFacing.NORTH.ordinal()] = areAllOpaque(BlockArea.areaFromSize(zeroCoord, sizeZ));
+        isSideOpaque[EnumFacing.EAST.ordinal()] = areAllOpaque(BlockArea.areaFromSize(new BlockPos(blockCollection.width - 1, 0, 0), sizeX));
+        isSideOpaque[EnumFacing.SOUTH.ordinal()] = areAllOpaque(BlockArea.areaFromSize(new BlockPos(0, 0, blockCollection.length - 1), sizeZ));
+        isSideOpaque[EnumFacing.WEST.ordinal()] = areAllOpaque(BlockArea.areaFromSize(zeroCoord, sizeX));
 
         if (worldObj != null)
         {
@@ -103,7 +97,7 @@ public class TileEntityMicroBlock extends TileEntity implements PartialUpdateHan
             else
                 markCacheInvalidClient(fromNBT);
 
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            worldObj.markBlockForUpdate(getPos());
         }
 
         markDirty();
@@ -118,9 +112,9 @@ public class TileEntityMicroBlock extends TileEntity implements PartialUpdateHan
     public boolean validateBeingMicroblock()
     {
         boolean allSame = true;
-        Block curBlock = blockCollection.getBlock(new BlockCoord(0, 0, 0));
-        int curMeta = blockCollection.getMetadata(new BlockCoord(0, 0, 0));
-        for (BlockCoord coord : blockCollection)
+        Block curBlock = blockCollection.getBlock(new BlockPos(0, 0, 0));
+        int curMeta = blockCollection.getMetadata(new BlockPos(0, 0, 0));
+        for (BlockPos coord : blockCollection)
         {
             if (blockCollection.getBlock(coord) != curBlock || blockCollection.getMetadata(coord) != curMeta)
             {
@@ -132,7 +126,7 @@ public class TileEntityMicroBlock extends TileEntity implements PartialUpdateHan
         if (allSame)
         {
             shouldDropAsItem = false;
-            worldObj.setBlock(xCoord, yCoord, zCoord, curBlock, curMeta, 3);
+            worldObj.setBlock(getPos(), curBlock, curMeta, 3);
         }
         else if (blockCollection.getBlockMultiplicity() > MAX_MICROBLOCK_MAPPINGS)
         {
@@ -144,7 +138,7 @@ public class TileEntityMicroBlock extends TileEntity implements PartialUpdateHan
 
     private boolean areAllOpaque(BlockArea area)
     {
-        for (BlockCoord coord : area)
+        for (BlockPos coord : area)
         {
             if (!blockCollection.getBlock(coord).isOpaqueCube())
                 return false;
@@ -195,7 +189,7 @@ public class TileEntityMicroBlock extends TileEntity implements PartialUpdateHan
     {
         NBTTagCompound compound = new NBTTagCompound();
         writeSyncToNBT(compound);
-        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, compound);
+        return new S35PacketUpdateTileEntity(getPos(), 1, compound);
     }
 
     @Override
@@ -224,10 +218,10 @@ public class TileEntityMicroBlock extends TileEntity implements PartialUpdateHan
     }
 
     @SideOnly(Side.CLIENT)
-    public GridQuadCache<IIcon> getQuadCache()
+    public GridQuadCache<Icon> getQuadCache()
     {
         if (quadCache == null)
-            quadCache = IIconQuadCache.createIconQuadCache(blockCollection);
+            quadCache = IconQuadCache.createIconQuadCache(blockCollection);
 
         return quadCache;
     }

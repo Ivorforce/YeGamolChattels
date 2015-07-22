@@ -5,10 +5,10 @@
 
 package ivorius.yegamolchattels.gui;
 
-import cpw.mods.fml.client.IModGuiFactory;
-import cpw.mods.fml.client.config.GuiConfig;
-import cpw.mods.fml.client.config.GuiConfigEntries;
-import cpw.mods.fml.client.config.IConfigElement;
+import net.minecraftforge.fml.client.IModGuiFactory;
+import net.minecraftforge.fml.client.config.GuiConfig;
+import net.minecraftforge.fml.client.config.GuiConfigEntries;
+import net.minecraftforge.fml.client.config.IConfigElement;
 import ivorius.yegamolchattels.YGCConfig;
 import ivorius.yegamolchattels.YeGamolChattels;
 import net.minecraft.client.Minecraft;

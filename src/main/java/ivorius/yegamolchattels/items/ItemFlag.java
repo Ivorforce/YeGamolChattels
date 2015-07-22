@@ -6,14 +6,14 @@
 package ivorius.yegamolchattels.items;
 
 import ivorius.yegamolchattels.entities.EntityFlag;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import ivorius.ivtoolkit.rendering.grid.Icon;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -23,8 +23,8 @@ public class ItemFlag extends Item
     public int flagSize;
     public String namePrefix;
 
-    private IIcon poleIcon;
-    private IIcon clothIcon;
+    private Icon poleIcon;
+    private Icon clothIcon;
 
     public ItemFlag(int flagSize, String namePrefix)
     {
@@ -86,7 +86,7 @@ public class ItemFlag extends Item
     }
 
     @Override
-    public IIcon getIconFromDamageForRenderPass(int damage, int pass)
+    public Icon getIconFromDamageForRenderPass(int damage, int pass)
     {
         return pass == 0 ? poleIcon : clothIcon;
     }
@@ -98,7 +98,7 @@ public class ItemFlag extends Item
     }
 
     @Override
-    public void registerIcons(IIconRegister iconRegister)
+    public void registerIcons(IconRegister iconRegister)
     {
         poleIcon = iconRegister.registerIcon(getIconString() + "_" + "pole");
         clothIcon = iconRegister.registerIcon(getIconString() + "_" + "cloth");

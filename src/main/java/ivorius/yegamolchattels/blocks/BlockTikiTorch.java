@@ -10,11 +10,11 @@ import ivorius.yegamolchattels.YeGamolChattels;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.IIcon;
+import ivorius.ivtoolkit.rendering.grid.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -23,7 +23,7 @@ import java.util.Random;
 
 public class BlockTikiTorch extends Block
 {
-    public IIcon upperTexture;
+    public Icon upperTexture;
 
     public BlockTikiTorch()
     {
@@ -44,7 +44,7 @@ public class BlockTikiTorch extends Block
     }
 
     @Override
-    public boolean renderAsNormalBlock()
+    public boolean isFullCube()
     {
         return false;
     }
@@ -118,17 +118,17 @@ public class BlockTikiTorch extends Block
     }
 
     @Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block block)
+    public void onNeighborBlockChange(World world, BlockPos pos, Block block)
     {
-        super.onNeighborBlockChange(world, x, y, z, block);
+        super.onNeighborBlockChange(world, pos, block);
 
-        int i1 = world.getBlockMetadata(x, y, z);
+        int i1 = world.getBlockMetadata(pos);
 
-        if (!(dropTorchIfCantStay(world, x, y, z) && i1 == 0))
+        if (!(dropTorchIfCantStay(world, pos) && i1 == 0))
         {
             if (world.getBlock(x, y + 1, z) != this)
             {
-                world.setBlock(x, y, z, Blocks.air, 0, 3);
+                world.setBlock(pos, Blocks.air, 0, 3);
             }
         }
     }
@@ -173,14 +173,14 @@ public class BlockTikiTorch extends Block
     }
 
     @Override
-    public void registerBlockIcons(IIconRegister par1IconRegister)
+    public void registerBlockIcons(IconRegister par1IconRegister)
     {
         blockIcon = par1IconRegister.registerIcon(YeGamolChattels.textureBase + this.getTextureName());
         upperTexture = par1IconRegister.registerIcon(YeGamolChattels.textureBase + this.getTextureName() + "Upper");
     }
 
     @Override
-    public IIcon getIcon(int par1, int par2)
+    public Icon getIcon(int par1, int par2)
     {
         if (par2 == 0)
         {
