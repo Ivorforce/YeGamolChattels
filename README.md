@@ -5,7 +5,7 @@ Ye Gamol Chattels
 ![Curse Version](http://cf.way2muchnoise.eu/versions/224600_latest.svg)
 ![Curse Downloads](http://cf.way2muchnoise.eu/full_224600_downloads.svg)
 
-[Download](httpshttps://mods.curse.com/mc-mods/minecraft/224600-ye-gamol-chattels) | [Wiki](http://minecraft-ygc.wikia.com/wiki/Minecraft_YGC_Wiki) | [Forum](http://www.minecraftforum.net/topic/563257-172-ivorius-mods-drugs-statues-flags-boxes-of-doom-hamsters/) 
+[Download](https://mods.curse.com/mc-mods/minecraft/224600-ye-gamol-chattels) | [Wiki](http://minecraft-ygc.wikia.com/wiki/Minecraft_YGC_Wiki) | [Forum](http://www.minecraftforum.net/topic/563257-172-ivorius-mods-drugs-statues-flags-boxes-of-doom-hamsters/) 
 
 Contributing
 ============
